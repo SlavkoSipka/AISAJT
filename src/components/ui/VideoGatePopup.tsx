@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { X, Play, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import emailjs from '@emailjs/browser';
+import { trackVideoGate } from '../../utils/analytics';
 
 const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "O6sCZaCGoXrFHvBGT";
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_rsasqr9";
@@ -47,6 +48,9 @@ export function VideoGatePopup({ onClose, onSubmitSuccess }: VideoGatePopupProps
 
       if (result.status === 200) {
         console.log('✅ Video gate email poslat uspešno!');
+        
+        // Track video gate u Google Analytics i Facebook Pixel
+        trackVideoGate(name, email, 'Adq2OJ_F24I', language);
       }
       
       // Zatvori popup i pokreni video

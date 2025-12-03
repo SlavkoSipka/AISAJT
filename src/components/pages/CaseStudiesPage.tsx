@@ -3,6 +3,7 @@ import { TrendingUp, Target, Award, ArrowRight, ExternalLink, CheckCircle } from
 import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
+import { SEOHelmet } from '../seo/SEOHelmet';
 
 interface CaseStudy {
   id: string;
@@ -167,6 +168,13 @@ export function CaseStudiesPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet
+        title={language === 'sr' ? 'Studije Slučaja | Uspešni Web Projekti | AISajt' : 'Case Studies | Successful Web Projects | AISajt'}
+        description={language === 'sr' ? 'Pogledajte naše uspešne web projekte i rezultate koje smo postigli za klijente. Realne studije slučaja sa merljivim rezultatima.' : 'Check out our successful web projects and results we achieved for clients. Real case studies with measurable results.'}
+        keywords="studije slučaja, web projekti, portfolio, aisajt projekti"
+        canonicalUrl="https://aisajt.com/case-studies"
+      />
+      
       <Navbar />
 
       {/* Hero Section */}

@@ -4,6 +4,7 @@ import { ChevronDown, Search, MessageCircle, Mail, Phone, ArrowRight } from 'luc
 import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
+import { SEOHelmet } from '../seo/SEOHelmet';
 
 interface FAQItemProps {
   question: string;
@@ -292,6 +293,13 @@ export function FAQPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet
+        title={language === 'sr' ? 'Česta Pitanja (FAQ) | Sve o Izradi Sajta | AISajt' : 'Frequently Asked Questions (FAQ) | All About Website Development | AISajt'}
+        description={language === 'sr' ? 'Odgovori na najčešća pitanja o izradi web sajtova, cenama, vremenskim rokovima i procesu razvoja. Sve što trebate da znate o web development-u.' : 'Answers to the most common questions about website development, prices, deadlines and development process. Everything you need to know about web development.'}
+        keywords="faq, česta pitanja, izrada sajta pitanja, cene sajta, web development faq"
+        canonicalUrl="https://aisajt.com/faq"
+      />
+      
       <Navbar />
 
       {/* Hero Section */}

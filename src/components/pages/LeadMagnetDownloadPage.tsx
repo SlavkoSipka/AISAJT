@@ -5,6 +5,8 @@ import { useLanguage } from '../../hooks/useLanguage';
 import emailjs from '@emailjs/browser';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
+import { trackPDFDownloadRequest } from '../../utils/analytics';
+import { SEOHelmet } from '../seo/SEOHelmet';
 
 type MagnetType = 'guide' | 'checklist';
 
@@ -116,6 +118,9 @@ export function LeadMagnetDownloadPage() {
       'O6sCZaCGoXrFHvBGT'
     ).then(() => {
       console.log(`✅ ${pdfType} email poslat!`);
+      
+      // Track PDF download request u Google Analytics i Facebook Pixel
+      trackPDFDownloadRequest(magnetType, name, email, language);
     }).catch((error) => {
       console.error('❌ Email greška:', error);
     });
@@ -126,8 +131,23 @@ export function LeadMagnetDownloadPage() {
 
   const Icon = magnetType === 'guide' ? BookOpen : FileText;
 
+  const seoTitle = magnetType === 'guide' 
+    ? (language === 'sr' ? 'Besplatan Vodič za Izradu Sajta | AISajt' : 'Free Website Creation Guide | AISajt')
+    : (language === 'sr' ? 'Besplatna Checklist - 27 Stvari Koje Sajt Mora Imati | AISajt' : 'Free Checklist - 27 Things Every Website Must Have | AISajt');
+  
+  const seoDescription = magnetType === 'guide'
+    ? (language === 'sr' ? 'Preuzmite besplatni vodič za izradu web sajta. Saznajte sve što vam treba za uspešan web projekat - od planiranja do lansiranja.' : 'Download free website creation guide. Learn everything you need for a successful web project - from planning to launch.')
+    : (language === 'sr' ? 'Preuzmite besplatnu checklist sa 27 stvari koje svaki sajt mora imati. SEO, performanse, sigurnost i više.' : 'Download free checklist with 27 things every website must have. SEO, performance, security and more.');
+
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet
+        title={seoTitle}
+        description={seoDescription}
+        keywords={magnetType === 'guide' ? 'vodič za sajt, besplatan pdf, izrada sajta, web development guide' : 'checklist sajt, 27 stvari, seo checklist, web checklist'}
+        canonicalUrl={`https://aisajt.com/resources/${magnetType}`}
+      />
+      
       <Navbar />
 
       {/* Hero Section */}

@@ -3,6 +3,7 @@ import { Check, ArrowRight, Zap, Star, Crown, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
+import { SEOHelmet } from '../seo/SEOHelmet';
 
 interface PriceCardProps {
   name: string;
@@ -274,6 +275,13 @@ export function PricingPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet
+        title={language === 'sr' ? 'Cene Izrade Sajta | Transparentni Paket Cene | AISajt' : 'Website Development Pricing | Transparent Package Prices | AISajt'}
+        description={language === 'sr' ? 'Transparentne cene za izradu web sajtova. Landing stranice, kompleksni sajtovi i premium paketi. Bez skrivenih troškova.' : 'Transparent prices for website development. Landing pages, complex websites and premium packages. No hidden costs.'}
+        keywords="cene sajta, cenovnik, landing page cena, izrada sajta cena, web development pricing"
+        canonicalUrl="https://aisajt.com/pricing"
+      />
+      
       <Navbar />
 
       {/* Hero Section */}

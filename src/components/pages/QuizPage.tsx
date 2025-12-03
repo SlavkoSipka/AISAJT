@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, HelpCircle, ArrowRight, ArrowLeft, Check, Mail, Phone, MapPin } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { NavLink, MobileNavLink } from '../navigation/NavLink';
 import emailjs from '@emailjs/browser';
 import { translations } from '../../types/language';
+import { trackQuizStart, trackQuizAnswer, trackQuizComplete } from '../../utils/analytics';
+import { SEOHelmet } from '../seo/SEOHelmet';
+import { Navbar } from '../layout/Navbar';
+import { Footer } from '../layout/Footer';
 
 interface Question {
   id: number;
@@ -148,8 +152,16 @@ export function QuizPage() {
   const totalQuestions = questions.length;
   const progress = ((currentQuestion + 1) / totalQuestions) * 100;
 
+  // Track quiz start kada komponenta mountuje (samo jednom)
+  useEffect(() => {
+    trackQuizStart(language);
+  }, []); // Prazan dependency array = samo pri mountovanju
+
   const handleAnswer = (value: string) => {
     setAnswers({ ...answers, [currentQuestion]: value });
+    
+    // Track svaki odgovor
+    trackQuizAnswer(currentQuestion + 1, value, language);
   };
 
   const handleNext = () => {
@@ -198,6 +210,9 @@ export function QuizPage() {
       'O6sCZaCGoXrFHvBGT'
     ).then(() => {
       console.log('✅ Kviz email poslat!');
+      
+      // Track quiz completion u Google Analytics i Facebook Pixel
+      trackQuizComplete(name || 'User', email, answers, language);
     }).catch((error) => {
       console.error('❌ Email greška:', error);
     });
@@ -207,6 +222,15 @@ export function QuizPage() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
+      <SEOHelmet
+        title={language === 'sr' ? 'Kviz - Pronađite Ideal website rešenje | AISajt' : 'Quiz - Find Your Ideal Website Solution | AISajt'}
+        description={language === 'sr' ? 'Odgovorite na nekoliko pitanja i otkrijte koje web rešenje najbolje odgovara vašim potrebama. Besplatna procena i konsultacije za izradu sajta.' : 'Answer a few questions and discover which web solution best fits your needs. Free estimate and consultation for website development.'}
+        keywords="web kviz, procena sajta, izrada sajta kviz, web development quiz, aisajt kviz"
+        canonicalUrl="https://aisajt.com/resources/quiz"
+      />
+      
+      <Navbar />
+      
       {/* Top Navigation Bar - Full navbar kao na HomePage */}
       <nav className="fixed w-full z-50 bg-white/98 shadow-md backdrop-blur-md">
         <div className="container mx-auto px-4 md:px-8">
@@ -611,6 +635,8 @@ export function QuizPage() {
           </div>
         </div>
       </footer>
+
+      <Footer />
     </div>
   );
 }

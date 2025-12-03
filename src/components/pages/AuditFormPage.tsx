@@ -5,6 +5,8 @@ import { useLanguage } from '../../hooks/useLanguage';
 import emailjs from '@emailjs/browser';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
+import { SEOHelmet } from '../seo/SEOHelmet';
+import { trackAuditFormSubmit } from '../../utils/analytics';
 
 export function AuditFormPage() {
   const { language } = useLanguage();
@@ -92,6 +94,9 @@ export function AuditFormPage() {
       'O6sCZaCGoXrFHvBGT'
     ).then(() => {
       console.log('✅ Audit email poslat!');
+      
+      // Track audit form submission u Google Analytics i Facebook Pixel
+      trackAuditFormSubmit(formData.name, formData.email, formData.website, language);
     }).catch((error) => {
       console.error('❌ Email greška:', error);
     });
@@ -101,6 +106,13 @@ export function AuditFormPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet
+        title={language === 'sr' ? 'Besplatan Audit Sajta | Analiza Performansi i SEO | AISajt' : 'Free Website Audit | Performance & SEO Analysis | AISajt'}
+        description={language === 'sr' ? 'Dobijte besplatnu profesionalnu analizu vašeg sajta. Proveravamo SEO, performanse, sigurnost i korisničko iskustvo. Rezultati u roku od 24h.' : 'Get a free professional analysis of your website. We check SEO, performance, security and user experience. Results within 24 hours.'}
+        keywords="audit sajta, besplatna analiza, seo analiza, web audit, performanse sajta, aisajt audit"
+        canonicalUrl="https://aisajt.com/resources/audit"
+      />
+      
       <Navbar />
 
       {/* Hero Section */}

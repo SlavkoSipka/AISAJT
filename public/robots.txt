@@ -1,15 +1,25 @@
-# AI izrada sajtova - robots.txt
-# https://aisajt.com
+# robots.txt for AiSajt.com
 
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /api/
 
-# Sitemap za AI websajt izrada
+# Sitemap location
 Sitemap: https://aisajt.com/sitemap.xml
 
-# Crawl-delay (opciono)
-Crawl-delay: 1
+# Block access to admin/private areas (if any)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*.json$
 
-# SEO optimizacija za: AI izrada sajtova, AI websajt izrada, Izrada veb sajta
+# Allow all search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Crawl delay (optional, helps with server load)
+Crawl-delay: 1

@@ -4,6 +4,7 @@ import { Calculator, TrendingUp, DollarSign, Users, ArrowRight, Sparkles, CheckC
 import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
+import { SEOHelmet } from '../seo/SEOHelmet';
 
 export function ROICalculatorPage() {
   const { language } = useLanguage();
@@ -149,6 +150,13 @@ export function ROICalculatorPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet
+        title={language === 'sr' ? 'ROI Kalkulator | Izračunajte Povrat od Web Sajta | AISajt' : 'ROI Calculator | Calculate Website Return | AISajt'}
+        description={language === 'sr' ? 'Besplatni ROI kalkulator za web sajt. Izračunajte koliko možete zaraditi sa novim sajtom i koji je povrat vaše investicije.' : 'Free website ROI calculator. Calculate how much you can earn with a new website and what is your return on investment.'}
+        keywords="roi kalkulator, povrat investicije, web roi, kalkulator sajta"
+        canonicalUrl="https://aisajt.com/roi-calculator"
+      />
+      
       <Navbar />
 
       {/* Hero Section */}

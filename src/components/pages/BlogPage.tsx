@@ -4,6 +4,7 @@ import { Calendar, Clock, ArrowRight, Tag, Search } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
+import { SEOHelmet } from '../seo/SEOHelmet';
 
 interface BlogPost {
   id: string;
@@ -177,6 +178,13 @@ export function BlogPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet
+        title={language === 'sr' ? 'Blog | Web Development Saveti i Vodiči | AISajt' : 'Blog | Web Development Tips & Guides | AISajt'}
+        description={language === 'sr' ? 'Pročitajte naše članke o web development-u, SEO optimizaciji, dizajnu i digitalnom marketingu. Saveti i trikovi za uspešan online biznis.' : 'Read our articles about web development, SEO optimization, design and digital marketing. Tips and tricks for successful online business.'}
+        keywords="blog, web development, seo saveti, dizajn saveti, ai sajt blog"
+        canonicalUrl="https://aisajt.com/blog"
+      />
+      
       <Navbar />
 
       {/* Hero Section */}

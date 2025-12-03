@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, BookOpen, Calculator, HelpCircle, Layout, Download, ArrowRight, CheckCircle, Sparkles, Target, FileText } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
+import { SEOHelmet } from '../seo/SEOHelmet';
 
 interface ResourceCardProps {
   icon: any;
@@ -122,6 +122,13 @@ export function ResourcesPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet
+        title={language === 'sr' ? 'Resursi za Web Development | Vodič, Kviz, Audit | AISajt' : 'Web Development Resources | Guide, Quiz, Audit | AISajt'}
+        description={language === 'sr' ? 'Besplatni resursi za web development: Vodič za izradu sajta, kviz za procenu potreba, besplatan audit sajta. Sve što vam treba za uspešan web projekat.' : 'Free web development resources: Website creation guide, needs assessment quiz, free website audit. Everything you need for a successful web project.'}
+        keywords="web resursi, vodič za sajt, audit sajta, web kviz, besplatni resursi, aisajt resursi"
+        canonicalUrl="https://aisajt.com/resources"
+      />
+      
       <Navbar />
 
       {/* Hero Section */}
