@@ -10,8 +10,8 @@
 Event Name: generate_lead
 
 📍 Gde se okida:
-   - Kada korisnik uspešno pošalje kontakt formu na Contact page
-   - Kada korisnik uspešno pošalje kontakt formu na Home page
+   - Kada korisnik uspešno pošalje kontakt formu i stigne na Thank You page (/thank-you)
+   - Thank You page se otvara automatski nakon uspešnog slanja forme sa Contact page ili Home page
 
 📊 Parametri:
    - event_category: "Lead Generation"

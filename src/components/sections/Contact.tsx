@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowRight, CheckCircle, PartyPopper, Sparkles } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import { Language, Translation } from '../../types/language';
 import { trackLeadGeneration, trackFormInteraction, trackFormSubmitAttempt, trackFormError } from '../../utils/analytics';
 
@@ -24,6 +25,7 @@ interface ContactProps {
 }
 
 export function Contact({ language, t }: ContactProps) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -70,15 +72,9 @@ export function Contact({ language, t }: ContactProps) {
       );
 
       if (result.status === 200) {
-        // ⭐ GLAVNI LEAD EVENT - USPEŠNO POSLATA FORMA ⭐
-        trackLeadGeneration('home_page', formData.name, language);
-
-        setShowSuccess(true);
+        // Redirect na Thank You page - tamo će se triggerovati generate_lead event
+        navigate(`/thank-you?name=${encodeURIComponent(formData.name)}&source=home_page&lang=${language}`);
         setFormData({ name: '', email: '', phone: '' });
-        setTimeout(() => {
-          setShowSuccess(false);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 3000);
       }
     } catch (error) {
       // Track form error

@@ -4,6 +4,7 @@ import { HomePage } from './components/pages/HomePage';
 import { TermsPage } from './components/pages/TermsPage';
 import { PrivacyPage } from './components/pages/PrivacyPage';
 import { ContactPage } from './components/pages/ContactPage';
+import { ThankYouPage } from './components/pages/ThankYouPage';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 
 function AppContent() {
@@ -39,6 +40,7 @@ function AppContent() {
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/contact" element={<ContactPage />} />
+      <Route path="/thank-you" element={<ThankYouPage />} />
     </Routes>
   );
 }

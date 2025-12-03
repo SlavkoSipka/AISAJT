@@ -97,15 +97,9 @@ export function ContactPage() {
       );
 
       if (result.status === 200) {
-        // ⭐ GLAVNI LEAD EVENT - USPEŠNO POSLATA FORMA ⭐
-        trackLeadGeneration('contact_page', formData.name, language);
-
-        setShowSuccess(true);
+        // Redirect na Thank You page - tamo će se triggerovati generate_lead event
+        navigate(`/thank-you?name=${encodeURIComponent(formData.name)}&source=contact_page&lang=${language}`);
         setFormData({ name: '', email: '', phone: '' });
-        setTimeout(() => {
-          setShowSuccess(false);
-          navigate('/');
-        }, 3000);
       }
     } catch (error) {
       // Track form error
