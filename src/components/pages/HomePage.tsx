@@ -168,6 +168,13 @@ export function HomePage() {
                 trackNavigationClick('About Us', language);
                 scrollToSection('video-section');
               }}>{t.aboutUs}</NavLink>
+              
+              {/* Novi linkovi */}
+              <NavLink onClick={() => {
+                trackNavigationClick('Resources', language);
+                navigate('/resources');
+              }}>{language === 'sr' ? 'Resursi' : 'Resources'}</NavLink>
+              
               <button
                 onClick={() => {
                   trackCTAClick('Kontakt - Top Navigation', 'top_nav', language);
@@ -236,6 +243,13 @@ export function HomePage() {
               trackNavigationClick('About Us', language);
               scrollToSection('video-section');
             }}>{t.aboutUs}</MobileNavLink>
+            
+            {/* Novi linkovi - Mobile */}
+            <MobileNavLink onClick={() => {
+              trackNavigationClick('Resources', language);
+              navigate('/resources');
+              setIsMenuOpen(false);
+            }}>{language === 'sr' ? 'Resursi' : 'Resources'}</MobileNavLink>
             
             {/* Language Switcher Toggle - Mobile */}
             <div className="px-4 py-2 flex justify-center">
@@ -329,6 +343,16 @@ export function HomePage() {
             
             <button
               onClick={() => {
+                trackNavigationClick('Resources', language);
+                navigate('/resources');
+              }}
+              className="px-6 py-3 rounded-full bg-white text-gray-900 font-semibold text-sm transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 hover:text-white hover:shadow-lg hover:shadow-violet-500/30 hover:-translate-x-1 whitespace-nowrap border border-gray-200 hover:border-transparent"
+            >
+              {language === 'sr' ? 'Resursi' : 'Resources'}
+            </button>
+            
+            <button
+              onClick={() => {
                 trackCTAClick('Kontakt - Side Navigation', 'side_nav', language);
                 navigate('/contact');
               }}
@@ -402,6 +426,7 @@ export function HomePage() {
                 videoId="Adq2OJ_F24I"
                 title="Upoznajte naš tim i način rada"
                 className="rounded-lg mb-6"
+                requireGate={true}
               />
               <div className="text-center space-y-5">
                 <h3 className="text-xl md:text-2xl font-bold text-gray-900">
@@ -849,6 +874,104 @@ export function HomePage() {
         <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent via-violet-50/40 to-violet-50/60 pointer-events-none z-10"></div>
       </section>
 
+      {/* Besplatni Resursi Section - Pomereno PRE Portfolio */}
+      <section className="relative py-20 md:py-28 overflow-hidden">
+        {/* Background Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-violet-50/30 to-white"></div>
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-10 left-1/4 w-96 h-96 bg-gradient-to-br from-violet-400 to-indigo-500 rounded-full opacity-10 blur-3xl animate-blob"></div>
+          <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-gradient-to-br from-pink-400 to-violet-500 rounded-full opacity-10 blur-3xl animate-blob animation-delay-2000"></div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-12 scroll-fade-in">
+              <div className="inline-block mb-4">
+                <span className="px-6 py-2 bg-gradient-to-r from-violet-100 via-indigo-100 to-pink-100 text-transparent bg-clip-text font-semibold text-sm uppercase tracking-wider border border-violet-200 rounded-full">
+                  ✨ {language === 'sr' ? 'Besplatni Resursi' : 'Free Resources'}
+                </span>
+              </div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+                {language === 'sr' 
+                  ? 'Alati Koji Će Vam Pomoći'
+                  : 'Tools That Will Help You'
+                }
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                {language === 'sr' 
+                  ? 'Besplatni vodiči, kalkulatori, i resursi za donošenje pametnih odluka o vašem web sajtu'
+                  : 'Free guides, calculators, and resources for making smart decisions about your website'
+                }
+              </p>
+            </div>
+
+            {/* Resources Grid */}
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+              {/* Resource 1: Quiz */}
+              <div 
+                onClick={() => navigate('/resources/quiz')}
+                className="group bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-pink-400 transition-all duration-500 hover:shadow-2xl hover:shadow-pink-500/20 hover:-translate-y-2 cursor-pointer scroll-fade-in"
+              >
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-violet-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  {language === 'sr' ? 'Kviz: Koji Sajt Vam Treba?' : 'Quiz: Which Site Do You Need?'}
+                </h3>
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  {language === 'sr' 
+                    ? 'Odgovorite na 5 brzih pitanja i saznajte koji tip sajta najbolje odgovara vašem biznisu. Dobićete personalizovanu preporuku i ponudu.'
+                    : 'Answer 5 quick questions and find out which type of site best suits your business. Get a personalized recommendation and quote.'
+                  }
+                </p>
+                <span className="text-pink-600 font-bold text-lg inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+                  {language === 'sr' ? 'Započni Kviz →' : 'Start Quiz →'}
+                </span>
+              </div>
+
+              {/* Resource 2: Audit Form */}
+              <div 
+                onClick={() => navigate('/resources/audit')}
+                className="group bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-violet-400 transition-all duration-500 hover:shadow-2xl hover:shadow-violet-500/20 hover:-translate-y-2 cursor-pointer scroll-fade-in"
+                style={{ animationDelay: '0.1s' }}
+              >
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-violet-500 to-indigo-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  {language === 'sr' ? 'Besplatna Analiza Sajta' : 'Free Website Audit'}
+                </h3>
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  {language === 'sr' 
+                    ? 'Već imate sajt? Saznajte šta vam košta u izgubljenim klijentima. Dobijate detaljnu analizu za 24h.'
+                    : 'Already have a site? Find out what it costs you in lost clients. Get detailed analysis in 24h.'
+                  }
+                </p>
+                <span className="text-violet-600 font-bold text-lg inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+                  {language === 'sr' ? 'Analiziraj Sajt →' : 'Analyze Site →'}
+                </span>
+              </div>
+            </div>
+
+            {/* CTA Button */}
+            <div className="text-center scroll-fade-in">
+              <button
+                onClick={() => navigate('/resources')}
+                className="group px-8 py-4 bg-gray-900 text-white rounded-full font-semibold hover:scale-105 transition-all duration-300 inline-flex items-center gap-3 shadow-xl hover:shadow-2xl"
+              >
+                {language === 'sr' ? 'Pogledaj Sve Resurse' : 'View All Resources'}
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Portfolio Section */}
       <section className="py-20 md:py-32 relative overflow-hidden" id="why-us">
         {/* Top gradient transition from Services */}
@@ -1033,6 +1156,9 @@ export function HomePage() {
               <ul className="space-y-2">
                 <li><a href="#video-section" className="text-gray-600 hover:text-violet-600 transition-colors duration-300" aria-label={t.aboutUs}>{t.aboutUs}</a></li>
                 <li><a href="#why-us" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300" aria-label={t.portfolio}>{t.portfolio}</a></li>
+                <li><Link to="/resources" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'Resursi' : 'Resources'}</Link></li>
+                <li><Link to="/blog" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">Blog</Link></li>
+                <li><Link to="/faq" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">FAQ</Link></li>
                 <li><a href="#contact" className="text-gray-600 hover:text-pink-600 transition-colors duration-300" aria-label={t.contact}>{t.contact}</a></li>
               </ul>
             </div>

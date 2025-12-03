@@ -1,7 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CheckCircle, ArrowLeft, Home, Mail, Sparkles, Star } from 'lucide-react';
 import { trackLeadGeneration } from '../../utils/analytics';
+
+// Globalna varijabla za tracking downloada (van React-a)
+declare global {
+  interface Window {
+    pdfDownloadInProgress?: boolean;
+  }
+}
 
 // Confetti particle component
 const ConfettiParticle = ({ delay, duration }: { delay: number; duration: number }) => {
@@ -44,6 +51,7 @@ export function ThankYouPage() {
   const [searchParams] = useSearchParams();
   const [showContent, setShowContent] = useState(false);
   const [showConfetti, setShowConfetti] = useState(true);
+  const downloadTriggered = useRef(false);
   
   // Dobij podatke iz URL parametara
   const userName = searchParams.get('name') || 'Korisnik';
@@ -66,6 +74,44 @@ export function ThankYouPage() {
 
     // Zaustavi confetti nakon 4 sekunde
     setTimeout(() => setShowConfetti(false), 4000);
+
+    // AUTO-DOWNLOAD PDF ako je guide ili checklist (SAMO JEDNOM!)
+    const downloadKey = `pdf_downloaded_${source}`;
+    
+    if (!downloadTriggered.current && (source === 'guide' || source === 'checklist')) {
+      // TROSTRUKA ZAŠTITA protiv duplog downloada:
+      // 1. useRef
+      // 2. sessionStorage
+      // 3. window.pdfDownloadInProgress (globalna varijabla)
+      
+      if (!sessionStorage.getItem(downloadKey) && !window.pdfDownloadInProgress) {
+        downloadTriggered.current = true;
+        window.pdfDownloadInProgress = true;
+        sessionStorage.setItem(downloadKey, 'true');
+        
+        const timeoutId = setTimeout(() => {
+          const link = document.createElement('a');
+          
+          if (source === 'guide') {
+            link.href = '/downloads/vodic.pdf';
+            link.download = 'Vodic-Od-Ideje-Do-Sajta.pdf';
+          } else {
+            link.href = '/downloads/checklist.pdf';
+            link.download = '27-Stvari-Koje-Sajt-Mora-Imati.pdf';
+          }
+          
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          
+          // Reset nakon 5 sekundi
+          setTimeout(() => {
+            sessionStorage.removeItem(downloadKey);
+            window.pdfDownloadInProgress = false;
+          }, 5000);
+        }, 1500);
+      }
+    }
   }, [userName, source, language]);
 
   // Generate confetti particles
@@ -171,8 +217,8 @@ export function ThankYouPage() {
                     <span className="text-pink-600 font-bold">•</span>
                     <span>
                       {language === 'sr' 
-                        ? 'Proverite vaš email inbox (i spam folder)'
-                        : 'Check your email inbox (and spam folder)'
+                        ? 'Proverite vaš email inbox'
+                        : 'Check your email inbox'
                       }
                     </span>
                   </li>
@@ -182,15 +228,7 @@ export function ThankYouPage() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up animation-delay-1000">
-            <button
-              onClick={() => navigate(-1)}
-              className="group px-8 py-4 bg-white border-2 border-gray-900 text-gray-900 font-semibold rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 hover:scale-110 hover:shadow-xl"
-            >
-              <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-              {language === 'sr' ? 'Nazad' : 'Go Back'}
-            </button>
-
+          <div className="flex justify-center animate-fade-in-up animation-delay-1000">
             <button
               onClick={() => navigate('/')}
               className="group px-8 py-4 bg-gray-900 text-white font-semibold rounded-full hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-110 hover:shadow-xl animate-pulse-slow"

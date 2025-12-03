@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, ArrowRight, Mail, Phone, MapPin, CheckCircle, Send, PartyPopper, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, Mail, Phone, MapPin, CheckCircle, Send, PartyPopper, Sparkles } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import toast, { Toaster } from 'react-hot-toast';
 import { trackLeadGeneration, trackFormInteraction, trackFormSubmitAttempt, trackFormError, trackContactInfoClick } from '../../utils/analytics';
+import { Navbar } from '../layout/Navbar';
+import { Footer } from '../layout/Footer';
 
 // Initialize EmailJS
 const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "O6sCZaCGoXrFHvBGT";
@@ -47,7 +49,6 @@ const translations = {
 
 export function ContactPage() {
   const [language, setLanguage] = useState<Language>('sr');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formData, setFormData] = useState<FormData>({ name: '', email: '', phone: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -85,14 +86,15 @@ export function ContactPage() {
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
         {
+          form_type: 'KONTAKT',
           to_email: 'office@aisajt.com',
-          from_name: formData.name,
-          from_email: formData.email,
-          phone: formData.phone,
-          message: `Nova prijava za konsultacije:
-            Ime: ${formData.name}
-            Email: ${formData.email}
-            Telefon: ${formData.phone}`
+          user_name: formData.name,
+          user_email: formData.email,
+          user_phone: formData.phone,
+          message: `Nova prijava za konsultacije:\n\nIme: ${formData.name}\nEmail: ${formData.email}\nTelefon: ${formData.phone}`,
+          quiz_result: 'N/A',
+          website_url: 'N/A',
+          language: language
         }
       );
 
@@ -139,68 +141,7 @@ export function ContactPage() {
         </div>
       )}
 
-      {/* Navbar */}
-      <nav className="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-20">
-            <Link to="/" className="flex items-center group">
-              <img 
-                src="/images/providna2.png" 
-                alt="AiSajt Logo" 
-                className="h-12 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-              />
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                {language === 'sr' ? 'Početna' : 'Home'}
-              </Link>
-              <span className="text-gray-900 font-semibold border-b-2 border-violet-500 pb-1">
-                {t.contact}
-              </span>
-              
-              {/* Language Switcher */}
-              <div className="flex gap-1 border-2 border-gray-900 rounded-full p-1">
-                <button
-                  onClick={() => setLanguage('sr')}
-                  className={`w-10 h-10 rounded-full text-xs font-bold transition-all duration-300 ${
-                    language === 'sr' ? 'bg-gray-900 text-white' : 'bg-transparent text-gray-700 hover:text-gray-900'
-                  }`}
-                >
-                  SR
-                </button>
-                <button
-                  onClick={() => setLanguage('en')}
-                  className={`w-10 h-10 rounded-full text-xs font-bold transition-all duration-300 ${
-                    language === 'en' ? 'bg-gray-900 text-white' : 'bg-transparent text-gray-700 hover:text-gray-900'
-                  }`}
-                >
-                  EN
-                </button>
-              </div>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden text-gray-900 p-2"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 py-4">
-            <div className="container mx-auto px-4 space-y-4">
-              <Link to="/" className="block text-gray-600 py-2">{language === 'sr' ? 'Početna' : 'Home'}</Link>
-              <span className="block text-gray-900 font-semibold py-2">{t.contact}</span>
-            </div>
-          </div>
-        )}
-      </nav>
+      <Navbar />
 
       {/* Hero Section with Contact Form */}
       <section className="pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden min-h-screen">
@@ -495,106 +436,7 @@ export function ContactPage() {
         </div>
       </section>
 
-          {/* Footer */}
-          <footer className="relative text-gray-900 py-12 md:py-16 border-t border-violet-200/30">
-            {/* Smooth layered gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-b from-indigo-50/40 via-violet-50/35 to-pink-50/40"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-violet-50/20 via-transparent to-indigo-50/25"></div>
-            <div className="container mx-auto px-4 relative z-10">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                <div className="space-y-4">
-                  <Link 
-                    to="/"
-                    className="flex items-center hover:opacity-80 transition-opacity duration-300 group"
-                  >
-                    <img 
-                      src="/images/providna2.png" 
-                      alt="AiSajt Logo" 
-                      className="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </Link>
-                  <p className="text-gray-600">
-                    {t.footerDesc}
-                  </p>
-                </div>
-                
-                <div>
-                  <h4 className="text-lg font-semibold mb-4">{t.services}</h4>
-                  <ul className="space-y-2">
-                    <li><Link to="/#services" className="text-gray-600 hover:text-violet-600 transition-colors duration-300" aria-label={language === 'sr' ? 'Web Dizajn' : 'Web Design'}>{language === 'sr' ? 'Web Dizajn' : 'Web Design'}</Link></li>
-                    <li><Link to="/#services" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300" aria-label={language === 'sr' ? 'Baze Podataka' : 'Database Management'}>{language === 'sr' ? 'Baze Podataka' : 'Database Management'}</Link></li>
-                    <li><Link to="/#services" className="text-gray-600 hover:text-pink-600 transition-colors duration-300" aria-label={language === 'sr' ? 'Online Marketing' : 'Online Marketing'}>{language === 'sr' ? 'Online Marketing' : 'Online Marketing'}</Link></li>
-                    <li><Link to="/#services" className="text-gray-600 hover:text-violet-600 transition-colors duration-300" aria-label={language === 'sr' ? 'E-commerce' : 'E-commerce'}>{language === 'sr' ? 'E-commerce' : 'E-commerce'}</Link></li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h4 className="text-lg font-semibold mb-4">{t.company}</h4>
-                  <ul className="space-y-2">
-                    <li><Link to="/#video-section" className="text-gray-600 hover:text-violet-600 transition-colors duration-300" aria-label={t.aboutUs}>{t.aboutUs}</Link></li>
-                    <li><Link to="/#why-us" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300" aria-label={t.portfolio}>{t.portfolio}</Link></li>
-                    <li><Link to="/contact" className="text-gray-600 hover:text-pink-600 transition-colors duration-300" aria-label={t.contact}>{t.contact}</Link></li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h4 className="text-lg font-semibold mb-4">{t.contact}</h4>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-violet-600" aria-hidden="true" />
-                      <a 
-                        href="mailto:office@aisajt.com"
-                        onClick={() => trackContactInfoClick('email', 'office@aisajt.com', language)}
-                        className="text-gray-600 hover:text-violet-600 transition-colors duration-300"
-                        aria-label="Pošaljite email na office@aisajt.com"
-                      >
-                        office@aisajt.com
-                      </a>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-indigo-600" aria-hidden="true" />
-                      <a 
-                        href="tel:+381613091583"
-                        onClick={() => trackContactInfoClick('phone', '+381613091583', language)}
-                        className="text-gray-600 hover:text-indigo-600 transition-colors duration-300"
-                        aria-label="Pozovite na broj +381 61 3091583"
-                      >
-                        +381 61 3091583
-                      </a>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-pink-600" aria-hidden="true" />
-                      <span className="text-gray-600">{language === 'sr' ? 'Beograd, Srbija' : 'Belgrade, Serbia'}</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              
-              <div className="border-t border-violet-200 pt-8">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                  <p className="text-sm text-gray-600">
-                    &copy; {new Date().getFullYear()} AiSajt.com | {language === 'sr' ? 'Profesionalna izrada web sajtova' : 'Professional web development'}
-                  </p>
-                  <div className="flex gap-6">
-                    <Link 
-                      to="/privacy" 
-                      className="text-sm text-gray-600 hover:text-violet-600 transition-colors duration-300"
-                      aria-label={language === 'sr' ? 'Politika privatnosti' : 'Privacy Policy'}
-                    >
-                      {language === 'sr' ? 'Privatnost' : 'Privacy'}
-                    </Link>
-                    <Link 
-                      to="/terms" 
-                      className="text-sm text-gray-600 hover:text-violet-600 transition-colors duration-300"
-                      aria-label={language === 'sr' ? 'Uslovi korišćenja' : 'Terms of Service'}
-                    >
-                      {language === 'sr' ? 'Uslovi korišćenja' : 'Terms of Service'}
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </footer>
+      <Footer />
     </div>
   );
 }

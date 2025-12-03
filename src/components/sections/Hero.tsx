@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Sparkles, ArrowRight, ExternalLink } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Sparkles, ArrowRight, ExternalLink, HelpCircle } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Language, Translation } from '../../types/language';
 
 interface HeroProps {
@@ -12,6 +12,7 @@ export function Hero({ language, t }: HeroProps) {
   const [isVisible, setIsVisible] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
@@ -123,20 +124,25 @@ export function Hero({ language, t }: HeroProps) {
             {/* Buttons - PopArt Style */}
             <div className={`flex flex-wrap gap-4 transform transition-all duration-1000 delay-800 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
               <button
+                onClick={() => {
+                  // Zapamti da treba vratiti korisnika ovde posle kviza
+                  sessionStorage.setItem('returnToVideo', 'true');
+                  navigate('/resources/quiz');
+                }}
+                className="group px-8 py-4 bg-gradient-to-r from-pink-500 to-violet-600 text-white font-semibold rounded-full hover:scale-105 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
+              >
+                <HelpCircle className="w-5 h-5" />
+                {language === 'sr' ? 'KOJI SAJT VAM TREBA?' : 'WHICH SITE DO YOU NEED?'}
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
+              </button>
+              
+              <button
                 onClick={() => scrollToSection('why-us')}
                 className="group px-8 py-4 border-2 border-gray-900 text-gray-900 font-semibold rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 flex items-center gap-2"
               >
                 {language === 'sr' ? 'PORTFOLIO' : 'PORTFOLIO'}
                 <ExternalLink className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
               </button>
-              
-              <Link
-                to="/contact"
-                className="group px-8 py-4 bg-gray-900 text-white font-semibold rounded-full hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 flex items-center gap-2"
-              >
-                {language === 'sr' ? 'NARUČITE' : 'ORDER'}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
-              </Link>
             </div>
           </div>
 

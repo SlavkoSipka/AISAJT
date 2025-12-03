@@ -1,0 +1,130 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ SVE JE GOTOVO U KODU - SADA SAMO 2 STVARI:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📧 STVAR #1: DODAJ TEMPLATE U EMAILJS (5 minuta)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Idi na: https://dashboard.emailjs.com/admin/templates
+2. Otvori template: template_jf2rgsy
+3. Obriši SVE što piše u HTML box-u
+4. Otvori fajl: EMAILJS_TEMPLATE_FINALNI.html (u projektu)
+5. Kopiraj SVE iz tog fajla
+6. Zalepi u EmailJS HTML box
+7. Subject napiši: Novi Lead: {{form_type}}
+8. To Email napiši: office@aisajt.com
+9. Klikni SAVE
+
+✅ GOTOVO! Sad će ti stizati mailovi kada neko popuni formu!
+
+
+📄 STVAR #2: KREIRAJ 2 PDF-A (30-60 minuta)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PDF #1: vodic.pdf
+━━━━━━━━━━━━━━━━━
+Naziv: "Vodič: Od Ideje do Sajta (7 Koraka)"
+
+Sadržaj:
+- Korak 1: Koji tip sajta vam treba (Landing/One-Page/Multi-Page/E-commerce)
+- Korak 2: Koliko košta i koliko traje
+- Korak 3: Šta pripremiti pre nego što započnete
+- Korak 4: Kako izabrati pravu agenciju
+- Korak 5: Red flags na koje treba paziti
+- Korak 6: Pitanja koja treba postaviti
+- Korak 7: Checklist za pripremu
+
+📌 Alat: Canva.com (besplatno)
+   → Dizajn → Dokument → 8-10 stranica → Download kao PDF
+
+
+PDF #2: checklist.pdf
+━━━━━━━━━━━━━━━━━━━━━
+Naziv: "27 Stvari Koje Sajt Mora Imati"
+
+Sadržaj (checkbox format):
+☐ SEO: Meta tagovi, sitemap, alt text
+☐ Brzina: Optimizovane slike, caching
+☐ Sigurnost: SSL, backup, spam zaštita
+☐ Responzivnost: Desktop, tablet, mobil
+☐ Pravni: Privacy Policy, GDPR
+☐ Analytics: Google Analytics, Facebook Pixel
+☐ Kontakt: Forma, email, telefon
+☐ ... (još 20 stavki)
+
+📌 Alat: Canva.com ili Google Docs
+   → Napravi listu sa checkbox-ovima → Download PDF
+
+
+Gde Staviti PDF-ove:
+━━━━━━━━━━━━━━━━━━━━━━━
+Stavi oba PDF-a u folder:
+AISAJT-main/public/downloads/
+
+Nazivi MORAJU biti:
+✅ vodic.pdf (sve malim slovima)
+✅ checklist.pdf (sve malim slovima)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 KAKO TESTIRATI:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+npm run dev
+
+Test 1: KVIZ
+→ Idi na: http://localhost:5173/resources/quiz
+→ Odgovori na pitanja, unesi ime+email
+→ Proveri da li ti stigne email sa tipom "KVIZ"
+
+Test 2: AUDIT
+→ Idi na: http://localhost:5173/resources/audit
+→ Popuni formu sa URL-om sajta
+→ Proveri da li ti stigne email sa tipom "AUDIT"
+
+Test 3: KONTAKT
+→ Idi na: http://localhost:5173/contact
+→ Popuni ime, email, telefon
+→ Proveri da li ti stigne email sa tipom "KONTAKT"
+
+Test 4: VODIČ
+→ Idi na: http://localhost:5173/resources/guide
+→ Unesi ime+email, klikni "Preuzmi PDF"
+→ Proveri: Email "VODIČ" stiže + PDF se downloaduje
+
+Test 5: CHECKLIST
+→ Idi na: http://localhost:5173/resources/checklist
+→ Unesi ime+email, klikni "Preuzmi PDF"
+→ Proveri: Email "CHECKLIST" stiže + PDF se downloaduje
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ KAD ZAVRŠIŠ:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+npm run build
+
+Sve je spremno za deploy na hosting!
+
+Svaki put kada neko:
+- Završi kviz → Email ti stigne: "KVIZ"
+- Traži audit → Email ti stigne: "AUDIT"
+- Pošalje kontakt → Email ti stigne: "KONTAKT"
+- Preuzme vodič → Email ti stigne: "VODIČ" + auto-download PDF-a
+- Preuzme checklist → Email ti stigne: "CHECKLIST" + auto-download PDF-a
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 DETALJNIJE OBJAŠNJENJE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Pogledaj fajlove:
+- SVE_JE_GOTOVO_FINALNO.md (Kompletno objašnjenje)
+- EMAILJS_TEMPLATE_FINALNI.html (Template za EmailJS)
+- public/downloads/README.txt (Uputstvo za PDF-ove)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 TO JE TO! SAMO 2 STVARI I GOTOVO!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

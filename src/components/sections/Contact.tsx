@@ -7,9 +7,9 @@ import { Language, Translation } from '../../types/language';
 import { trackLeadGeneration, trackFormInteraction, trackFormSubmitAttempt, trackFormError } from '../../utils/analytics';
 
 // Initialize EmailJS
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "X82U5O5R8avB-lWeL";
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_j5ciudw";
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_k5lvrwi";
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "O6sCZaCGoXrFHvBGT";
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_rsasqr9";
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_jf2rgsy";
 
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
@@ -60,14 +60,15 @@ export function Contact({ language, t }: ContactProps) {
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
         {
+          form_type: 'KONTAKT',
           to_email: 'office@aisajt.com',
-          from_name: formData.name,
-          from_email: formData.email,
-          phone: formData.phone,
-          message: `Nova prijava za konsultacije:
-            Ime: ${formData.name}
-            Email: ${formData.email}
-            Telefon: ${formData.phone}`
+          user_name: formData.name,
+          user_email: formData.email,
+          user_phone: formData.phone,
+          message: `Nova prijava za konsultacije:\n\nIme: ${formData.name}\nEmail: ${formData.email}\nTelefon: ${formData.phone}`,
+          quiz_result: 'N/A',
+          website_url: 'N/A',
+          language: language
         }
       );
 
