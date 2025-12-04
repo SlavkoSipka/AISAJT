@@ -51,14 +51,7 @@
     <priority>0.8</priority>
   </url>
   
-  <!-- Blog & Content -->
-  <url>
-    <loc>https://aisajt.com/blog</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
+  <!-- Content -->
   <url>
     <loc>https://aisajt.com/case-studies</loc>
     <lastmod>2025-01-01</lastmod>
@@ -67,15 +60,6 @@
   </url>
   
   <!-- Support Pages -->
-  <url>
-    <loc>Kompletan Digitalni
-Ekosistem za Vaš BizniKompletan Digitalni
-Ekosistem za Vaš Bizni</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
   <url>
     <loc>https://aisajt.com/privacy</loc>
     <lastmod>2025-01-01</lastmod>
