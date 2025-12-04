@@ -1157,8 +1157,6 @@ export function HomePage() {
                 <li><a href="#video-section" className="text-gray-600 hover:text-violet-600 transition-colors duration-300" aria-label={t.aboutUs}>{t.aboutUs}</a></li>
                 <li><a href="#why-us" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300" aria-label={t.portfolio}>{t.portfolio}</a></li>
                 <li><Link to="/resources" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'Resursi' : 'Resources'}</Link></li>
-                <li><Link to="/blog" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">Blog</Link></li>
-                <li><Link to="/faq" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">FAQ</Link></li>
                 <li><a href="#contact" className="text-gray-600 hover:text-pink-600 transition-colors duration-300" aria-label={t.contact}>{t.contact}</a></li>
               </ul>
             </div>
