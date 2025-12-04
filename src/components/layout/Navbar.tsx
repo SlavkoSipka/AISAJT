@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { NavLink, MobileNavLink } from '../navigation/NavLink';
 import { translations } from '../../types/language';
+import { navigateToSection } from '../../utils/navigation';
 
 export function Navbar() {
   const { language, setLanguage } = useLanguage();
   const t = translations[language];
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -29,9 +31,9 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            <NavLink onClick={() => navigate('/')}>{t.services}</NavLink>
-            <NavLink onClick={() => navigate('/')}>{t.portfolio}</NavLink>
-            <NavLink onClick={() => navigate('/')}>{t.aboutUs}</NavLink>
+            <NavLink onClick={() => navigateToSection('services', navigate, location.pathname)}>{t.services}</NavLink>
+            <NavLink onClick={() => navigateToSection('why-us', navigate, location.pathname)}>{t.portfolio}</NavLink>
+            <NavLink onClick={() => navigateToSection('video-section', navigate, location.pathname)}>{t.aboutUs}</NavLink>
             <NavLink onClick={() => navigate('/resources')}>{language === 'sr' ? 'Resursi' : 'Resources'}</NavLink>
             
             <button
@@ -88,16 +90,16 @@ export function Navbar() {
       >
         <div className="container mx-auto px-4 py-4 space-y-4">
           <MobileNavLink onClick={() => {
-            navigate('/');
             setIsMenuOpen(false);
+            navigateToSection('services', navigate, location.pathname);
           }}>{t.services}</MobileNavLink>
           <MobileNavLink onClick={() => {
-            navigate('/');
             setIsMenuOpen(false);
+            navigateToSection('why-us', navigate, location.pathname);
           }}>{t.portfolio}</MobileNavLink>
           <MobileNavLink onClick={() => {
-            navigate('/');
             setIsMenuOpen(false);
+            navigateToSection('video-section', navigate, location.pathname);
           }}>{t.aboutUs}</MobileNavLink>
           <MobileNavLink onClick={() => {
             navigate('/resources');

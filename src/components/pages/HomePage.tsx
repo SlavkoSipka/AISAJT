@@ -619,7 +619,7 @@ export function HomePage() {
           </div>
 
           {/* Services Section - Split Layout */}
-          <div className="py-12 md:py-20 max-w-7xl mx-auto relative">
+          <div id="services" className="py-12 md:py-20 max-w-7xl mx-auto relative">
             {/* Smooth gradient transition to next section */}
             <div className="absolute -bottom-32 left-0 right-0 h-40 bg-gradient-to-b from-transparent via-indigo-50/20 to-violet-50/30 pointer-events-none z-20"></div>
             {/* Animated Background Circles - Full Coverage */}
