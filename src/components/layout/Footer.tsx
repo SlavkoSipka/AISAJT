@@ -48,6 +48,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li><button onClick={() => navigateToSection('video-section', navigate, location.pathname)} className="text-gray-600 hover:text-violet-600 transition-colors duration-300 text-left">{t.aboutUs}</button></li>
               <li><button onClick={() => navigateToSection('why-us', navigate, location.pathname)} className="text-gray-600 hover:text-indigo-600 transition-colors duration-300 text-left">{t.portfolio}</button></li>
+              <li><Link to="/case-studies" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'Studije Slučaja' : 'Case Studies'}</Link></li>
               <li><Link to="/resources" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'Resursi' : 'Resources'}</Link></li>
               <li><Link to="/contact" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{t.contact}</Link></li>
             </ul>

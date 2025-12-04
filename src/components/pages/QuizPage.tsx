@@ -252,7 +252,7 @@ export function QuizPage() {
               <NavLink onClick={() => navigate('/')}>{t.services}</NavLink>
               <NavLink onClick={() => navigate('/')}>{t.portfolio}</NavLink>
               <NavLink onClick={() => navigate('/')}>{t.aboutUs}</NavLink>
-              <NavLink onClick={() => navigate('/resources')}>{language === 'sr' ? 'Resursi' : 'Resources'}</NavLink>
+              <NavLink onClick={() => navigate('/resources')}>{t.resources}</NavLink>
               
               <button
                 onClick={() => navigate('/contact')}
@@ -322,7 +322,7 @@ export function QuizPage() {
             <MobileNavLink onClick={() => {
               navigate('/resources');
               setIsMenuOpen(false);
-            }}>{language === 'sr' ? 'Resursi' : 'Resources'}</MobileNavLink>
+            }}>{t.resources}</MobileNavLink>
             
             {/* Language Switcher Toggle - Mobile */}
             <div className="px-4 py-2 flex justify-center">
@@ -365,7 +365,7 @@ export function QuizPage() {
       </nav>
 
       {/* Main Content */}
-      <div className="pt-32 pb-20 md:pt-40 md:pb-28 min-h-screen relative overflow-hidden">
+      <div className="pt-24 pb-12 md:pt-40 md:pb-28 min-h-screen relative overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-b from-white via-violet-50/30 to-white" />
         
@@ -380,31 +380,31 @@ export function QuizPage() {
             {!showResults ? (
               <>
                 {/* Header */}
-                <div className="text-center mb-12">
-                  <div className="inline-block mb-6 animate-fade-in">
-                    <span className="px-6 py-2 bg-gradient-to-r from-violet-100 via-pink-100 to-indigo-100 text-transparent bg-clip-text font-semibold text-sm uppercase tracking-wider border border-violet-200 rounded-full">
+                <div className="text-center mb-6 md:mb-12">
+                  <div className="inline-block mb-3 md:mb-6 animate-fade-in">
+                    <span className="px-4 py-1.5 md:px-6 md:py-2 bg-gradient-to-r from-violet-100 via-pink-100 to-indigo-100 text-transparent bg-clip-text font-semibold text-xs md:text-sm uppercase tracking-wider border border-violet-200 rounded-full">
                       ❓ {language === 'sr' ? 'Interaktivni Kviz' : 'Interactive Quiz'}
                     </span>
                   </div>
 
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight animate-fade-in-up animation-delay-200">
+                  <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 md:mb-4 leading-tight animate-fade-in-up animation-delay-200 px-2">
                     {qt.hero}
                   </h1>
 
-                  <p className="text-lg text-gray-600 animate-fade-in-up animation-delay-400">
+                  <p className="text-base md:text-lg text-gray-600 animate-fade-in-up animation-delay-400 px-2">
                     {qt.subtitle}
                   </p>
                 </div>
 
                 {/* Progress Bar */}
-                <div className="mb-8 animate-fade-in-up animation-delay-600">
+                <div className="mb-4 md:mb-8 animate-fade-in-up animation-delay-600">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-semibold text-gray-700">
+                    <span className="text-xs md:text-sm font-semibold text-gray-700">
                       {language === 'sr' ? 'Pitanje' : 'Question'} {currentQuestion + 1}/{totalQuestions}
                     </span>
-                    <span className="text-sm font-semibold text-violet-600">{progress.toFixed(0)}%</span>
+                    <span className="text-xs md:text-sm font-semibold text-violet-600">{progress.toFixed(0)}%</span>
                   </div>
-                  <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="w-full h-2 md:h-3 bg-gray-200 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-gradient-to-r from-violet-600 to-pink-600 transition-all duration-500 rounded-full"
                       style={{ width: `${progress}%` }}
@@ -413,29 +413,29 @@ export function QuizPage() {
                 </div>
 
                 {/* Question Card */}
-                <div className="bg-white rounded-3xl p-8 md:p-12 border-2 border-gray-200 shadow-xl animate-fade-in-up animation-delay-800">
-                  <div className="flex items-center gap-3 mb-6">
-                    <HelpCircle className="w-8 h-8 text-violet-600" />
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 lg:p-12 border-2 border-gray-200 shadow-xl animate-fade-in-up animation-delay-800">
+                  <div className="flex items-start md:items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                    <HelpCircle className="w-6 h-6 md:w-8 md:h-8 text-violet-600 flex-shrink-0 mt-1 md:mt-0" />
+                    <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-gray-900 leading-snug">
                       {questions[currentQuestion].question}
                     </h2>
                   </div>
 
-                  <div className="space-y-3 mb-8">
+                  <div className="space-y-2 md:space-y-3 mb-4 md:mb-8">
                     {questions[currentQuestion].options.map((option, index) => (
                       <button
                         key={index}
                         onClick={() => handleAnswer(option.value)}
-                        className={`w-full text-left px-6 py-4 rounded-2xl border-2 transition-all duration-300 ${
+                        className={`w-full text-left px-3 py-2.5 md:px-6 md:py-4 rounded-xl md:rounded-2xl border-2 transition-all duration-300 ${
                           answers[currentQuestion] === option.value
                             ? 'border-violet-500 bg-violet-50 shadow-lg'
                             : 'border-gray-200 hover:border-violet-300 hover:bg-gray-50'
                         }`}
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-lg font-medium text-gray-900">{option.text}</span>
+                          <span className="text-sm md:text-lg font-medium text-gray-900 pr-2">{option.text}</span>
                           {answers[currentQuestion] === option.value && (
-                            <Check className="w-6 h-6 text-violet-600" />
+                            <Check className="w-5 h-5 md:w-6 md:h-6 text-violet-600 flex-shrink-0" />
                           )}
                         </div>
                       </button>
@@ -443,13 +443,13 @@ export function QuizPage() {
                   </div>
 
                   {/* Navigation Buttons */}
-                  <div className="flex gap-3">
+                  <div className="flex gap-2 md:gap-3">
                     {currentQuestion > 0 && (
                       <button
                         onClick={handlePrev}
-                        className="px-6 py-3 border-2 border-gray-900 text-gray-900 rounded-full font-semibold hover:bg-gray-900 hover:text-white transition-all flex items-center gap-2"
+                        className="px-4 py-2.5 md:px-6 md:py-3 border-2 border-gray-900 text-gray-900 rounded-full font-semibold hover:bg-gray-900 hover:text-white transition-all flex items-center gap-1 md:gap-2 text-sm md:text-base"
                       >
-                        <ArrowLeft className="w-5 h-5" />
+                        <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
                         {qt.prevButton}
                       </button>
                     )}
@@ -457,7 +457,7 @@ export function QuizPage() {
                     <button
                       onClick={handleNext}
                       disabled={!answers[currentQuestion]}
-                      className={`flex-1 px-6 py-3 rounded-full font-semibold transition-all flex items-center justify-center gap-2 ${
+                      className={`flex-1 px-4 py-2.5 md:px-6 md:py-3 rounded-full font-semibold transition-all flex items-center justify-center gap-1 md:gap-2 text-sm md:text-base ${
                         answers[currentQuestion]
                           ? 'bg-gradient-to-r from-violet-600 to-pink-600 text-white hover:scale-[1.02] shadow-lg'
                           : 'bg-gray-200 text-gray-400 cursor-not-allowed'
@@ -467,7 +467,7 @@ export function QuizPage() {
                         ? (language === 'sr' ? 'Vidi Rezultat' : 'See Result')
                         : qt.nextButton
                       }
-                      <ArrowRight className="w-5 h-5" />
+                      <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
                     </button>
                   </div>
                 </div>
@@ -475,40 +475,40 @@ export function QuizPage() {
             ) : (
               <>
                 {/* Results - prikazuje samo odgovore */}
-                <div className="text-center mb-8 animate-fade-in">
-                  <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                <div className="text-center mb-4 md:mb-8 animate-fade-in">
+                  <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 md:mb-4 px-2">
                     {qt.results.title}
                   </h1>
-                  <p className="text-lg text-gray-600 mb-6">
+                  <p className="text-base md:text-lg text-gray-600 mb-4 md:mb-6 px-2">
                     {qt.results.subtitle}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-3xl p-8 md:p-12 border-2 border-violet-200 shadow-2xl animate-scale-in">
-                  {/* Prikaži sve odgovore */}
-                  <div className="space-y-4 mb-8">
+                <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 lg:p-12 border-2 border-violet-200 shadow-2xl animate-scale-in">
+                  {/* Prikaži sve odgovore - kompaktnije na mobilnom */}
+                  <div className="space-y-2 md:space-y-4 mb-4 md:mb-8">
                     {questions.map((q, index) => (
-                      <div key={index} className="bg-gradient-to-r from-violet-50 via-indigo-50 to-pink-50 rounded-xl p-4 border border-violet-100">
-                        <p className="font-semibold text-gray-900 mb-2">{q.question}</p>
-                        <p className="text-violet-600 text-lg font-medium">→ {getAnswerText(index)}</p>
+                      <div key={index} className="bg-gradient-to-r from-violet-50 via-indigo-50 to-pink-50 rounded-lg md:rounded-xl p-2.5 md:p-4 border border-violet-100">
+                        <p className="font-semibold text-gray-900 mb-1 md:mb-2 text-xs md:text-base">{q.question}</p>
+                        <p className="text-violet-600 text-sm md:text-lg font-medium">→ {getAnswerText(index)}</p>
                       </div>
                     ))}
                   </div>
 
-                  {/* Email Capture - elegantno dizajnirano */}
-                  <div className="mt-8 border-t-2 border-gradient-to-r from-violet-300 to-pink-300 pt-8">
-                    <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-violet-600 via-indigo-600 to-pink-600 bg-clip-text text-transparent mb-3 text-center leading-tight">
+                  {/* Email Capture - kompaktnije dizajnirano za mobilne */}
+                  <div className="mt-4 md:mt-8 border-t-2 border-gradient-to-r from-violet-300 to-pink-300 pt-4 md:pt-8">
+                    <h3 className="text-base md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-violet-600 via-indigo-600 to-pink-600 bg-clip-text text-transparent mb-2 md:mb-3 text-center leading-tight px-2">
                       {qt.results.email.title}
                     </h3>
                     
-                    <form onSubmit={handleEmailSubmit} className="space-y-4 max-w-md mx-auto mt-6">
+                    <form onSubmit={handleEmailSubmit} className="space-y-2.5 md:space-y-4 max-w-md mx-auto mt-3 md:mt-6">
                       <input
                         type="text"
                         required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder={language === 'sr' ? 'Vaše ime' : 'Your name'}
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-gray-900 focus:outline-none transition-colors text-lg"
+                        className="w-full px-3 py-2.5 md:px-5 md:py-4 border-2 border-gray-300 rounded-xl focus:border-gray-900 focus:outline-none transition-colors text-sm md:text-lg"
                       />
                       <input
                         type="email"
@@ -516,14 +516,14 @@ export function QuizPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder={qt.results.email.placeholder}
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:border-gray-900 focus:outline-none transition-colors text-lg"
+                        className="w-full px-3 py-2.5 md:px-5 md:py-4 border-2 border-gray-300 rounded-xl focus:border-gray-900 focus:outline-none transition-colors text-sm md:text-lg"
                       />
                       <button
                         type="submit"
-                        className="w-full group px-8 py-4 bg-gray-900 text-white rounded-full font-bold text-lg hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 flex items-center justify-center gap-2 shadow-xl uppercase tracking-wide"
+                        className="w-full group px-6 py-3 md:px-8 md:py-4 bg-gray-900 text-white rounded-full font-bold text-sm md:text-lg hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 flex items-center justify-center gap-2 shadow-xl uppercase tracking-wide"
                       >
                         {qt.results.email.button}
-                        <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                        <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform" />
                       </button>
                     </form>
                   </div>
@@ -561,10 +561,10 @@ export function QuizPage() {
             <div>
               <h4 className="text-lg font-semibold mb-4">{t.services}</h4>
               <ul className="space-y-2">
-                <li><Link to="/" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'Web Dizajn' : 'Web Design'}</Link></li>
+                <li><Link to="/" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{t.professionalAiWebDesign.split(' ')[0] + ' ' + t.professionalAiWebDesign.split(' ')[1]}</Link></li>
                 <li><Link to="/" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300">{language === 'sr' ? 'Baze Podataka' : 'Database Management'}</Link></li>
-                <li><Link to="/" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{language === 'sr' ? 'Online Marketing' : 'Online Marketing'}</Link></li>
-                <li><Link to="/" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'E-commerce' : 'E-commerce'}</Link></li>
+                <li><Link to="/" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">Online Marketing</Link></li>
+                <li><Link to="/" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">E-commerce</Link></li>
               </ul>
             </div>
             
@@ -573,7 +573,7 @@ export function QuizPage() {
               <ul className="space-y-2">
                 <li><Link to="/" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{t.aboutUs}</Link></li>
                 <li><Link to="/" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300">{t.portfolio}</Link></li>
-                <li><Link to="/resources" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'Resursi' : 'Resources'}</Link></li>
+                <li><Link to="/resources" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{t.resources}</Link></li>
                 <li><Link to="/faq" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">FAQ</Link></li>
                 <li><Link to="/contact" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{t.contact}</Link></li>
               </ul>
@@ -587,7 +587,7 @@ export function QuizPage() {
                   <a 
                     href="mailto:office@aisajt.com"
                     className="text-gray-600 hover:text-violet-600 transition-colors duration-300"
-                    aria-label="Pošaljite email na office@aisajt.com"
+                    aria-label={language === 'sr' ? 'Pošaljite email na office@aisajt.com' : 'Send email to office@aisajt.com'}
                   >
                     office@aisajt.com
                   </a>
@@ -597,7 +597,7 @@ export function QuizPage() {
                   <a 
                     href="tel:+381613091583"
                     className="text-gray-600 hover:text-indigo-600 transition-colors duration-300"
-                    aria-label="Pozovite na broj +381 61 3091583"
+                    aria-label={language === 'sr' ? 'Pozovite na broj +381 61 3091583' : 'Call +381 61 3091583'}
                   >
                     +381 61 3091583
                   </a>
@@ -613,7 +613,7 @@ export function QuizPage() {
           <div className="border-t border-violet-200 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-sm text-gray-600">
-                &copy; {new Date().getFullYear()} AiSajt.com | {language === 'sr' ? 'Profesionalna izrada web sajtova' : 'Professional web development'}
+                &copy; {new Date().getFullYear()} AiSajt.com | {t.professionalWebDevDesc.split(' ')[0] + ' ' + (language === 'sr' ? 'izrada web sajtova' : 'web development')}
               </p>
               <div className="flex gap-6">
                 <Link 

@@ -448,8 +448,8 @@ export function HomePage() {
 
           {/* Founders Section */}
           <div className="py-16 md:py-24 max-w-6xl mx-auto relative overflow-visible">
-            {/* Background Elements */}
-            <div className="absolute -inset-20 pointer-events-none">
+            {/* Background Elements - Hidden on mobile to improve readability */}
+            <div className="hidden md:block absolute -inset-20 pointer-events-none">
               {/* Animated circles */}
               <div className="absolute top-20 left-0 w-72 h-72 bg-gradient-to-br from-violet-400 to-indigo-500 rounded-full opacity-8 animate-blob blur-xl"></div>
               <div className="absolute bottom-10 right-0 w-80 h-80 bg-gradient-to-br from-pink-400 to-violet-500 rounded-full opacity-8 animate-blob animation-delay-2000 blur-xl"></div>

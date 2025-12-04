@@ -70,6 +70,11 @@ export function ResourcesPage() {
         home: 'Početna'
       },
       resources: {
+        quiz: {
+          title: 'Kviz: Koji Sajt Vam Treba?',
+          desc: 'Odgovorite na 4 brza pitanja i saznajte koji tip sajta najbolje odgovara vašem biznisu.',
+          button: 'Započni Kviz'
+        },
         audit: {
           title: 'Besplatna Analiza Sajta',
           desc: 'Saznajte šta vam sajt košta u izgubljenim klijentima. SEO analiza, brzina, dizajn.',
@@ -99,6 +104,11 @@ export function ResourcesPage() {
         home: 'Home'
       },
       resources: {
+        quiz: {
+          title: 'Quiz: Which Site Do You Need?',
+          desc: 'Answer 4 quick questions and find out which type of site best suits your business.',
+          button: 'Start Quiz'
+        },
         audit: {
           title: 'Free Website Audit',
           desc: 'Find out what your site costs in lost clients. SEO analysis, speed, design.',
@@ -167,38 +177,49 @@ export function ResourcesPage() {
       {/* Resources Grid */}
       <section className="py-20 relative">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
             
-            {/* Resource 1: Audit */}
+            {/* Resource 1: Quiz */}
+            <ResourceCard
+              icon={HelpCircle}
+              title={content.resources.quiz.title}
+              description={content.resources.quiz.desc}
+              buttonText={content.resources.quiz.button}
+              gradient="bg-gradient-to-br from-pink-500 to-violet-600"
+              delay={0.1}
+              onClick={() => navigate('/resources/quiz')}
+            />
+
+            {/* Resource 2: Audit */}
             <ResourceCard
               icon={Search}
               title={content.resources.audit.title}
               description={content.resources.audit.desc}
               buttonText={content.resources.audit.button}
               gradient="bg-gradient-to-br from-violet-500 to-indigo-600"
-              delay={0.1}
+              delay={0.2}
               onClick={() => navigate('/resources/audit')}
             />
 
-            {/* Resource 2: Guide */}
+            {/* Resource 3: Guide */}
             <ResourceCard
               icon={BookOpen}
               title={content.resources.guide.title}
               description={content.resources.guide.desc}
               buttonText={content.resources.guide.button}
-              gradient="bg-gradient-to-br from-pink-500 to-violet-600"
-              delay={0.2}
+              gradient="bg-gradient-to-br from-indigo-500 to-violet-600"
+              delay={0.3}
               onClick={() => navigate('/resources/guide')}
             />
 
-            {/* Resource 3: Checklist */}
+            {/* Resource 4: Checklist */}
             <ResourceCard
               icon={CheckCircle}
               title={content.resources.checklist.title}
               description={content.resources.checklist.desc}
               buttonText={content.resources.checklist.button}
-              gradient="bg-gradient-to-br from-indigo-600 to-violet-500"
-              delay={0.3}
+              gradient="bg-gradient-to-br from-violet-600 to-pink-500"
+              delay={0.4}
               onClick={() => navigate('/resources/checklist')}
             />
 

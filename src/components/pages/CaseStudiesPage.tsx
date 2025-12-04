@@ -34,61 +34,62 @@ export function CaseStudiesPage() {
         {
           id: '1',
           client: 'Kralj Residence',
-          industry: 'Apartmani',
-          image: '/images/kralj-residence.jpg',
-          challenge: 'Klijent je imao stari sajt bez mogućnosti rezervacija. Nije bilo online prisutnosti, konkurencija ih je prestizala na Google-u.',
-          solution: 'Kreirali smo moderan one-page sajt sa integrisanim booking sistemom, naprednim SEO, Google Maps, i galerijom sa 50+ slika.',
+          industry: 'Nekretnine',
+          image: '/images/favicon/kraljresidence.png',
+          challenge: 'Dugogodišnja firma Kralj DOO iz Vrnjačke Banje je imala potrebu za modernim sajtem koji će im omogućiti online prodaju luksuznih apartmana.',
+          solution: 'Kreirali smo moderan, elegantni sajt sa integrisanim booking sistemom, naprednim SEO optimizacijama, Google Maps integracijom i impresivnom galerijom sa preko 50 profesionalnih fotografija.',
           results: [
-            'Sajt optimizovan za brzinu (<2s load time)',
-            'Mobile-first dizajn',
-            'Integracija sa Booking.com',
-            'Google Analytics i Facebook Pixel setup'
+            'Sajt optimizovan za brzinu (<2s vreme učitavanja)',
+            'Responsive dizajn za sve uređaje',
+            'Integrisana online rezervacija',
+            'Google Analytics i konverziono praćenje'
           ],
           stats: [
-            { label: 'Povećanje rezervacija', value: '+300%' },
+            { label: 'Prodato apartmana', value: '5-6' },
             { label: 'Google pozicija', value: 'Top 3' },
-            { label: 'Profit za 6 meseci', value: '15,000€' }
+            { label: 'ROI', value: 'Izuzetan' }
           ],
           url: 'https://kraljresidence.com'
         },
         {
           id: '2',
           client: 'BN Autofolije',
-          industry: 'Auto Usluge',
-          image: '/images/bn-autofolije.jpg',
-          challenge: 'Kompanija nije imala web sajt. Svi klijenti dolazili su preporukom, nisu mogli da skaliraju biznis.',
-          solution: 'Napravili smo elegantni one-page sa galerijom uradenih radova, cenovnikom, Google Maps, i kontakt formom.',
+          industry: 'Auto Zatamnjivanje',
+          image: '/images/bnautofolije.png',
+          challenge: 'Kompanija za profesionalno zatamnjivanje stakala nije imala web prisutnost. Klijenti dolazili su samo kroz preporuke, što je ograničavalo rast biznisa.',
+          solution: 'Napravili smo atraktivan one-page sajt sa galerijom uradenih radova, detaljnim cenovnikom usluga, Google Maps integracijom i jednostavnom kontakt formom.',
           results: [
-            'Portfolio galerija sa before/after slikama',
-            'Jasni paketi i cene',
-            'WhatsApp i poziv direktno sa sajta',
-            'Instagram integracija'
+            'Profesionalna portfolio galerija',
+            'Jasno prikazani paketi usluga i cene',
+            'Direktan WhatsApp i poziv sa sajta',
+            'Instagram integracija za dodatni marketing'
           ],
           stats: [
             { label: 'Novi klijenti mesečno', value: '+50' },
             { label: 'Online upita', value: '+200%' },
             { label: 'ROI za 3 meseca', value: '400%' }
           ],
-          url: 'https://bnautof olije.rs'
+          url: 'https://bnautofolije.rs'
         },
         {
           id: '3',
-          client: 'Modern Interior',
-          industry: 'Dizajn Enterijera',
-          image: '/images/modern-interior.jpg',
-          challenge: 'Designer je želeo portfolio koji prikazuje projekte na elegantan način, ali bez komplikovanog CMS-a.',
-          solution: 'Multi-page sajt sa portfolio stranicom, detaljnim view-om svakog projekta, blog sekcijom, i kontakt formom.',
+          client: 'IN-STAN Stolarija',
+          industry: 'Stolarija',
+          image: '/images/instan.png',
+          challenge: 'Ozbiljna stolarija firma koja radi na celoj teritoriji Srbije tražila je profesionalan web sajt koji će odražavati kvalitet njihovog rada.',
+          solution: 'Razvili smo kompletan web sajt sa galerijom projekata, prezentacijom usluga (nameštaj, kantovanje, CNC obrada), kontakt formom i SEO optimizacijom.',
           results: [
-            'Minimalistički dizajn',
-            'Portfolio sa filterima po tipu projekta',
-            'Blog za SEO (kako dizajnirati, trendovi)',
-            'Lead forma sa upitom za ponudu'
+            'Elegantna prezentacija proizvoda',
+            'Portfolio realizovanih projekata',
+            'Detaljan prikaz usluga i mogućnosti',
+            'Optimizacija za lokalna pretraživanja'
           ],
           stats: [
-            { label: 'Porast upita', value: '+180%' },
-            { label: 'Organic traffic', value: '+250%' },
-            { label: 'Konverzija', value: '8.5%' }
-          ]
+            { label: 'Povećanje upita', value: '+180%' },
+            { label: 'Pokrivena teritorija', value: 'Srbija' },
+            { label: 'Iskustvo', value: '20+ god' }
+          ],
+          url: 'https://instanstolarija.rs'
         }
       ]
     },
@@ -104,35 +105,35 @@ export function CaseStudiesPage() {
         {
           id: '1',
           client: 'Kralj Residence',
-          industry: 'Apartments',
-          image: '/images/kralj-residence.jpg',
-          challenge: 'Client had an old site without booking capability. No online presence, competition was surpassing them on Google.',
-          solution: 'We created a modern one-page site with integrated booking system, advanced SEO, Google Maps, and gallery with 50+ images.',
+          industry: 'Real Estate',
+          image: '/images/favicon/kraljresidence.png',
+          challenge: 'Long-standing company Kralj DOO from Vrnjačka Banja needed a modern website to enable online sales of luxury apartments.',
+          solution: 'We created a modern, elegant website with integrated booking system, advanced SEO, Google Maps integration, and impressive gallery with 50+ professional photos.',
           results: [
             'Site optimized for speed (<2s load time)',
-            'Mobile-first design',
-            'Booking.com integration',
-            'Google Analytics and Facebook Pixel setup'
+            'Responsive design for all devices',
+            'Integrated online booking',
+            'Google Analytics and conversion tracking'
           ],
           stats: [
-            { label: 'Booking increase', value: '+300%' },
+            { label: 'Apartments sold', value: '5-6' },
             { label: 'Google position', value: 'Top 3' },
-            { label: 'Profit in 6 months', value: '15,000€' }
+            { label: 'ROI', value: 'Excellent' }
           ],
           url: 'https://kraljresidence.com'
         },
         {
           id: '2',
           client: 'BN Autofolije',
-          industry: 'Auto Services',
-          image: '/images/bn-autofolije.jpg',
-          challenge: 'Company had no website. All clients came by referral, couldn\'t scale the business.',
-          solution: 'We made an elegant one-page with gallery of completed work, pricing, Google Maps, and contact form.',
+          industry: 'Auto Tinting',
+          image: '/images/bnautofolije.png',
+          challenge: 'Professional window tinting company had no web presence. Clients came only through referrals, limiting business growth.',
+          solution: 'We created an attractive one-page site with gallery of completed work, detailed pricing, Google Maps integration, and simple contact form.',
           results: [
-            'Portfolio gallery with before/after images',
-            'Clear packages and prices',
-            'WhatsApp and call directly from site',
-            'Instagram integration'
+            'Professional portfolio gallery',
+            'Clear service packages and pricing',
+            'Direct WhatsApp and call from site',
+            'Instagram integration for extra marketing'
           ],
           stats: [
             { label: 'New clients monthly', value: '+50' },
@@ -143,22 +144,23 @@ export function CaseStudiesPage() {
         },
         {
           id: '3',
-          client: 'Modern Interior',
-          industry: 'Interior Design',
-          image: '/images/modern-interior.jpg',
-          challenge: 'Designer wanted a portfolio showcasing projects elegantly, but without complicated CMS.',
-          solution: 'Multi-page site with portfolio page, detailed view of each project, blog section, and contact form.',
+          client: 'IN-STAN Carpentry',
+          industry: 'Carpentry',
+          image: '/images/instan.png',
+          challenge: 'Serious carpentry company operating across Serbia needed a professional website reflecting the quality of their work.',
+          solution: 'We developed a complete website with project gallery, service presentation (furniture, edging, CNC processing), contact form, and SEO optimization.',
           results: [
-            'Minimalist design',
-            'Portfolio with filters by project type',
-            'Blog for SEO (how to design, trends)',
-            'Lead form with quote request'
+            'Elegant product presentation',
+            'Portfolio of completed projects',
+            'Detailed service and capabilities overview',
+            'Local search optimization'
           ],
           stats: [
             { label: 'Inquiry increase', value: '+180%' },
-            { label: 'Organic traffic', value: '+250%' },
-            { label: 'Conversion', value: '8.5%' }
-          ]
+            { label: 'Coverage area', value: 'Serbia' },
+            { label: 'Experience', value: '20+ yrs' }
+          ],
+          url: 'https://instanstolarija.rs'
         }
       ]
     }
@@ -223,10 +225,11 @@ export function CaseStudiesPage() {
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-pink-500 rounded-3xl blur-2xl opacity-20 group-hover:opacity-30 transition-opacity" />
                     <div className="relative bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl overflow-hidden aspect-video shadow-2xl">
-                      {/* Placeholder for actual image */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <Award className="w-24 h-24 text-gray-400" />
-                      </div>
+                      <img 
+                        src={study.image} 
+                        alt={`${study.client} - ${study.industry}`}
+                        className="w-full h-full object-contain p-8 group-hover:scale-105 transition-transform duration-500"
+                      />
                     </div>
                   </div>
                 </div>

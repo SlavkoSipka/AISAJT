@@ -6,6 +6,7 @@ export interface Translation {
   pricing: string;
   portfolio: string;
   contact: string;
+  resources: string;
   
   // Hero section
   heroTitle: string;
@@ -131,6 +132,7 @@ export const translations: Record<Language, Translation> = {
     pricing: 'Cene',
     portfolio: 'Portfolio',
     contact: 'Kontakt',
+    resources: 'Resursi',
     
     // Hero section
     heroTitle: 'Za 24h',
@@ -248,6 +250,7 @@ export const translations: Record<Language, Translation> = {
     pricing: 'Pricing',
     portfolio: 'Portfolio',
     contact: 'Contact',
+    resources: 'Resources',
     
     // Hero section
     heroTitle: 'In 24h',
