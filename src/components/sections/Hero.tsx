@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Sparkles, ArrowRight, ExternalLink, HelpCircle } from 'lucide-react';
+import { Sparkles, ArrowRight, ExternalLink } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Language, Translation } from '../../types/language';
 
@@ -124,15 +124,11 @@ export function Hero({ language, t }: HeroProps) {
             {/* Buttons - PopArt Style */}
             <div className={`flex flex-wrap gap-4 transform transition-all duration-1000 delay-800 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
               <button
-                onClick={() => {
-                  // Zapamti da treba vratiti korisnika ovde posle kviza
-                  sessionStorage.setItem('returnToVideo', 'true');
-                  navigate('/resources/quiz');
-                }}
+                onClick={() => navigate('/contact')}
                 className="group px-8 py-4 bg-gradient-to-r from-pink-500 to-violet-600 text-white font-semibold rounded-full hover:scale-105 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
               >
-                <HelpCircle className="w-5 h-5" />
-                {language === 'sr' ? 'KOJI SAJT VAM TREBA?' : 'WHICH SITE DO YOU NEED?'}
+                <Sparkles className="w-5 h-5" />
+                {language === 'sr' ? 'BESPLATNE KONSULTACIJE' : 'FREE CONSULTATION'}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
               </button>
               

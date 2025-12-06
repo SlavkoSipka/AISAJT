@@ -5,6 +5,7 @@ declare global {
   interface Window {
     gtag?: (...args: any[]) => void;
     fbq?: (...args: any[]) => void;
+    _leadEventTracked?: boolean; // ✅ Globalna zaštita protiv duplog slanja
   }
 }
 
@@ -88,6 +89,20 @@ export const trackLeadGeneration = (
   userName: string,
   language: string
 ) => {
+  // ✅ DUPLA ZAŠTITA: Proveri da li je lead već trackovan u poslednjih 3 sekunde
+  if (window._leadEventTracked) {
+    console.warn('⚠️ Lead event already tracked, skipping duplicate');
+    return;
+  }
+
+  // Postavi flag da je event trackovan
+  window._leadEventTracked = true;
+  
+  // Reset flag nakon 3 sekunde (dozvoli sledeći lead ako korisnik ponovo submituje)
+  setTimeout(() => {
+    window._leadEventTracked = false;
+  }, 3000);
+
   const leadValue = 15; // Najviši prioritet
 
   // 1️⃣ Google Analytics 4 - Event

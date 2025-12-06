@@ -144,7 +144,7 @@ export function ContactPage() {
       <Navbar />
 
       {/* Hero Section with Contact Form */}
-      <section className="pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden min-h-screen">
+      <section className="pt-24 pb-12 md:pt-40 md:pb-32 relative overflow-hidden min-h-screen">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-b from-white via-violet-50/30 to-white"></div>
         
@@ -259,29 +259,29 @@ export function ContactPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-6xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center">
+            <div className="grid lg:grid-cols-2 gap-6 md:gap-12 lg:gap-20 items-start">
               
               {/* Left - Hero Content */}
-              <div className="space-y-6 md:space-y-8">
+              <div className="space-y-4 md:space-y-6 lg:space-y-8">
                 <div>
-                  <p className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-4">
+                  <p className="text-xs md:text-sm font-medium text-gray-400 uppercase tracking-widest mb-2 md:mb-4">
                     {language === 'sr' ? 'Stupite u kontakt' : 'Get in Touch'}
                   </p>
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight mb-3 md:mb-6">
                     <span className="gradient-text">{language === 'sr' ? 'Besplatne Konsultacije' : 'Free Consultations'}</span>
                     <br />
-                    <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl">{language === 'sr' ? 'za Vaš Website' : 'for Your Website'}</span>
+                    <span className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">{language === 'sr' ? 'za Vaš Website' : 'for Your Website'}</span>
                   </h1>
-                  <p className="text-base md:text-lg text-gray-600 leading-relaxed max-w-lg">
+                  <p className="text-sm md:text-base lg:text-lg text-gray-600 leading-relaxed max-w-lg hidden md:block">
                     {language === 'sr' 
-                      ? 'Spremni smo da saslušamo vašu ideju i pretvorimo je u moderan, funkcionalan website koji privlači klijente. Kontaktirajte nas danas i započnimo saradnju.'
-                      : 'We are ready to hear your idea and turn it into a modern, functional website that attracts clients. Contact us today and let\'s start working together.'
+                      ? 'Spremni smo da saslušamo vašu ideju i pretvorimo je u moderan, funkcionalan website koji privlači klijente.'
+                      : 'We are ready to hear your idea and turn it into a modern, functional website that attracts clients.'
                     }
                   </p>
                 </div>
 
-                {/* Contact Info */}
-                <div className="space-y-6 pt-8 border-t border-gray-100">
+                {/* Contact Info - Hidden on mobile */}
+                <div className="hidden md:flex md:flex-col space-y-4 lg:space-y-6 pt-6 lg:pt-8 border-t border-gray-100">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center">
                       <MapPin className="w-5 h-5 text-violet-600" />
@@ -329,22 +329,22 @@ export function ContactPage() {
 
               {/* Right - Form */}
               <div className="relative">
-                {/* Decorative elements */}
-                <div className="absolute -top-6 -right-6 w-24 h-24 border-2 border-violet-200 rounded-2xl opacity-50"></div>
-                <div className="absolute -bottom-6 -left-6 w-32 h-32 border-2 border-pink-200 rounded-2xl opacity-50"></div>
+                {/* Decorative elements - hidden on mobile */}
+                <div className="hidden md:block absolute -top-6 -right-6 w-24 h-24 border-2 border-violet-200 rounded-2xl opacity-50"></div>
+                <div className="hidden md:block absolute -bottom-6 -left-6 w-32 h-32 border-2 border-pink-200 rounded-2xl opacity-50"></div>
                 
-                <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl shadow-violet-500/10 p-6 md:p-8 lg:p-10 border border-gray-100 relative">
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-xl md:shadow-2xl shadow-violet-500/10 p-5 md:p-8 lg:p-10 border border-gray-100 relative">
+                  <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-2">
                     {language === 'sr' ? 'Pošaljite nam poruku' : 'Send us a message'}
                   </h3>
-                  <p className="text-sm md:text-base text-gray-500 mb-6 md:mb-8">
+                  <p className="text-xs md:text-sm lg:text-base text-gray-500 mb-4 md:mb-6 lg:mb-8">
                     {language === 'sr' ? 'Popunite formular ispod' : 'Fill out the form below'}
                   </p>
                   
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                     {/* Name */}
                     <div>
-                      <label className="block text-xs font-medium text-violet-400 uppercase tracking-widest mb-3">
+                      <label className="block text-xs font-medium text-violet-400 uppercase tracking-widest mb-2 md:mb-3">
                         {t.name} *
                       </label>
                       <input
@@ -356,7 +356,7 @@ export function ContactPage() {
                         onBlur={() => setFocusedField(null)}
                         required
                         placeholder={language === 'sr' ? 'Vaše ime i prezime' : 'Your full name'}
-                        className={`w-full px-0 py-4 bg-transparent border-0 border-b-2 text-gray-900 text-lg placeholder-gray-300 focus:outline-none transition-colors duration-300 ${
+                        className={`w-full px-0 py-3 md:py-4 bg-transparent border-0 border-b-2 text-gray-900 text-base md:text-lg placeholder-gray-300 focus:outline-none transition-colors duration-300 ${
                           focusedField === 'name' ? 'border-violet-500' : 'border-gray-200'
                         }`}
                       />
@@ -364,7 +364,7 @@ export function ContactPage() {
 
                     {/* Email */}
                     <div>
-                      <label className="block text-xs font-medium text-indigo-400 uppercase tracking-widest mb-3">
+                      <label className="block text-xs font-medium text-indigo-400 uppercase tracking-widest mb-2 md:mb-3">
                         {t.email} *
                       </label>
                       <input
@@ -376,7 +376,7 @@ export function ContactPage() {
                         onBlur={() => setFocusedField(null)}
                         required
                         placeholder={language === 'sr' ? 'vas@email.com' : 'your@email.com'}
-                        className={`w-full px-0 py-4 bg-transparent border-0 border-b-2 text-gray-900 text-lg placeholder-gray-300 focus:outline-none transition-colors duration-300 ${
+                        className={`w-full px-0 py-3 md:py-4 bg-transparent border-0 border-b-2 text-gray-900 text-base md:text-lg placeholder-gray-300 focus:outline-none transition-colors duration-300 ${
                           focusedField === 'email' ? 'border-indigo-500' : 'border-gray-200'
                         }`}
                       />
@@ -384,7 +384,7 @@ export function ContactPage() {
 
                     {/* Phone */}
                     <div>
-                      <label className="block text-xs font-medium text-pink-400 uppercase tracking-widest mb-3">
+                      <label className="block text-xs font-medium text-pink-400 uppercase tracking-widest mb-2 md:mb-3">
                         {t.phone} *
                       </label>
                       <input
@@ -396,33 +396,33 @@ export function ContactPage() {
                         onBlur={() => setFocusedField(null)}
                         required
                         placeholder="+381 XX XXX XXXX"
-                        className={`w-full px-0 py-4 bg-transparent border-0 border-b-2 text-gray-900 text-lg placeholder-gray-300 focus:outline-none transition-colors duration-300 ${
+                        className={`w-full px-0 py-3 md:py-4 bg-transparent border-0 border-b-2 text-gray-900 text-base md:text-lg placeholder-gray-300 focus:outline-none transition-colors duration-300 ${
                           focusedField === 'phone' ? 'border-pink-500' : 'border-gray-200'
                         }`}
                       />
                     </div>
 
                     {/* Submit */}
-                    <div className="pt-4">
+                    <div className="pt-2 md:pt-4">
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className={`w-full group px-8 py-4 bg-gray-900 text-white font-semibold rounded-full hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 flex items-center justify-center gap-3 text-lg ${
+                        className={`w-full group px-6 md:px-8 py-3 md:py-4 bg-gray-900 text-white font-semibold rounded-full hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg ${
                           isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
                         }`}
                       >
-                        <Send className={`w-5 h-5 ${isSubmitting ? 'animate-pulse' : 'group-hover:rotate-12 transition-transform'}`} />
+                        <Send className={`w-4 h-4 md:w-5 md:h-5 ${isSubmitting ? 'animate-pulse' : 'group-hover:rotate-12 transition-transform'}`} />
                         {isSubmitting 
                           ? (language === 'sr' ? 'Šaljem...' : 'Sending...') 
                           : (language === 'sr' ? 'Pošalji' : 'Send')
                         }
-                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                       </button>
                     </div>
                   </form>
 
                   {/* Trust note */}
-                  <p className="text-sm text-gray-400 text-center mt-6">
+                  <p className="text-xs md:text-sm text-gray-400 text-center mt-4 md:mt-6">
                     {language === 'sr' 
                       ? '✨ Odgovaramo u roku od 24h. Bez obaveza.'
                       : '✨ We respond within 24h. No obligations.'
