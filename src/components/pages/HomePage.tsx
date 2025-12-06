@@ -1,36 +1,23 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Clock, MessageSquare, CheckCircle, ArrowRight, Menu, X, Brain, Cpu, Bot, Mail, Phone, MapPin } from 'lucide-react';
+import { Clock, MessageSquare, CheckCircle, ArrowRight, Brain, Cpu, Bot, Mail, Phone, MapPin } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { translations } from '../../types/language';
-import { NavLink, MobileNavLink } from '../navigation/NavLink';
+import { Navbar } from '../layout/Navbar';
+import { Footer } from '../layout/Footer';
 import { PortfolioCard } from '../cards/PortfolioCard';
 import { Hero } from '../sections/Hero';
 import { YouTubeVideo } from '../video/YouTubeVideo';
 import { rafThrottle } from '../../utils/performance';
 import { Link, useNavigate } from 'react-router-dom';
-import { trackCTAClick, trackNavigationClick, trackContactInfoClick, trackPortfolioClick, trackScrollDepth, trackTimeOnPage } from '../../utils/analytics';
+import { trackCTAClick, trackContactInfoClick, trackPortfolioClick, trackScrollDepth, trackTimeOnPage } from '../../utils/analytics';
 
 export function HomePage() {
   const { language, setLanguage } = useLanguage();
   const t = translations[language];
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [showSideNav, setShowSideNav] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const parallaxRefs = useRef<HTMLElement[]>([]);
 
-  // Check if device is mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   // 📊 Track Scroll Depth (25%, 50%, 75%, 90%)
   useEffect(() => {
@@ -113,19 +100,6 @@ export function HomePage() {
     };
   }, [language]);
 
-  useEffect(() => {
-    const handleScroll = rafThrottle(() => {
-      const scrollPosition = window.scrollY;
-      setIsScrolled(scrollPosition > 50);
-      // Only show side nav on desktop devices
-      if (!isMobile) {
-        setShowSideNav(scrollPosition > 200);
-      }
-    });
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMobile]);
 
   useEffect(() => {
     const handleParallax = rafThrottle(() => {
@@ -204,270 +178,11 @@ export function HomePage() {
     };
   }, []);
 
-  const scrollToSection = useCallback((sectionId: string) => {
-    setIsMenuOpen(false);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }
-  }, []);
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
-      {/* Top Navigation Bar - Large, appears at top (always visible on mobile) */}
-      <nav className={`fixed w-full z-50 transition-all duration-700 ${
-        showSideNav && !isMobile ? 'opacity-0 -translate-y-full pointer-events-none' : 'opacity-100 translate-y-0'
-      } ${isScrolled ? 'bg-white/98 shadow-md' : 'bg-white/80'} nav-blur`}>
-        <div className="container mx-auto px-4 md:px-8">
-          <div className="flex items-center justify-between h-20 md:h-24">
-            <Link 
-              to="/" 
-              className="flex items-center group py-2"
-              aria-label="AI Sajt - Početna stranica"
-            >
-              <img 
-                src="/images/providna2.png" 
-                alt="AiSajt Logo" 
-                className="h-12 md:h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-              />
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-              <NavLink onClick={() => {
-                trackNavigationClick('Services', language);
-                scrollToSection('services');
-              }}>{t.services}</NavLink>
-              <NavLink onClick={() => {
-                trackNavigationClick('Portfolio', language);
-                scrollToSection('why-us');
-              }}>{t.portfolio}</NavLink>
-              <NavLink onClick={() => {
-                trackNavigationClick('About Us', language);
-                scrollToSection('video-section');
-              }}>{t.aboutUs}</NavLink>
-              
-              {/* Novi linkovi */}
-              <NavLink onClick={() => {
-                trackNavigationClick('Resources', language);
-                navigate('/resources');
-              }}>{language === 'sr' ? 'Resursi' : 'Resources'}</NavLink>
-              
-              <button
-                onClick={() => {
-                  trackCTAClick('Kontakt - Top Navigation', 'top_nav', language);
-                  navigate('/contact');
-                }}
-                className="bg-gray-900 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 text-sm uppercase tracking-wide"
-                aria-label="Kontaktirajte nas"
-              >
-                {t.contact}
-              </button>
-              
-              {/* Language Switcher Toggle */}
-              <div className="flex gap-1 border-2 border-gray-900 rounded-full p-1">
-                <button
-                  onClick={() => setLanguage('sr')}
-                  className={`w-10 h-10 rounded-full text-xs font-bold transition-all duration-300 ${
-                    language === 'sr'
-                      ? 'bg-gray-900 text-white shadow-md'
-                      : 'bg-transparent text-gray-700 hover:text-gray-900'
-                  }`}
-                >
-                  SR
-                </button>
-                <button
-                  onClick={() => setLanguage('en')}
-                  className={`w-10 h-10 rounded-full text-xs font-bold transition-all duration-300 ${
-                    language === 'en'
-                      ? 'bg-gray-900 text-white shadow-md'
-                      : 'bg-transparent text-gray-700 hover:text-gray-900'
-                  }`}
-                >
-                  EN
-                </button>
-              </div>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden text-gray-900 p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              aria-label={isMenuOpen ? 'Zatvori meni' : 'Otvori meni'}
-            >
-              {isMenuOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <div
-          className={`md:hidden absolute w-full bg-white/95 backdrop-blur-md shadow-xl shadow-violet-500/10 transition-all duration-300 ease-in-out ${
-            isMenuOpen
-              ? 'opacity-100 translate-y-0 visible'
-              : 'opacity-0 -translate-y-4 invisible'
-          }`}
-        >
-          <div className="container mx-auto px-4 py-4 space-y-4">
-            <MobileNavLink onClick={() => {
-              trackNavigationClick('Services', language);
-              scrollToSection('services');
-            }}>{t.services}</MobileNavLink>
-            <MobileNavLink onClick={() => {
-              trackNavigationClick('Portfolio', language);
-              scrollToSection('why-us');
-            }}>{t.portfolio}</MobileNavLink>
-            <MobileNavLink onClick={() => {
-              trackNavigationClick('About Us', language);
-              scrollToSection('video-section');
-            }}>{t.aboutUs}</MobileNavLink>
-            
-            {/* Novi linkovi - Mobile */}
-            <MobileNavLink onClick={() => {
-              trackNavigationClick('Resources', language);
-              navigate('/resources');
-              setIsMenuOpen(false);
-            }}>{language === 'sr' ? 'Resursi' : 'Resources'}</MobileNavLink>
-            
-            {/* Language Switcher Toggle - Mobile */}
-            <div className="px-4 py-2 flex justify-center">
-              <div className="flex gap-1 bg-gray-700 rounded-full p-1">
-                <button
-                  onClick={() => setLanguage('sr')}
-                  className={`w-12 h-12 rounded-full text-sm font-bold transition-all duration-300 ${
-                    language === 'sr'
-                      ? 'bg-white text-gray-700 shadow-md'
-                      : 'bg-transparent text-gray-300 hover:text-white'
-                  }`}
-                >
-                  SR
-                </button>
-                <button
-                  onClick={() => setLanguage('en')}
-                  className={`w-12 h-12 rounded-full text-sm font-bold transition-all duration-300 ${
-                    language === 'en'
-                      ? 'bg-white text-gray-700 shadow-md'
-                      : 'bg-transparent text-gray-300 hover:text-white'
-                  }`}
-                >
-                  EN
-                </button>
-              </div>
-            </div>
-            
-            <button
-              onClick={() => {
-                trackCTAClick('Kontakt - Mobile Menu', 'mobile_nav', language);
-                navigate('/contact');
-              }}
-              className="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300"
-              aria-label="Kontaktirajte nas - Mobilni meni"
-            >
-              {t.contact}
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Side Navigation Bar - Appears on right when scrolling */}
-      <nav className={`hidden md:block fixed top-1/2 -translate-y-1/2 right-0 z-50 transition-all duration-700 ${
-        showSideNav ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-      }`}>
-        <div className="bg-white/98 backdrop-blur-md shadow-2xl rounded-l-3xl px-4 py-8 flex flex-col items-center gap-6 border-l-4 border-violet-500">
-          {/* Logo */}
-          <Link 
-            to="/" 
-            className="group mb-2"
-            aria-label="AI Sajt - Početna stranica"
-          >
-            <img 
-              src="/images/providna2.png" 
-              alt="AiSajt Logo" 
-              className="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-110"
-            />
-          </Link>
-
-          {/* Vertical Navigation Links */}
-          <div className="flex flex-col items-stretch gap-3 w-full px-2">
-            <button
-              onClick={() => {
-                trackNavigationClick('Services', language);
-                scrollToSection('services');
-              }}
-              className="px-6 py-3 rounded-full bg-white text-gray-900 font-semibold text-sm transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 hover:text-white hover:shadow-lg hover:shadow-violet-500/30 hover:-translate-x-1 whitespace-nowrap border border-gray-200 hover:border-transparent"
-            >
-              {t.services}
-            </button>
-            
-            <button
-              onClick={() => {
-                trackNavigationClick('Portfolio', language);
-                scrollToSection('why-us');
-              }}
-              className="px-6 py-3 rounded-full bg-white text-gray-900 font-semibold text-sm transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 hover:text-white hover:shadow-lg hover:shadow-violet-500/30 hover:-translate-x-1 whitespace-nowrap border border-gray-200 hover:border-transparent"
-            >
-              {t.portfolio}
-            </button>
-            
-            <button
-              onClick={() => {
-                trackNavigationClick('About Us', language);
-                scrollToSection('video-section');
-              }}
-              className="px-6 py-3 rounded-full bg-white text-gray-900 font-semibold text-sm transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 hover:text-white hover:shadow-lg hover:shadow-violet-500/30 hover:-translate-x-1 whitespace-nowrap border border-gray-200 hover:border-transparent"
-            >
-              {t.aboutUs}
-            </button>
-            
-            <button
-              onClick={() => {
-                trackNavigationClick('Resources', language);
-                navigate('/resources');
-              }}
-              className="px-6 py-3 rounded-full bg-white text-gray-900 font-semibold text-sm transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 hover:text-white hover:shadow-lg hover:shadow-violet-500/30 hover:-translate-x-1 whitespace-nowrap border border-gray-200 hover:border-transparent"
-            >
-              {language === 'sr' ? 'Resursi' : 'Resources'}
-            </button>
-            
-            <button
-              onClick={() => {
-                trackCTAClick('Kontakt - Side Navigation', 'side_nav', language);
-                navigate('/contact');
-              }}
-              className="px-6 py-3 rounded-full bg-gray-900 text-white font-semibold text-sm transition-all duration-300 hover:scale-105 hover:bg-white hover:text-gray-900 border-2 border-gray-900 hover:-translate-x-1 whitespace-nowrap"
-            >
-              {t.contact}
-            </button>
-          </div>
-
-          {/* Language Switcher - Horizontal Toggle */}
-          <div className="flex gap-1 mt-2 border-2 border-gray-900 rounded-full p-1">
-            <button
-              onClick={() => setLanguage('sr')}
-              className={`w-10 h-10 rounded-full text-xs font-bold transition-all duration-300 ${
-                language === 'sr'
-                  ? 'bg-gray-900 text-white shadow-md'
-                  : 'bg-transparent text-gray-700 hover:text-gray-900'
-              }`}
-            >
-              SR
-            </button>
-            <button
-              onClick={() => setLanguage('en')}
-              className={`w-10 h-10 rounded-full text-xs font-bold transition-all duration-300 ${
-                language === 'en'
-                  ? 'bg-gray-900 text-white shadow-md'
-                  : 'bg-transparent text-gray-700 hover:text-gray-900'
-              }`}
-            >
-              EN
-            </button>
-          </div>
-        </div>
-      </nav>
+      {/* ✅ Navbar komponenta - jedna za ceo sajt */}
+      <Navbar />
 
       <Hero language={language} t={t} />
 
@@ -1199,107 +914,8 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="relative text-gray-900 py-12 md:py-16 border-t border-violet-200/30">
-        {/* Smooth layered gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-indigo-50/40 via-violet-50/35 to-pink-50/40"></div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-violet-50/20 via-transparent to-indigo-50/25"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div className="space-y-4">
-              <Link 
-                to="/"
-                className="flex items-center hover:opacity-80 transition-opacity duration-300 group"
-              >
-                <img 
-                  src="/images/providna2.png" 
-                  alt="AiSajt Logo" 
-                  className="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                />
-              </Link>
-              <p className="text-gray-600">
-                {t.footerDesc}
-              </p>
-            </div>
-            
-            <div>
-              <h4 className="text-lg font-semibold mb-4">{t.services}</h4>
-              <ul className="space-y-2">
-                <li><a href="#services" className="text-gray-600 hover:text-violet-600 transition-colors duration-300" aria-label={language === 'sr' ? 'Web Dizajn' : 'Web Design'}>{language === 'sr' ? 'Web Dizajn' : 'Web Design'}</a></li>
-                <li><a href="#services" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300" aria-label={language === 'sr' ? 'Baze Podataka' : 'Database Management'}>{language === 'sr' ? 'Baze Podataka' : 'Database Management'}</a></li>
-                <li><a href="#services" className="text-gray-600 hover:text-pink-600 transition-colors duration-300" aria-label={language === 'sr' ? 'Online Marketing' : 'Online Marketing'}>{language === 'sr' ? 'Online Marketing' : 'Online Marketing'}</a></li>
-                <li><a href="#services" className="text-gray-600 hover:text-violet-600 transition-colors duration-300" aria-label={language === 'sr' ? 'E-commerce' : 'E-commerce'}>{language === 'sr' ? 'E-commerce' : 'E-commerce'}</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="text-lg font-semibold mb-4">{t.company}</h4>
-              <ul className="space-y-2">
-                <li><a href="#video-section" className="text-gray-600 hover:text-violet-600 transition-colors duration-300" aria-label={t.aboutUs}>{t.aboutUs}</a></li>
-                <li><a href="#why-us" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300" aria-label={t.portfolio}>{t.portfolio}</a></li>
-                <li><Link to="/resources" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'Resursi' : 'Resources'}</Link></li>
-                <li><a href="#contact" className="text-gray-600 hover:text-pink-600 transition-colors duration-300" aria-label={t.contact}>{t.contact}</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="text-lg font-semibold mb-4">{t.contact}</h4>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-violet-600" aria-hidden="true" />
-                  <a 
-                    href="mailto:office@aisajt.com"
-                    onClick={() => trackContactInfoClick('email', 'office@aisajt.com', language)}
-                    className="text-gray-600 hover:text-violet-600 transition-colors duration-300"
-                    aria-label="Pošaljite email na office@aisajt.com"
-                  >
-                    office@aisajt.com
-                  </a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-indigo-600" aria-hidden="true" />
-                  <a 
-                    href="tel:+381613091583"
-                    onClick={() => trackContactInfoClick('phone', '+381613091583', language)}
-                    className="text-gray-600 hover:text-indigo-600 transition-colors duration-300"
-                    aria-label="Pozovite na broj +381 61 3091583"
-                  >
-                    +381 61 3091583
-                  </a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-pink-600" aria-hidden="true" />
-                  <span className="text-gray-600">{language === 'sr' ? 'Beograd, Srbija' : 'Belgrade, Serbia'}</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t border-violet-200 pt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-sm text-gray-600">
-                &copy; {new Date().getFullYear()} AiSajt.com | {language === 'sr' ? 'Profesionalna izrada web sajtova' : 'Professional web development'}
-              </p>
-              <div className="flex gap-6">
-                <Link 
-                  to="/privacy" 
-                  className="text-sm text-gray-600 hover:text-violet-600 transition-colors duration-300"
-                  aria-label={language === 'sr' ? 'Politika privatnosti' : 'Privacy Policy'}
-                >
-                  {language === 'sr' ? 'Privatnost' : 'Privacy'}
-                </Link>
-                <Link 
-                  to="/terms" 
-                  className="text-sm text-gray-600 hover:text-violet-600 transition-colors duration-300"
-                  aria-label={language === 'sr' ? 'Uslovi korišćenja' : 'Terms of Service'}
-                >
-                  {language === 'sr' ? 'Uslovi korišćenja' : 'Terms of Service'}
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* ✅ Footer komponenta - jedna za ceo sajt */}
+      <Footer />
     </div>
   );
 }
