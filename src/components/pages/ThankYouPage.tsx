@@ -52,6 +52,7 @@ export function ThankYouPage() {
   const [showContent, setShowContent] = useState(false);
   const [showConfetti, setShowConfetti] = useState(true);
   const downloadTriggered = useRef(false);
+  const leadTracked = useRef(false); // ✅ Zaštita protiv duplog tracking-a
   
   // Dobij podatke iz URL parametara
   const userName = searchParams.get('name') || 'Korisnik';
@@ -59,12 +60,15 @@ export function ThankYouPage() {
   const language = searchParams.get('lang') || 'sr';
 
   useEffect(() => {
-    // Triggeruj GLAVNI LEAD EVENT kada se stranica učita
-    trackLeadGeneration(
-      source as 'contact_page' | 'home_page',
-      userName,
-      language as 'sr' | 'en'
-    );
+    // Triggeruj GLAVNI LEAD EVENT kada se stranica učita - SAMO JEDNOM!
+    if (!leadTracked.current) {
+      trackLeadGeneration(
+        source as 'contact_page' | 'home_page',
+        userName,
+        language as 'sr' | 'en'
+      );
+      leadTracked.current = true; // ✅ Označi da je lead trackovan
+    }
 
     // Scroll to top
     window.scrollTo(0, 0);
@@ -112,7 +116,7 @@ export function ThankYouPage() {
         }, 1500);
       }
     }
-  }, [userName, source, language]);
+  }, []); // ✅ Prazan dependency array - izvršava se SAMO JEDNOM pri mount-u
 
   // Generate confetti particles
   const confettiParticles = showConfetti ? Array.from({ length: 50 }, (_, i) => (
