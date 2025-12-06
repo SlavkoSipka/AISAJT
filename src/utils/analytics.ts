@@ -10,6 +10,16 @@ declare global {
 }
 
 /**
+ * 🚫 Helper: Proveri da li je localhost okruženje
+ * Ne šalji tracking evente sa localhost-a
+ */
+const isLocalhost = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const hostname = window.location.hostname;
+  return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]';
+};
+
+/**
  * 📊 PRIORITY LEVELS (za vrednost konverzija):
  * 
  * 🏆 TIER 1 (Vrednost: 15€) - GLAVNI LEADOVI:
@@ -41,6 +51,7 @@ export const trackEvent = (
     [key: string]: any;
   }
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', eventName, params);
   }
@@ -59,6 +70,7 @@ export const trackFBEvent = (
     [key: string]: any;
   }
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
   if (typeof window !== 'undefined' && window.fbq) {
     window.fbq('track', eventName, params);
   }
@@ -71,6 +83,7 @@ export const trackGoogleAdsConversion = (
   conversionLabel: string,
   value?: number
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'conversion', {
       'send_to': `AW-XXXXXXXXXX/${conversionLabel}`, // 👈 Ti ćeš zameniti sa tvojim ID-om
@@ -89,6 +102,8 @@ export const trackLeadGeneration = (
   userName: string,
   language: string
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
+  
   // ✅ DUPLA ZAŠTITA: Proveri da li je lead već trackovan u poslednjih 3 sekunde
   if (window._leadEventTracked) {
     console.warn('⚠️ Lead event already tracked, skipping duplicate');
@@ -186,6 +201,8 @@ export const trackCTAClick = (
   location: string,
   language: string
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
+  
   // 1️⃣ Google Analytics 4 - Event
   trackEvent('cta_click', {
     event_category: 'Engagement',
@@ -287,6 +304,8 @@ export const trackScrollDepth = (
   pagePath: string,
   language: string
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
+  
   // 1️⃣ Google Analytics 4 - Event
   trackEvent('scroll_depth', {
     event_category: 'Engagement',
@@ -317,6 +336,8 @@ export const trackTimeOnPage = (
   pagePath: string,
   language: string
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
+  
   // 1️⃣ Google Analytics 4 - Event
   trackEvent('time_on_page', {
     event_category: 'Engagement',
@@ -347,6 +368,8 @@ export const trackPageView = (
   pageTitle: string,
   language: string
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
+  
   // 1️⃣ Google Analytics 4 - Automatski prati page view
   
   // 2️⃣ Meta Pixel - PageView (već se poziva u index.html, ali može i programatski)
@@ -366,6 +389,8 @@ export const trackVideoPlay = (
   videoId: string,
   language: string
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
+  
   // 1️⃣ Google Analytics 4 - Event
   trackEvent('video_play', {
     event_category: 'Engagement',
@@ -396,6 +421,8 @@ export const trackVideoGate = (
   videoId: string,
   language: string
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
+  
   const leadValue = 5; // Srednji prioritet
 
   // 1️⃣ Google Analytics 4 - Event
@@ -465,6 +492,8 @@ export const trackQuizComplete = (
   answers: Record<number, string>,
   language: string
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
+  
   const leadValue = 15; // Najviši prioritet
 
   // 1️⃣ Google Analytics 4 - Event
@@ -504,6 +533,8 @@ export const trackPDFDownloadRequest = (
   userEmail: string,
   language: string
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
+  
   const leadValue = 5; // Srednji prioritet
 
   // 1️⃣ Google Analytics 4 - Event
@@ -560,6 +591,8 @@ export const trackAuditFormSubmit = (
   websiteUrl: string,
   language: string
 ) => {
+  if (isLocalhost()) return; // 🚫 Ne šalji sa localhost-a
+  
   const leadValue = 15; // Najviši prioritet
 
   // 1️⃣ Google Analytics 4 - Event

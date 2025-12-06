@@ -36,19 +36,26 @@
     <title>AI Izrada Sajtova | Profesionalna Izrada Veb Sajta Beograd | AI Websajt Izrada</title>
 
     <!-- Google tag (gtag.js) - Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6C046QS9HG"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      // Google Analytics 4
-      gtag('config', 'G-6C046QS9HG');
+      // 🚫 Ne učitavaj Google Analytics na localhost-u
+      if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && window.location.hostname !== '[::1]') {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-6C046QS9HG';
+        document.head.appendChild(script);
+        
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
       
-      // Google Ads Conversion Tracking
-      // 👇 ZAMENI "AW-XXXXXXXXXX" sa tvojim Google Ads Conversion ID-jem
-      // Pronaći ćeš ga u: Google Ads → Tools → Conversions → Conversion Actions
-      // gtag('config', 'AW-XXXXXXXXXX');
+        // Google Analytics 4
+        gtag('config', 'G-6C046QS9HG');
+        
+        // Google Ads Conversion Tracking
+        // 👇 ZAMENI "AW-XXXXXXXXXX" sa tvojim Google Ads Conversion ID-jem
+        // Pronaći ćeš ga u: Google Ads → Tools → Conversions → Conversion Actions
+        // gtag('config', 'AW-XXXXXXXXXX');
+      }
     </script>
     
     <!-- 
@@ -77,16 +84,19 @@
     
     <!-- Meta Pixel Code (Facebook Ads) -->
     <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '861131543475701');
-      fbq('track', 'PageView');
+      // 🚫 Ne učitavaj Meta Pixel na localhost-u
+      if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && window.location.hostname !== '[::1]') {
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '861131543475701');
+        fbq('track', 'PageView');
+      }
     </script>
     <!-- End Meta Pixel Code -->
     
