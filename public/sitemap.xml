@@ -51,14 +51,6 @@
     <priority>0.8</priority>
   </url>
   
-  <!-- Content -->
-  <url>
-    <loc>https://aisajt.com/case-studies</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
   <!-- Support Pages -->
   <url>
     <loc>https://aisajt.com/privacy</loc>

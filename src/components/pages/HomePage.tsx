@@ -8,7 +8,7 @@ import { Hero } from '../sections/Hero';
 import { YouTubeVideo } from '../video/YouTubeVideo';
 import { rafThrottle } from '../../utils/performance';
 import { Link, useNavigate } from 'react-router-dom';
-import { trackCTAClick, trackNavigationClick, trackContactInfoClick, trackPortfolioClick } from '../../utils/analytics';
+import { trackCTAClick, trackNavigationClick, trackContactInfoClick, trackPortfolioClick, trackScrollDepth, trackTimeOnPage } from '../../utils/analytics';
 
 export function HomePage() {
   const { language, setLanguage } = useLanguage();
@@ -31,6 +31,87 @@ export function HomePage() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // 📊 Track Scroll Depth (25%, 50%, 75%, 90%)
+  useEffect(() => {
+    const scrollDepthTracked = {
+      '25': false,
+      '50': false,
+      '75': false,
+      '90': false
+    };
+
+    const handleScrollDepth = rafThrottle(() => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+
+      if (scrollPercent >= 25 && !scrollDepthTracked['25']) {
+        scrollDepthTracked['25'] = true;
+        trackScrollDepth(25, window.location.pathname, language);
+      }
+      if (scrollPercent >= 50 && !scrollDepthTracked['50']) {
+        scrollDepthTracked['50'] = true;
+        trackScrollDepth(50, window.location.pathname, language);
+      }
+      if (scrollPercent >= 75 && !scrollDepthTracked['75']) {
+        scrollDepthTracked['75'] = true;
+        trackScrollDepth(75, window.location.pathname, language);
+      }
+      if (scrollPercent >= 90 && !scrollDepthTracked['90']) {
+        scrollDepthTracked['90'] = true;
+        trackScrollDepth(90, window.location.pathname, language);
+      }
+    });
+
+    window.addEventListener('scroll', handleScrollDepth, { passive: true });
+    return () => window.removeEventListener('scroll', handleScrollDepth);
+  }, [language]);
+
+  // ⏱️ Track Time on Page (30s, 60s, 120s, 180s)
+  useEffect(() => {
+    const timeTracked = {
+      '30': false,
+      '60': false,
+      '120': false,
+      '180': false
+    };
+
+    const timer30 = setTimeout(() => {
+      if (!timeTracked['30']) {
+        timeTracked['30'] = true;
+        trackTimeOnPage(30, window.location.pathname, language);
+      }
+    }, 30000); // 30 seconds
+
+    const timer60 = setTimeout(() => {
+      if (!timeTracked['60']) {
+        timeTracked['60'] = true;
+        trackTimeOnPage(60, window.location.pathname, language);
+      }
+    }, 60000); // 1 minute
+
+    const timer120 = setTimeout(() => {
+      if (!timeTracked['120']) {
+        timeTracked['120'] = true;
+        trackTimeOnPage(120, window.location.pathname, language);
+      }
+    }, 120000); // 2 minutes
+
+    const timer180 = setTimeout(() => {
+      if (!timeTracked['180']) {
+        timeTracked['180'] = true;
+        trackTimeOnPage(180, window.location.pathname, language);
+      }
+    }, 180000); // 3 minutes
+
+    return () => {
+      clearTimeout(timer30);
+      clearTimeout(timer60);
+      clearTimeout(timer120);
+      clearTimeout(timer180);
+    };
+  }, [language]);
 
   useEffect(() => {
     const handleScroll = rafThrottle(() => {

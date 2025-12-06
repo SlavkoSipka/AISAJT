@@ -2,8 +2,11 @@
 <html lang="sr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="/images/favicon/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png" />
+    <!-- Favicon - Root location for Google -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <!-- Additional favicons for various devices -->
     <link rel="icon" type="image/png" sizes="512x512" href="/images/favicon/android-chrome-512x512.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,6 +26,7 @@
     <meta name="yandex-verification" content="yandex-verification=1" />
     <meta name="author" content="AiSajt" />
     <meta name="theme-color" content="#1F2937" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="canonical" href="https://aisajt.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,17 +35,47 @@
     <link rel="dns-prefetch" href="https://res.cloudinary.com" />
     <title>AI Izrada Sajtova | Profesionalna Izrada Veb Sajta Beograd | AI Websajt Izrada</title>
 
-    <!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) - Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-6C046QS9HG"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
     
+      // Google Analytics 4
       gtag('config', 'G-6C046QS9HG');
+      
+      // Google Ads Conversion Tracking
+      // 👇 ZAMENI "AW-XXXXXXXXXX" sa tvojim Google Ads Conversion ID-jem
+      // Pronaći ćeš ga u: Google Ads → Tools → Conversions → Conversion Actions
+      // gtag('config', 'AW-XXXXXXXXXX');
     </script>
     
-    <!-- Meta Pixel Code -->
+    <!-- 
+    🎯 KAKO SETUPOVATI GOOGLE ADS KONVERZIJE:
+    
+    1. Idi na Google Ads → Tools & Settings → Measurement → Conversions
+    2. Klikni "New conversion action"
+    3. Izaberi "Website"
+    4. Kreraj konverzije sa ovim imenima (TAČNO OVAKO):
+       
+       📌 TIER 1 KONVERZIJE (Vrednost: 15€):
+       - contact_form_submit  (Primary)
+       - quiz_complete        (Primary)
+       - audit_form_submit    (Primary)
+       
+       📌 TIER 2 KONVERZIJE (Vrednost: 5€):
+       - video_unlock         (Secondary)
+       - pdf_download         (Secondary)
+    
+    5. Za svaku konverziju, Google Ads će ti dati CONVERSION LABEL
+    6. Zatim ovde u index.html odkomentiraj liniju 47 i dodaj svoj AW-XXXXXXXXXX ID
+    7. Konverzije će se automatski pratiti preko analytics.ts fajla!
+    
+    NAPOMENA: Konverzioni labeli su već konfigurisani u analytics.ts
+    -->
+    
+    <!-- Meta Pixel Code (Facebook Ads) -->
     <script>
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -55,6 +89,63 @@
       fbq('track', 'PageView');
     </script>
     <!-- End Meta Pixel Code -->
+    
+    <!-- 
+    🎯 KAKO SETUPOVATI META (FACEBOOK) ADS KONVERZIJE:
+    
+    ✅ Meta Pixel je već instaliran! (ID: 861131543475701)
+    
+    Sada kreiraj CUSTOM CONVERSIONS u Meta Events Manager:
+    
+    1. Idi na: Meta Events Manager → Custom Conversions → Create Custom Conversion
+    2. Kreiraj sledeće custom konverzije:
+    
+    📌 TIER 1 KONVERZIJE (Vrednost: 15€ svaka):
+    
+       Naziv: "Contact Form Lead"
+       Event: Lead
+       URL sadrži: /thank-you?source=contact_page
+       Value: 15 EUR
+       Category: Lead Generation - Tier 1
+       
+       Naziv: "Quiz Complete Lead"
+       Event: Lead
+       URL sadrži: /thank-you?source=quiz
+       Value: 15 EUR
+       Category: Lead Generation - Tier 1
+       
+       Naziv: "Audit Form Lead"
+       Event: Lead
+       URL sadrži: /thank-you?source=audit_form
+       Value: 15 EUR
+       Category: Lead Generation - Tier 1
+    
+    📌 TIER 2 KONVERZIJE (Vrednost: 5€ svaka):
+    
+       Naziv: "Video Unlock Lead"
+       Event: Lead
+       content_category sadrži: "Tier 2"
+       content_type equals: "video"
+       Value: 5 EUR
+       
+       Naziv: "PDF Download Lead"
+       Event: Lead
+       content_category sadrži: "Tier 2"
+       content_type equals: "document"
+       Value: 5 EUR
+    
+    📌 ENGAGEMENT EVENTI (za Retargeting Custom Audiences):
+    
+       - CTAClick (custom event)
+       - VideoPlay (custom event)
+       - HighEngagement (custom event - scroll 75%+ ili 2min+)
+       - ViewContent (portfolio clicks)
+    
+    3. Koristi ove Custom Conversions za Conversion Campaigns
+    4. Kreiraj Custom Audiences od engagement eventa za retargeting
+    
+    NAPOMENA: Svi eventi se automatski šalju kroz analytics.ts fajl!
+    -->
 
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">

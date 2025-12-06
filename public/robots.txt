@@ -2,6 +2,8 @@
 
 User-agent: *
 Allow: /
+Allow: /favicon.ico
+Allow: /favicon-32x32.png
 
 # Sitemap location
 Sitemap: https://aisajt.com/sitemap.xml
