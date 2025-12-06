@@ -203,7 +203,7 @@ export function HomePage() {
             <span className="inline-block px-6 py-2 bg-gradient-to-r from-violet-100 via-indigo-100 to-pink-100 text-transparent bg-clip-text font-semibold text-sm uppercase tracking-wider border border-violet-200 rounded-full mb-6 badge-reveal">
               {language === 'sr' ? '💼 O Nama' : '💼 About Us'}
             </span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight section-header-reveal">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight section-header-reveal">
               {language === 'sr' ? 'Upoznajte ' : 'Meet '}
               <span className="gradient-text">{language === 'sr' ? 'Naš Tim' : 'Our Team'}</span>
             </h2>

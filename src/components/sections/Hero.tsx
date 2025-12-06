@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Sparkles, ArrowRight, ExternalLink } from 'lucide-react';
+import { Send, ArrowRight, ExternalLink } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Language, Translation } from '../../types/language';
 
@@ -70,7 +70,7 @@ export function Hero({ language, t }: HeroProps) {
         <div className={`absolute top-1/2 left-1/3 w-40 h-40 bg-violet-500 rounded-full opacity-10 transition-all duration-[1800ms] delay-200 ${isVisible ? 'scale-100' : 'scale-0'}`}></div>
         
         {/* Small indigo accent */}
-        <div className={`absolute bottom-1/3 right-1/4 w-32 h-32 bg-indigo-500 rounded-full opacity-15 transition-all duration-[2000ms] delay-700 ${isVisible ? 'scale-100' : 'scale-0'}`}></div>
+        <div className={`hidden md:block absolute bottom-1/3 right-1/4 w-32 h-32 bg-indigo-500 rounded-full opacity-15 transition-all duration-[2000ms] delay-700 ${isVisible ? 'scale-100' : 'scale-0'}`}></div>
       </div>
       
       {/* Giant Background Letter "A" - Behind Text */}
@@ -125,11 +125,12 @@ export function Hero({ language, t }: HeroProps) {
             <div className={`flex flex-wrap gap-4 transform transition-all duration-1000 delay-800 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
               <button
                 onClick={() => navigate('/contact')}
-                className="group px-8 py-4 bg-gradient-to-r from-pink-500 to-violet-600 text-white font-semibold rounded-full hover:scale-105 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
+                className="group relative px-8 py-4 bg-gray-900 text-white font-semibold rounded-full hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-2xl overflow-hidden"
               >
-                <Sparkles className="w-5 h-5" />
-                {language === 'sr' ? 'BESPLATNE KONSULTACIJE' : 'FREE CONSULTATION'}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-r from-violet-500/0 via-violet-500/20 to-violet-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                <Send className="w-5 h-5 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
+                <span className="relative z-10">{language === 'sr' ? 'BESPLATNE KONSULTACIJE' : 'FREE CONSULTATION'}</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
               </button>
               
               <button
