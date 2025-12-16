@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
 import { ArrowRight, CheckCircle, PartyPopper, Sparkles } from 'lucide-react';
-import emailjs from '@emailjs/browser';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { Language, Translation } from '../../types/language';
-import { trackLeadGeneration, trackFormInteraction, trackFormSubmitAttempt, trackFormError } from '../../utils/analytics';
-
-// Initialize EmailJS
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "O6sCZaCGoXrFHvBGT";
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_rsasqr9";
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_jf2rgsy";
-
-emailjs.init(EMAILJS_PUBLIC_KEY);
+import { trackFormInteraction, trackFormSubmitAttempt, trackFormError } from '../../utils/analytics';
+import { submitContactForm } from '../../utils/hubspot';
 
 interface FormData {
   name: string;
@@ -56,33 +49,30 @@ export function Contact({ language, t }: ContactProps) {
     trackFormSubmitAttempt('home_page', language);
 
     try {
-      const result = await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        {
-          form_type: 'KONTAKT',
-          to_email: 'office@aisajt.com',
-          user_name: formData.name,
-          user_email: formData.email,
-          user_phone: formData.phone,
-          message: `Nova prijava za konsultacije:\n\nIme: ${formData.name}\nEmail: ${formData.email}\nTelefon: ${formData.phone}`,
-          quiz_result: 'N/A',
-          website_url: 'N/A',
-          language: language
-        }
-      );
+      // Submit to HubSpot
+      const result = await submitContactForm({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+      });
 
-      if (result.status === 200) {
+      if (result.success) {
         // Redirect na Thank You page - tamo će se triggerovati generate_lead event
         navigate(`/thank-you?name=${encodeURIComponent(formData.name)}&source=home_page&lang=${language}`);
         setFormData({ name: '', email: '', phone: '' });
+      } else {
+        throw new Error(result.message || 'HubSpot submission failed');
       }
     } catch (error) {
       // Track form error
       trackFormError('home_page', language, String(error));
 
-      toast.error('Došlo je do greške. Molimo pokušajte ponovo.');
-      console.error('EmailJS error:', error);
+      toast.error(
+        language === 'sr' 
+          ? 'Došlo je do greške. Molimo pokušajte ponovo.' 
+          : 'An error occurred. Please try again.'
+      );
+      console.error('HubSpot error:', error);
     } finally {
       setIsSubmitting(false);
     }

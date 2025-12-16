@@ -1,12 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { X, Play, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
-import emailjs from '@emailjs/browser';
 import { trackVideoGate } from '../../utils/analytics';
-
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "O6sCZaCGoXrFHvBGT";
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_rsasqr9";
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_jf2rgsy";
+import { submitVideoGateForm } from '../../utils/hubspot';
 
 interface VideoGatePopupProps {
   onClose: () => void;
@@ -19,44 +15,30 @@ export function VideoGatePopup({ onClose, onSubmitSuccess }: VideoGatePopupProps
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Inicijalizuj EmailJS
-  useEffect(() => {
-    emailjs.init(EMAILJS_PUBLIC_KEY);
-  }, []);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // Pošalji email sa video gate informacijama (sve parametre koje template očekuje)
-      const result = await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        {
-          form_type: 'VIDEO_GATE',
-          to_email: 'office@aisajt.com',
-          user_name: name,
-          user_email: email,
-          user_phone: 'N/A',
-          message: `🎥 VIDEO GATE - Novi korisnik je otkljucao video!\n\n👤 Ime: ${name}\n📧 Email: ${email}\n🎬 Video: Upoznajte naš tim i način rada\n🌐 Jezik: ${language === 'sr' ? 'Srpski' : 'English'}`,
-          quiz_result: 'N/A',
-          website_url: 'N/A',
-          language: language
-        }
-      );
+      // Submit to HubSpot
+      const result = await submitVideoGateForm({
+        name: name,
+        email: email,
+      });
 
-      if (result.status === 200) {
-        console.log('✅ Video gate email poslat uspešno!');
+      if (result.success) {
+        console.log('✅ Video gate poslat na HubSpot!');
         
         // Track video gate u Google Analytics i Facebook Pixel
         trackVideoGate(name, email, 'Adq2OJ_F24I', language);
+      } else {
+        console.error('❌ HubSpot greška:', result.message);
       }
       
-      // Zatvori popup i pokreni video
+      // Zatvori popup i pokreni video (čak i ako HubSpot fails)
       onSubmitSuccess();
     } catch (error) {
-      console.error('❌ Video gate email greška:', error);
+      console.error('❌ Video gate greška:', error);
       // I dalje dozvoli video da se pokrene
       onSubmitSuccess();
     } finally {

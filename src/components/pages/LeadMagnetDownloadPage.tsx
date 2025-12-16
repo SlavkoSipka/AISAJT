@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Download, BookOpen, CheckCircle, ArrowRight, FileText, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
-import emailjs from '@emailjs/browser';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
 import { trackPDFDownloadRequest } from '../../utils/analytics';
+import { submitPDFDownloadForm } from '../../utils/hubspot';
 import { SEOHelmet } from '../seo/SEOHelmet';
 
 type MagnetType = 'guide' | 'checklist';
@@ -94,39 +94,33 @@ export function LeadMagnetDownloadPage() {
   const t = content[language];
   const magnet = t[magnetType];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Odredi naziv PDF-a za email
-    const pdfType = magnetType === 'guide' ? 'VODIČ' : 'CHECKLIST';
-    
-    // Pošalji email TEBI na office@aisajt.com
-    emailjs.send(
-      'service_rsasqr9',
-      'template_jf2rgsy',
-      {
-        form_type: pdfType,
-        to_email: 'office@aisajt.com',
-        user_name: name,
-        user_email: email,
-        user_phone: 'N/A',
-        message: `Korisnik je preuzeo ${pdfType} PDF.`,
-        quiz_result: 'N/A',
-        website_url: 'N/A',
-        language: language
-      },
-      'O6sCZaCGoXrFHvBGT'
-    ).then(() => {
-      console.log(`✅ ${pdfType} email poslat!`);
-      
-      // Track PDF download request u Google Analytics i Facebook Pixel
-      trackPDFDownloadRequest(magnetType, name, email, language);
-    }).catch((error) => {
-      console.error('❌ Email greška:', error);
-    });
-    
-    // Redirect na Thank You stranicu
-    navigate(`/thank-you?name=${encodeURIComponent(name)}&source=${magnetType}&lang=${language}`);
+    try {
+      // Submit to HubSpot
+      const result = await submitPDFDownloadForm({
+        name: name,
+        email: email,
+        type: magnetType,
+      });
+
+      if (result.success) {
+        console.log(`✅ ${magnetType} PDF download poslat na HubSpot!`);
+        
+        // Track PDF download request u Google Analytics i Facebook Pixel
+        trackPDFDownloadRequest(magnetType, name, email, language);
+        
+        // Redirect na Thank You stranicu
+        navigate(`/thank-you?name=${encodeURIComponent(name)}&source=${magnetType}&lang=${language}`);
+      } else {
+        throw new Error(result.message || 'HubSpot submission failed');
+      }
+    } catch (error) {
+      console.error('❌ HubSpot greška:', error);
+      // I dalje redirect na thank you page kao fallback
+      navigate(`/thank-you?name=${encodeURIComponent(name)}&source=${magnetType}&lang=${language}`);
+    }
   };
 
   const Icon = magnetType === 'guide' ? BookOpen : FileText;

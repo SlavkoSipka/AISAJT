@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { X, Search, BookOpen, ArrowRight, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../hooks/useLanguage';
+import { submitExitAuditForm, submitExitGuideForm } from '../../utils/hubspot';
 
 export function ExitIntentPopup() {
   const [isVisible, setIsVisible] = useState(false);
@@ -53,19 +54,46 @@ export function ExitIntentPopup() {
     setStep(hasSite ? 'withSite' : 'withoutSite');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would integrate with your email service
-    console.log('Form submitted:', formData, step);
     
-    // Redirect based on choice
-    if (step === 'withSite') {
-      navigate(`/thank-you?name=User&source=exit_popup_audit&lang=${language}`);
-    } else {
-      navigate(`/thank-you?name=User&source=exit_popup_guide&lang=${language}`);
+    try {
+      if (step === 'withSite') {
+        // Submit exit audit form (email + website)
+        const result = await submitExitAuditForm({
+          email: formData.email,
+          website: formData.url,
+        });
+
+        if (result.success) {
+          console.log('✅ Exit Audit popup poslat na HubSpot!');
+        } else {
+          console.error('❌ HubSpot greška:', result.message);
+        }
+
+        navigate(`/thank-you?name=User&source=exit_popup_audit&lang=${language}`);
+      } else {
+        // Submit exit guide form (email only)
+        const result = await submitExitGuideForm({
+          email: formData.email,
+        });
+
+        if (result.success) {
+          console.log('✅ Exit Guide popup poslat na HubSpot!');
+        } else {
+          console.warn('⚠️ Exit Guide form not configured yet');
+        }
+
+        navigate(`/thank-you?name=User&source=exit_popup_guide&lang=${language}`);
+      }
+    } catch (error) {
+      console.error('❌ Exit popup greška:', error);
+      // I dalje redirect na thank you page
+      const source = step === 'withSite' ? 'exit_popup_audit' : 'exit_popup_guide';
+      navigate(`/thank-you?name=User&source=${source}&lang=${language}`);
+    } finally {
+      handleClose();
     }
-    
-    handleClose();
   };
 
   if (!isVisible) return null;

@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ArrowRight, CheckCircle, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
-import emailjs from '@emailjs/browser';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
 import { SEOHelmet } from '../seo/SEOHelmet';
 import { trackAuditFormSubmit } from '../../utils/analytics';
+import { submitAuditForm } from '../../utils/hubspot';
 
 export function AuditFormPage() {
   const { language } = useLanguage();
@@ -73,35 +73,34 @@ export function AuditFormPage() {
 
   const t = content[language];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Pošalji email TEBI na office@aisajt.com
-    emailjs.send(
-      'service_rsasqr9',
-      'template_jf2rgsy',
-      {
-        form_type: 'AUDIT',
-        to_email: 'office@aisajt.com',
-        user_name: formData.name,
-        user_email: formData.email,
-        user_phone: formData.phone || 'N/A',
-        message: 'Korisnik traži besplatnu analizu sajta.',
-        quiz_result: 'N/A',
-        website_url: formData.website,
-        language: language
-      },
-      'O6sCZaCGoXrFHvBGT'
-    ).then(() => {
-      console.log('✅ Audit email poslat!');
-      
-      // Track audit form submission u Google Analytics i Facebook Pixel
-      trackAuditFormSubmit(formData.name, formData.email, formData.website, language);
-    }).catch((error) => {
-      console.error('❌ Email greška:', error);
-    });
-    
-    navigate(`/thank-you?name=${encodeURIComponent(formData.name)}&source=audit_form&lang=${language}`);
+    try {
+      // Submit to HubSpot
+      const result = await submitAuditForm({
+        name: formData.name,
+        email: formData.email,
+        website: formData.website,
+        phone: formData.phone || undefined,
+      });
+
+      if (result.success) {
+        console.log('✅ Audit forma poslata na HubSpot!');
+        
+        // Track audit form submission u Google Analytics i Facebook Pixel
+        trackAuditFormSubmit(formData.name, formData.email, formData.website, language);
+        
+        // Redirect na Thank You page
+        navigate(`/thank-you?name=${encodeURIComponent(formData.name)}&source=audit_form&lang=${language}`);
+      } else {
+        throw new Error(result.message || 'HubSpot submission failed');
+      }
+    } catch (error) {
+      console.error('❌ HubSpot greška:', error);
+      // I dalje redirect na thank you page kao fallback
+      navigate(`/thank-you?name=${encodeURIComponent(formData.name)}&source=audit_form&lang=${language}`);
+    }
   };
 
   return (

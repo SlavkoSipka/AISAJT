@@ -3,9 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, HelpCircle, ArrowRight, ArrowLeft, Check, Mail, Phone, MapPin } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { NavLink, MobileNavLink } from '../navigation/NavLink';
-import emailjs from '@emailjs/browser';
 import { translations } from '../../types/language';
 import { trackQuizStart, trackQuizAnswer, trackQuizComplete } from '../../utils/analytics';
+import { submitQuizForm } from '../../utils/hubspot';
 import { SEOHelmet } from '../seo/SEOHelmet';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
@@ -29,6 +29,7 @@ export function QuizPage() {
   const [showResults, setShowResults] = useState(false);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
 
   const quizContent = {
     sr: {
@@ -185,39 +186,34 @@ export function QuizPage() {
     return option ? option.text : '';
   };
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Formatiraj odgovore za email
-    const answersText = questions.map((q, index) => 
-      `${q.question}\n → ${getAnswerText(index)}`
-    ).join('\n\n');
-    
-    // Pošalji email TEBI na office@aisajt.com
-    emailjs.send(
-      'service_rsasqr9',
-      'template_jf2rgsy',
-      {
-        form_type: 'KVIZ',
-        to_email: 'office@aisajt.com',
-        user_name: name || 'User',
-        user_email: email,
-        user_phone: 'N/A',
-        message: `Korisnik je završio kviz. Odgovori:\n\n${answersText}`,
-        website_url: 'N/A',
-        language: language
-      },
-      'O6sCZaCGoXrFHvBGT'
-    ).then(() => {
-      console.log('✅ Kviz email poslat!');
-      
-      // Track quiz completion u Google Analytics i Facebook Pixel
-      trackQuizComplete(name || 'User', email, answers, language);
-    }).catch((error) => {
-      console.error('❌ Email greška:', error);
-    });
-    
-    navigate(`/thank-you?name=${encodeURIComponent(name || 'User')}&source=quiz&lang=${language}`);
+    try {
+      // Submit to HubSpot
+      const result = await submitQuizForm({
+        name: name || 'User',
+        email: email,
+        phone: phone,
+        answers: answers,
+      });
+
+      if (result.success) {
+        console.log('✅ Quiz poslat na HubSpot!');
+        
+        // Track quiz completion u Google Analytics i Facebook Pixel
+        trackQuizComplete(name || 'User', email, answers, language);
+        
+        // Redirect na Thank You page
+        navigate(`/thank-you?name=${encodeURIComponent(name || 'User')}&source=quiz&lang=${language}`);
+      } else {
+        throw new Error(result.message || 'HubSpot submission failed');
+      }
+    } catch (error) {
+      console.error('❌ HubSpot greška:', error);
+      // I dalje redirect na thank you page kao fallback
+      navigate(`/thank-you?name=${encodeURIComponent(name || 'User')}&source=quiz&lang=${language}`);
+    }
   };
 
   return (
@@ -516,6 +512,14 @@ export function QuizPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder={qt.results.email.placeholder}
+                        className="w-full px-3 py-2.5 md:px-5 md:py-4 border-2 border-gray-300 rounded-xl focus:border-gray-900 focus:outline-none transition-colors text-sm md:text-lg"
+                      />
+                      <input
+                        type="tel"
+                        required
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder={language === 'sr' ? 'Broj telefona' : 'Phone number'}
                         className="w-full px-3 py-2.5 md:px-5 md:py-4 border-2 border-gray-300 rounded-xl focus:border-gray-900 focus:outline-none transition-colors text-sm md:text-lg"
                       />
                       <button
