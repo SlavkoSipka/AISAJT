@@ -28,7 +28,7 @@ Korisnik popunjava formu → Klikne "Pošalji" → ✅ generate_lead event!
 - Parametri: lead_source, language, user_name, value
 
 ### ✅ Facebook Pixel
-- Pixel ID: **861131543475701**
+- Pixel ID: **1518014729424098**
 - Event: **`Lead`**
 - Konverzija tracking aktivan
 
@@ -163,7 +163,7 @@ Contact Form Success → FB Pixel "Lead" event
 ### Provera:
 ```
 1. Facebook Events Manager
-2. Pixel ID: 861131543475701
+2. Pixel ID: 1518014729424098
 3. Test Events → Real-Time
 4. Videćete "Lead" event
 ```
@@ -250,7 +250,7 @@ console.log('FB:', typeof window.fbq !== 'undefined');
 ### Problem: FB Pixel ne radi
 **Rešenje:**
 - Instalirajte: [Facebook Pixel Helper](https://chrome.google.com/webstore/detail/facebook-pixel-helper/)
-- Proverite Pixel ID: 861131543475701
+- Proverite Pixel ID: 1518014729424098
 
 **Detaljan guide:** `TESTING_ANALYTICS.md`
 
@@ -302,7 +302,7 @@ Pre nego što ide live na aisajt.com:
 ## 🎯 Prvi Lead = Prvi Uspeh! 🎉
 
 **Google Analytics ID:** G-6C046QS9HG  
-**Facebook Pixel ID:** 861131543475701
+**Facebook Pixel ID:** 1518014729424098
 
 ---
 

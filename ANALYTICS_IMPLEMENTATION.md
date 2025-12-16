@@ -216,7 +216,7 @@ const handleSubmit = async (e) => {
 
 ### Provera:
 1. [Facebook Events Manager](https://business.facebook.com/events_manager2)
-2. Pixel ID: **861131543475701**
+2. Pixel ID: **1518014729424098**
 3. Test Event → Pošaljite formu
 4. Videćete **Lead** event u real-time
 
@@ -366,7 +366,7 @@ Nakon implementacije, očekujte:
 Pre nego što sajt ide live:
 
 - [x] Google Analytics ID konfigurisan: **G-6C046QS9HG**
-- [x] Facebook Pixel ID konfigurisan: **861131543475701**
+- [x] Facebook Pixel ID konfigurisan: **1518014729424098**
 - [x] Lead tracking implementiran na Contact Page
 - [x] Lead tracking implementiran na Home Page
 - [x] Helper funkcije kreirane i testirane

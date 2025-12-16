@@ -248,7 +248,7 @@ NAJVAŽNIJE METRIKE ZA PRAĆENJE
 FACEBOOK PIXEL EVENTI (Automatski)
 ═══════════════════════════════════════════════════════════════════════════════
 
-Pixel ID: 861131543475701
+Pixel ID: 1518014729424098
 
 Eventi koji se šalju:
 - "Lead" event - kada se generate_lead triggeruje (glavni event)

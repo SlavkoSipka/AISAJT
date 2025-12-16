@@ -116,21 +116,21 @@ U Google Ads, kreiraj 5 konverzija sa **TAČNO OVIM IMENIMA**:
 
 ### B) META (FACEBOOK) ADS SETUP
 
-✅ **Meta Pixel je već instaliran!** (ID: 861131543475701)
+✅ **Meta Pixel je već instaliran!** (ID: 1518014729424098)
 
 Sada treba da kreiraš **Custom Conversions**.
 
 #### Korak 1: Otvori Meta Events Manager
 
 1. Idi na: [Meta Events Manager](https://business.facebook.com/events_manager2)
-2. Izaberi tvoj Pixel (861131543475701)
+2. Izaberi tvoj Pixel (1518014729424098)
 3. Klikni **Custom Conversions** → **Create Custom Conversion**
 
 #### Korak 2: Kreiraj TIER 1 Custom Conversions
 
 **1. Contact Form Lead**
 - **Name:** Contact Form Lead
-- **Data Source:** Tvoj Pixel (861131543475701)
+- **Data Source:** Tvoj Pixel (1518014729424098)
 - **Conversion Event:** Lead
 - **Rules:** 
   - URL contains `/thank-you`

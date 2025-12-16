@@ -246,7 +246,7 @@ Error Rate = form_submit_error / form_submit_attempt × 100%
 Prije nego što sajt ide live, proverite:
 
 - [ ] GA Property ID je tačan: **G-6C046QS9HG**
-- [ ] FB Pixel ID je tačan: **861131543475701**
+- [ ] FB Pixel ID je tačan: **1518014729424098**
 - [ ] Testirano slanje forme sa Contact page
 - [ ] Testirano slanje forme sa Home page
 - [ ] Eventi se vide u GA4 Real-Time

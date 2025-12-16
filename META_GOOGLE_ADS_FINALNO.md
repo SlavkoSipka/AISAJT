@@ -42,7 +42,7 @@ Implementiran **3-TIER sistem praćenja konverzija** sa pravilnim prioritetima:
 ### 2. **index.html** - AŽURIRAN SA UPUTSTVIMA ✅
 
 - ✅ Google Analytics 4 već instaliran (ID: G-6C046QS9HG)
-- ✅ Meta Pixel već instaliran (ID: 861131543475701)
+- ✅ Meta Pixel već instaliran (ID: 1518014729424098)
 - ✅ Dodato **detaljno uputstvo** za Google Ads setup
 - ✅ Dodato **detaljno uputstvo** za Meta Custom Conversions setup
 - ✅ Pripremljeno mesto za Google Ads Conversion ID (samo treba odkomentarisati)

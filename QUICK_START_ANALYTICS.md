@@ -72,7 +72,7 @@ Reports → Engagement → Events → Traži "generate_lead"
 
 ### Facebook Events Manager:
 ```
-Business Manager → Events Manager → Pixel ID: 861131543475701
+Business Manager → Events Manager → Pixel ID: 1518014729424098
 ```
 
 ---
@@ -101,7 +101,7 @@ Business Manager → Events Manager → Pixel ID: 861131543475701
 ### Property Info:
 - **Property ID:** G-6C046QS9HG
 - **Sajt:** https://aisajt.com
-- **Facebook Pixel ID:** 861131543475701
+- **Facebook Pixel ID:** 1518014729424098
 
 ### Kreiranje Konverzije:
 1. GA4 → **Configure** → **Events**
@@ -177,7 +177,7 @@ window.gtag('event', 'test_event', { test: 'value' });
 Provera prije nego što ide live:
 
 - [x] GA Property ID: G-6C046QS9HG
-- [x] FB Pixel ID: 861131543475701
+- [x] FB Pixel ID: 1518014729424098
 - [x] Lead tracking na Contact page
 - [x] Lead tracking na Home page
 - [ ] Testirano na produkciji
