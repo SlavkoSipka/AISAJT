@@ -13,6 +13,12 @@ export function ExitIntentPopup() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // 📱 Isključi na mobilnim uređajima - samo desktop
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      return; // Ne prikazuj na mobilnim
+    }
+
     // Proveri da li je korisnik već zatvorio popup
     const hasClosedBefore = localStorage.getItem('exitPopupClosed');
     if (hasClosedBefore === 'true') {

@@ -58,10 +58,6 @@ export interface Translation {
   // Pricing
   affordableWebDev: string;
   affordableWebDevDesc: string;
-  pricingTitle: 'Most Affordable Web Development',
-  pricingDescription: 'Professional websites at the most affordable prices with AI technology',
-  pricingTitle: 'Najpovoljnija Izrada Web Sajtova',
-  pricingDescription: 'Profesionalni web sajtovi po najpovoljnijim cenama uz AI tehnologiju',
   pricingTitle: string;
   pricingDescription: string;
   ecommerceWebsite: string;
@@ -184,6 +180,8 @@ export const translations: Record<Language, Translation> = {
     // Pricing
     affordableWebDev: 'Najpovoljnija Izrada Web Sajtova',
     affordableWebDevDesc: 'Profesionalni web sajtovi po najpovoljnijim cenama uz AI tehnologiju',
+    pricingTitle: 'Najpovoljnija Izrada Web Sajtova',
+    pricingDescription: 'Profesionalni web sajtovi po najpovoljnijim cenama uz AI tehnologiju',
     ecommerceWebsite: 'E-commerce Web Sajt',
     ecommerceFeatures: {
       onlineStore: 'Online prodavnica',
@@ -302,6 +300,8 @@ export const translations: Record<Language, Translation> = {
     // Pricing
     affordableWebDev: 'Most Affordable Web Development',
     affordableWebDevDesc: 'Professional websites at the most affordable prices with AI technology',
+    pricingTitle: 'Most Affordable Web Development',
+    pricingDescription: 'Professional websites at the most affordable prices with AI technology',
     ecommerceWebsite: 'E-commerce Website',
     ecommerceFeatures: {
       onlineStore: 'Online store',

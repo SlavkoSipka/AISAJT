@@ -3,13 +3,16 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 const root = document.getElementById('root');
 if (root) {
   createRoot(root).render(
     <StrictMode>
       <ErrorBoundary>
-        <App />
+        <LanguageProvider>
+          <App />
+        </LanguageProvider>
       </ErrorBoundary>
     </StrictMode>
   );
