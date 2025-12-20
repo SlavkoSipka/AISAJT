@@ -44,6 +44,26 @@ export function ExitIntentPopup() {
     };
   }, [hasShown]);
 
+  // 🔒 Blokiraj body scroll kada je popup otvoren (iOS fix)
+  useEffect(() => {
+    if (isVisible) {
+      const originalStyle = window.getComputedStyle(document.body).overflow;
+      const originalPosition = window.getComputedStyle(document.body).position;
+      
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
+      
+      return () => {
+        document.body.style.overflow = originalStyle;
+        document.body.style.position = originalPosition;
+        document.body.style.width = '';
+        document.body.style.height = '';
+      };
+    }
+  }, [isVisible]);
+
   const handleClose = () => {
     setIsVisible(false);
     // Zapamti da je korisnik zatvorio popup
@@ -99,20 +119,41 @@ export function ExitIntentPopup() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center px-4 animate-fade-in">
-      {/* Backdrop */}
+    <div 
+      className="fixed inset-0 z-[9999] flex items-center justify-center animate-fade-in"
+      style={{
+        WebkitTransform: 'translate3d(0,0,0)',
+        padding: 'max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left))'
+      }}
+    >
+      {/* Backdrop - bez backdrop-blur za iOS */}
       <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70"
         onClick={handleClose}
+        style={{
+          WebkitTapHighlightColor: 'transparent'
+        }}
       />
 
-      {/* Popup Container */}
-      <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl shadow-violet-500/20 overflow-hidden animate-scale-in">
+      {/* Popup Container - iOS optimizovan */}
+      <div 
+        className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl shadow-violet-500/20 overflow-hidden animate-scale-in max-h-[90vh] overflow-y-auto"
+        style={{
+          WebkitTransform: 'translate3d(0,0,0)',
+          WebkitOverflowScrolling: 'touch'
+        }}
+      >
         
-        {/* Close Button */}
+        {/* Close Button - iOS optimizovan */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors group"
+          type="button"
+          className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors group"
+          style={{
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation'
+          }}
+          aria-label="Close"
         >
           <X className="w-5 h-5 text-gray-600 group-hover:rotate-90 transition-transform" />
         </button>
@@ -153,11 +194,16 @@ export function ExitIntentPopup() {
                 {language === 'sr' ? 'Imate li već web sajt?' : 'Do you already have a website?'}
               </p>
 
-              {/* Buttons */}
+              {/* Buttons - iOS optimizovani */}
               <div className="grid grid-cols-2 gap-4">
                 <button
                   onClick={() => handleChoice(true)}
-                  className="group px-6 py-4 bg-gradient-to-br from-violet-500 to-indigo-600 text-white rounded-2xl font-semibold hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-violet-500/30"
+                  type="button"
+                  className="group px-6 py-4 bg-gradient-to-br from-violet-500 to-indigo-600 text-white rounded-2xl font-semibold active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-violet-500/30"
+                  style={{
+                    WebkitTapHighlightColor: 'transparent',
+                    touchAction: 'manipulation'
+                  }}
                 >
                   <Search className="w-6 h-6 mx-auto mb-2" />
                   <span className="block text-sm">
@@ -170,7 +216,12 @@ export function ExitIntentPopup() {
 
                 <button
                   onClick={() => handleChoice(false)}
-                  className="group px-6 py-4 bg-gradient-to-br from-pink-500 to-violet-600 text-white rounded-2xl font-semibold hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-pink-500/30"
+                  type="button"
+                  className="group px-6 py-4 bg-gradient-to-br from-pink-500 to-violet-600 text-white rounded-2xl font-semibold active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-pink-500/30"
+                  style={{
+                    WebkitTapHighlightColor: 'transparent',
+                    touchAction: 'manipulation'
+                  }}
                 >
                   <BookOpen className="w-6 h-6 mx-auto mb-2" />
                   <span className="block text-sm">
@@ -214,6 +265,12 @@ export function ExitIntentPopup() {
                     onChange={(e) => setFormData({ ...formData, url: e.target.value })}
                     placeholder="https://example.com"
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-violet-500 focus:outline-none transition-colors"
+                    style={{
+                      fontSize: '16px',
+                      WebkitAppearance: 'none',
+                      WebkitTapHighlightColor: 'transparent'
+                    }}
+                    autoComplete="url"
                   />
                 </div>
 
@@ -228,12 +285,22 @@ export function ExitIntentPopup() {
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder={language === 'sr' ? 'vas@email.com' : 'your@email.com'}
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-violet-500 focus:outline-none transition-colors"
+                    style={{
+                      fontSize: '16px',
+                      WebkitAppearance: 'none',
+                      WebkitTapHighlightColor: 'transparent'
+                    }}
+                    autoComplete="email"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full group px-6 py-4 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-semibold hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                  className="w-full group px-6 py-4 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-semibold active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                  style={{
+                    WebkitTapHighlightColor: 'transparent',
+                    touchAction: 'manipulation'
+                  }}
                 >
                   {language === 'sr' ? 'Analiziraj Besplatno' : 'Analyze Free'}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -247,7 +314,11 @@ export function ExitIntentPopup() {
               <button
                 type="button"
                 onClick={() => setStep('choice')}
-                className="mt-4 text-sm text-gray-500 hover:text-gray-700 underline"
+                className="mt-4 text-sm text-gray-500 hover:text-gray-700 active:text-gray-900 underline"
+                style={{
+                  WebkitTapHighlightColor: 'transparent',
+                  touchAction: 'manipulation'
+                }}
               >
                 ← {language === 'sr' ? 'Nazad' : 'Back'}
               </button>
@@ -304,12 +375,22 @@ export function ExitIntentPopup() {
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder={language === 'sr' ? 'vas@email.com' : 'your@email.com'}
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none transition-colors"
+                    style={{
+                      fontSize: '16px',
+                      WebkitAppearance: 'none',
+                      WebkitTapHighlightColor: 'transparent'
+                    }}
+                    autoComplete="email"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full group px-6 py-4 bg-gradient-to-r from-pink-600 to-violet-600 text-white rounded-xl font-semibold hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                  className="w-full group px-6 py-4 bg-gradient-to-r from-pink-600 to-violet-600 text-white rounded-xl font-semibold active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                  style={{
+                    WebkitTapHighlightColor: 'transparent',
+                    touchAction: 'manipulation'
+                  }}
                 >
                   {language === 'sr' ? 'Preuzmi Vodič' : 'Download Guide'}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -323,7 +404,11 @@ export function ExitIntentPopup() {
               <button
                 type="button"
                 onClick={() => setStep('choice')}
-                className="mt-4 text-sm text-gray-500 hover:text-gray-700 underline"
+                className="mt-4 text-sm text-gray-500 hover:text-gray-700 active:text-gray-900 underline"
+                style={{
+                  WebkitTapHighlightColor: 'transparent',
+                  touchAction: 'manipulation'
+                }}
               >
                 ← {language === 'sr' ? 'Nazad' : 'Back'}
               </button>

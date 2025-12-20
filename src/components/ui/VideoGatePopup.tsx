@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Play, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { trackVideoGate } from '../../utils/analytics';
@@ -14,6 +14,26 @@ export function VideoGatePopup({ onClose, onSubmitSuccess }: VideoGatePopupProps
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 🔒 Blokiraj body scroll kada je popup otvoren (iOS fix)
+  useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    const originalPosition = window.getComputedStyle(document.body).position;
+    
+    // Blokiraj scroll na body
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.height = '100%';
+    
+    // Vrati originalne stilove kada se popup zatvori
+    return () => {
+      document.body.style.overflow = originalStyle;
+      document.body.style.position = originalPosition;
+      document.body.style.width = '';
+      document.body.style.height = '';
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,19 +67,42 @@ export function VideoGatePopup({ onClose, onSubmitSuccess }: VideoGatePopupProps
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-fade-in">
-      {/* Backdrop */}
+    <div 
+      className="fixed inset-0 z-[9999] flex items-center justify-center animate-fade-in"
+      style={{
+        // iOS Safari fix: Force proper stacking
+        WebkitTransform: 'translate3d(0,0,0)',
+        padding: 'max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left))'
+      }}
+    >
+      {/* Backdrop - bez backdrop-blur za iOS kompatibilnost */}
       <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70"
         onClick={onClose}
+        style={{
+          WebkitTapHighlightColor: 'transparent' // iOS Safari fix
+        }}
       />
 
-      {/* Popup Card */}
-      <div className="relative bg-white rounded-3xl p-8 md:p-12 max-w-md w-full shadow-2xl animate-scale-in border-2 border-violet-200">
-        {/* Close Button */}
+      {/* Popup Card - optimizovan za iPhone */}
+      <div 
+        className="relative bg-white rounded-3xl p-6 md:p-12 max-w-md w-full shadow-2xl animate-scale-in border-2 border-violet-200 max-h-[90vh] overflow-y-auto"
+        style={{
+          // iOS Safari fix: Prevent zoom on input focus
+          WebkitTransform: 'translate3d(0,0,0)',
+          WebkitOverflowScrolling: 'touch'
+        }}
+      >
+        {/* Close Button - Optimizovan za iPhone */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors"
+          type="button"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 active:text-gray-600 transition-colors p-2 -m-2"
+          style={{
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation'
+          }}
+          aria-label="Close"
         >
           <X className="w-6 h-6" />
         </button>
@@ -87,7 +130,7 @@ export function VideoGatePopup({ onClose, onSubmitSuccess }: VideoGatePopupProps
           </p>
         </div>
 
-        {/* Form */}
+        {/* Form - Optimizovano za iPhone */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input
@@ -97,6 +140,12 @@ export function VideoGatePopup({ onClose, onSubmitSuccess }: VideoGatePopupProps
               onChange={(e) => setName(e.target.value)}
               placeholder={language === 'sr' ? 'Vaše ime' : 'Your name'}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-violet-500 focus:outline-none transition-colors text-gray-900"
+              style={{
+                fontSize: '16px', // iOS fix: Prevents auto-zoom on focus
+                WebkitAppearance: 'none', // Remove iOS default styling
+                WebkitTapHighlightColor: 'transparent'
+              }}
+              autoComplete="name"
             />
           </div>
 
@@ -108,13 +157,23 @@ export function VideoGatePopup({ onClose, onSubmitSuccess }: VideoGatePopupProps
               onChange={(e) => setEmail(e.target.value)}
               placeholder={language === 'sr' ? 'Vaš email' : 'Your email'}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-violet-500 focus:outline-none transition-colors text-gray-900"
+              style={{
+                fontSize: '16px', // iOS fix: Prevents auto-zoom on focus
+                WebkitAppearance: 'none', // Remove iOS default styling
+                WebkitTapHighlightColor: 'transparent'
+              }}
+              autoComplete="email"
             />
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full group px-6 py-4 bg-gradient-to-r from-violet-600 via-indigo-500 to-pink-500 text-white rounded-xl font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full group px-6 py-4 bg-gradient-to-r from-violet-600 via-indigo-500 to-pink-500 text-white rounded-xl font-semibold hover:shadow-xl active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{
+              WebkitTapHighlightColor: 'transparent', // iOS fix
+              touchAction: 'manipulation' // Disable double-tap zoom
+            }}
           >
             <Play className="w-5 h-5" />
             {isSubmitting 
