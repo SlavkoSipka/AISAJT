@@ -55,48 +55,48 @@ export function VideoGatePopup({ onClose, onSubmitSuccess }: VideoGatePopupProps
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-fade-in">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 animate-fade-in">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Popup Card */}
-      <div className="relative bg-white rounded-3xl p-8 md:p-12 max-w-md w-full shadow-2xl animate-scale-in border-2 border-violet-200">
+      {/* Popup Card - Optimizovan za telefon */}
+      <div className="relative bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 max-w-sm sm:max-w-md w-full shadow-2xl animate-scale-in border-2 border-violet-200">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-400 hover:text-gray-900 transition-colors p-1"
         >
-          <X className="w-6 h-6" />
+          <X className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
 
-        {/* Icon */}
-        <div className="flex justify-center mb-6">
+        {/* Icon - manji na telefonu */}
+        <div className="flex justify-center mb-4 sm:mb-6">
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-violet-600 via-indigo-500 to-pink-500 rounded-full opacity-20 blur-xl animate-pulse" />
-            <div className="relative bg-gradient-to-r from-violet-600 via-indigo-500 to-pink-500 rounded-full p-4">
-              <Play className="w-8 h-8 text-white" />
+            <div className="relative bg-gradient-to-r from-violet-600 via-indigo-500 to-pink-500 rounded-full p-3 sm:p-4">
+              <Play className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </div>
           </div>
         </div>
 
-        {/* Title */}
-        <div className="text-center mb-6">
-          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 flex items-center justify-center gap-2">
-            <Sparkles className="w-6 h-6 text-violet-600" />
+        {/* Title - kompaktniji na telefonu */}
+        <div className="text-center mb-4 sm:mb-6">
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3 flex items-center justify-center gap-2">
+            <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-violet-600" />
             {language === 'sr' ? 'Otkrijte AiSajt Tim' : 'Discover AiSajt Team'}
           </h3>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 text-sm sm:text-base leading-snug">
             {language === 'sr' 
-              ? 'Unesite vaše podatke i pogledajte kako radimo i šta možemo da vam ponudimo!' 
-              : 'Enter your details and see how we work and what we can offer you!'}
+              ? 'Unesite vaše podatke i pogledajte kako radimo!' 
+              : 'Enter your details and see how we work!'}
           </p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Form - kompaktniji */}
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <input
               type="text"
@@ -104,8 +104,9 @@ export function VideoGatePopup({ onClose, onSubmitSuccess }: VideoGatePopupProps
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={language === 'sr' ? 'Vaše ime' : 'Your name'}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-violet-500 focus:outline-none transition-colors text-gray-900"
+              className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border-2 border-gray-200 rounded-lg sm:rounded-xl focus:border-violet-500 focus:outline-none transition-colors text-gray-900"
               style={{ fontSize: '16px' }}
+              disabled={isSubmitting}
             />
           </div>
 
@@ -116,28 +117,36 @@ export function VideoGatePopup({ onClose, onSubmitSuccess }: VideoGatePopupProps
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={language === 'sr' ? 'Vaš email' : 'Your email'}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-violet-500 focus:outline-none transition-colors text-gray-900"
+              className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border-2 border-gray-200 rounded-lg sm:rounded-xl focus:border-violet-500 focus:outline-none transition-colors text-gray-900"
               style={{ fontSize: '16px' }}
+              disabled={isSubmitting}
             />
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full group px-6 py-4 bg-gradient-to-r from-violet-600 via-indigo-500 to-pink-500 text-white rounded-xl font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full group px-4 py-3 sm:px-6 sm:py-3.5 bg-gradient-to-r from-violet-600 via-indigo-500 to-pink-500 text-white rounded-lg sm:rounded-xl font-semibold hover:shadow-xl active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:scale-95"
           >
-            <Play className="w-5 h-5" />
-            {isSubmitting 
-              ? (language === 'sr' ? 'Šalje se...' : 'Sending...') 
-              : (language === 'sr' ? 'Pusti Video' : 'Play Video')}
+            {isSubmitting ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span>{language === 'sr' ? 'Šalje se...' : 'Sending...'}</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-5 h-5" />
+                <span>{language === 'sr' ? 'Pusti Video' : 'Play Video'}</span>
+              </>
+            )}
           </button>
         </form>
 
-        {/* Privacy Note */}
-        <p className="text-xs text-gray-500 text-center mt-4">
+        {/* Privacy Note - kompaktniji */}
+        <p className="text-xs text-gray-500 text-center mt-3 leading-tight">
           {language === 'sr' 
-            ? 'Vaši podaci su sigurni i neće biti deljeni sa trećim licima.' 
-            : 'Your data is safe and will not be shared with third parties.'}
+            ? 'Vaši podaci su sigurni.' 
+            : 'Your data is safe.'}
         </p>
       </div>
     </div>
