@@ -254,8 +254,8 @@ export const translations: Record<Language, Translation> = {
     monthly: 'mesečno',
     
     // SEO-optimized sections
-    servicesHeading: 'Izrada Web Sajta i Izrada Sajtova',
-    servicesSubheading: 'Profesionalna izrada web sajta za firme i preduzetnike. Izrada sajta cena od 150€. Brzo, kvalitetno i transparentno.',
+    servicesHeading: 'Naše Usluge Web Dizajna i Razvoja',
+    servicesSubheading: 'Profesionalne usluge za firme i preduzetnike. Cena zavisi od projekta - od 150€. Brzo, kvalitetno i transparentno.',
     pricingHeading: 'Cene Izrade Web Sajtova',
     pricingSubheading: 'Transparentni cenovnik za izradu sajtova - od osnovnih landing stranica do kompleksnih e-commerce rešenja',
     whyAiSajt: 'Zašto Odabrati AiSajt za Izradu Web Sajta?',

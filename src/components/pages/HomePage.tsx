@@ -228,22 +228,93 @@ export function HomePage() {
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                 {language === 'sr' 
-                  ? 'Izrada Web Sajta i Izrada Sajtova Beograd' 
-                  : 'Website Development and Web Design Belgrade'
+                  ? 'Profesionalna Izrada Web Sajta u Beogradu' 
+                  : 'Professional Website Development in Belgrade'
                 }
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-4">
                 {language === 'sr' 
-                  ? 'AiSajt je tim za profesionalnu izradu web sajta baziran u Beogradu. Nudimo kompletnu izradu sajtova po povoljnoj ceni - od dizajna do programiranja i lansiranja. Naša izrada web sajta pokriva sve od jednostavnih stranica do kompleksnih e-commerce platformi.'
-                  : 'AiSajt is a team for professional website development based in Belgrade. We offer complete website creation at affordable prices - from design to programming and launch. Our website development covers everything from simple pages to complex e-commerce platforms.'
+                  ? 'AiSajt je tim za profesionalnu izradu web sajta baziran u Beogradu. Nudimo kompletne usluge - od dizajna do programiranja i lansiranja. Svaki web sajt koji kreiramo je prilagođen vašim potrebama, bilo da je u pitanju prezentacioni sajt, web shop ili kompleksna e-commerce platforma.'
+                  : 'AiSajt is a team for professional website development based in Belgrade. We offer complete services - from design to programming and launch. Every website we create is tailored to your needs, whether it\'s a presentation site, web shop or complex e-commerce platform.'
+                }
+              </p>
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                {language === 'sr' 
+                  ? 'Da li se pitate koliko košta kvalitetan sajt? Cena izrade sajta zavisi od obima projekta i započinje od 150€. Transparentna ponuda bez skrivenih troškova - to je ono što možete očekivati kada radite sa nama. Radimo sa klijentima širom Srbije, od Beograda do Novog Sada.'
+                  : 'Wondering how much a quality website costs? Website creation price depends on the project scope and starts from €150. Transparent offer without hidden costs - that\'s what you can expect when working with us. We work with clients across Serbia, from Belgrade to Novi Sad.'
                 }
               </p>
               <p className="text-lg text-gray-700 leading-relaxed">
                 {language === 'sr' 
-                  ? 'Izrada sajta cena zavisi od obima projekta i započinje od 150€. Cena izrade sajta je transparentna - bez skrivenih troškova. Radimo sa klijentima širom Srbije, uključujući izrada web sajta Novi Sad i druge gradove.'
-                  : 'Website creation price depends on the project scope and starts from €150. Website pricing is transparent - no hidden costs. We work with clients across Serbia, including website development in Novi Sad and other cities.'
+                  ? 'Na internetu danas nije dovoljno samo biti prisutan - važno je da vaša web stranica privlači i zadržava posetioce. Zato se naša izrada sajtova fokusira na brze, moderne i SEO optimizovane web stranice koje donose rezultate za vaš biznis.'
+                  : 'On the internet today, it\'s not enough to just be present - it\'s important that your website attracts and retains visitors. That\'s why our website development focuses on fast, modern and SEO optimized websites that deliver results for your business.'
                 }
               </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Informativna sekcija - Long-form content za SEO */}
+        <section className="py-12 md:py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">
+                {language === 'sr' 
+                  ? 'Sve što treba da znate o izradi web sajta' 
+                  : 'Everything you need to know about website development'
+                }
+              </h2>
+              
+              <div className="prose prose-lg max-w-none">
+                {language === 'sr' ? (
+                  <>
+                    <p className="text-gray-700 mb-4 leading-relaxed">
+                      Kada govorimo o izradi sajtova, često se postavlja pitanje: "Da li mi je uopšte potreban sajt?" Odgovor je jednostavan - u digitalnom dobu, web stranica je digitalni izlog vašeg biznisa. Svaki web sajt koji napravimo služi kao most između vas i vaših potencijalnih klijenata na internetu.
+                    </p>
+                    
+                    <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+                      Šta obuhvata profesionalna izrada web sajta?
+                    </h3>
+                    <p className="text-gray-700 mb-4 leading-relaxed">
+                      Kada izaberete nas za vas projekat, dobijate kompletno rešenje. To znači da se ne bavimo samo dizajnom - naša usluga obuhvata planiranje, dizajn, razvoj, testiranje i lansiranje. Bilo da vam je u pitanju jednostavna prezentacija, web shop za online prodaju, ili kompleksna platforma, pristup je isti: profesionalan i detaljan.
+                    </p>
+                    
+                    <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+                      Zašto je cena izrade sajta različita za svaki projekat?
+                    </h3>
+                    <p className="text-gray-700 mb-4 leading-relaxed">
+                      Često nas pitaju o ceni. Razlog zbog kojeg nemamo jednu fiksnu cenu je što svaki biznis ima jedinstvene potrebe. Web shop sa 100 proizvoda zahteva više posla nego prezentacioni sajt sa 5 stranica. Zato izrada sajta cena počinje od 150€ za osnovne projekte, dok se za složenije platforme pravi prilagođena ponuda. Ono što je važno - uvek dobijate transparentnu ponudu bez skrivenih troškova.
+                    </p>
+                    
+                    <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+                      Kako izgleda proces saradnje sa nama?
+                    </h3>
+                    <p className="text-gray-700 mb-4 leading-relaxed">
+                      Proces počinje besplatnom konsultacijom gde razgovaramo o vašim ciljevima. Zatim izrađujemo plan i ponudu. Nakon vaše saglasnosti, prelazimo na dizajn i razvoj. Tokom celog procesa ste u kontaktu sa našim timom i možete da pratite napredak. Na kraju dobijate potpuno funkcionalan sajt, obuku za korišćenje, i podršku nakon lansiranja.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-gray-700 mb-4 leading-relaxed">
+                      When we talk about website development, the question often arises: "Do I even need a website?" The answer is simple - in the digital age, a website is the digital storefront of your business. Every website we create serves as a bridge between you and your potential clients on the internet.
+                    </p>
+                    
+                    <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+                      What does professional website development include?
+                    </h3>
+                    <p className="text-gray-700 mb-4 leading-relaxed">
+                      When you choose us for your project, you get a complete solution. This means we don't just do design - our service includes planning, design, development, testing and launch. Whether it's a simple presentation, web shop for online sales, or complex platform, the approach is the same: professional and detailed.
+                    </p>
+                    
+                    <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+                      Why is the website price different for each project?
+                    </h3>
+                    <p className="text-gray-700 mb-4 leading-relaxed">
+                      We're often asked about pricing. The reason we don't have one fixed price is that every business has unique needs. A web shop with 100 products requires more work than a presentation site with 5 pages. That's why website creation starts from €150 for basic projects, while more complex platforms get customized quotes.
+                    </p>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </section>
