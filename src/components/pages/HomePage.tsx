@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Clock, MessageSquare, CheckCircle, ArrowRight, Brain, Cpu, Bot, Mail, Phone, MapPin } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { Clock, MessageSquare, CheckCircle, ArrowRight, Brain, Cpu, MapPin } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { translations } from '../../types/language';
 import { Navbar } from '../layout/Navbar';
@@ -7,16 +7,19 @@ import { Footer } from '../layout/Footer';
 import { PortfolioCard } from '../cards/PortfolioCard';
 import { Hero } from '../sections/Hero';
 import { YouTubeVideo } from '../video/YouTubeVideo';
+import { FAQ } from '../sections/FAQ';
+import { SEOHelmet } from '../seo/SEOHelmet';
 import { rafThrottle } from '../../utils/performance';
 import { Link, useNavigate } from 'react-router-dom';
-import { trackCTAClick, trackContactInfoClick, trackPortfolioClick, trackScrollDepth, trackTimeOnPage } from '../../utils/analytics';
+import { trackCTAClick, trackScrollDepth, trackTimeOnPage } from '../../utils/analytics';
 
 export function HomePage() {
-  const { language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
   const t = translations[language];
   const navigate = useNavigate();
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const parallaxRefs = useRef<HTMLElement[]>([]);
+  const parallaxRefs = useRef<Set<HTMLElement>>(new Set());
+  const observedElements = useRef<Set<Element>>(new Set());
 
 
   // 📊 Track Scroll Depth (25%, 50%, 75%, 90%)
@@ -101,6 +104,7 @@ export function HomePage() {
   }, [language]);
 
 
+  // Parallax scroll efekat - optimizovan bez duplikata
   useEffect(() => {
     const handleParallax = rafThrottle(() => {
       parallaxRefs.current.forEach(element => {
@@ -114,11 +118,14 @@ export function HomePage() {
     });
 
     window.addEventListener('scroll', handleParallax, { passive: true });
-    return () => window.removeEventListener('scroll', handleParallax);
+    return () => {
+      window.removeEventListener('scroll', handleParallax);
+      parallaxRefs.current.clear(); // Očisti Set pri unmount
+    };
   }, []);
 
+  // IntersectionObserver za scroll animacije - optimizovan sa "once" ponašanjem
   useEffect(() => {
-    // Optimize Intersection Observer with single instance
     const options: IntersectionObserverInit = {
       threshold: 0.1,
       rootMargin: '0px 0px -50px 0px'
@@ -126,27 +133,18 @@ export function HomePage() {
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        // Use requestAnimationFrame to batch DOM updates
         requestAnimationFrame(() => {
           entries.forEach((entry) => {
+            if (!entry.isIntersecting) return; // Ne skidaj klase kada izađe iz viewport-a
+            
             const target = entry.target;
             
-            if (!entry.isIntersecting) {
-              target.classList.remove('visible');
-              if (target.classList.contains('grid')) {
-                const children = Array.from(target.children);
-                children.forEach(item => {
-                  item.classList.remove('visible');
-                  for (let i = 1; i <= 12; i++) {
-                    item.classList.remove(`stagger-delay-${i}`);
-                  }
-                });
-              }
-              return;
-            }
-            
-            if (entry.isIntersecting) {
+            // Dodaj 'visible' klasu samo jednom
+            if (!observedElements.current.has(target)) {
               target.classList.add('visible');
+              observedElements.current.add(target);
+              
+              // Grid stagger efekat
               if (target.classList.contains('grid')) {
                 const children = Array.from(target.children);
                 children.forEach((item, index) => {
@@ -154,6 +152,9 @@ export function HomePage() {
                   item.classList.add('visible');
                 });
               }
+              
+              // Unobserve nakon što postane vidljiv (performance boost)
+              observerRef.current?.unobserve(target);
             }
           });
         });
@@ -161,12 +162,20 @@ export function HomePage() {
       options
     );
 
-    // Observe all animation elements
-    const elementsToObserve = document.querySelectorAll('.scroll-fade-in, .scroll-scale-in, .parallax-scroll, .stagger-grid-item, .fly-in-left, .fly-in-right, .portfolio-card-reveal, .video-reveal, .founder-reveal, .service-image-reveal, .service-text-reveal, .section-header-reveal, .badge-reveal');
+    // Selektuj sve elemente samo jednom
+    const elementsToObserve = document.querySelectorAll(
+      '.scroll-fade-in, .scroll-scale-in, .parallax-scroll, .stagger-grid-item, ' +
+      '.fly-in-left, .fly-in-right, .portfolio-card-reveal, .video-reveal, ' +
+      '.founder-reveal, .service-image-reveal, .service-text-reveal, ' +
+      '.section-header-reveal, .badge-reveal'
+    );
+    
     elementsToObserve.forEach((element) => {
       observerRef.current?.observe(element);
+      
+      // Dodaj u parallax Set bez duplikata
       if (element.classList.contains('parallax-scroll')) {
-        parallaxRefs.current.push(element as HTMLElement);
+        parallaxRefs.current.add(element as HTMLElement);
       }
     });
 
@@ -175,16 +184,69 @@ export function HomePage() {
         observerRef.current.disconnect();
         observerRef.current = null;
       }
+      observedElements.current.clear();
     };
   }, []);
 
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
+      {/* SEO Meta Tags - dinamički po jeziku */}
+      <SEOHelmet
+        title={language === 'sr' 
+          ? 'Izrada Web Sajta | Izrada Sajtova | Izrada Sajta Cena Beograd'
+          : 'Website Development | Web Design | Website Creation Belgrade'
+        }
+        description={language === 'sr'
+          ? 'Profesionalna izrada web sajta i izrada sajtova u Beogradu. Izrada sajta cena od 150€. Cena izrade sajta zavisi od projekta. Besplatna konsultacija i transparentna ponuda.'
+          : 'Professional website development and web design in Belgrade. Website creation from €150. Transparent pricing. Free consultation.'
+        }
+        keywords={language === 'sr'
+          ? 'izrada web sajta, izrada sajtova, izrada sajta cena, web sajt izrada, cena izrade sajta, izrada web sajta cena, izrada web sajta novi sad'
+          : 'website development, web design, website creation, web development belgrade'
+        }
+        canonicalUrl="https://aisajt.com/"
+      />
+
+      {/* Skip to content link - accessibility */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-6 focus:py-3 focus:bg-violet-600 focus:text-white focus:rounded-lg focus:shadow-lg"
+      >
+        Pređi na glavni sadržaj
+      </a>
+      
       {/* ✅ Navbar komponenta - jedna za ceo sajt */}
       <Navbar />
 
-      <Hero language={language} t={t} />
+      <main id="main-content">
+        <Hero language={language} />
+
+        {/* What We Do - strukturni SEO blok sa prirodnim keyword-ima */}
+        <section className="py-8 md:py-12 bg-gradient-to-b from-white to-gray-50/30">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                {language === 'sr' 
+                  ? 'Izrada Web Sajta i Izrada Sajtova Beograd' 
+                  : 'Website Development and Web Design Belgrade'
+                }
+              </h2>
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                {language === 'sr' 
+                  ? 'AiSajt je tim za profesionalnu izradu web sajta baziran u Beogradu. Nudimo kompletnu izradu sajtova po povoljnoj ceni - od dizajna do programiranja i lansiranja. Naša izrada web sajta pokriva sve od jednostavnih stranica do kompleksnih e-commerce platformi.'
+                  : 'AiSajt is a team for professional website development based in Belgrade. We offer complete website creation at affordable prices - from design to programming and launch. Our website development covers everything from simple pages to complex e-commerce platforms.'
+                }
+              </p>
+              <p className="text-lg text-gray-700 leading-relaxed">
+                {language === 'sr' 
+                  ? 'Izrada sajta cena zavisi od obima projekta i započinje od 150€. Cena izrade sajta je transparentna - bez skrivenih troškova. Radimo sa klijentima širom Srbije, uključujući izrada web sajta Novi Sad i druge gradove.'
+                  : 'Website creation price depends on the project scope and starts from €150. Website pricing is transparent - no hidden costs. We work with clients across Serbia, including website development in Novi Sad and other cities.'
+                }
+              </p>
+            </div>
+          </div>
+        </section>
 
       {/* Services and Pricing Section */}
       <section className="py-16 md:py-28 relative overflow-hidden" id="services">
@@ -283,9 +345,9 @@ export function HomePage() {
               <div className="relative group founder-reveal founder-reveal-left w-full md:w-[75%] md:ml-0">
                 {/* Background Letter "S" */}
                 <div className="absolute -top-12 -left-12 pointer-events-none overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                  <h1 className="text-[200px] md:text-[280px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-violet-600 via-indigo-500 to-pink-500 select-none opacity-10">
+                  <div className="text-[200px] md:text-[280px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-violet-600 via-indigo-500 to-pink-500 select-none opacity-10" aria-hidden="true">
                     S
-                  </h1>
+                  </div>
                 </div>
 
                 <div className="bg-white/70 backdrop-blur-sm p-6 md:p-8 rounded-3xl border border-gray-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
@@ -299,7 +361,7 @@ export function HomePage() {
                       <div className="absolute inset-1 bg-white rounded-full"></div>
                       <img 
                         src="/images/zeka.jpg"
-                        alt="Strahinja - Arhitekta i osnivač AI izrada sajtova tim"
+                        alt="Strahinja, arhitekta i osnivač AiSajt tima za izradu web sajtova"
                         className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] rounded-full object-cover"
                       />
                     </div>
@@ -349,9 +411,9 @@ export function HomePage() {
               <div className="relative group founder-reveal founder-reveal-right w-full md:w-[75%] md:ml-auto md:mt-8">
                 {/* Background Letter "B" */}
                 <div className="absolute -top-12 -right-12 pointer-events-none overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                  <h1 className="text-[200px] md:text-[280px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 via-pink-500 to-violet-500 select-none opacity-10">
+                  <div className="text-[200px] md:text-[280px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 via-pink-500 to-violet-500 select-none opacity-10" aria-hidden="true">
                     B
-                  </h1>
+                  </div>
                 </div>
 
                 <div className="bg-white/70 backdrop-blur-sm p-6 md:p-8 rounded-3xl border border-gray-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
@@ -365,7 +427,7 @@ export function HomePage() {
                       <div className="absolute inset-1 bg-white rounded-full"></div>
                       <img 
                         src="/images/boban.jpg"
-                        alt="Bogdan - CEO i programer ETF, stručnjak za AI websajt izrada"
+                        alt="Bogdan, CEO i programer ETF, stručnjak za web razvoj i dizajn"
                         className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] rounded-full object-cover"
                       />
                     </div>
@@ -415,7 +477,7 @@ export function HomePage() {
           </div>
 
           {/* Services Section - Split Layout */}
-          <div id="services" className="py-12 md:py-20 max-w-7xl mx-auto relative">
+          <div id="services-detailed" className="py-12 md:py-20 max-w-7xl mx-auto relative">
             {/* Smooth gradient transition to next section */}
             <div className="absolute -bottom-32 left-0 right-0 h-40 bg-gradient-to-b from-transparent via-indigo-50/20 to-violet-50/30 pointer-events-none z-20"></div>
             {/* Animated Background Circles - Full Coverage */}
@@ -437,26 +499,17 @@ export function HomePage() {
               <div className="absolute top-1/4 right-1/3 w-48 h-48 bg-gradient-to-br from-indigo-300 to-violet-400 rounded-full opacity-10 animate-blob animation-delay-4000"></div>
             </div>
 
-            {/* Section Header */}
+            {/* Section Header - SEO Optimized */}
             <div className="text-center mb-16 relative z-10">
               <span className="px-6 py-2 bg-gradient-to-r from-violet-100 via-indigo-100 to-pink-100 text-transparent bg-clip-text font-semibold text-sm uppercase tracking-wider border border-violet-200 rounded-full inline-block mb-4 badge-reveal">
                 {language === 'sr' ? '🚀 Naše Usluge' : '🚀 Our Services'}
               </span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight section-header-reveal">
-                {language === 'sr' ? (
-                  <>
-                    Kompletan <span className="gradient-text">Digitalni</span>
-                    <br />
-                    Ekosistem za Vaš Biznis
-                  </>
-                ) : (
-                  <>
-                    Complete <span className="gradient-text">Digital</span>
-                    <br />
-                    Ecosystem for Your Business
-                  </>
-                )}
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight section-header-reveal">
+                {t.servicesHeading}
               </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                {t.servicesSubheading}
+              </p>
             </div>
 
             {/* Service 1 - Web Dizajn (Image Left) */}
@@ -468,9 +521,9 @@ export function HomePage() {
               
               {/* Giant Background Letter "W" */}
               <div className="absolute -top-10 left-1/2 -translate-x-1/2 md:left-[60%] md:-translate-x-1/2 z-0 pointer-events-none overflow-hidden">
-                <h1 className="text-[280px] sm:text-[320px] md:text-[380px] lg:text-[420px] xl:text-[480px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-violet-600 via-indigo-500 to-pink-500 select-none opacity-[0.06]">
+                <div className="text-[280px] sm:text-[320px] md:text-[380px] lg:text-[420px] xl:text-[480px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-violet-600 via-indigo-500 to-pink-500 select-none opacity-[0.06]" aria-hidden="true">
                   W
-                </h1>
+                </div>
               </div>
               
               <div className="relative service-image-reveal service-image-left z-10" style={{ perspective: '1000px' }}>
@@ -478,7 +531,7 @@ export function HomePage() {
                 <div className="relative overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-700" style={{ borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%', width: '115%', marginLeft: '-15%' }}>
                   <img 
                     src="/images/dizajn.png"
-                    alt="Profesionalna izrada veb sajta - Web dizajn i AI websajt izrada"
+                    alt="Moderan i profesionalan web dizajn za poslovne sajtove"
                     className="w-full h-[380px] md:h-[440px] object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 via-transparent to-indigo-600/20"></div>
@@ -536,9 +589,9 @@ export function HomePage() {
               
               {/* Giant Background Letter "B" */}
               <div className="absolute -top-10 left-1/2 -translate-x-1/2 md:left-[40%] md:-translate-x-1/2 z-0 pointer-events-none overflow-hidden">
-                <h1 className="text-[280px] sm:text-[320px] md:text-[380px] lg:text-[420px] xl:text-[480px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 via-pink-500 to-violet-500 select-none opacity-[0.06]">
+                <div className="text-[280px] sm:text-[320px] md:text-[380px] lg:text-[420px] xl:text-[480px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 via-pink-500 to-violet-500 select-none opacity-[0.06]" aria-hidden="true">
                   B
-                </h1>
+                </div>
               </div>
               
               <div className="space-y-4 md:space-y-6 order-2 md:order-1 service-text-reveal service-delay-2 relative z-10">
@@ -587,7 +640,7 @@ export function HomePage() {
                 <div className="relative overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-700" style={{ borderRadius: '40% 60% 70% 30% / 40% 70% 30% 60%', width: '85%', marginLeft: 'auto', marginRight: '0' }}>
                   <img 
                     src="/images/baza.jpg"
-                    alt="Upravljanje bazama podataka za veb sajtove - AI izrada sajtova"
+                    alt="Upravljanje bazama podataka i backend razvoj web aplikacija"
                     className="w-full h-[340px] md:h-[380px] object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-transparent to-pink-600/20"></div>
@@ -604,9 +657,9 @@ export function HomePage() {
               
               {/* Giant Background Letter "M" */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 md:left-[55%] md:-translate-x-1/2 z-0 pointer-events-none overflow-hidden">
-                <h1 className="text-[280px] sm:text-[320px] md:text-[380px] lg:text-[420px] xl:text-[480px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-pink-600 via-violet-500 to-indigo-500 select-none opacity-[0.06]">
+                <div className="text-[280px] sm:text-[320px] md:text-[380px] lg:text-[420px] xl:text-[480px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-pink-600 via-violet-500 to-indigo-500 select-none opacity-[0.06]" aria-hidden="true">
                   M
-                </h1>
+                </div>
               </div>
               
               <div className="relative service-image-reveal service-image-left service-delay-1 z-10" style={{ perspective: '1000px' }}>
@@ -614,7 +667,7 @@ export function HomePage() {
                 <div className="relative overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-700" style={{ borderRadius: '70% 30% 50% 50% / 30% 60% 40% 70%', width: '95%', marginTop: '20px' }}>
                   <img 
                     src="/images/marketing.png"
-                    alt="Online marketing za web sajtove - Digitalni marketing i izrada veb sajta"
+                    alt="Digitalni marketing i promocija web sajtova putem društvenih mreža"
                     className="w-full h-[380px] md:h-[440px] object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-br from-pink-600/20 via-transparent to-violet-600/20"></div>
@@ -769,7 +822,7 @@ export function HomePage() {
       </section>
 
       {/* Portfolio Section */}
-      <section className="py-20 md:py-32 relative overflow-hidden" id="why-us">
+      <section className="py-20 md:py-32 relative overflow-hidden" id="portfolio">
         {/* Top gradient transition from Services */}
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-violet-50/60 via-violet-50/30 to-transparent pointer-events-none z-10"></div>
         {/* Smooth layered gradient background */}
@@ -913,6 +966,161 @@ export function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Why AiSajt Section - NEW */}
+      <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-white via-gray-50/30 to-white" id="why-us">
+        {/* Background Elements */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-20 -left-20 w-80 h-80 bg-gradient-to-br from-violet-400 to-indigo-500 rounded-full opacity-5 blur-3xl animate-blob"></div>
+          <div className="absolute bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-pink-400 to-violet-500 rounded-full opacity-5 blur-3xl animate-blob animation-delay-2000"></div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Header */}
+          <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
+            <span className="px-6 py-2 bg-gradient-to-r from-violet-100 via-indigo-100 to-pink-100 text-transparent bg-clip-text font-semibold text-sm uppercase tracking-wider border border-violet-200 rounded-full inline-block mb-6">
+              {language === 'sr' ? '⭐ Zašto Mi' : '⭐ Why Us'}
+            </span>
+            
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              {t.whyAiSajt}
+            </h2>
+            
+            <p className="text-lg text-gray-600 leading-relaxed">
+              {t.whyAiSajtDesc}
+            </p>
+          </div>
+
+          {/* Benefits Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Benefit 1 */}
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-14 h-14 bg-gradient-to-br from-violet-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-4">
+                <Clock className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                {language === 'sr' ? 'Brza Izrada' : 'Fast Development'}
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                {language === 'sr' 
+                  ? 'Standardni web sajt spreman za 7-14 dana. Za hitne projekte nudimo ekspresnu izradu za 24-48h.'
+                  : 'Standard websites ready in 7-14 days. For urgent projects we offer express development in 24-48h.'
+                }
+              </p>
+            </div>
+
+            {/* Benefit 2 */}
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-pink-600 rounded-2xl flex items-center justify-center mb-4">
+                <Brain className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                {language === 'sr' ? 'AI Tehnologija' : 'AI Technology'}
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                {language === 'sr' 
+                  ? 'Koristimo AI za optimizaciju svake faze izrade - od dizajna, preko sadržaja, do SEO performansi.'
+                  : 'We use AI to optimize every development phase - from design, through content, to SEO performance.'
+                }
+              </p>
+            </div>
+
+            {/* Benefit 3 */}
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-14 h-14 bg-gradient-to-br from-pink-500 to-violet-600 rounded-2xl flex items-center justify-center mb-4">
+                <CheckCircle className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                {language === 'sr' ? 'Dokazani Rezultati' : 'Proven Results'}
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                {language === 'sr' 
+                  ? 'Preko 50 zadovoljnih klijenata širom Srbije. Merljivi rezultati i ROI koji opravdava investiciju.'
+                  : 'Over 50 satisfied clients across Serbia. Measurable results and ROI that justifies the investment.'
+                }
+              </p>
+            </div>
+
+            {/* Benefit 4 */}
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-14 h-14 bg-gradient-to-br from-violet-500 to-pink-600 rounded-2xl flex items-center justify-center mb-4">
+                <Cpu className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                {language === 'sr' ? 'Tehnički Stručni' : 'Technical Experts'}
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                {language === 'sr' 
+                  ? 'Tim sa višegodišnjim iskustvom u razvoju web aplikacija, e-commerce rešenja i kompleksnih sistema.'
+                  : 'Team with years of experience in web application development, e-commerce solutions, and complex systems.'
+                }
+              </p>
+            </div>
+
+            {/* Benefit 5 */}
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-2xl flex items-center justify-center mb-4">
+                <MapPin className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                {t.locationServed}
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                {language === 'sr' 
+                  ? 'Bazirani u Beogradu, radimo projekte za klijente širom cele Srbije sa mogućnošću online komunikacije.'
+                  : 'Based in Belgrade, we work on projects for clients across Serbia with online communication options.'
+                }
+              </p>
+            </div>
+
+            {/* Benefit 6 */}
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="w-14 h-14 bg-gradient-to-br from-pink-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-4">
+                <MessageSquare className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                {language === 'sr' ? 'Podrška & Održavanje' : 'Support & Maintenance'}
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                {language === 'sr' 
+                  ? 'Neprestana podrška nakon lansiranja. Redovni backup-ovi, update-i i tehnička pomoć kada vam zatreba.'
+                  : 'Continuous support after launch. Regular backups, updates, and technical help when you need it.'
+                }
+              </p>
+            </div>
+          </div>
+
+          {/* Internal Links */}
+          <div className="mt-12 md:mt-16 text-center">
+            <p className="text-gray-600 mb-6">
+              {language === 'sr' 
+                ? 'Želite da saznate više o procesu i cenama?'
+                : 'Want to learn more about the process and pricing?'
+              }
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link
+                to="/resources"
+                className="px-6 py-3 border-2 border-violet-600 text-violet-600 font-semibold rounded-full hover:bg-violet-600 hover:text-white transition-all duration-300 inline-flex items-center gap-2"
+              >
+                {language === 'sr' ? 'Besplatni Resursi' : 'Free Resources'}
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                to="/resources/audit"
+                className="px-6 py-3 bg-violet-600 text-white font-semibold rounded-full hover:bg-violet-700 transition-all duration-300 inline-flex items-center gap-2"
+              >
+                {language === 'sr' ? 'Besplatni Audit Sajta' : 'Free Site Audit'}
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+        {/* FAQ Section */}
+        <FAQ language={language} />
+      </main>
 
       {/* ✅ Footer komponenta - jedna za ceo sajt */}
       <Footer />

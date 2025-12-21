@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Send, ArrowRight, ExternalLink } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Language, Translation } from '../../types/language';
+import { useNavigate } from 'react-router-dom';
+import { Language } from '../../types/language';
 
 interface HeroProps {
   language: Language;
-  t: Translation;
 }
 
-export function Hero({ language, t }: HeroProps) {
+export function Hero({ language }: HeroProps) {
   const [isVisible, setIsVisible] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -94,29 +93,27 @@ export function Hero({ language, t }: HeroProps) {
               </p>
             </div>
 
-            {/* Main Heading */}
+            {/* Main Heading - SEO Optimized H1 */}
             <div className={`transform transition-all duration-1000 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight mb-6 drop-shadow-sm">
                 {language === 'sr' ? (
                   <>
-                    Profesionalna Izrada <br />
-                    <span className="gradient-text drop-shadow-md">AI Web Sajtova</span>
+                    Izrada Web Sajta
                   </>
                 ) : (
                   <>
-                    Professional <br />
-                    <span className="gradient-text drop-shadow-md">AI Web Development</span>
+                    Website Development
                   </>
                 )}
               </h1>
             </div>
 
-            {/* Description */}
+            {/* Description - SEO Enhanced */}
             <div className={`transform transition-all duration-1000 delay-600 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
               <p className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-xl font-normal">
                 {language === 'sr' 
-                  ? 'Kompletne usluge izrade web sajtova za online prisustvo koje vaš brend zaslužuje. Otkrijte moć prilagođenog, optimizovanog dizajna uz najnoviju AI tehnologiju.'
-                  : 'Complete website development services for the online presence your brand deserves. Discover the power of custom-made, optimized design with cutting-edge AI technology.'
+                  ? 'Profesionalna izrada web sajta i izrada sajtova u Beogradu. Moderne, brze sajtove pravimo po najpovoljnijim cenama. Proverite našu izrada sajta cena - transparentno i bez skrivenih troškova.'
+                  : 'Professional website development and web design services in Belgrade. We create modern, fast websites at the best prices. Check our transparent pricing - no hidden costs.'
                 }
               </p>
             </div>

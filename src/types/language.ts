@@ -119,6 +119,17 @@ export interface Translation {
   days1to2: string;
   day1: string;
   monthly: string;
+  
+  // SEO-optimized sections
+  servicesHeading: string;
+  servicesSubheading: string;
+  pricingHeading: string;
+  pricingSubheading: string;
+  whyAiSajt: string;
+  whyAiSajtDesc: string;
+  locationServed: string;
+  processHeading: string;
+  processSubheading: string;
 }
 
 export const translations: Record<Language, Translation> = {
@@ -240,7 +251,18 @@ export const translations: Record<Language, Translation> = {
     hours24: '24h',
     days1to2: '1-2 dana',
     day1: '1 dan',
-    monthly: 'mesečno'
+    monthly: 'mesečno',
+    
+    // SEO-optimized sections
+    servicesHeading: 'Izrada Web Sajta i Izrada Sajtova',
+    servicesSubheading: 'Profesionalna izrada web sajta za firme i preduzetnike. Izrada sajta cena od 150€. Brzo, kvalitetno i transparentno.',
+    pricingHeading: 'Cene Izrade Web Sajtova',
+    pricingSubheading: 'Transparentni cenovnik za izradu sajtova - od osnovnih landing stranica do kompleksnih e-commerce rešenja',
+    whyAiSajt: 'Zašto Odabrati AiSajt za Izradu Web Sajta?',
+    whyAiSajtDesc: 'Stručan tim iz Beograda sa iskustvom u izradi web sajta i izrada sajtova za klijente širom Srbije. Naša izrada web sajta kombinuje moderne tehnologije i proverene prakse za rezultate koji donose klijente.',
+    locationServed: 'Izrada web sajtova Beograd i cela Srbija',
+    processHeading: 'Proces Izrade Web Sajta',
+    processSubheading: 'Od ideje do live sajta u nekoliko jednostavnih koraka'
   },
   en: {
     // Navigation
@@ -360,6 +382,17 @@ export const translations: Record<Language, Translation> = {
     hours24: '24h',
     days1to2: '1-2 days',
     day1: '1 day',
-    monthly: 'monthly'
+    monthly: 'monthly',
+    
+    // SEO-optimized sections
+    servicesHeading: 'Website Development Services',
+    servicesSubheading: 'Complete range of services for creating modern, fast and SEO optimized websites at the best prices',
+    pricingHeading: 'Website Development Pricing',
+    pricingSubheading: 'Transparent pricing for website development - from basic landing pages to complex e-commerce solutions',
+    whyAiSajt: 'Why Choose AiSajt for Your Website Development?',
+    whyAiSajtDesc: 'Expert team from Belgrade with experience in website development for clients across Serbia. We combine the latest technologies, AI automation and proven SEO practices for results that exceed expectations.',
+    locationServed: 'Website development Belgrade and all of Serbia',
+    processHeading: 'Website Development Process',
+    processSubheading: 'From idea to live website in a few simple steps'
   }
 };
