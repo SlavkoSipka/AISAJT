@@ -228,14 +228,14 @@ export function HomePage() {
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                 {language === 'sr' 
-                  ? 'Profesionalna Izrada Web Sajta u Beogradu' 
-                  : 'Professional Website Development in Belgrade'
+                  ? 'Izrada Web Sajta - Profesionalne Usluge u Beogradu' 
+                  : 'Website Development - Professional Services in Belgrade'
                 }
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-4">
                 {language === 'sr' 
-                  ? 'AiSajt je tim za profesionalnu izradu web sajta baziran u Beogradu. Nudimo kompletne usluge - od dizajna do programiranja i lansiranja. Svaki web sajt koji kreiramo je prilagođen vašim potrebama, bilo da je u pitanju prezentacioni sajt, web shop ili kompleksna e-commerce platforma.'
-                  : 'AiSajt is a team for professional website development based in Belgrade. We offer complete services - from design to programming and launch. Every website we create is tailored to your needs, whether it\'s a presentation site, web shop or complex e-commerce platform.'
+                  ? 'Tražite pouzdanu agenciju za izradu web sajta? AiSajt je tim baziran u Beogradu koji nudi kompletne usluge izrade web sajta - od dizajna do programiranja i lansiranja. Svaki web sajt koji kreiramo je prilagođen vašim potrebama, bilo da je u pitanju prezentacioni sajt, web shop ili kompleksna e-commerce platforma.'
+                  : 'Looking for a reliable website development agency? AiSajt is a Belgrade-based team offering complete website development services - from design to programming and launch. Every website we create is tailored to your needs, whether it\'s a presentation site, web shop or complex e-commerce platform.'
                 }
               </p>
               <p className="text-lg text-gray-700 leading-relaxed mb-4">
@@ -269,14 +269,14 @@ export function HomePage() {
                 {language === 'sr' ? (
                   <>
                     <p className="text-gray-700 mb-4 leading-relaxed">
-                      Kada govorimo o izradi sajtova, često se postavlja pitanje: "Da li mi je uopšte potreban sajt?" Odgovor je jednostavan - u digitalnom dobu, web stranica je digitalni izlog vašeg biznisa. Svaki web sajt koji napravimo služi kao most između vas i vaših potencijalnih klijenata na internetu.
+                      Kada govorimo o uslugama, često se postavlja pitanje: "Da li mi je uopšte potreban sajt?" Odgovor je jednostavan - u digitalnom dobu, web stranica je digitalni izlog vašeg biznisa. Profesionalna izrada web sajta služi kao most između vas i vaših potencijalnih klijenata na internetu. Svaki web sajt koji napravimo donosi vrednost vašem poslovanju.
                     </p>
                     
                     <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
                       Šta obuhvata profesionalna izrada web sajta?
                     </h3>
                     <p className="text-gray-700 mb-4 leading-relaxed">
-                      Kada izaberete nas za vas projekat, dobijate kompletno rešenje. To znači da se ne bavimo samo dizajnom - naša usluga obuhvata planiranje, dizajn, razvoj, testiranje i lansiranje. Bilo da vam je u pitanju jednostavna prezentacija, web shop za online prodaju, ili kompleksna platforma, pristup je isti: profesionalan i detaljan.
+                      Kada izaberete nas za vaš projekat, dobijate kompletno rešenje. Naša izrada web sajta obuhvata planiranje, dizajn, razvoj, testiranje i lansiranje. To znači da se ne bavimo samo dizajnom. Bilo da vam je u pitanju jednostavna prezentacija, web shop za online prodaju, ili kompleksna platforma, pristup je isti: profesionalan i detaljan.
                     </p>
                     
                     <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
