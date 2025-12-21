@@ -76,9 +76,9 @@ export function Hero({ language, t }: HeroProps) {
       {/* Giant Background Letter "A" - Behind Text */}
       <div className="absolute top-1/2 left-0 md:left-10 -translate-y-1/2 z-[2] pointer-events-none overflow-hidden">
         <div className={`transform transition-all duration-[2000ms] ${isVisible ? 'translate-x-0 opacity-30 md:opacity-25 scale-100' : '-translate-x-20 opacity-0 scale-90'}`}>
-          <h1 className="text-[200px] sm:text-[280px] md:text-[350px] lg:text-[420px] xl:text-[500px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-violet-600 via-indigo-500 to-pink-500 select-none">
+          <div className="text-[200px] sm:text-[280px] md:text-[350px] lg:text-[420px] xl:text-[500px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-violet-600 via-indigo-500 to-pink-500 select-none" aria-hidden="true">
             A
-          </h1>
+          </div>
         </div>
       </div>
 
