@@ -47,7 +47,7 @@ function PriceCard({ name, price, period, description, features, icon: Icon, gra
 
       {/* Price */}
       <div className="mb-4">
-        <span className="text-4xl md:text-5xl font-bold gradient-text">{price}</span>
+        <span className="text-4xl md:text-5xl font-bold text-gray-900">{price}</span>
         <span className="text-gray-600 ml-2">{period}</span>
       </div>
 
@@ -297,13 +297,6 @@ export function PricingPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
-            {/* Badge */}
-            <div className="inline-block mb-6 animate-fade-in">
-              <span className="px-6 py-2 bg-gradient-to-r from-violet-100 via-indigo-100 to-pink-100 text-transparent bg-clip-text font-semibold text-sm uppercase tracking-wider border border-violet-200 rounded-full">
-                💰 {language === 'sr' ? 'Naše Cene' : 'Our Pricing'}
-              </span>
-            </div>
-
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight animate-fade-in-up animation-delay-200">
               {t.hero}
             </h1>

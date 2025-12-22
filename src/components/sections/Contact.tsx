@@ -129,7 +129,7 @@ export function Contact({ language, t }: ContactProps) {
                     {language === 'sr' ? 'Kontakt' : 'Contact'}
                   </p>
                   <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                    <span className="gradient-text">{language === 'sr' ? 'Besplatne' : 'Free'}</span>
+                    {language === 'sr' ? 'Besplatne' : 'Free'}
                     <br />
                     {language === 'sr' ? 'Konsultacije' : 'Consultations'}
                   </h2>

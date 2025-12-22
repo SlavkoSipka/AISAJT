@@ -258,7 +258,7 @@ export function ContactPage() {
                     {language === 'sr' ? 'Stupite u kontakt' : 'Get in Touch'}
                   </p>
                   <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight mb-3 md:mb-6">
-                    <span className="gradient-text">{language === 'sr' ? 'Besplatne Konsultacije' : 'Free Consultations'}</span>
+                    {language === 'sr' ? 'Besplatne Konsultacije' : 'Free Consultations'}
                     <br />
                     <span className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">{language === 'sr' ? 'za Vaš Website' : 'for Your Website'}</span>
                   </h1>

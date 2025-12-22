@@ -172,15 +172,7 @@ export function ThankYouPage() {
           {/* Heading */}
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 animate-fade-in-up animation-delay-200">
-              {language === 'sr' ? (
-                <>
-                  Hvala vam, <span className="gradient-text animate-gradient-x">{userName}</span>!
-                </>
-              ) : (
-                <>
-                  Thank you, <span className="gradient-text animate-gradient-x">{userName}</span>!
-                </>
-              )}
+              {language === 'sr' ? `Hvala vam, ${userName}!` : `Thank you, ${userName}!`}
             </h1>
             <p className="text-lg md:text-xl text-gray-600 leading-relaxed animate-fade-in-up animation-delay-400">
               {language === 'sr' 

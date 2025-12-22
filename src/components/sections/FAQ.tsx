@@ -30,10 +30,6 @@ const faqData: Record<Language, FAQItem[]> = {
       answer: "Apsolutno! Svaki sajt koji kreiramo je potpuno responzivan i optimizovan za sve uređaje - mobilne telefone, tablete i desktop računare. Preko 60% korisnika danas pristupa internetu preko mobilnih uređaja, tako da je mobilna optimizacija obavezna."
     },
     {
-      question: "Da li mogu sam da ažuriram sadržaj na sajtu?",
-      answer: "Da, ako želite CMS (Content Management System) kao što je WordPress, moći ćete lako da dodajete i menjate sadržaj bez programerskog znanja. Pružamo vam obuku i dokumentaciju kako da koristite CMS nakon predaje projekta."
-    },
-    {
       question: "Da li sajt dolazi sa SEO optimizacijom?",
       answer: "Da, svaki sajt koji pravimo je tehnički SEO optimizovan od prvog dana - brzo učitavanje, mobilna prilagođenost, pravilna struktura, meta tagovi, sitemap i sve što je potrebno za dobar start na Google-u. Za napredni SEO i content marketing nudimo dodatne pakete."
     },
@@ -101,22 +97,8 @@ export function FAQ({ language }: FAQProps) {
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
         <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
-          <span className="px-6 py-2 bg-gradient-to-r from-violet-100 via-indigo-100 to-pink-100 text-transparent bg-clip-text font-semibold text-sm uppercase tracking-wider border border-violet-200 rounded-full inline-block mb-6">
-            {language === 'sr' ? '❓ Često Postavljana Pitanja' : '❓ Frequently Asked Questions'}
-          </span>
-          
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            {language === 'sr' ? (
-              <>
-                Pitanja o{' '}
-                <span className="gradient-text">Izradi Web Sajtova</span>
-              </>
-            ) : (
-              <>
-                Questions About{' '}
-                <span className="gradient-text">Website Development</span>
-              </>
-            )}
+            {language === 'sr' ? 'Pitanja o Izradi Web Sajtova' : 'Questions About Website Development'}
           </h2>
           
           <p className="text-lg text-gray-600">

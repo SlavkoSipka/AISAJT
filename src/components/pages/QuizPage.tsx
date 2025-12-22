@@ -377,12 +377,6 @@ export function QuizPage() {
               <>
                 {/* Header */}
                 <div className="text-center mb-6 md:mb-12">
-                  <div className="inline-block mb-3 md:mb-6 animate-fade-in">
-                    <span className="px-4 py-1.5 md:px-6 md:py-2 bg-gradient-to-r from-violet-100 via-pink-100 to-indigo-100 text-transparent bg-clip-text font-semibold text-xs md:text-sm uppercase tracking-wider border border-violet-200 rounded-full">
-                      ❓ {language === 'sr' ? 'Interaktivni Kviz' : 'Interactive Quiz'}
-                    </span>
-                  </div>
-
                   <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 md:mb-4 leading-tight animate-fade-in-up animation-delay-200 px-2">
                     {qt.hero}
                   </h1>

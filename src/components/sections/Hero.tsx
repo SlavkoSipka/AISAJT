@@ -110,10 +110,10 @@ export function Hero({ language }: HeroProps) {
 
             {/* Description - SEO Enhanced */}
             <div className={`transform transition-all duration-1000 delay-600 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-              <p className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-xl font-normal">
+              <p className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-2xl font-normal text-left">
                 {language === 'sr' 
-                  ? 'Profesionalna izrada web sajta i izrada sajtova u Beogradu. Moderne, brze sajtove pravimo po najpovoljnijim cenama. Proverite našu izrada sajta cena - transparentno i bez skrivenih troškova.'
-                  : 'Professional website development and web design services in Belgrade. We create modern, fast websites at the best prices. Check our transparent pricing - no hidden costs.'
+                  ? 'Profesionalna izrada web sajta. (Beograd, Novi Sad, Srbija). Moderne, brze sajtove pravimo po najpovoljnijim cenama. Kliknite na dugme izrada sajta cena.'
+                  : 'Professional website development. (Belgrade, Novi Sad, Serbia). We create modern, fast websites at the best prices. Click the button for pricing.'
                 }
               </p>
             </div>

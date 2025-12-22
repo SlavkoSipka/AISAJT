@@ -129,14 +129,15 @@ export function AuditFormPage() {
               
               {/* Left: Info */}
               <div className="animate-fade-in-up">
-                <div className="inline-block mb-6">
-                  <span className="px-6 py-2 bg-gradient-to-r from-violet-100 via-indigo-100 to-pink-100 text-transparent bg-clip-text font-semibold text-sm uppercase tracking-wider border border-violet-200 rounded-full">
-                    🔍 {language === 'sr' ? 'Besplatna Analiza' : 'Free Audit'}
-                  </span>
-                </div>
-
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                  {t.hero}
+                  {language === 'sr' ? (
+                    <>
+                      Besplatna<br />
+                      Analiza Sajta
+                    </>
+                  ) : (
+                    t.hero
+                  )}
                 </h1>
 
                 <p className="text-lg text-gray-600 mb-8 leading-relaxed">

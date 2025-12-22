@@ -190,12 +190,6 @@ export function CaseStudiesPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block mb-6 animate-fade-in">
-              <span className="px-6 py-2 bg-gradient-to-r from-violet-100 via-indigo-100 to-pink-100 text-transparent bg-clip-text font-semibold text-sm uppercase tracking-wider border border-violet-200 rounded-full">
-                🏆 {language === 'sr' ? 'Naši Projekti' : 'Our Projects'}
-              </span>
-            </div>
-
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight animate-fade-in-up animation-delay-200">
               {t.hero}
             </h1>
@@ -282,7 +276,7 @@ export function CaseStudiesPage() {
                   <div className="grid grid-cols-3 gap-4 mb-6">
                     {study.stats.map((stat, i) => (
                       <div key={i} className="text-center">
-                        <p className="text-2xl md:text-3xl font-bold gradient-text mb-1">
+                        <p className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
                           {stat.value}
                         </p>
                         <p className="text-xs text-gray-600">{stat.label}</p>

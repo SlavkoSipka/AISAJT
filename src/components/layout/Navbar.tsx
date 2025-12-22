@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
@@ -12,11 +12,36 @@ export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          setIsScrolled(currentScrollY > 100);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <nav className="fixed w-full z-50 bg-white/98 shadow-md backdrop-blur-md">
-      <div className="container mx-auto px-4 md:px-8">
-        <div className="flex items-center justify-between h-20 md:h-24">
+    <>
+      {/* Horizontal Navbar - Top */}
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-700 ease-in-out ${
+        isScrolled 
+          ? 'opacity-0 pointer-events-none -translate-y-full' 
+          : 'opacity-100 bg-white/95 shadow-sm backdrop-blur-sm'
+      }`}>
+        <div className="container mx-auto px-4 md:px-8">
+          <div className="flex items-center justify-between h-20 md:h-24">
           <Link 
             to="/" 
             className="flex items-center group py-2"
@@ -145,6 +170,90 @@ export function Navbar() {
         </div>
       </div>
     </nav>
+
+      {/* Vertical Sidebar Navbar - Left Side on Scroll (Hidden on Mobile) */}
+      <nav className={`hidden md:block fixed left-0 top-0 h-full z-50 bg-white shadow-2xl transition-all duration-700 ease-in-out ${
+        isScrolled 
+          ? 'translate-x-0 opacity-100' 
+          : '-translate-x-full opacity-0 pointer-events-none'
+      }`}>
+        <div className="flex flex-col h-full py-4 px-4 w-52 border-r border-gray-200">
+          {/* Logo at Top - Smaller & Closer to Top */}
+          <Link 
+            to="/" 
+            className="flex items-center justify-center mb-6 group"
+            aria-label="AI Sajt - Početna stranica"
+          >
+            <img 
+              src="/images/providna3.png" 
+              alt="AiSajt Logo" 
+              className="w-3/4 h-auto object-contain transition-transform duration-300 group-hover:scale-110"
+            />
+          </Link>
+
+          {/* Horizontal Navigation Buttons - Minimal Design with Site Colors */}
+          <div className="flex flex-col space-y-1 flex-1">
+            <button
+              onClick={() => navigateToSection('services', navigate, location.pathname)}
+              className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
+            >
+              {t.services}
+            </button>
+            <button
+              onClick={() => navigateToSection('why-us', navigate, location.pathname)}
+              className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
+            >
+              {t.portfolio}
+            </button>
+            <button
+              onClick={() => navigateToSection('video-section', navigate, location.pathname)}
+              className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
+            >
+              {t.aboutUs}
+            </button>
+            <button
+              onClick={() => navigate('/resources')}
+              className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
+            >
+              {language === 'sr' ? 'Resursi' : 'Resources'}
+            </button>
+          </div>
+
+          {/* Contact Button at Bottom - Same as Horizontal Navbar */}
+          <button
+            onClick={() => navigate('/contact')}
+            className="w-full bg-gray-900 text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 text-sm uppercase tracking-wide"
+            aria-label="Kontaktirajte nas"
+          >
+            {t.contact}
+          </button>
+          
+          {/* Language Switcher at Bottom */}
+          <div className="flex gap-2 mt-4 justify-center">
+            <button
+              onClick={() => setLanguage('sr')}
+              className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300 ${
+                language === 'sr'
+                  ? 'bg-gray-900 text-white shadow-md'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              SR
+            </button>
+            <button
+              onClick={() => setLanguage('en')}
+              className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300 ${
+                language === 'en'
+                  ? 'bg-gray-900 text-white shadow-md'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              EN
+            </button>
+          </div>
+        </div>
+      </nav>
+    </>
   );
 }
 
