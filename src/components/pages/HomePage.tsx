@@ -542,9 +542,9 @@ export function HomePage() {
                 </div>
               </div>
               <div className="space-y-4 md:space-y-6 service-text-reveal service-delay-2 relative z-10">
-                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
                   {language === 'sr' ? 'Web Dizajn' : 'Web Design'}
-                </h3>
+                </h2>
                 <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed">
                   {language === 'sr' 
                     ? 'Kreiramo moderne, responzivne web sajtove koji ne samo da izgledaju sjajno, već i donose rezultate. Svaki dizajn je prilagođen vašem brendu i ciljevima, sa fokusom na korisničko iskustvo i konverzije.'
@@ -599,9 +599,9 @@ export function HomePage() {
               </div>
               
               <div className="space-y-4 md:space-y-6 order-2 md:order-1 service-text-reveal service-delay-2 relative z-10">
-                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
                   {language === 'sr' ? 'Baze Podataka' : 'Databases'}
-                </h3>
+                </h2>
                 <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed">
                   {language === 'sr' 
                     ? 'Razvijamo i optimizujemo baze podataka za vaše poslovanje. Od analize postojećih sistema do kreiranja potpuno novih, skalabilnih rešenja koja rastu zajedno sa vašom kompanijom.'
@@ -678,9 +678,9 @@ export function HomePage() {
                 </div>
               </div>
               <div className="space-y-4 md:space-y-6 service-text-reveal service-delay-3 relative z-10">
-                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
                   {language === 'sr' ? 'SEO i Marketing' : 'SEO & Marketing'}
-                </h3>
+                </h2>
                 <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed">
                   {language === 'sr' 
                     ? 'Dovedite pravu publiku do vašeg brenda kroz strategije digitalnog marketinga koje donose rezultate. Google Ads, društvene mreže, SEO - sve na jednom mestu za maksimalan ROI.'
