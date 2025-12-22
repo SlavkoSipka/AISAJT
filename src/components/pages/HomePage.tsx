@@ -442,25 +442,25 @@ export function HomePage() {
       <section className="w-full py-12 md:py-16 bg-white relative z-20 shadow-lg">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center scroll-fade-in">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 section-header-reveal">
+            <h2 className="text-xl md:text-3xl font-bold text-gray-900 mb-4 section-header-reveal">
               {language === 'sr' 
                 ? 'Izrada Web Sajta - Profesionalne Usluge u Beogradu' 
                 : 'Website Development - Professional Services in Belgrade'
               }
             </h2>
-            <p className="text-lg text-gray-700 leading-relaxed mb-4">
+            <p className="text-sm md:text-lg text-gray-700 leading-relaxed mb-4">
               {language === 'sr' 
                 ? 'Tražite pouzdanu agenciju za izradu web sajta? AiSajt je tim baziran u Beogradu koji nudi kompletne usluge izrade web sajta - od dizajna do programiranja i lansiranja. Svaki web sajt koji kreiramo je prilagođen vašim potrebama, bilo da je u pitanju prezentacioni sajt, web shop ili kompleksna e-commerce platforma.'
                 : 'Looking for a reliable website development agency? AiSajt is a Belgrade-based team offering complete website development services - from design to programming and launch. Every website we create is tailored to your needs, whether it\'s a presentation site, web shop or complex e-commerce platform.'
               }
             </p>
-            <p className="text-lg text-gray-700 leading-relaxed mb-4">
+            <p className="text-sm md:text-lg text-gray-700 leading-relaxed mb-4">
               {language === 'sr' 
                 ? 'Da li se pitate koliko košta kvalitetan sajt? Cena izrade sajta zavisi od obima projekta. Transparentna ponuda bez skrivenih troškova - to je ono što možete očekivati kada radite sa nama. Radimo sa klijentima širom Srbije, od Beograda do Novog Sada, ali i za inostranstvo.'
                 : 'Wondering how much a quality website costs? Website creation price depends on the project scope. Transparent offer without hidden costs - that\'s what you can expect when working with us. We work with clients across Serbia, from Belgrade to Novi Sad, and internationally.'
               }
             </p>
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <p className="text-sm md:text-lg text-gray-700 leading-relaxed">
               {language === 'sr' 
                 ? 'Na internetu danas nije dovoljno samo biti prisutan - važno je da vaša web stranica privlači i zadržava posetioce. Zato se naša izrada sajtova fokusira na brze, moderne i SEO optimizovane web stranice koje donose rezultate za vaš biznis.'
                 : 'On the internet today, it\'s not enough to just be present - it\'s important that your website attracts and retains visitors. That\'s why our website development focuses on fast, modern and SEO optimized websites that deliver results for your business.'
@@ -731,7 +731,7 @@ export function HomePage() {
       <section className="py-12 md:py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto scroll-fade-in">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center section-header-reveal">
+            <h2 className="text-xl md:text-3xl font-bold text-gray-900 mb-6 text-center section-header-reveal">
               {language === 'sr' 
                 ? 'Sve što treba da znate o izradi web sajta' 
                 : 'Everything you need to know about website development'
@@ -741,48 +741,48 @@ export function HomePage() {
             <div className="prose prose-lg max-w-none">
               {language === 'sr' ? (
                 <>
-                  <p className="text-gray-700 mb-4 leading-relaxed">
+                  <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">
                     Kada govorimo o uslugama, često se postavlja pitanje: "Da li mi je uopšte potreban sajt?" Odgovor je jednostavan - u digitalnom dobu, web stranica je digitalni izlog vašeg biznisa. Profesionalna izrada web sajta služi kao most između vas i vaših potencijalnih klijenata na internetu. Svaki web sajt koji napravimo donosi vrednost vašem poslovanju.
                   </p>
                   
-                  <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 mt-6 mb-3">
                     Šta obuhvata profesionalna izrada web sajta?
                   </h3>
-                  <p className="text-gray-700 mb-4 leading-relaxed">
+                  <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">
                     Kada izaberete nas za vaš projekat, dobijate kompletno rešenje. Naša izrada web sajta obuhvata planiranje, dizajn, razvoj, testiranje i lansiranje. To znači da se ne bavimo samo dizajnom. Bilo da vam je u pitanju jednostavna prezentacija, web shop za online prodaju, ili kompleksna platforma, pristup je isti: profesionalan i detaljan.
                   </p>
                   
-                  <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 mt-6 mb-3">
                     Zašto je cena izrade sajta različita za svaki projekat?
                   </h3>
-                  <p className="text-gray-700 mb-4 leading-relaxed">
+                  <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">
                     Često nas pitaju o ceni. Razlog zbog kojeg nemamo jednu fiksnu cenu je što svaki biznis ima jedinstvene potrebe. Web shop sa 100 proizvoda zahteva više posla nego prezentacioni sajt sa 5 stranica. Zato izrada sajta cena počinje od 450€ za osnovne projekte, dok se za složenije platforme pravi prilagođena ponuda. Ono što je važno - uvek dobijate transparentnu ponudu bez skrivenih troškova.
                   </p>
                   
-                  <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 mt-6 mb-3">
                     Kako izgleda proces saradnje sa nama?
                   </h3>
-                  <p className="text-gray-700 mb-4 leading-relaxed">
+                  <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">
                     Proces počinje besplatnom konsultacijom gde razgovaramo o vašim ciljevima. Zatim izrađujemo plan i ponudu. Nakon vaše saglasnosti, prelazimo na dizajn i razvoj. Tokom celog procesa ste u kontaktu sa našim timom i možete da pratite napredak. Na kraju dobijate potpuno funkcionalan sajt, obuku za korišćenje, i podršku nakon lansiranja.
                   </p>
                 </>
               ) : (
                 <>
-                  <p className="text-gray-700 mb-4 leading-relaxed">
+                  <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">
                     When we talk about website development, the question often arises: "Do I even need a website?" The answer is simple - in the digital age, a website is the digital storefront of your business. Every website we create serves as a bridge between you and your potential clients on the internet.
                   </p>
                   
-                  <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 mt-6 mb-3">
                     What does professional website development include?
                   </h3>
-                  <p className="text-gray-700 mb-4 leading-relaxed">
+                  <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">
                     When you choose us for your project, you get a complete solution. This means we don't just do design - our service includes planning, design, development, testing and launch. Whether it's a simple presentation, web shop for online sales, or complex platform, the approach is the same: professional and detailed.
                   </p>
                   
-                  <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 mt-6 mb-3">
                     Why is the website price different for each project?
                   </h3>
-                  <p className="text-gray-700 mb-4 leading-relaxed">
+                  <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">
                     We're often asked about pricing. The reason we don't have one fixed price is that every business has unique needs. A web shop with 100 products requires more work than a presentation site with 5 pages. That's why website creation starts from €150 for basic projects, while more complex platforms get customized quotes.
                   </p>
                 </>
@@ -813,27 +813,27 @@ export function HomePage() {
             </div>
 
             {/* Resources Grid */}
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto mb-12">
               {/* Resource 1: Quiz */}
               <div 
                 onClick={() => navigate('/resources/quiz')}
-                className="group bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-pink-400 transition-all duration-500 hover:shadow-2xl hover:shadow-pink-500/20 hover:-translate-y-2 cursor-pointer scroll-fade-in"
+                className="group bg-white rounded-2xl p-5 md:p-8 border-2 border-gray-200 hover:border-pink-400 transition-all duration-500 hover:shadow-2xl hover:shadow-pink-500/20 hover:-translate-y-2 cursor-pointer scroll-fade-in"
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-violet-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-pink-500 to-violet-600 rounded-2xl mb-3 md:mb-4 group-hover:scale-110 transition-transform">
+                  <svg className="w-6 h-6 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-lg md:text-2xl font-bold text-gray-900 mb-2 md:mb-3">
                   {language === 'sr' ? 'Kviz: Koji Sajt Vam Treba?' : 'Quiz: Which Site Do You Need?'}
                 </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">
+                <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6 leading-relaxed">
                   {language === 'sr' 
                     ? 'Odgovorite na 5 brzih pitanja i saznajte koji tip sajta najbolje odgovara vašem biznisu. Dobićete personalizovanu preporuku i ponudu.'
                     : 'Answer 5 quick questions and find out which type of site best suits your business. Get a personalized recommendation and quote.'
                   }
                 </p>
-                <span className="text-pink-600 font-bold text-lg inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+                <span className="text-pink-600 font-bold text-base md:text-lg inline-flex items-center gap-2 group-hover:gap-3 transition-all">
                   {language === 'sr' ? 'Započni Kviz →' : 'Start Quiz →'}
                 </span>
               </div>
@@ -841,24 +841,24 @@ export function HomePage() {
               {/* Resource 2: Audit Form */}
               <div 
                 onClick={() => navigate('/resources/audit')}
-                className="group bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-violet-400 transition-all duration-500 hover:shadow-2xl hover:shadow-violet-500/20 hover:-translate-y-2 cursor-pointer scroll-fade-in"
+                className="group bg-white rounded-2xl p-5 md:p-8 border-2 border-gray-200 hover:border-violet-400 transition-all duration-500 hover:shadow-2xl hover:shadow-violet-500/20 hover:-translate-y-2 cursor-pointer scroll-fade-in"
                 style={{ animationDelay: '0.1s' }}
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-violet-500 to-indigo-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-violet-500 to-indigo-600 rounded-2xl mb-3 md:mb-4 group-hover:scale-110 transition-transform">
+                  <svg className="w-6 h-6 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-lg md:text-2xl font-bold text-gray-900 mb-2 md:mb-3">
                   {language === 'sr' ? 'Besplatna Analiza Sajta' : 'Free Website Audit'}
                 </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">
+                <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6 leading-relaxed">
                   {language === 'sr' 
                     ? 'Već imate sajt? Saznajte šta vam košta u izgubljenim klijentima. Dobijate detaljnu analizu za 24h.'
                     : 'Already have a site? Find out what it costs you in lost clients. Get detailed analysis in 24h.'
                   }
                 </p>
-                <span className="text-violet-600 font-bold text-lg inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+                <span className="text-violet-600 font-bold text-base md:text-lg inline-flex items-center gap-2 group-hover:gap-3 transition-all">
                   {language === 'sr' ? 'Analiziraj Sajt →' : 'Analyze Site →'}
                 </span>
               </div>

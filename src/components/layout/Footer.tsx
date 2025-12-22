@@ -36,10 +36,10 @@ export function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">{t.services}</h4>
             <ul className="space-y-2">
-              <li><button onClick={() => navigateToSection('services', navigate, location.pathname)} className="text-gray-600 hover:text-violet-600 transition-colors duration-300 text-left">{language === 'sr' ? 'Web Dizajn' : 'Web Design'}</button></li>
-              <li><button onClick={() => navigateToSection('services', navigate, location.pathname)} className="text-gray-600 hover:text-indigo-600 transition-colors duration-300 text-left">{language === 'sr' ? 'Baze Podataka' : 'Database Management'}</button></li>
-              <li><button onClick={() => navigateToSection('services', navigate, location.pathname)} className="text-gray-600 hover:text-pink-600 transition-colors duration-300 text-left">{language === 'sr' ? 'Online Marketing' : 'Online Marketing'}</button></li>
-              <li><button onClick={() => navigateToSection('services', navigate, location.pathname)} className="text-gray-600 hover:text-violet-600 transition-colors duration-300 text-left">{language === 'sr' ? 'E-commerce' : 'E-commerce'}</button></li>
+              <li><button onClick={() => navigateToSection('services-detailed', navigate, location.pathname)} className="text-gray-600 hover:text-violet-600 transition-colors duration-300 text-left">{language === 'sr' ? 'Web Dizajn' : 'Web Design'}</button></li>
+              <li><button onClick={() => navigateToSection('services-detailed', navigate, location.pathname)} className="text-gray-600 hover:text-indigo-600 transition-colors duration-300 text-left">{language === 'sr' ? 'Baze Podataka' : 'Database Management'}</button></li>
+              <li><button onClick={() => navigateToSection('services-detailed', navigate, location.pathname)} className="text-gray-600 hover:text-pink-600 transition-colors duration-300 text-left">{language === 'sr' ? 'Online Marketing' : 'Online Marketing'}</button></li>
+              <li><button onClick={() => navigateToSection('services-detailed', navigate, location.pathname)} className="text-gray-600 hover:text-violet-600 transition-colors duration-300 text-left">{language === 'sr' ? 'E-commerce' : 'E-commerce'}</button></li>
             </ul>
           </div>
           
@@ -47,7 +47,7 @@ export function Footer() {
             <h4 className="text-lg font-semibold mb-4">{t.company}</h4>
             <ul className="space-y-2">
               <li><button onClick={() => navigateToSection('video-section', navigate, location.pathname)} className="text-gray-600 hover:text-violet-600 transition-colors duration-300 text-left">{t.aboutUs}</button></li>
-              <li><button onClick={() => navigateToSection('why-us', navigate, location.pathname)} className="text-gray-600 hover:text-indigo-600 transition-colors duration-300 text-left">{t.portfolio}</button></li>
+              <li><button onClick={() => navigateToSection('portfolio', navigate, location.pathname)} className="text-gray-600 hover:text-indigo-600 transition-colors duration-300 text-left">{t.portfolio}</button></li>
               <li><Link to="/case-studies" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'Studije Slučaja' : 'Case Studies'}</Link></li>
               <li><Link to="/resources" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'Resursi' : 'Resources'}</Link></li>
               <li><Link to="/contact" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{t.contact}</Link></li>

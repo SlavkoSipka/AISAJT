@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { Send, ArrowRight, ExternalLink } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Language } from '../../types/language';
+import { navigateToSection } from '../../utils/navigation';
 
 interface HeroProps {
   language: Language;
@@ -12,6 +13,7 @@ export function Hero({ language }: HeroProps) {
   const heroRef = useRef<HTMLElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
@@ -41,12 +43,6 @@ export function Hero({ language }: HeroProps) {
     };
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
 
   return (
     <header 
@@ -131,7 +127,7 @@ export function Hero({ language }: HeroProps) {
               </button>
               
               <button
-                onClick={() => scrollToSection('why-us')}
+                onClick={() => navigateToSection('portfolio', navigate, location.pathname)}
                 className="group px-8 py-4 border-2 border-gray-900 text-gray-900 font-semibold rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 flex items-center gap-2"
               >
                 {language === 'sr' ? 'PORTFOLIO' : 'PORTFOLIO'}

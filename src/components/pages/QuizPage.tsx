@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, HelpCircle, ArrowRight, ArrowLeft, Check, Mail, Phone, MapPin } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { NavLink, MobileNavLink } from '../navigation/NavLink';
@@ -9,6 +9,7 @@ import { submitQuizForm } from '../../utils/hubspot';
 import { SEOHelmet } from '../seo/SEOHelmet';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
+import { navigateToSection } from '../../utils/navigation';
 
 interface Question {
   id: number;
@@ -23,6 +24,7 @@ export function QuizPage() {
   const { language, setLanguage } = useLanguage();
   const t = translations[language];
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -245,9 +247,9 @@ export function QuizPage() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-              <NavLink onClick={() => navigate('/')}>{t.services}</NavLink>
-              <NavLink onClick={() => navigate('/')}>{t.portfolio}</NavLink>
-              <NavLink onClick={() => navigate('/')}>{t.aboutUs}</NavLink>
+              <NavLink onClick={() => navigateToSection('services-detailed', navigate, location.pathname)}>{t.services}</NavLink>
+              <NavLink onClick={() => navigateToSection('portfolio', navigate, location.pathname)}>{t.portfolio}</NavLink>
+              <NavLink onClick={() => navigateToSection('video-section', navigate, location.pathname)}>{t.aboutUs}</NavLink>
               <NavLink onClick={() => navigate('/resources')}>{t.resources}</NavLink>
               
               <button
@@ -304,15 +306,15 @@ export function QuizPage() {
         >
           <div className="container mx-auto px-4 py-4 space-y-4">
             <MobileNavLink onClick={() => {
-              navigate('/');
+              navigateToSection('services-detailed', navigate, location.pathname);
               setIsMenuOpen(false);
             }}>{t.services}</MobileNavLink>
             <MobileNavLink onClick={() => {
-              navigate('/');
+              navigateToSection('portfolio', navigate, location.pathname);
               setIsMenuOpen(false);
             }}>{t.portfolio}</MobileNavLink>
             <MobileNavLink onClick={() => {
-              navigate('/');
+              navigateToSection('video-section', navigate, location.pathname);
               setIsMenuOpen(false);
             }}>{t.aboutUs}</MobileNavLink>
             <MobileNavLink onClick={() => {

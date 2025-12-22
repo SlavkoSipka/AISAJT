@@ -34,10 +34,10 @@ export function Navbar() {
 
   return (
     <>
-      {/* Horizontal Navbar - Top */}
+      {/* Horizontal Navbar - Top (hides on scroll for desktop, always visible on mobile) */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-700 ease-in-out ${
         isScrolled 
-          ? 'opacity-0 pointer-events-none -translate-y-full' 
+          ? 'md:opacity-0 md:pointer-events-none md:-translate-y-full opacity-100 pointer-events-auto translate-y-0 bg-white/95 shadow-sm backdrop-blur-sm' 
           : 'opacity-100 bg-white/95 shadow-sm backdrop-blur-sm'
       }`}>
         <div className="container mx-auto px-4 md:px-8">
