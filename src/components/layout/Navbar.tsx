@@ -56,8 +56,8 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            <NavLink onClick={() => navigateToSection('services', navigate, location.pathname)}>{t.services}</NavLink>
-            <NavLink onClick={() => navigateToSection('why-us', navigate, location.pathname)}>{t.portfolio}</NavLink>
+            <NavLink onClick={() => navigateToSection('services-detailed', navigate, location.pathname)}>{t.services}</NavLink>
+            <NavLink onClick={() => navigateToSection('portfolio', navigate, location.pathname)}>{t.portfolio}</NavLink>
             <NavLink onClick={() => navigateToSection('video-section', navigate, location.pathname)}>{t.aboutUs}</NavLink>
             <NavLink onClick={() => navigate('/resources')}>{language === 'sr' ? 'Resursi' : 'Resources'}</NavLink>
             
@@ -116,11 +116,11 @@ export function Navbar() {
         <div className="container mx-auto px-4 py-4 space-y-4">
           <MobileNavLink onClick={() => {
             setIsMenuOpen(false);
-            navigateToSection('services', navigate, location.pathname);
+            navigateToSection('services-detailed', navigate, location.pathname);
           }}>{t.services}</MobileNavLink>
           <MobileNavLink onClick={() => {
             setIsMenuOpen(false);
-            navigateToSection('why-us', navigate, location.pathname);
+            navigateToSection('portfolio', navigate, location.pathname);
           }}>{t.portfolio}</MobileNavLink>
           <MobileNavLink onClick={() => {
             setIsMenuOpen(false);
@@ -194,13 +194,13 @@ export function Navbar() {
           {/* Horizontal Navigation Buttons - Minimal Design with Site Colors */}
           <div className="flex flex-col space-y-1 flex-1">
             <button
-              onClick={() => navigateToSection('services', navigate, location.pathname)}
+              onClick={() => navigateToSection('services-detailed', navigate, location.pathname)}
               className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
             >
               {t.services}
             </button>
             <button
-              onClick={() => navigateToSection('why-us', navigate, location.pathname)}
+              onClick={() => navigateToSection('portfolio', navigate, location.pathname)}
               className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
             >
               {t.portfolio}

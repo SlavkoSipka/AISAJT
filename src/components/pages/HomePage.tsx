@@ -222,8 +222,8 @@ export function HomePage() {
       <main id="main-content">
         <Hero language={language} />
 
-      {/* Services and Pricing Section */}
-      <section className="py-16 md:py-28 relative overflow-hidden" id="services">
+      {/* Team Section */}
+      <section className="py-16 md:py-28 relative overflow-hidden" id="team-section">
         {/* Smooth layered gradient background */}
         <div className="absolute inset-0 bg-gradient-to-b from-pink-50/30 via-violet-50/50 to-indigo-50/40"></div>
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-pink-100/30 to-violet-100/40"></div>
@@ -471,7 +471,7 @@ export function HomePage() {
       </section>
 
       {/* Services and Pricing Section */}
-      <section className="pt-8 md:pt-12 pb-16 md:pb-28 relative overflow-hidden" id="services">
+      <section className="pt-8 md:pt-12 pb-16 md:pb-28 relative overflow-hidden">
         {/* Smooth layered gradient background */}
         <div className="absolute inset-0 bg-gradient-to-b from-pink-50/30 via-violet-50/50 to-indigo-50/40"></div>
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-pink-100/30 to-violet-100/40"></div>

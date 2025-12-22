@@ -54,7 +54,7 @@ export const scrollToSection = (sectionId: string) => {
   
   if (element) {
     console.log(`✅ Found element:`, element);
-    const headerOffset = 100; // Offset for fixed navbar
+    const headerOffset = 0; // Offset for fixed navbar
     const elementPosition = element.getBoundingClientRect().top;
     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
