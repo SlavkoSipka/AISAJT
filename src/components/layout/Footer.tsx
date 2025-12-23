@@ -37,9 +37,9 @@ export function Footer() {
             <h4 className="text-lg font-semibold mb-4">{t.services}</h4>
             <ul className="space-y-2">
               <li><button onClick={() => navigateToSection('services-detailed', navigate, location.pathname)} className="text-gray-600 hover:text-violet-600 transition-colors duration-300 text-left">{language === 'sr' ? 'Web Dizajn' : 'Web Design'}</button></li>
+              <li><Link to="/seo" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'SEO Optimizacija' : 'SEO Optimization'}</Link></li>
               <li><button onClick={() => navigateToSection('services-detailed', navigate, location.pathname)} className="text-gray-600 hover:text-indigo-600 transition-colors duration-300 text-left">{language === 'sr' ? 'Baze Podataka' : 'Database Management'}</button></li>
               <li><button onClick={() => navigateToSection('services-detailed', navigate, location.pathname)} className="text-gray-600 hover:text-pink-600 transition-colors duration-300 text-left">{language === 'sr' ? 'Online Marketing' : 'Online Marketing'}</button></li>
-              <li><button onClick={() => navigateToSection('services-detailed', navigate, location.pathname)} className="text-gray-600 hover:text-violet-600 transition-colors duration-300 text-left">{language === 'sr' ? 'E-commerce' : 'E-commerce'}</button></li>
             </ul>
           </div>
           

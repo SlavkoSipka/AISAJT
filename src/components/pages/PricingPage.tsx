@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Check, ArrowRight, Zap, Star, Crown, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
@@ -301,8 +301,34 @@ export function PricingPage() {
               {t.hero}
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-600 leading-relaxed animate-fade-in-up animation-delay-400">
+            <p className="text-lg md:text-xl text-gray-600 mb-4 leading-relaxed animate-fade-in-up animation-delay-400">
               {t.subtitle}
+            </p>
+            
+            <p className="text-base text-gray-500 animate-fade-in-up animation-delay-500">
+              {language === 'sr' ? (
+                <>
+                  Prvo put na sajtu? Pogledajte{' '}
+                  <Link to="/" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                    početnu stranicu
+                  </Link>
+                  {' '}ili saznajte više o našoj{' '}
+                  <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                    SEO optimizaciji
+                  </Link>.
+                </>
+              ) : (
+                <>
+                  First time here? Check out our{' '}
+                  <Link to="/" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                    homepage
+                  </Link>
+                  {' '}or learn more about our{' '}
+                  <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                    SEO optimization
+                  </Link>.
+                </>
+              )}
             </p>
           </div>
         </div>

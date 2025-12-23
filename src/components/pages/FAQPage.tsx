@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ChevronDown, Search, MessageCircle, Mail, Phone, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
@@ -55,6 +55,7 @@ export function FAQPage() {
     sr: {
       hero: 'Često Postavljana Pitanja',
       subtitle: 'Odgovori na najčešća pitanja o izradi web sajtova',
+      intro: 'Pronađite odgovore na sva vaša pitanja o našim uslugama.',
       search: 'Pretražite pitanja...',
       categories: {
         general: 'Opšta Pitanja',
@@ -317,8 +318,34 @@ export function FAQPage() {
               {t.hero}
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed animate-fade-in-up animation-delay-400">
+            <p className="text-lg md:text-xl text-gray-600 mb-4 leading-relaxed animate-fade-in-up animation-delay-400">
               {t.subtitle}
+            </p>
+            
+            <p className="text-base text-gray-500 mb-10 animate-fade-in-up animation-delay-500">
+              {language === 'sr' ? (
+                <>
+                  Pogledajte sve naše usluge na{' '}
+                  <Link to="/" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                    početnoj stranici
+                  </Link>
+                  {' '}ili saznajte više o{' '}
+                  <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                    SEO optimizaciji
+                  </Link>.
+                </>
+              ) : (
+                <>
+                  View all our services on our{' '}
+                  <Link to="/" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                    homepage
+                  </Link>
+                  {' '}or learn more about{' '}
+                  <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                    SEO optimization
+                  </Link>.
+                </>
+              )}
             </p>
 
             {/* Search Bar */}

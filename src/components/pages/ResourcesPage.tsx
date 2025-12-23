@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Search, BookOpen, Calculator, HelpCircle, Layout, Download, ArrowRight, CheckCircle, Sparkles, Target, FileText } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
@@ -160,8 +160,35 @@ export function ResourcesPage() {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-lg md:text-xl text-gray-600 leading-relaxed animate-fade-in-up animation-delay-400">
+            <p className="text-lg md:text-xl text-gray-600 leading-relaxed animate-fade-in-up animation-delay-400 mb-4">
               {content.subtitle}
+            </p>
+            
+            {/* Link to HomePage */}
+            <p className="text-base text-gray-500 animate-fade-in-up animation-delay-500">
+              {language === 'sr' ? (
+                <>
+                  Novo na sajtu? Pogledajte našu{' '}
+                  <Link to="/" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                    početnu stranicu
+                  </Link>
+                  {' '}i saznajte više o uslugama izrade web sajtova ili pogledajte našu{' '}
+                  <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                    SEO optimizaciju
+                  </Link>.
+                </>
+              ) : (
+                <>
+                  New here? Check out our{' '}
+                  <Link to="/" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                    homepage
+                  </Link>
+                  {' '}to learn more about our website development services or check out our{' '}
+                  <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                    SEO optimization
+                  </Link>.
+                </>
+              )}
             </p>
           </div>
         </div>

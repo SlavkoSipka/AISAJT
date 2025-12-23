@@ -1,10 +1,17 @@
 import React from 'react';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
+import { SEOHelmet } from '../seo/SEOHelmet';
 
 export function TermsPage() {
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet
+        title="Uslovi Korišćenja | AiSajt"
+        description="Uslovi korišćenja usluga AI Sajt-a. Pročitajte naše uslove za izradu web sajtova, online prodavnica i QR menija."
+        keywords="uslovi korišćenja, terms of service, pravila korišćenja"
+        canonicalUrl="https://aisajt.com/terms"
+      />
       <Navbar />
 
       <div className="container mx-auto px-4 pt-32 pb-16">

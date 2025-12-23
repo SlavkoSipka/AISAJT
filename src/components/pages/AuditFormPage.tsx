@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Search, ArrowRight, CheckCircle, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
@@ -140,8 +140,34 @@ export function AuditFormPage() {
                   )}
                 </h1>
 
-                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                <p className="text-lg text-gray-600 mb-4 leading-relaxed">
                   {t.subtitle}
+                </p>
+                
+                <p className="text-sm text-gray-500 mb-8">
+                  {language === 'sr' ? (
+                    <>
+                      Pogledajte sve naše usluge na{' '}
+                      <Link to="/" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                        početnoj stranici
+                      </Link>
+                      {' '}ili saznajte više o{' '}
+                      <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                        SEO optimizaciji
+                      </Link>.
+                    </>
+                  ) : (
+                    <>
+                      Check out all our services on our{' '}
+                      <Link to="/" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                        homepage
+                      </Link>
+                      {' '}or learn more about{' '}
+                      <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                        SEO optimization
+                      </Link>.
+                    </>
+                  )}
                 </p>
 
                 {/* Benefits */}

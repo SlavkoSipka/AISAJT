@@ -50,16 +50,29 @@ export function Navbar() {
             <img 
               src="/images/providna2.png" 
               alt="AiSajt Logo" 
-              className="h-12 md:h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              className="h-12 md:h-14 lg:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            <NavLink onClick={() => navigateToSection('services-detailed', navigate, location.pathname)}>{t.services}</NavLink>
             <NavLink onClick={() => navigateToSection('portfolio', navigate, location.pathname)}>{t.portfolio}</NavLink>
             <NavLink onClick={() => navigateToSection('video-section', navigate, location.pathname)}>{t.aboutUs}</NavLink>
             <NavLink onClick={() => navigate('/resources')}>{language === 'sr' ? 'Resursi' : 'Resources'}</NavLink>
+            
+            {/* SEO Link - Slightly bolder with slide-up animation */}
+            <button
+              onClick={() => navigate('/seo')}
+              className="relative overflow-hidden font-bold text-sm uppercase tracking-wider group h-6"
+              aria-label="SEO Optimizacija"
+            >
+              <span className="relative block transition-transform duration-300 ease-out group-hover:-translate-y-full text-gray-900 whitespace-nowrap">
+                SEO
+              </span>
+              <span className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full bg-gradient-to-r from-violet-600 via-indigo-500 to-pink-500 bg-clip-text text-transparent font-bold whitespace-nowrap">
+                SEO
+              </span>
+            </button>
             
             <button
               onClick={() => navigate('/contact')}
@@ -114,10 +127,17 @@ export function Navbar() {
         }`}
       >
         <div className="container mx-auto px-4 py-4 space-y-4">
-          <MobileNavLink onClick={() => {
-            setIsMenuOpen(false);
-            navigateToSection('services-detailed', navigate, location.pathname);
-          }}>{t.services}</MobileNavLink>
+          {/* SEO - First on mobile menu */}
+          <button
+            onClick={() => {
+              setIsMenuOpen(false);
+              navigate('/seo');
+            }}
+            className="block w-full text-left text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 py-4 px-4 rounded-lg hover:bg-violet-50 transition-all duration-300 touch-feedback text-lg font-bold"
+          >
+            SEO
+          </button>
+          
           <MobileNavLink onClick={() => {
             setIsMenuOpen(false);
             navigateToSection('portfolio', navigate, location.pathname);
@@ -194,12 +214,6 @@ export function Navbar() {
           {/* Horizontal Navigation Buttons - Minimal Design with Site Colors */}
           <div className="flex flex-col space-y-1 flex-1">
             <button
-              onClick={() => navigateToSection('services-detailed', navigate, location.pathname)}
-              className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
-            >
-              {t.services}
-            </button>
-            <button
               onClick={() => navigateToSection('portfolio', navigate, location.pathname)}
               className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
             >
@@ -216,6 +230,14 @@ export function Navbar() {
               className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
             >
               {language === 'sr' ? 'Resursi' : 'Resources'}
+            </button>
+            
+            {/* SEO - Slightly bolder with gradient hover */}
+            <button
+              onClick={() => navigate('/seo')}
+              className="w-full text-left px-4 py-3.5 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 font-bold text-[15px] transition-all duration-300 border-l-2 border-transparent hover:border-violet-600"
+            >
+              SEO
             </button>
           </div>
 

@@ -461,10 +461,23 @@ export function HomePage() {
               }
             </p>
             <p className="text-sm md:text-lg text-gray-700 leading-relaxed">
-              {language === 'sr' 
-                ? 'Na internetu danas nije dovoljno samo biti prisutan - važno je da vaša web stranica privlači i zadržava posetioce. Zato se naša izrada sajtova fokusira na brze, moderne i SEO optimizovane web stranice koje donose rezultate za vaš biznis.'
-                : 'On the internet today, it\'s not enough to just be present - it\'s important that your website attracts and retains visitors. That\'s why our website development focuses on fast, modern and SEO optimized websites that deliver results for your business.'
-              }
+              {language === 'sr' ? (
+                <>
+                  Na internetu danas nije dovoljno samo biti prisutan - važno je da vaša web stranica privlači i zadržava posetioce. Zato se naša izrada sajtova fokusira na brze, moderne i{' '}
+                  <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold">
+                    SEO optimizovane
+                  </Link>
+                  {' '}web stranice koje donose rezultate za vaš biznis.
+                </>
+              ) : (
+                <>
+                  On the internet today, it's not enough to just be present - it's important that your website attracts and retains visitors. That's why our website development focuses on fast, modern and{' '}
+                  <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold">
+                    SEO optimized
+                  </Link>
+                  {' '}websites that deliver results for your business.
+                </>
+              )}
             </p>
           </div>
         </div>
@@ -710,7 +723,7 @@ export function HomePage() {
                 <button
                   onClick={() => {
                     trackCTAClick('Saznaj Više - SEO i Marketing', 'services_section', language);
-                    navigate('/contact');
+                    navigate('/seo');
                   }}
                   className="group mt-8 px-8 py-4 border-2 border-gray-900 text-gray-900 font-semibold rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 flex items-center gap-2"
                 >
@@ -749,7 +762,11 @@ export function HomePage() {
                     Šta obuhvata profesionalna izrada web sajta?
                   </h3>
                   <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">
-                    Kada izaberete nas za vaš projekat, dobijate kompletno rešenje. Naša izrada web sajta obuhvata planiranje, dizajn, razvoj, testiranje i lansiranje. To znači da se ne bavimo samo dizajnom. Bilo da vam je u pitanju jednostavna prezentacija, web shop za online prodaju, ili kompleksna platforma, pristup je isti: profesionalan i detaljan.
+                    Kada izaberete nas za vaš projekat, dobijate kompletno rešenje. Naša izrada web sajta obuhvata planiranje, dizajn, razvoj, testiranje i lansiranje. To znači da se ne bavimo samo dizajnom. Bilo da vam je u pitanju jednostavna prezentacija, web shop za online prodaju, ili kompleksna platforma, pristup je isti: profesionalan i detaljan. Svaki sajt uključuje osnovnu{' '}
+                    <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold">
+                      SEO optimizaciju
+                    </Link>
+                    {' '}kako bi vaš biznis bio vidljiv na Google-u.
                   </p>
                   
                   <h3 className="text-lg md:text-xl font-semibold text-gray-900 mt-6 mb-3">

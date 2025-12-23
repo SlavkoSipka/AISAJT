@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ArrowRight, Mail, Phone, MapPin, CheckCircle, Send, PartyPopper, Sparkles } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { trackFormInteraction, trackFormSubmitAttempt, trackFormError, trackContactInfoClick } from '../../utils/analytics';
 import { submitContactForm } from '../../utils/hubspot';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
-
-type Language = 'sr' | 'en';
+import { useLanguage } from '../../hooks/useLanguage';
+import { SEOHelmet } from '../seo/SEOHelmet';
 
 interface FormData {
   name: string;
@@ -15,47 +15,17 @@ interface FormData {
   phone: string;
 }
 
-const translations = {
-  sr: {
-    services: 'Usluge',
-    portfolio: 'Portfolio',
-    aboutUs: 'O Nama',
-    contact: 'Kontakt',
-    name: 'Ime',
-    email: 'Email',
-    phone: 'Telefon',
-    footerDesc: 'Profesionalna izrada web sajtova uz pomoć najnovije AI tehnologije.',
-    company: 'Kompanija',
-  },
-  en: {
-    services: 'Services',
-    portfolio: 'Portfolio',
-    aboutUs: 'About Us',
-    contact: 'Contact',
-    name: 'Name',
-    email: 'Email',
-    phone: 'Phone',
-    footerDesc: 'Professional website development using the latest AI technology.',
-    company: 'Company',
-  }
-};
-
 export function ContactPage() {
-  const [language, setLanguage] = useState<Language>('sr');
+  const { language } = useLanguage();
   const [formData, setFormData] = useState<FormData>({ name: '', email: '', phone: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const t = translations[language];
-
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = language === 'sr' 
-      ? 'Besplatne Konsultacije za Website | AI Izrada Sajtova - AI Websajt Izrada' 
-      : 'Free Website Consultations | AI Website Development';
-  }, [language]);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -106,6 +76,18 @@ export function ContactPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet
+        title={language === 'sr' ? 'Kontakt - Besplatna Konsultacija | AiSajt' : 'Contact - Free Consultation | AiSajt'}
+        description={language === 'sr' 
+          ? 'Kontaktirajte nas za besplatnu konsultaciju o izradi vašeg web sajta. Profesionalna izrada sajtova, SEO optimizacija i digitalni marketing.'
+          : 'Contact us for a free consultation about your website development. Professional website creation, SEO optimization, and digital marketing.'
+        }
+        keywords={language === 'sr'
+          ? 'kontakt, besplatna konsultacija, izrada sajta kontakt, web dizajn kontakt, SEO konsultacija'
+          : 'contact, free consultation, website development contact, web design contact, SEO consultation'
+        }
+        canonicalUrl="https://aisajt.com/contact"
+      />
       <Toaster position="top-center" />
       
       {/* Success Modal */}
@@ -268,6 +250,31 @@ export function ContactPage() {
                       : 'We are ready to hear your idea and turn it into a modern, functional website that attracts clients.'
                     }
                   </p>
+                  <p className="text-sm text-gray-500 mt-3 hidden md:block">
+                    {language === 'sr' ? (
+                      <>
+                        Saznajte više o našim uslugama na{' '}
+                        <a href="/" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                          početnoj stranici
+                        </a>
+                        {' '}ili pogledajte{' '}
+                        <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                          SEO optimizaciju
+                        </Link>.
+                      </>
+                    ) : (
+                      <>
+                        Learn more about our services on our{' '}
+                        <a href="/" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                          homepage
+                        </a>
+                        {' '}or check out{' '}
+                        <Link to="/seo" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                          SEO optimization
+                        </Link>.
+                      </>
+                    )}
+                  </p>
                 </div>
 
                 {/* Contact Info - Hidden on mobile */}
@@ -335,7 +342,7 @@ export function ContactPage() {
                     {/* Name */}
                     <div>
                       <label className="block text-xs font-medium text-violet-400 uppercase tracking-widest mb-2 md:mb-3">
-                        {t.name} *
+                        {language === 'sr' ? 'Ime' : 'Name'} *
                       </label>
                       <input
                         type="text"
@@ -355,7 +362,7 @@ export function ContactPage() {
                     {/* Email */}
                     <div>
                       <label className="block text-xs font-medium text-indigo-400 uppercase tracking-widest mb-2 md:mb-3">
-                        {t.email} *
+                        Email *
                       </label>
                       <input
                         type="email"
@@ -375,7 +382,7 @@ export function ContactPage() {
                     {/* Phone */}
                     <div>
                       <label className="block text-xs font-medium text-pink-400 uppercase tracking-widest mb-2 md:mb-3">
-                        {t.phone} *
+                        {language === 'sr' ? 'Telefon' : 'Phone'} *
                       </label>
                       <input
                         type="tel"

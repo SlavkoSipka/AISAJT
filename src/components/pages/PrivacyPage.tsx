@@ -1,10 +1,17 @@
 import React from 'react';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
+import { SEOHelmet } from '../seo/SEOHelmet';
 
 export function PrivacyPage() {
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet
+        title="Politika Privatnosti | AiSajt"
+        description="Politika privatnosti AI Sajt-a. Saznajte kako prikupljamo, koristimo i štitimo vaše lične podatke."
+        keywords="politika privatnosti, privacy policy, zaštita podataka, GDPR"
+        canonicalUrl="https://aisajt.com/privacy"
+      />
       <Navbar />
 
       <div className="container mx-auto px-4 pt-32 pb-16">

@@ -493,6 +493,24 @@ export function QuizPage() {
                       {qt.results.email.title}
                     </h3>
                     
+                    <p className="text-xs md:text-sm text-gray-500 text-center mb-3 md:mb-4">
+                      {language === 'sr' ? (
+                        <>
+                          Saznajte više o našim uslugama na{' '}
+                          <Link to="/" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                            početnoj stranici
+                          </Link>.
+                        </>
+                      ) : (
+                        <>
+                          Learn more about our services on our{' '}
+                          <Link to="/" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                            homepage
+                          </Link>.
+                        </>
+                      )}
+                    </p>
+                    
                     <form onSubmit={handleEmailSubmit} className="space-y-2.5 md:space-y-4 max-w-md mx-auto mt-3 md:mt-6">
                       <input
                         type="text"
