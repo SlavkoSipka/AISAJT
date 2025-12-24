@@ -3,7 +3,7 @@
   <!-- Main Pages -->
   <url>
     <loc>https://aisajt.com/</loc>
-    <lastmod>2025-01-01</lastmod>
+    <lastmod>2025-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -11,54 +11,59 @@
   <!-- SEO Page - SECOND MOST IMPORTANT -->
   <url>
     <loc>https://aisajt.com/seo</loc>
-    <lastmod>2025-01-01</lastmod>
+    <lastmod>2025-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
-  
-  <!-- Placeholder for future pages -->
-  <!-- Web Dizajn - THIRD (coming soon) - priority 0.90 -->
-  <!-- Baze Podataka - FOURTH (coming soon) - priority 0.85 -->
-  
-  <!-- Resources -->
+
+  <!-- Web Dizajn Page - THIRD MOST IMPORTANT -->
   <url>
-    <loc>https://aisajt.com/resources</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://aisajt.com/web-dizajn</loc>
+    <lastmod>2025-12-24</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.70</priority>
+    <priority>0.90</priority>
   </url>
   
+  <!-- Contact & Resources Pages -->
   <url>
     <loc>https://aisajt.com/contact</loc>
-    <lastmod>2025-01-01</lastmod>
+    <lastmod>2025-12-24</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
+    <priority>0.8</priority>
   </url>
   
   <url>
+    <loc>https://aisajt.com/resources</loc>
+    <lastmod>2025-12-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Lead Generation Tools -->
+  <url>
     <loc>https://aisajt.com/resources/quiz</loc>
-    <lastmod>2025-01-01</lastmod>
+    <lastmod>2025-12-24</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.60</priority>
+    <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://aisajt.com/resources/audit</loc>
-    <lastmod>2025-01-01</lastmod>
+    <lastmod>2025-12-24</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.60</priority>
+    <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://aisajt.com/resources/guide</loc>
-    <lastmod>2025-01-01</lastmod>
+    <lastmod>2025-12-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
   
   <url>
     <loc>https://aisajt.com/resources/checklist</loc>
-    <lastmod>2025-01-01</lastmod>
+    <lastmod>2025-12-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
@@ -66,15 +71,15 @@
   <!-- Support Pages -->
   <url>
     <loc>https://aisajt.com/privacy</loc>
-    <lastmod>2025-01-01</lastmod>
+    <lastmod>2025-12-24</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.3</priority>
   </url>
   
   <url>
     <loc>https://aisajt.com/terms</loc>
-    <lastmod>2025-01-01</lastmod>
+    <lastmod>2025-12-24</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.3</priority>
   </url>
 </urlset>

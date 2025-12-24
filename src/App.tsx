@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { HomePage } from './components/pages/HomePage';
 import { SEOPage } from './components/pages/SEOPage';
+import { WebDizajnPage } from './components/pages/WebDizajnPage';
 import { TermsPage } from './components/pages/TermsPage';
 import { PrivacyPage } from './components/pages/PrivacyPage';
 import { ContactPage } from './components/pages/ContactPage';
@@ -46,6 +47,7 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/seo" element={<SEOPage />} />
+        <Route path="/web-dizajn" element={<WebDizajnPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/contact" element={<ContactPage />} />

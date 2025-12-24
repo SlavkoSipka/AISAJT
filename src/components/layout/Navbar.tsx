@@ -73,6 +73,20 @@ export function Navbar() {
                 SEO
               </span>
             </button>
+
+            {/* Web Dizajn Link - Slightly bolder with slide-up animation */}
+            <button
+              onClick={() => navigate('/web-dizajn')}
+              className="relative overflow-hidden font-bold text-sm uppercase tracking-wider group h-6"
+              aria-label="Web Dizajn"
+            >
+              <span className="relative block transition-transform duration-300 ease-out group-hover:-translate-y-full text-gray-900 whitespace-nowrap">
+                {language === 'sr' ? 'WEB DIZAJN' : 'WEB DESIGN'}
+              </span>
+              <span className="absolute left-0 top-full block transition-transform duration-300 ease-out group-hover:-translate-y-full bg-gradient-to-r from-pink-600 via-rose-500 to-violet-500 bg-clip-text text-transparent font-bold whitespace-nowrap">
+                {language === 'sr' ? 'WEB DIZAJN' : 'WEB DESIGN'}
+              </span>
+            </button>
             
             <button
               onClick={() => navigate('/contact')}
@@ -136,6 +150,17 @@ export function Navbar() {
             className="block w-full text-left text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 py-4 px-4 rounded-lg hover:bg-violet-50 transition-all duration-300 touch-feedback text-lg font-bold"
           >
             SEO
+          </button>
+
+          {/* Web Dizajn - Second on mobile menu */}
+          <button
+            onClick={() => {
+              setIsMenuOpen(false);
+              navigate('/web-dizajn');
+            }}
+            className="block w-full text-left text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-600 hover:via-rose-500 hover:to-violet-500 py-4 px-4 rounded-lg hover:bg-pink-50 transition-all duration-300 touch-feedback text-lg font-bold"
+          >
+            {language === 'sr' ? 'WEB DIZAJN' : 'WEB DESIGN'}
           </button>
           
           <MobileNavLink onClick={() => {
@@ -213,6 +238,22 @@ export function Navbar() {
 
           {/* Horizontal Navigation Buttons - Minimal Design with Site Colors */}
           <div className="flex flex-col space-y-1 flex-1">
+            {/* SEO - First, Slightly bolder with gradient hover */}
+            <button
+              onClick={() => navigate('/seo')}
+              className="w-full text-left px-4 py-3.5 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 font-bold text-[15px] transition-all duration-300 border-l-2 border-transparent hover:border-violet-600"
+            >
+              SEO
+            </button>
+
+            {/* Web Dizajn - Second, Slightly bolder with gradient hover */}
+            <button
+              onClick={() => navigate('/web-dizajn')}
+              className="w-full text-left px-4 py-3.5 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-600 hover:via-rose-500 hover:to-violet-500 font-bold text-[15px] transition-all duration-300 border-l-2 border-transparent hover:border-pink-600"
+            >
+              {language === 'sr' ? 'Web Dizajn' : 'Web Design'}
+            </button>
+            
             <button
               onClick={() => navigateToSection('portfolio', navigate, location.pathname)}
               className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
@@ -230,14 +271,6 @@ export function Navbar() {
               className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
             >
               {language === 'sr' ? 'Resursi' : 'Resources'}
-            </button>
-            
-            {/* SEO - Slightly bolder with gradient hover */}
-            <button
-              onClick={() => navigate('/seo')}
-              className="w-full text-left px-4 py-3.5 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 font-bold text-[15px] transition-all duration-300 border-l-2 border-transparent hover:border-violet-600"
-            >
-              SEO
             </button>
           </div>
 
