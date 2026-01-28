@@ -1,0 +1,18 @@
+# Redirect HTTP www to HTTPS non-www (highest priority)
+http://www.aisajt.com/* https://aisajt.com/:splat 301!
+
+# Redirect HTTPS www to HTTPS non-www
+https://www.aisajt.com/* https://aisajt.com/:splat 301!
+
+# Redirect HTTP non-www to HTTPS non-www
+http://aisajt.com/* https://aisajt.com/:splat 301!
+
+# Redirect Netlify subdomain to primary domain
+https://aisajt.netlify.app/* https://aisajt.com/:splat 301!
+http://aisajt.netlify.app/* https://aisajt.com/:splat 301!
+
+# Serve custom robots.txt for Netlify subdomain
+/robots.txt /netlify-robots.txt 200  Host=aisajt.netlify.app
+
+# Handle client-side routing (SPA fallback) - MUST BE LAST
+/* /index.html 200

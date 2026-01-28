@@ -1,0 +1,8 @@
+# robots.txt for Netlify subdomain - Block all indexing
+# This subdomain redirects to main domain
+
+User-agent: *
+Disallow: /
+
+# Redirect users to main domain
+Sitemap: https://aisajt.com/sitemap.xml
