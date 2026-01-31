@@ -1,0 +1,64 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+# Serve sitemap.xml with correct Content-Type
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml; charset=utf-8"
+    Cache-Control = "public, max-age=3600"
+
+# Serve robots.txt with correct Content-Type
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    Cache-Control = "public, max-age=3600"
+
+# Security headers for all pages
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Force HTTPS
+[[redirects]]
+  from = "http://www.aisajt.com/*"
+  to = "https://aisajt.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://aisajt.com/*"
+  to = "https://aisajt.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.aisajt.com/*"
+  to = "https://aisajt.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://aisajt.netlify.app/*"
+  to = "https://aisajt.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://aisajt.netlify.app/*"
+  to = "https://aisajt.com/:splat"
+  status = 301
+  force = true
+
+# SPA fallback - handle client-side routing (MUST BE LAST)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+

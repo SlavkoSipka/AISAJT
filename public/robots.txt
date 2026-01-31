@@ -1,0 +1,26 @@
+# robots.txt for AiSajt.com
+# Main domain: https://aisajt.com (non-www, HTTPS only)
+
+User-agent: *
+Allow: /
+
+# Sitemap location (use canonical domain)
+Sitemap: https://aisajt.com/sitemap.xml
+
+# Block access to admin/private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*.json$
+
+# Allow specific search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Crawl delay (helps with server load)
+Crawl-delay: 1
