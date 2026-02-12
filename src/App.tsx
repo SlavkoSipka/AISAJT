@@ -32,8 +32,12 @@ function AppContent() {
     return () => clearTimeout(minLoadTime);
   }, []);
 
-  // Show loading screen on route change
+  // Show loading screen on route change (ne prikazuj loading na thank-you da ne bi dupli Lead)
   useEffect(() => {
+    if (location.pathname === '/thank-you') {
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
     const timer = setTimeout(() => {
       setIsLoading(false);

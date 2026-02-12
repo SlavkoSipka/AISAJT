@@ -60,15 +60,14 @@ export function ThankYouPage() {
   const language = searchParams.get('lang') || 'sr';
 
   useEffect(() => {
-    // Triggeruj GLAVNI LEAD EVENT kada se stranica učita - SAMO JEDNOM!
-    if (!leadTracked.current) {
-      trackLeadGeneration(
-        source as 'contact_page' | 'home_page',
-        userName,
-        language as 'sr' | 'en'
-      );
-      leadTracked.current = true; // ✅ Označi da je lead trackovan
-    }
+    // Triggeruj GLAVNI LEAD EVENT kada se stranica učita - SAMO JEDNOM (zaštita i od Strict Mode double-mount)
+    if (leadTracked.current) return;
+    leadTracked.current = true;
+    trackLeadGeneration(
+      source as 'contact_page' | 'home_page',
+      userName,
+      language as 'sr' | 'en'
+    );
 
     // Scroll to top
     window.scrollTo(0, 0);

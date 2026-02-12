@@ -67,6 +67,9 @@ export const trackGoogleAdsConversion = (
   }
 };
 
+const LEAD_DEDUPE_KEY = 'lead_tracked_at';
+const LEAD_DEDUPE_MS = 5000;
+
 /**
  * Track Lead Generation - Contact Form Submit
  */
@@ -76,18 +79,21 @@ export const trackLeadGeneration = (
   language: string
 ) => {
   if (isLocalhost()) return;
-  
-  if (window._leadEventTracked) {
-    return;
+
+  // Zaštita od duplog fire-a (double mount zbog loading screena / Strict Mode)
+  if (window._leadEventTracked) return;
+  const now = Date.now();
+  const lastAt = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(LEAD_DEDUPE_KEY) : null;
+  if (lastAt) {
+    const elapsed = now - parseInt(lastAt, 10);
+    if (elapsed < LEAD_DEDUPE_MS) return;
   }
 
-  // Postavi flag da je event trackovan
   window._leadEventTracked = true;
-  
-  // Reset flag nakon 3 sekunde (dozvoli sledeći lead ako korisnik ponovo submituje)
+  if (typeof sessionStorage !== 'undefined') sessionStorage.setItem(LEAD_DEDUPE_KEY, String(now));
   setTimeout(() => {
     window._leadEventTracked = false;
-  }, 3000);
+  }, LEAD_DEDUPE_MS);
 
   const leadValue = 15; // Najviši prioritet
 
