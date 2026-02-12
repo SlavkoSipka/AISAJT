@@ -33,10 +33,10 @@ export function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">{t.services}</h4>
             <ul className="space-y-2.5">
-              <li><Link to="/seo-optimizacija-cena" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'SEO Optimizacija Cena' : 'SEO Optimization Price'}</Link></li>
-              <li><Link to="/izrada-sajta-cena" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300">{language === 'sr' ? 'Izrada Sajta Cena' : 'Website Development Price'}</Link></li>
+              <li><Link to="/seo-optimizacija-cena" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{language === 'sr' ? 'SEO Optimizacija' : 'SEO Optimization'}</Link></li>
+              <li><Link to="/izrada-sajta-cena" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300">{language === 'sr' ? 'Izrada Sajta' : 'Website Development'}</Link></li>
               <li><Link to="/web-dizajn" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{language === 'sr' ? 'Web Dizajn' : 'Web Design'}</Link></li>
-              <li><button onClick={() => navigateToSection('services-detailed', navigate, location.pathname)} className="text-gray-600 hover:text-violet-600 transition-colors duration-300 text-left">{language === 'sr' ? 'Online Prodavnica' : 'Online Store'}</button></li>
+              <li><Link to="/izrada-web-shopa" className="text-gray-600 hover:text-emerald-600 transition-colors duration-300">{language === 'sr' ? 'Web Prodavnica' : 'Web Shop'}</Link></li>
             </ul>
           </div>
           
@@ -45,6 +45,7 @@ export function Footer() {
             <ul className="space-y-2.5">
               <li><button onClick={() => navigateToSection('video-section', navigate, location.pathname)} className="text-gray-600 hover:text-violet-600 transition-colors duration-300 text-left">{t.aboutUs}</button></li>
               <li><button onClick={() => navigateToSection('portfolio', navigate, location.pathname)} className="text-gray-600 hover:text-indigo-600 transition-colors duration-300 text-left">{t.portfolio}</button></li>
+              <li><Link to="/blog" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">Blog</Link></li>
               <li><Link to="/contact" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{t.contact}</Link></li>
             </ul>
           </div>

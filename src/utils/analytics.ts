@@ -108,6 +108,7 @@ export const trackLeadGeneration = (
     user_name: userName
   });
 
+<<<<<<< HEAD
   // Meta Pixel (Facebook Ads) - Standard Event
   trackFBEvent('Lead', {
     content_name: `${source === 'contact_page' ? 'Contact' : 'Home'} Form Submission`,
@@ -117,6 +118,8 @@ export const trackLeadGeneration = (
     status: 'success'
   });
 
+=======
+>>>>>>> origin/main
   // Google Ads Conversion Tracking
   trackGoogleAdsConversion('contact_form_submit', leadValue);
 };
@@ -184,6 +187,7 @@ export const trackCTAClick = (
     location: location,
     language: language
   });
+<<<<<<< HEAD
 
   // Meta Pixel - Custom Event
   if (typeof window !== 'undefined' && window.fbq) {
@@ -193,6 +197,8 @@ export const trackCTAClick = (
       language: language
     });
   }
+=======
+>>>>>>> origin/main
 };
 
 /**
@@ -210,6 +216,7 @@ export const trackPortfolioClick = (
     project_url: projectUrl,
     language: language
   });
+<<<<<<< HEAD
 
   // Meta Pixel - ViewContent
   trackFBEvent('ViewContent', {
@@ -218,6 +225,8 @@ export const trackPortfolioClick = (
     content_type: 'project',
     content_ids: [projectUrl]
   });
+=======
+>>>>>>> origin/main
 };
 
 /**
@@ -282,6 +291,7 @@ export const trackScrollDepth = (
     page_path: pagePath,
     language: language
   });
+<<<<<<< HEAD
 
   // Meta Pixel - Custom Event for high engagement (75%+)
   if (percentage >= 75 && typeof window !== 'undefined' && window.fbq) {
@@ -291,6 +301,8 @@ export const trackScrollDepth = (
       page_path: pagePath
     });
   }
+=======
+>>>>>>> origin/main
 };
 
 /**
@@ -311,6 +323,7 @@ export const trackTimeOnPage = (
     page_path: pagePath,
     language: language
   });
+<<<<<<< HEAD
 
   // Meta Pixel - Custom Event for quality visitors (120s+)
   if (seconds >= 120 && typeof window !== 'undefined' && window.fbq) {
@@ -337,6 +350,10 @@ export const trackPageView = (
     window.fbq('track', 'PageView');
   }
 };
+=======
+};
+
+>>>>>>> origin/main
 
 /**
  * Track Video Play
@@ -355,6 +372,7 @@ export const trackVideoPlay = (
     video_id: videoId,
     language: language
   });
+<<<<<<< HEAD
 
   // Meta Pixel - Custom Event for video engagement
   if (typeof window !== 'undefined' && window.fbq) {
@@ -364,6 +382,8 @@ export const trackVideoPlay = (
       language: language
     });
   }
+=======
+>>>>>>> origin/main
 };
 
 /**
@@ -391,6 +411,7 @@ export const trackVideoGate = (
     user_email: userEmail
   });
 
+<<<<<<< HEAD
   // Meta Pixel (Facebook Ads) - Standard Event
   trackFBEvent('Lead', {
     content_name: 'Video Gate Submission',
@@ -400,6 +421,8 @@ export const trackVideoGate = (
     content_type: 'video'
   });
 
+=======
+>>>>>>> origin/main
   // Google Ads Conversion Tracking
   trackGoogleAdsConversion('video_unlock', leadValue);
 };
@@ -457,6 +480,7 @@ export const trackQuizComplete = (
     total_questions: Object.keys(answers).length
   });
 
+<<<<<<< HEAD
   // Meta Pixel (Facebook Ads) - Standard Event
   trackFBEvent('Lead', {
     content_name: 'Quiz Completion',
@@ -466,6 +490,8 @@ export const trackQuizComplete = (
     status: 'completed'
   });
 
+=======
+>>>>>>> origin/main
   // Google Ads Conversion Tracking
   trackGoogleAdsConversion('quiz_complete', leadValue);
 };
@@ -495,6 +521,7 @@ export const trackPDFDownloadRequest = (
     user_email: userEmail
   });
 
+<<<<<<< HEAD
   // Meta Pixel (Facebook Ads) - Standard Event
   trackFBEvent('Lead', {
     content_name: `PDF Download - ${pdfType}`,
@@ -504,6 +531,8 @@ export const trackPDFDownloadRequest = (
     content_type: 'document'
   });
 
+=======
+>>>>>>> origin/main
   // Google Ads Conversion Tracking
   trackGoogleAdsConversion('pdf_download', leadValue);
 };
@@ -548,6 +577,7 @@ export const trackAuditFormSubmit = (
     website_url: websiteUrl
   });
 
+<<<<<<< HEAD
   // Meta Pixel (Facebook Ads) - Standard Event
   trackFBEvent('Lead', {
     content_name: 'Audit Form Submission',
@@ -557,6 +587,8 @@ export const trackAuditFormSubmit = (
     status: 'submitted'
   });
 
+=======
+>>>>>>> origin/main
   // Google Ads Conversion Tracking
   trackGoogleAdsConversion('audit_form_submit', leadValue);
 };

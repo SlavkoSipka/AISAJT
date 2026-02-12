@@ -3,7 +3,7 @@
   <!-- Main Pages -->
   <url>
     <loc>https://aisajt.com/</loc>
-    <lastmod>2026-01-04</lastmod>
+    <lastmod>2026-01-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -11,7 +11,7 @@
   <!-- SEO Page - SECOND MOST IMPORTANT -->
   <url>
     <loc>https://aisajt.com/seo-optimizacija-cena</loc>
-    <lastmod>2026-01-04</lastmod>
+    <lastmod>2026-01-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
@@ -19,7 +19,7 @@
   <!-- Izrada Sajta Cena Page - THIRD MOST IMPORTANT -->
   <url>
     <loc>https://aisajt.com/izrada-sajta-cena</loc>
-    <lastmod>2026-01-04</lastmod>
+    <lastmod>2026-01-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
   </url>
@@ -27,7 +27,7 @@
   <!-- Web Dizajn Page - FOURTH MOST IMPORTANT -->
   <url>
     <loc>https://aisajt.com/web-dizajn</loc>
-    <lastmod>2026-01-04</lastmod>
+    <lastmod>2026-01-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
@@ -35,7 +35,7 @@
   <!-- Web Shop Page -->
   <url>
     <loc>https://aisajt.com/izrada-web-shopa</loc>
-    <lastmod>2026-01-04</lastmod>
+    <lastmod>2026-01-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
@@ -43,7 +43,7 @@
   <!-- Blog Hub - HIGH PRIORITY for SEO -->
   <url>
     <loc>https://aisajt.com/blog</loc>
-    <lastmod>2026-01-06</lastmod>
+    <lastmod>2026-01-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
@@ -51,28 +51,28 @@
   <!-- Blog Categories -->
   <url>
     <loc>https://aisajt.com/blog/category/seo</loc>
-    <lastmod>2026-01-06</lastmod>
+    <lastmod>2026-01-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
     <loc>https://aisajt.com/blog/category/izrada-sajtova</loc>
-    <lastmod>2026-01-06</lastmod>
+    <lastmod>2026-01-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
     <loc>https://aisajt.com/blog/category/web-dizajn</loc>
-    <lastmod>2026-01-06</lastmod>
+    <lastmod>2026-01-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
     <loc>https://aisajt.com/blog/category/e-commerce</loc>
-    <lastmod>2026-01-06</lastmod>
+    <lastmod>2026-01-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>

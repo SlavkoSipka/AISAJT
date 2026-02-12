@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, HelpCircle, ArrowRight, ArrowLeft, Check, Mail, Phone, MapPin } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { HelpCircle, ArrowRight, ArrowLeft, Check } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
-import { NavLink, MobileNavLink } from '../navigation/NavLink';
 import { translations } from '../../types/language';
 import { trackQuizStart, trackQuizAnswer, trackQuizComplete } from '../../utils/analytics';
 import { submitQuizForm } from '../../utils/hubspot';
 import { SEOHelmet } from '../seo/SEOHelmet';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
-import { navigateToSection } from '../../utils/navigation';
 
 interface Question {
   id: number;
@@ -21,11 +19,9 @@ interface Question {
 }
 
 export function QuizPage() {
-  const { language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
   const t = translations[language];
   const navigate = useNavigate();
-  const location = useLocation();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [showResults, setShowResults] = useState(false);
@@ -221,139 +217,6 @@ export function QuizPage() {
       />
       
       <Navbar />
-      
-      {/* Top Navigation Bar - Full navbar kao na HomePage */}
-      <nav className="fixed w-full z-50 bg-white/98 shadow-md backdrop-blur-md">
-        <div className="container mx-auto px-4 md:px-8">
-          <div className="flex items-center justify-between h-20 md:h-24">
-            <Link 
-              to="/" 
-              className="flex items-center group py-2"
-              aria-label="AI Sajt - Početna stranica"
-            >
-              <img 
-                src="/images/providna2.png" 
-                alt="AiSajt Logo" 
-                className="h-12 md:h-16 lg:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-              />
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-              <NavLink onClick={() => navigateToSection('services-detailed', navigate, location.pathname)}>{t.services}</NavLink>
-              <NavLink onClick={() => navigateToSection('portfolio', navigate, location.pathname)}>{t.portfolio}</NavLink>
-              <NavLink onClick={() => navigateToSection('video-section', navigate, location.pathname)}>{t.aboutUs}</NavLink>
-              <NavLink onClick={() => navigate('/resources')}>{t.resources}</NavLink>
-              
-              <button
-                onClick={() => navigate('/contact')}
-                className="bg-gray-900 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 text-sm uppercase tracking-wide"
-                aria-label="Kontaktirajte nas"
-              >
-                {t.contact}
-              </button>
-              
-              {/* Language Switcher Toggle */}
-              <div className="flex gap-1 border-2 border-gray-900 rounded-full p-1">
-                <button
-                  onClick={() => setLanguage('sr')}
-                  className={`w-10 h-10 rounded-full text-xs font-bold transition-all duration-300 ${
-                    language === 'sr'
-                      ? 'bg-gray-900 text-white shadow-md'
-                      : 'bg-transparent text-gray-700 hover:text-gray-900'
-                  }`}
-                >
-                  SR
-                </button>
-                <button
-                  onClick={() => setLanguage('en')}
-                  className={`w-10 h-10 rounded-full text-xs font-bold transition-all duration-300 ${
-                    language === 'en'
-                      ? 'bg-gray-900 text-white shadow-md'
-                      : 'bg-transparent text-gray-700 hover:text-gray-900'
-                  }`}
-                >
-                  EN
-                </button>
-              </div>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden text-gray-900 p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              aria-label={isMenuOpen ? 'Zatvori meni' : 'Otvori meni'}
-            >
-              {isMenuOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <div
-          className={`md:hidden absolute w-full bg-white/95 backdrop-blur-md shadow-xl transition-all duration-300 ease-in-out ${
-            isMenuOpen
-              ? 'opacity-100 translate-y-0 visible'
-              : 'opacity-0 -translate-y-4 invisible'
-          }`}
-        >
-          <div className="container mx-auto px-4 py-4 space-y-4">
-            <MobileNavLink onClick={() => {
-              navigateToSection('services-detailed', navigate, location.pathname);
-              setIsMenuOpen(false);
-            }}>{t.services}</MobileNavLink>
-            <MobileNavLink onClick={() => {
-              navigateToSection('portfolio', navigate, location.pathname);
-              setIsMenuOpen(false);
-            }}>{t.portfolio}</MobileNavLink>
-            <MobileNavLink onClick={() => {
-              navigateToSection('video-section', navigate, location.pathname);
-              setIsMenuOpen(false);
-            }}>{t.aboutUs}</MobileNavLink>
-            <MobileNavLink onClick={() => {
-              navigate('/resources');
-              setIsMenuOpen(false);
-            }}>{t.resources}</MobileNavLink>
-            
-            {/* Language Switcher Toggle - Mobile */}
-            <div className="px-4 py-2 flex justify-center">
-              <div className="flex gap-1 bg-gray-700 rounded-full p-1">
-                <button
-                  onClick={() => setLanguage('sr')}
-                  className={`w-12 h-12 rounded-full text-sm font-bold transition-all duration-300 ${
-                    language === 'sr'
-                      ? 'bg-white text-gray-700 shadow-md'
-                      : 'bg-transparent text-gray-300 hover:text-white'
-                  }`}
-                >
-                  SR
-                </button>
-                <button
-                  onClick={() => setLanguage('en')}
-                  className={`w-12 h-12 rounded-full text-sm font-bold transition-all duration-300 ${
-                    language === 'en'
-                      ? 'bg-white text-gray-700 shadow-md'
-                      : 'bg-transparent text-gray-300 hover:text-white'
-                  }`}
-                >
-                  EN
-                </button>
-              </div>
-            </div>
-            
-            <button
-              onClick={() => {
-                navigate('/contact');
-                setIsMenuOpen(false);
-              }}
-              className="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300"
-              aria-label="Kontaktirajte nas - Mobilni meni"
-            >
-              {t.contact}
-            </button>
-          </div>
-        </div>
-      </nav>
 
       {/* Main Content */}
       <div className="pt-24 pb-12 md:pt-40 md:pb-28 min-h-screen relative overflow-hidden">
@@ -545,107 +408,6 @@ export function QuizPage() {
           </div>
         </div>
       </div>
-
-      {/* Footer - puni footer kao na HomePage */}
-      <footer className="relative text-gray-900 py-12 md:py-16 border-t border-violet-200/30">
-        {/* Smooth layered gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-indigo-50/40 via-violet-50/35 to-pink-50/40"></div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-violet-50/20 via-transparent to-indigo-50/25"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div className="space-y-4">
-              <Link 
-                to="/"
-                className="flex items-center hover:opacity-80 transition-opacity duration-300 group"
-              >
-                <img 
-                  src="/images/providna2.png" 
-                  alt="AiSajt Logo" 
-                  className="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                />
-              </Link>
-              <p className="text-gray-600">
-                {t.footerDesc}
-              </p>
-            </div>
-            
-            <div>
-              <h4 className="text-lg font-semibold mb-4">{t.services}</h4>
-              <ul className="space-y-2">
-                <li><Link to="/" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{t.professionalAiWebDesign.split(' ')[0] + ' ' + t.professionalAiWebDesign.split(' ')[1]}</Link></li>
-                <li><Link to="/" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300">{language === 'sr' ? 'Baze Podataka' : 'Database Management'}</Link></li>
-                <li><Link to="/" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">Online Marketing</Link></li>
-                <li><Link to="/" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">E-commerce</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="text-lg font-semibold mb-4">{t.company}</h4>
-              <ul className="space-y-2">
-                <li><Link to="/" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{t.aboutUs}</Link></li>
-                <li><Link to="/" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300">{t.portfolio}</Link></li>
-                <li><Link to="/resources" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">{t.resources}</Link></li>
-                <li><Link to="/faq" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">FAQ</Link></li>
-                <li><Link to="/contact" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{t.contact}</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="text-lg font-semibold mb-4">{t.contact}</h4>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-violet-600" aria-hidden="true" />
-                  <a 
-                    href="mailto:office@aisajt.com"
-                    className="text-gray-600 hover:text-violet-600 transition-colors duration-300"
-                    aria-label={language === 'sr' ? 'Pošaljite email na office@aisajt.com' : 'Send email to office@aisajt.com'}
-                  >
-                    office@aisajt.com
-                  </a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-indigo-600" aria-hidden="true" />
-                  <a 
-                    href="tel:+381613091583"
-                    className="text-gray-600 hover:text-indigo-600 transition-colors duration-300"
-                    aria-label={language === 'sr' ? 'Pozovite na broj +381 61 3091583' : 'Call +381 61 3091583'}
-                  >
-                    +381 61 3091583
-                  </a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-pink-600" aria-hidden="true" />
-                  <span className="text-gray-600">{language === 'sr' ? 'Beograd, Srbija' : 'Belgrade, Serbia'}</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t border-violet-200 pt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-sm text-gray-600">
-                &copy; {new Date().getFullYear()} AiSajt.com | {t.professionalWebDevDesc.split(' ')[0] + ' ' + (language === 'sr' ? 'izrada web sajtova' : 'web development')}
-              </p>
-              <div className="flex gap-6">
-                <Link 
-                  to="/privacy" 
-                  className="text-sm text-gray-600 hover:text-violet-600 transition-colors duration-300"
-                  aria-label={language === 'sr' ? 'Politika privatnosti' : 'Privacy Policy'}
-                >
-                  {language === 'sr' ? 'Privatnost' : 'Privacy'}
-                </Link>
-                <Link 
-                  to="/terms" 
-                  className="text-sm text-gray-600 hover:text-violet-600 transition-colors duration-300"
-                  aria-label={language === 'sr' ? 'Uslovi korišćenja' : 'Terms of Service'}
-                >
-                  {language === 'sr' ? 'Uslovi korišćenja' : 'Terms of Service'}
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
 
       <Footer />
     </div>

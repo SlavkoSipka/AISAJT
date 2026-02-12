@@ -75,16 +75,20 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            <NavLink onClick={() => navigateToSection('portfolio', navigate, location.pathname)}>{t.portfolio}</NavLink>
-            <NavLink onClick={() => navigateToSection('video-section', navigate, location.pathname)}>{t.aboutUs}</NavLink>
+            <NavLink href="/#portfolio" onClick={() => navigateToSection('portfolio', navigate, location.pathname)}>{t.portfolio}</NavLink>
+            <NavLink href="/#video-section" onClick={() => navigateToSection('video-section', navigate, location.pathname)}>{t.aboutUs}</NavLink>
             
-            <button
-              onClick={() => navigate('/blog')}
+            <a
+              href="/blog"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/blog');
+              }}
               className="font-black text-sm uppercase tracking-wider text-gray-900 hover:text-violet-600 transition-colors duration-300"
               aria-label="Blog"
             >
               BLOG
-            </button>
+            </a>
             
             {/* Services Dropdown */}
             <div 
@@ -108,52 +112,64 @@ export function Navbar() {
                   isServicesOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
                 }`}
               >
-                <button
-                  onClick={() => {
+                <a
+                  href="/seo-optimizacija-cena"
+                  onClick={(e) => {
+                    e.preventDefault();
                     navigate('/seo-optimizacija-cena');
                     setIsServicesOpen(false);
                   }}
-                  className="w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 hover:bg-violet-50 font-bold text-sm transition-all duration-300"
+                  className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 hover:bg-violet-50 font-bold text-sm transition-all duration-300"
                 >
                   {language === 'sr' ? 'SEO Optimizacija' : 'SEO Optimization'}
-                </button>
-                <button
-                  onClick={() => {
+                </a>
+                <a
+                  href="/izrada-sajta-cena"
+                  onClick={(e) => {
+                    e.preventDefault();
                     navigate('/izrada-sajta-cena');
                     setIsServicesOpen(false);
                   }}
-                  className="w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-indigo-600 hover:via-blue-500 hover:to-cyan-500 hover:bg-indigo-50 font-bold text-sm transition-all duration-300"
+                  className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-indigo-600 hover:via-blue-500 hover:to-cyan-500 hover:bg-indigo-50 font-bold text-sm transition-all duration-300"
                 >
                   {language === 'sr' ? 'Izrada Sajta' : 'Website Development'}
-                </button>
-                <button
-                  onClick={() => {
+                </a>
+                <a
+                  href="/web-dizajn"
+                  onClick={(e) => {
+                    e.preventDefault();
                     navigate('/web-dizajn');
                     setIsServicesOpen(false);
                   }}
-                  className="w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-600 hover:via-rose-500 hover:to-violet-500 hover:bg-pink-50 font-bold text-sm transition-all duration-300"
+                  className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-600 hover:via-rose-500 hover:to-violet-500 hover:bg-pink-50 font-bold text-sm transition-all duration-300"
                 >
                   {language === 'sr' ? 'Web Dizajn' : 'Web Design'}
-                </button>
-                <button
-                  onClick={() => {
+                </a>
+                <a
+                  href="/izrada-web-shopa"
+                  onClick={(e) => {
+                    e.preventDefault();
                     navigate('/izrada-web-shopa');
                     setIsServicesOpen(false);
                   }}
-                  className="w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500 hover:bg-emerald-50 font-bold text-sm transition-all duration-300"
+                  className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500 hover:bg-emerald-50 font-bold text-sm transition-all duration-300"
                 >
                   {language === 'sr' ? 'Web Prodavnica' : 'Web Shop'}
-                </button>
+                </a>
               </div>
             </div>
             
-            <button
-              onClick={() => navigate('/contact')}
+            <a
+              href="/contact"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/contact');
+              }}
               className="bg-gray-900 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 text-sm uppercase tracking-wide"
               aria-label="Kontaktirajte nas"
             >
               {t.contact}
-            </button>
+            </a>
             
             {/* Language Switcher Toggle */}
             <div className="flex gap-1 border-2 border-gray-900 rounded-full p-1">
@@ -201,65 +217,75 @@ export function Navbar() {
       >
         <div className="container mx-auto px-4 py-4 space-y-4">
           {/* SEO - First on mobile menu */}
-          <button
-            onClick={() => {
+          <a
+            href="/seo-optimizacija-cena"
+            onClick={(e) => {
+              e.preventDefault();
               setIsMenuOpen(false);
-              navigate('/seo');
+              navigate('/seo-optimizacija-cena');
             }}
             className="block w-full text-left text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 py-4 px-4 rounded-lg hover:bg-violet-50 transition-all duration-300 touch-feedback text-lg font-bold"
           >
             {language === 'sr' ? 'SEO OPTIMIZACIJA' : 'SEO OPTIMIZATION'}
-          </button>
+          </a>
 
           {/* Izrada Sajta - Second on mobile menu */}
-          <button
-            onClick={() => {
+          <a
+            href="/izrada-sajta-cena"
+            onClick={(e) => {
+              e.preventDefault();
               setIsMenuOpen(false);
               navigate('/izrada-sajta-cena');
             }}
             className="block w-full text-left text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-indigo-600 hover:via-blue-500 hover:to-cyan-500 py-4 px-4 rounded-lg hover:bg-indigo-50 transition-all duration-300 touch-feedback text-lg font-bold"
           >
             {language === 'sr' ? 'IZRADA SAJTA' : 'WEBSITE DEV'}
-          </button>
+          </a>
 
           {/* Web Dizajn - Third on mobile menu */}
-          <button
-            onClick={() => {
+          <a
+            href="/web-dizajn"
+            onClick={(e) => {
+              e.preventDefault();
               setIsMenuOpen(false);
               navigate('/web-dizajn');
             }}
             className="block w-full text-left text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-600 hover:via-rose-500 hover:to-violet-500 py-4 px-4 rounded-lg hover:bg-pink-50 transition-all duration-300 touch-feedback text-lg font-bold"
           >
             {language === 'sr' ? 'WEB DIZAJN' : 'WEB DESIGN'}
-          </button>
+          </a>
 
           {/* Web Prodavnica - Fourth on mobile menu */}
-          <button
-            onClick={() => {
+          <a
+            href="/izrada-web-shopa"
+            onClick={(e) => {
+              e.preventDefault();
               setIsMenuOpen(false);
               navigate('/izrada-web-shopa');
             }}
             className="block w-full text-left text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500 py-4 px-4 rounded-lg hover:bg-emerald-50 transition-all duration-300 touch-feedback text-lg font-bold"
           >
             {language === 'sr' ? 'WEB PRODAVNICA' : 'WEB SHOP'}
-          </button>
+          </a>
           
           {/* Blog */}
-          <button
-            onClick={() => {
+          <a
+            href="/blog"
+            onClick={(e) => {
+              e.preventDefault();
               setIsMenuOpen(false);
               navigate('/blog');
             }}
             className="block w-full text-left text-gray-900 hover:text-violet-600 py-4 px-4 rounded-lg hover:bg-gray-50 transition-all duration-300 touch-feedback text-lg font-bold"
           >
             BLOG
-          </button>
+          </a>
           
-          <MobileNavLink onClick={() => {
+          <MobileNavLink href="/#portfolio" onClick={() => {
             setIsMenuOpen(false);
             navigateToSection('portfolio', navigate, location.pathname);
           }}>{t.portfolio}</MobileNavLink>
-          <MobileNavLink onClick={() => {
+          <MobileNavLink href="/#video-section" onClick={() => {
             setIsMenuOpen(false);
             navigateToSection('video-section', navigate, location.pathname);
           }}>{t.aboutUs}</MobileNavLink>
@@ -290,16 +316,18 @@ export function Navbar() {
             </div>
           </div>
           
-          <button
-            onClick={() => {
+          <a
+            href="/contact"
+            onClick={(e) => {
+              e.preventDefault();
               navigate('/contact');
               setIsMenuOpen(false);
             }}
-            className="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300"
+            className="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 block"
             aria-label="Kontaktirajte nas - Mobilni meni"
           >
             {t.contact}
-          </button>
+          </a>
         </div>
       </div>
     </nav>
@@ -326,24 +354,36 @@ export function Navbar() {
 
           {/* Horizontal Navigation Buttons - Minimal Design with Site Colors */}
           <div className="flex flex-col space-y-1 flex-1">
-            <button
-              onClick={() => navigateToSection('portfolio', navigate, location.pathname)}
+            <a
+              href="/#portfolio"
+              onClick={(e) => {
+                e.preventDefault();
+                navigateToSection('portfolio', navigate, location.pathname);
+              }}
               className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
             >
               {t.portfolio}
-            </button>
-            <button
-              onClick={() => navigateToSection('video-section', navigate, location.pathname)}
+            </a>
+            <a
+              href="/#video-section"
+              onClick={(e) => {
+                e.preventDefault();
+                navigateToSection('video-section', navigate, location.pathname);
+              }}
               className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
             >
               {t.aboutUs}
-            </button>
-            <button
-              onClick={() => navigate('/blog')}
+            </a>
+            <a
+              href="/blog"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/blog');
+              }}
               className="w-full text-left px-4 py-3.5 text-gray-900 hover:text-violet-600 font-black text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
             >
               Blog
-            </button>
+            </a>
             
             {/* Services Dropdown - Vertical */}
             <div 
@@ -365,54 +405,66 @@ export function Navbar() {
                   isServicesOpenVertical ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 }`}
               >
-                <button
-                  onClick={() => {
+                <a
+                  href="/seo-optimizacija-cena"
+                  onClick={(e) => {
+                    e.preventDefault();
                     navigate('/seo-optimizacija-cena');
                     setIsServicesOpenVertical(false);
                   }}
-                  className="w-full text-left px-8 py-3 text-gray-700 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 hover:bg-violet-50 font-semibold text-sm transition-all duration-300 border-l-2 border-transparent hover:border-violet-600"
+                  className="block w-full text-left px-8 py-3 text-gray-700 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 hover:bg-violet-50 font-semibold text-sm transition-all duration-300 border-l-2 border-transparent hover:border-violet-600"
                 >
                   {language === 'sr' ? 'SEO Optimizacija' : 'SEO Optimization'}
-                </button>
-                <button
-                  onClick={() => {
+                </a>
+                <a
+                  href="/izrada-sajta-cena"
+                  onClick={(e) => {
+                    e.preventDefault();
                     navigate('/izrada-sajta-cena');
                     setIsServicesOpenVertical(false);
                   }}
-                  className="w-full text-left px-8 py-3 text-gray-700 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-indigo-600 hover:via-blue-500 hover:to-cyan-500 hover:bg-indigo-50 font-semibold text-sm transition-all duration-300 border-l-2 border-transparent hover:border-indigo-600"
+                  className="block w-full text-left px-8 py-3 text-gray-700 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-indigo-600 hover:via-blue-500 hover:to-cyan-500 hover:bg-indigo-50 font-semibold text-sm transition-all duration-300 border-l-2 border-transparent hover:border-indigo-600"
                 >
                   {language === 'sr' ? 'Izrada Sajta' : 'Website Dev'}
-                </button>
-                <button
-                  onClick={() => {
+                </a>
+                <a
+                  href="/web-dizajn"
+                  onClick={(e) => {
+                    e.preventDefault();
                     navigate('/web-dizajn');
                     setIsServicesOpenVertical(false);
                   }}
-                  className="w-full text-left px-8 py-3 text-gray-700 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-600 hover:via-rose-500 hover:to-violet-500 hover:bg-pink-50 font-semibold text-sm transition-all duration-300 border-l-2 border-transparent hover:border-pink-600"
+                  className="block w-full text-left px-8 py-3 text-gray-700 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-600 hover:via-rose-500 hover:to-violet-500 hover:bg-pink-50 font-semibold text-sm transition-all duration-300 border-l-2 border-transparent hover:border-pink-600"
                 >
                   {language === 'sr' ? 'Web Dizajn' : 'Web Design'}
-                </button>
-                <button
-                  onClick={() => {
+                </a>
+                <a
+                  href="/izrada-web-shopa"
+                  onClick={(e) => {
+                    e.preventDefault();
                     navigate('/izrada-web-shopa');
                     setIsServicesOpenVertical(false);
                   }}
-                  className="w-full text-left px-8 py-3 text-gray-700 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500 hover:bg-emerald-50 font-semibold text-sm transition-all duration-300 border-l-2 border-transparent hover:border-emerald-600"
+                  className="block w-full text-left px-8 py-3 text-gray-700 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500 hover:bg-emerald-50 font-semibold text-sm transition-all duration-300 border-l-2 border-transparent hover:border-emerald-600"
                 >
                   {language === 'sr' ? 'Web Prodavnica' : 'Web Shop'}
-                </button>
+                </a>
               </div>
             </div>
           </div>
 
           {/* Contact Button at Bottom - Same as Horizontal Navbar */}
-          <button
-            onClick={() => navigate('/contact')}
-            className="w-full bg-gray-900 text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 text-sm uppercase tracking-wide"
+          <a
+            href="/contact"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/contact');
+            }}
+            className="block w-full bg-gray-900 text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 text-sm uppercase tracking-wide text-center"
             aria-label="Kontaktirajte nas"
           >
             {t.contact}
-          </button>
+          </a>
           
           {/* Language Switcher at Bottom */}
           <div className="flex gap-2 mt-4 justify-center">
