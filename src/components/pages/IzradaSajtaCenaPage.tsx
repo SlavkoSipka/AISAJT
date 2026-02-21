@@ -182,7 +182,7 @@ export function IzradaSajtaCenaPage() {
                       Šta Podrazumeva Profesionalna Izrada Sajta?
                     </h2>
                     <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-                      Izrada web sajta je kompleksan proces koji objedinjuje više disciplina. Nije samo programiranje ili samo dizajn - to je strategija koja uključuje planiranje korisničkog iskustva, vizuelni identitet, tehnički razvoj i optimizaciju. Kada govorimo o ceni izrade sajta, razumevanje ovog procesa pomaže da shvatite zašto svaki projekat nosi svoju specifičnu vrednost. Profesionalna izrada sajtova u Beogradu i Srbiji znači kombinaciju stručnosti, iskustva i razumevanja vašeg biznisa.
+                      Izrada web sajta je kompleksan proces koji objedinjuje više disciplina. Nije samo programiranje ili samo dizajn - to je strategija koja uključuje planiranje korisničkog iskustva, vizuelni identitet, tehnički razvoj i optimizaciju. Kada govorimo o ceni izrade sajta, razumevanje ovog procesa pomaže da shvatite zašto svaki projekat nosi svoju specifičnu vrednost. Profesionalna izrada sajta Beograd i Srbija znači kombinaciju stručnosti, iskustva i razumevanja vašeg biznisa - bilo da ste mali biznis ili velika kompanija.
                     </p>
                   </div>
 
@@ -192,7 +192,7 @@ export function IzradaSajtaCenaPage() {
                       Koliko Košta Izrada Sajta u 2025. Godini?
                     </h2>
                     <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-                      U Beogradu, Novom Sadu i širom Srbije cena izrade web sajta varira u zavisnosti od kompleksnosti. Jednostavan prezentacioni sajt sa nekoliko stranica počinje od 299€, dok napredna poslovna rešenja, web aplikacije i custom platforme mogu koštati i preko 2000€. Razlika u ceni odražava razliku u funkcionalnostima, dizajnu, vremenu razvoja i nivou prilagođavanja. Zato je važno razumeti šta vam zaista treba pre nego što dobijete ponudu za izradu sajtova.
+                      U Beogradu, Novom Sadu i širom Srbije izrada sajta cena varira u zavisnosti od kompleksnosti projekta. Jednostavan prezentacioni sajt sa nekoliko stranica počinje od 299€, dok napredna poslovna rešenja, web aplikacije i custom platforme mogu koštati i preko 2000€. Razlika u ceni odražava razliku u funkcionalnostima, dizajnu, vremenu razvoja i nivou prilagođavanja. Zato je važno razumeti šta vam zaista treba pre nego što dobijete ponudu - svaka cena izrade sajta se bazira na specifičnim potrebama vašeg biznisa.
                     </p>
                   </div>
 
@@ -202,7 +202,7 @@ export function IzradaSajtaCenaPage() {
                       Transparentnost i Kompletna Usluga
                     </h2>
                     <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-                      Naš pristup profesionalnoj izradi web sajta je transparentan - znate tačno šta plaćate i šta dobijate. Bez skrivenih troškova ili iznenađenja. Radimo sa klijentima u Beogradu, Novom Sadu i celoj Srbiji, nudeći kompletna digitalna rešenja: od inicijalne konsultacije, preko dizajna i programiranja, do lansiranja, obuke i kontinuirane podrške. Izrada sajtova nije jednokratna transakcija - to je partnerstvo fokusirano na vaš dugoročni digitalni uspeh.
+                      Naš pristup profesionalnoj izradi web sajta je transparentan - znate tačno šta plaćate i šta dobijate. Bez skrivenih troškova ili iznenađenja. Radimo sa klijentima u Beogradu, Novom Sadu i celoj Srbiji, nudeći kompletna digitalna rešenja: od inicijalne konsultacije, preko dizajna i programiranja, do lansiranja, obuke i kontinuirane podrške. Profesionalna izrada sajta Beograd, ili bilo gde u Srbiji, nije jednokratna transakcija - to je partnerstvo fokusirano na vaš dugoročni digitalni uspeh.
                     </p>
                   </div>
                 </div>
@@ -261,7 +261,7 @@ export function IzradaSajtaCenaPage() {
                 </h2>
                 <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                   {language === 'sr' 
-                    ? 'Svaka cena izrade web sajta se prilagođava vašim potrebama. Evo naših startnih paketa:'
+                    ? 'Svaka izrada sajta cena se prilagođava vašim potrebama. Evo naših startnih paketa:'
                     : 'Each website development price is tailored to your needs. Here are our starting packages:'
                   }
                 </p>
@@ -598,7 +598,7 @@ export function IzradaSajtaCenaPage() {
                 </h3>
                 <p className="text-gray-700 leading-relaxed max-w-2xl mx-auto">
                   {language === 'sr' 
-                    ? 'Nakon besplatne konsultacije dobijate detaljnu ponudu sa tačnom cenom izrade sajta. Bez skrivenih troškova, bez naknadnih doplata. Znate tačno šta plaćate i šta dobijate. To je naš pristup profesionalnoj izradi sajtova u Srbiji - transparentno, pošteno i kvalitetno.'
+                    ? 'Nakon besplatne konsultacije dobijate detaljnu ponudu sa tačnom cenom izrade sajta. Bez skrivenih troškova, bez naknadnih doplata. Znate tačno šta plaćate i šta dobijate. To je naš pristup profesionalnoj izradi sajtova u Srbiji - transparentno, pošteno i kvalitetno. Izrada sajta cena je uvek jasna i dogovorena unapred.'
                     : 'After a free consultation, you receive a detailed offer with the exact price. No hidden costs, no additional charges.'
                   }
                 </p>
