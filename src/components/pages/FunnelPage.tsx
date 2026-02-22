@@ -106,35 +106,39 @@ export function FunnelPage() {
           <ExternalLink className="w-3.5 h-3.5" />
         </button>
 
-        {/* Hero Section – čist layout, bez min-h-screen i negativnih margina */}
-        <section className="pt-14 md:pt-16 pb-10 md:pb-14 relative overflow-hidden">
+        {/* Hero Section – zbijen na telefonu, raspored kao referenca */}
+        <section className="pt-8 pb-6 md:pt-16 md:pb-14 relative overflow-hidden">
           <div className="container mx-auto px-4 relative z-10 w-full">
             <div className="max-w-4xl mx-auto text-center">
 
-              {/* AiSajt Logo */}
-              <div className={`mb-6 md:mb-8 transform transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'}`}>
+              {/* AiSajt Logo – manji margin na telefonu */}
+              <div className={`mb-3 md:mb-8 transform transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'}`}>
                 <div className="flex justify-center">
                   <img 
                     src="/images/aisajt_providno-removebg-preview.png" 
                     alt="AiSajt Logo" 
-                    className="h-9 md:h-10 w-auto opacity-85"
+                    className="h-8 md:h-10 w-auto opacity-85"
                   />
                 </div>
               </div>
 
-              {/* Trust badges */}
+              {/* Trust badges – na telefonu: avatari levo, tekst desno (kao referentna slika) */}
               <div className={`transform transition-all duration-700 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-                <div className="flex items-center justify-center gap-3 flex-wrap mb-5 md:mb-6">
-                  <img src="/images/ljudi.webp" alt="" className="h-8 w-auto rounded-full object-cover" />
-                  <span className="text-gray-400 text-sm font-medium">
-                    {language === 'sr' ? 'Pridruži se preko 50+ zadovoljnih klijenata' : 'Join 50+ satisfied clients'}
+                <div className="flex flex-row items-center justify-center gap-2 md:gap-3 flex-wrap mb-3 md:mb-6">
+                  <img src="/images/ljudi.webp" alt="" className="h-7 w-auto rounded-full object-cover flex-shrink-0 md:h-8" />
+                  <span className="text-gray-400 text-xs md:text-sm font-medium text-left md:text-center">
+                    {language === 'sr' ? (
+                      <>Pridruži se preko 50+<br className="md:hidden" /> zadovoljnih klijenata</>
+                    ) : (
+                      <>Join 50+ satisfied<br className="md:hidden" /> clients</>
+                    )}
                   </span>
                 </div>
               </div>
 
-              {/* Main Heading */}
+              {/* Main Heading – manji razmaci na telefonu */}
               <div className={`transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 md:mb-5">
+                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-2 md:mb-5">
                   {language === 'sr' ? (
                     <>Kako Da Napraviš 💰 Sa <span className="text-violet-300">Online Biznisom</span></>
                   ) : (
@@ -143,9 +147,9 @@ export function FunnelPage() {
                 </h1>
               </div>
 
-              {/* Subtitle */}
+              {/* Subtitle – zbijen */}
               <div className={`transform transition-all duration-1000 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-                <p className="text-base md:text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto mb-6 md:mb-8">
+                <p className="text-sm md:text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto mb-4 md:mb-8">
                   {language === 'sr' 
                     ? 'Nauči dokazani traffic, lead & sales sistem koji smo koristili da napravimo milione.'
                     : 'Learn the proven traffic, lead & sales system we used to make millions.'
@@ -153,29 +157,29 @@ export function FunnelPage() {
                 </p>
               </div>
 
-              {/* Video Section */}
+              {/* Video Section – manji padding na telefonu */}
               <div className={`transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-                <div className="relative rounded-xl overflow-hidden shadow-2xl border border-violet-500/20 bg-gradient-to-br from-gray-900 to-gray-800 max-w-3xl mx-auto">
-                  {/* CTA bar */}
-                  <div className="bg-gradient-to-r from-violet-600 to-violet-700 text-white py-2 px-6 text-center">
-                    <p className="font-semibold text-sm flex items-center justify-center gap-2">
-                      <Play className="w-3.5 h-3.5" />
+                <div className="relative rounded-lg md:rounded-xl overflow-hidden shadow-2xl border border-violet-500/20 bg-gradient-to-br from-gray-900 to-gray-800 max-w-3xl mx-auto">
+                  {/* CTA bar – kompaktniji na telefonu */}
+                  <div className="bg-gradient-to-r from-violet-600 to-violet-700 text-white py-1.5 md:py-2 px-4 md:px-6 text-center">
+                    <p className="font-semibold text-xs md:text-sm flex items-center justify-center gap-2">
+                      <Play className="w-3 h-3 md:w-3.5 md:h-3.5" />
                       {language === 'sr' ? 'Klikni Play Da Naučiš Više' : 'Click Play to Learn More'}
                     </p>
                   </div>
 
-                  {/* Video placeholder */}
+                  {/* Video placeholder – manji play dugme na telefonu */}
                   <div className="aspect-video bg-gradient-to-br from-gray-800 via-gray-900 to-black flex items-center justify-center relative group cursor-pointer">
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-violet-950/20 to-black/40"></div>
                     <div className="relative z-10 text-center">
-                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-r from-violet-600 to-pink-600 flex items-center justify-center mb-3 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                        <Play className="w-8 h-8 md:w-10 md:h-10 text-white ml-1" />
+                      <div className="w-12 h-12 md:w-20 md:h-20 rounded-full bg-gradient-to-r from-violet-600 to-pink-600 flex items-center justify-center mb-2 md:mb-3 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                        <Play className="w-6 h-6 md:w-10 md:h-10 text-white ml-0.5 md:ml-1" />
                       </div>
-                      <div className="bg-violet-600/90 backdrop-blur-sm rounded-xl px-5 py-3 max-w-xs mx-auto border border-violet-500/50">
-                        <p className="text-white font-bold text-base mb-0.5">
+                      <div className="bg-violet-600/90 backdrop-blur-sm rounded-lg md:rounded-xl px-3 py-2 md:px-5 md:py-3 max-w-xs mx-auto border border-violet-500/50">
+                        <p className="text-white font-bold text-sm md:text-base mb-0.5">
                           {language === 'sr' ? 'Tvoj Video Se Pušta' : 'Your Video is Playing'}
                         </p>
-                        <p className="text-white/80 text-xs">
+                        <p className="text-white/80 text-[10px] md:text-xs">
                           {language === 'sr' ? 'Klikni Da Isključiš Zvuk' : 'Click To Unmute'}
                         </p>
                       </div>
@@ -369,15 +373,15 @@ export function FunnelPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 mt-10">
                 {[
-                  { id: 'komotraks', logo: '/images/komotraks-logotip.png', siteImg: '/images/komotraks.png', title: 'Komotraks', tag: language === 'sr' ? 'Komarnici' : 'Screens & sliding doors', headline: language === 'sr' ? 'Profesionalan web sajt za komarnike i klizna vrata - jasna ponuda i kontakti' : 'Professional website for screens and sliding doors — clear offer and contacts', text: language === 'sr' ? 'Moderan sajt sa uslugama i flotom. Klijent zadovoljan preglednošću.' : 'Modern site with services and fleet. Client happy with clarity.' },
-                  { id: 'rc', logo: '/images/logo.png', siteImg: '/images/rc%20(2).png', title: 'Custom RC Parts', tag: language === 'sr' ? 'E-commerce, RC delovi' : 'E-commerce, RC parts', headline: language === 'sr' ? 'Web prodavnica za RC delove — porudžbine i katalog' : 'Online store for RC parts — orders and catalog', text: language === 'sr' ? 'Funkcionalan shop sa kategorijama i plaćanjem. Rast prodaje preko sajta.' : 'Functional shop with categories and payment. Sales growth via site.' },
+                  { id: 'prestige', logo: '/images/logop.png', siteImg: '/images/prestige.png', title: 'Prestige Gradnja', tag: language === 'sr' ? 'Nekretnine, gradnja' : 'Real estate, construction', headline: language === 'sr' ? 'Sajt za nekretnine i apartmane — projekti i kontakt' : 'Site for real estate and apartments — projects and contact', text: language === 'sr' ? 'Moderan izgled i jasna ponuda. Klijent zadovoljan.' : 'Modern look and clear offer. Client satisfied.' },
+                  { id: 'rc', logo: '/images/logo.png', siteImg: '/images/borakk.png', title: 'Custom RC Parts', tag: language === 'sr' ? 'E-commerce, RC delovi' : 'E-commerce, RC parts', headline: language === 'sr' ? 'Web prodavnica za RC delove — porudžbine i katalog' : 'Online store for RC parts — orders and catalog', text: language === 'sr' ? 'Funkcionalan shop sa kategorijama i plaćanjem. Rast prodaje preko sajta.' : 'Functional shop with categories and payment. Sales growth via site.' },
                   { id: 'kralj', logo: '/images/Beli%20logo2.png', siteImg: '/images/kralj.png', title: 'Kralj Residence', tag: language === 'sr' ? 'apartmani i nekretnine' : 'Apartments & real estate', headline: language === 'sr' ? 'Moderan sajt za prodaju stanova - direktna prodaja' : 'Modern site for apartment sales — direct sales', text: language === 'sr' ? 'Responzivan sajt sa jasnom ponudom stanova. Zadovoljan klijent.' : 'Responsive site with clear property offer. Happy client.' },
-                  { id: 'bora', logo: '/images/boralogo.jpg', siteImg: '/images/bora.png', title: 'Boracompany', tag: language === 'sr' ? 'CNC obrada' : 'CNC machining', headline: language === 'sr' ? 'Korporativni sajt — profesionalna prezentacija usluga' : 'Corporate site — professional service presentation', text: language === 'sr' ? 'Jasna struktura i poruka brenda. Povećana kredibilitet.' : 'Clear structure and brand message. Increased credibility.' },
+                  { id: 'bn', logo: '/images/logobn.png', siteImg: '/images/bn.png', title: 'BN Autofolije', tag: language === 'sr' ? 'Auto folije i detailing' : 'Car wraps & detailing', headline: language === 'sr' ? 'Web sajt za auto folije — više upita i preglednosti' : 'Website for car wraps — more inquiries and visibility', text: language === 'sr' ? 'Profesionalna prezentacija i galerija radova. Više upita.' : 'Professional presentation and portfolio. More inquiries.' },
                   { id: 'jastuci', logo: '/images/logo2.png', siteImg: '/images/jastuci.png', title: 'Vazdušni jastuci', tag: language === 'sr' ? 'Auto delovi' : 'Auto parts', headline: language === 'sr' ? 'Sajt za auto delove — katalog i upiti' : 'Site for auto parts — catalog and inquiries', text: language === 'sr' ? 'Pregledan katalog i kontakt forma. Više upita sa sajta.' : 'Clear catalog and contact form. More inquiries from site.' },
                   { id: 'poklon', logo: '/images/poklonilogo.png', siteImg: '/images/poklon.png', title: 'Pokloni Portret', tag: language === 'sr' ? 'Personalizovani pokloni' : 'Personalized gifts', headline: language === 'sr' ? 'Portreti po narudžbini — galerija i porudžbine' : 'Custom portraits — gallery and orders', text: language === 'sr' ? 'Umetnički brend na webu. Lako naručivanje i pregled radova.' : 'Art brand online. Easy ordering and portfolio view.' },
-                  { id: 'prestige', logo: '/images/logop.png', siteImg: '/images/prestige.png', title: 'Prestige Gradnja', tag: language === 'sr' ? 'Nekretnine, gradnja' : 'Real estate, construction', headline: language === 'sr' ? 'Sajt za nekretnine i apartmane — projekti i kontakt' : 'Site for real estate and apartments — projects and contact', text: language === 'sr' ? 'Moderan izgled i jasna ponuda. Klijent zadovoljan.' : 'Modern look and clear offer. Client satisfied.' },
+                  { id: 'komotraks', logo: '/images/komotraks-logotip.png', siteImg: '/images/komotraks.png', title: 'Komotraks', tag: language === 'sr' ? 'Komarnici' : 'Screens & sliding doors', headline: language === 'sr' ? 'Profesionalan web sajt za komarnike i klizna vrata - jasna ponuda i kontakti' : 'Professional website for screens and sliding doors — clear offer and contacts', text: language === 'sr' ? 'Moderan sajt sa uslugama i flotom. Klijent zadovoljan preglednošću.' : 'Modern site with services and fleet. Client happy with clarity.' },
                   { id: 'loki', logo: '/images/lokilo.png', siteImg: '/images/loki.png', title: 'Loki N-4', tag: language === 'sr' ? 'Betonski elementi' : 'Concrete elements', headline: language === 'sr' ? 'Prepoznatljiv brend na webu — identitet i poruka' : 'Recognizable brand online — identity and message', text: language === 'sr' ? 'Jedinstven vizuelni identitet i jasna komunikacija.' : 'Unique visual identity and clear communication.' },
-                  { id: 'bn', logo: '/images/logobn.png', siteImg: '/images/bn.png', title: 'BN Autofolije', tag: language === 'sr' ? 'Auto folije i detailing' : 'Car wraps & detailing', headline: language === 'sr' ? 'Web sajt za auto folije — više upita i preglednosti' : 'Website for car wraps — more inquiries and visibility', text: language === 'sr' ? 'Profesionalna prezentacija i galerija radova. Više upita.' : 'Professional presentation and portfolio. More inquiries.' },
+                  { id: 'bora', logo: '/images/boralogo.jpg', siteImg: '/images/bora.png', title: 'Boracompany', tag: language === 'sr' ? 'CNC obrada' : 'CNC machining', headline: language === 'sr' ? 'Korporativni sajt — profesionalna prezentacija usluga' : 'Corporate site — professional service presentation', text: language === 'sr' ? 'Jasna struktura i poruka brenda. Povećana kredibilitet.' : 'Clear structure and brand message. Increased credibility.' },
                   { id: 'lako', logo: '/images/logolak.png', siteImg: '/images/lako.png', title: 'Lako Sistem', tag: language === 'sr' ? 'Papirna galanterija' : 'Paper goods', headline: language === 'sr' ? 'Moderan prezentacioni web sajt - preglednost i autoritet. Zadovoljstvo i rezultati.' : 'Modern presentation website — clarity and authority. Satisfaction and results.', text: language === 'sr' ? 'Sajt prilagođen potrebama klijenta. Zadovoljstvo i rezultati.' : 'Site tailored to client needs. Satisfaction and results.' },
                   { id: 'panic', logo: '/images/logoin.png', siteImg: '/images/panic.png', title: 'IN-STAN', tag: language === 'sr' ? 'Stolarija' : 'Joinery', headline: language === 'sr' ? 'Moderan funkcionalan sajt za stolariju sa katalogom' : 'Modern functional website for joinery with catalog', text: language === 'sr' ? 'Profesionalan sajt koji predstavlja brend na internetu.' : 'Professional site that represents the brand online.' },
                 ].map((card) => (
@@ -398,7 +402,7 @@ export function FunnelPage() {
                         {card.text}
                       </p>
                       <div className="flex items-center gap-3">
-                        <div className={`w-24 h-14 md:w-28 md:h-16 rounded-lg border flex-shrink-0 overflow-hidden flex items-center justify-center p-1.5 ${['bora', 'lako', 'panic'].includes(card.id) ? 'bg-white border-gray-300' : 'bg-gray-800 border-gray-700'}`}>
+                        <div className={`w-24 h-14 md:w-28 md:h-16 rounded-lg border flex-shrink-0 overflow-hidden flex items-center justify-center p-1.5 ${['rc', 'bora', 'lako', 'panic'].includes(card.id) ? 'bg-white border-gray-300' : 'bg-gray-800 border-gray-700'}`}>
                           <img src={card.logo} alt="" className="max-w-full max-h-full w-auto h-auto object-contain" />
                         </div>
                         <div>
@@ -500,12 +504,16 @@ export function FunnelPage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 max-w-4xl mx-auto">
                 {[
                   { name: 'Bogdan Gradjanin', role: language === 'sr' ? 'Tehnički direktor' : 'Technical Director' },
-                  { name: 'Strahinja Zekanovic', role: language === 'sr' ? 'Menadžer & dizajn' : 'Manager & Design' },
+                  { name: 'Strahinja Zekanovic', role: language === 'sr' ? 'Menadžer & dizajn' : 'Manager & Design', image: '/images/zeka.jpg' },
                   { name: 'Marko Devedzic', role: language === 'sr' ? 'SEO specijalista' : 'SEO Specialist' },
                 ].map((member) => (
                   <div key={member.name} className="rounded-2xl border border-gray-600/60 bg-gray-900/80 backdrop-blur-sm overflow-hidden shadow-xl">
-                    <div className="aspect-square bg-gray-700/80 flex items-center justify-center text-4xl font-bold text-gray-500">
-                      {member.name.split(' ').map((n) => n[0]).join('')}
+                    <div className="aspect-square bg-gray-700/80 flex items-center justify-center text-4xl font-bold text-gray-500 overflow-hidden">
+                      {'image' in member && member.image ? (
+                        <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                      ) : (
+                        member.name.split(' ').map((n) => n[0]).join('')
+                      )}
                     </div>
                     <div className="p-5">
                       <p className="text-violet-400 font-bold text-lg">{member.name}</p>
