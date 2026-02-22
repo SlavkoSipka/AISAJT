@@ -13,6 +13,7 @@ import { ResourcesPage } from './components/pages/ResourcesPage';
 import { QuizPage } from './components/pages/QuizPage';
 import { AuditFormPage } from './components/pages/AuditFormPage';
 import { LeadMagnetDownloadPage } from './components/pages/LeadMagnetDownloadPage';
+import { FunnelPage } from './components/pages/FunnelPage';
 import { BlogHubPage } from './components/pages/BlogHubPage';
 import { BlogPostPage } from './components/pages/BlogPostPage';
 import { BlogCategoryPage } from './components/pages/BlogCategoryPage';
@@ -69,6 +70,7 @@ function AppContent() {
         <Route path="/resources/audit" element={<AuditFormPage />} />
         <Route path="/resources/guide" element={<LeadMagnetDownloadPage />} />
         <Route path="/resources/checklist" element={<LeadMagnetDownloadPage />} />
+        <Route path="/funnel" element={<FunnelPage />} />
         {/* Blog Routes */}
         <Route path="/blog" element={<BlogHubPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />

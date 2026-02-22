@@ -18,6 +18,11 @@ export function Navbar() {
   const servicesRef = useRef<HTMLDivElement>(null);
   const servicesVerticalRef = useRef<HTMLDivElement>(null);
 
+  // Hide navbar on funnel page
+  if (location.pathname === '/funnel') {
+    return null;
+  }
+
   useEffect(() => {
     let ticking = false;
 

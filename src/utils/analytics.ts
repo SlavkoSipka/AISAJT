@@ -136,16 +136,22 @@ export const trackFormInteraction = (
   });
 };
 
+const FORM_LOCATION_LABELS: Record<string, string> = {
+  contact_page: 'Contact Form',
+  home_page: 'Home Contact Form',
+  funnel_booking: 'Funnel Booking Form',
+};
+
 /**
  * Track Form Submit Attempt
  */
 export const trackFormSubmitAttempt = (
-  formLocation: 'contact_page' | 'home_page',
+  formLocation: 'contact_page' | 'home_page' | 'funnel_booking',
   language: string
 ) => {
   trackEvent('form_submit_attempt', {
     event_category: 'Lead Generation',
-    event_label: `${formLocation === 'contact_page' ? 'Contact Form' : 'Home Contact Form'} - Submit Clicked`,
+    event_label: `${FORM_LOCATION_LABELS[formLocation] ?? formLocation} - Submit Clicked`,
     language: language,
     page_path: window.location.pathname
   });
@@ -155,13 +161,13 @@ export const trackFormSubmitAttempt = (
  * Track Form Error
  */
 export const trackFormError = (
-  formLocation: 'contact_page' | 'home_page',
+  formLocation: 'contact_page' | 'home_page' | 'funnel_booking',
   language: string,
   errorMessage: string
 ) => {
   trackEvent('form_submit_error', {
     event_category: 'Lead Generation',
-    event_label: `${formLocation === 'contact_page' ? 'Contact Form' : 'Home Contact Form'} - Error`,
+    event_label: `${FORM_LOCATION_LABELS[formLocation] ?? formLocation} - Error`,
     language: language,
     error_message: errorMessage
   });

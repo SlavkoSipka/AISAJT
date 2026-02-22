@@ -19,6 +19,9 @@ export default {
         'shimmer': 'shimmer 2s linear infinite',
         'fade-in': 'fadeIn 0.3s ease-out forwards',
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      },
       keyframes: {
         shimmer: {
           '0%': { transform: 'translateX(-100%)' },

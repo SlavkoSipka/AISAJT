@@ -122,6 +122,38 @@ export async function submitContactForm(data: {
 }
 
 /**
+ * Submit funnel booking form (FunnelPage) – isti HubSpot Contact form + budžet (message + budget)
+ * Budžet šaljemo i kao "message" i kao "budget" da se prikaže u emailu ako imaš to polje u formi.
+ */
+export async function submitFunnelForm(data: {
+  name: string;
+  email: string;
+  phone: string;
+  message?: string; // budžet (opciono)
+}): Promise<{ success: boolean; message?: string }> {
+  const nameParts = data.name.trim().split(' ');
+  const firstname = nameParts[0] || '';
+  const lastname = nameParts.slice(1).join(' ') || '';
+
+  const fields: Record<string, string> = {
+    firstname,
+    lastname,
+    email: data.email,
+    phone: data.phone,
+  };
+  if (data.message) {
+    fields.message = data.message;
+    fields.budget = data.message; // i kao "budget" da se prosledi u HubSpot i u email
+  }
+
+  return submitToHubSpot(
+    HUBSPOT_FORMS.CONTACT,
+    fields,
+    'Funnel – Besplatna konsultacija'
+  );
+}
+
+/**
  * Submit quiz form
  */
 export async function submitQuizForm(data: {
