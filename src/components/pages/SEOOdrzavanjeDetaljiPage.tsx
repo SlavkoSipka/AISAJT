@@ -149,20 +149,20 @@ export function SEOOdrzavanjeDetaljiPage() {
         className="fixed top-0 left-0 z-[99999] pointer-events-none opacity-0 transition-opacity duration-200"
         style={{ willChange: 'transform' }}
       >
-        <div className="w-2 h-2 bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.7)]" />
+        <div className="w-2 h-2 bg-[#05afd1] shadow-[0_0_6px_rgba(5,175,209,0.7)]" />
       </div>
       {/* ──────────────────────────────────────────────────────── */}
       <div className="fixed top-0 left-0 right-0 h-[95vh] max-h-[1200px] pointer-events-none z-0">
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% -60%, rgba(139, 92, 246, 0.35), rgba(139, 92, 246, 0.15) 40%, rgba(0, 0, 0, 0) 70%)'
+            background: 'radial-gradient(circle at 50% -60%, rgba(5, 175, 209, 0.35), rgba(5, 175, 209, 0.15) 40%, rgba(0, 0, 0, 0) 70%)'
           }}
         />
-        <div className="absolute -top-[500px] left-1/2 -translate-x-1/2 w-[1600px] h-[1200px] bg-violet-600/25 rounded-full blur-[150px]" />
-        <div className="absolute -top-[200px] left-1/2 -translate-x-1/2 w-[1000px] h-[800px] bg-pink-600/15 rounded-full blur-[130px]" />
-        <div className="absolute top-1/4 -left-40 w-[700px] h-[700px] bg-violet-700/12 rounded-full blur-[120px]" />
-        <div className="absolute top-1/3 -right-40 w-[700px] h-[700px] bg-pink-700/12 rounded-full blur-[120px]" />
+        <div className="absolute -top-[500px] left-1/2 -translate-x-1/2 w-[1600px] h-[1200px] bg-[#05afd1]/25 rounded-full blur-[150px]" />
+        <div className="absolute -top-[200px] left-1/2 -translate-x-1/2 w-[1000px] h-[800px] bg-[#05afd1]/15 rounded-full blur-[130px]" />
+        <div className="absolute top-1/4 -left-40 w-[700px] h-[700px] bg-[#05afd1]/12 rounded-full blur-[120px]" />
+        <div className="absolute top-1/3 -right-40 w-[700px] h-[700px] bg-[#05afd1]/12 rounded-full blur-[120px]" />
       </div>
 
       <SEOHelmet
@@ -185,14 +185,14 @@ export function SEOOdrzavanjeDetaljiPage() {
         <div className="fixed top-5 left-4 right-4 md:left-auto md:right-6 z-50 flex items-center justify-between md:justify-end gap-2">
           <button
             onClick={() => navigate('/')}
-            className="px-4 py-2 md:px-5 md:py-2.5 border border-violet-500/30 bg-gray-950/80 backdrop-blur-md text-violet-300 text-xs md:text-sm font-semibold tracking-wide rounded-full hover:bg-violet-600/20 hover:text-white hover:border-violet-400 transition-all duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(139,92,246,0.15)]"
+            className="px-4 py-2 md:px-5 md:py-2.5 border border-[#05afd1]/30 bg-gray-950/80 backdrop-blur-md text-[#05afd1] text-xs md:text-sm font-semibold tracking-wide rounded-full hover:bg-[#05afd1]/20 hover:text-white hover:border-[#05afd1] transition-all duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(5,175,209,0.15)]"
           >
             {language === 'sr' ? 'Početna' : 'Home'}
             <ExternalLink className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={goToFunnel}
-            className="px-4 py-2 md:px-5 md:py-2.5 border border-violet-500/30 bg-gray-950/80 backdrop-blur-md text-violet-300 text-xs md:text-sm font-semibold tracking-wide rounded-full hover:bg-violet-600/20 hover:text-white hover:border-violet-400 transition-all duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(139,92,246,0.15)]"
+            className="px-4 py-2 md:px-5 md:py-2.5 border border-[#05afd1]/30 bg-gray-950/80 backdrop-blur-md text-[#05afd1] text-xs md:text-sm font-semibold tracking-wide rounded-full hover:bg-[#05afd1]/20 hover:text-white hover:border-[#05afd1] transition-all duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(5,175,209,0.15)]"
           >
             {language === 'sr' ? 'Zakaži poziv' : 'Book a call'}
             <ArrowRight className="w-3.5 h-3.5" />
@@ -231,12 +231,12 @@ export function SEOOdrzavanjeDetaljiPage() {
                   {language === 'sr' ? (
                     <>
                       <span className="text-white">Šta Ti Donosi Stalno</span>
-                      <span className="block mt-1 md:mt-2 text-violet-300">SEO Održavanje?</span>
+                      <span className="block mt-1 md:mt-2 text-[#05afd1]">SEO Održavanje?</span>
                     </>
                   ) : (
                     <>
                       <span className="text-white">What Does Constant</span>
-                      <span className="block mt-1 md:mt-2 text-violet-300">SEO Maintenance?</span>
+                      <span className="block mt-1 md:mt-2 text-[#05afd1]">SEO Maintenance?</span>
                     </>
                   )}
                 </h1>
@@ -251,20 +251,20 @@ export function SEOOdrzavanjeDetaljiPage() {
               </div>
 
               <div className={`transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-                <div className="relative rounded-lg md:rounded-xl overflow-hidden shadow-2xl border border-violet-500/20 bg-gradient-to-br from-gray-900 to-gray-800 max-w-3xl mx-auto">
-                  <div className="bg-gradient-to-r from-violet-600 to-violet-700 text-white py-1.5 md:py-2 px-4 md:px-6 text-center">
+                <div className="relative rounded-lg md:rounded-xl overflow-hidden shadow-2xl border border-[#05afd1]/20 bg-gradient-to-br from-gray-900 to-gray-800 max-w-3xl mx-auto">
+                  <div className="bg-gradient-to-r from-[#05afd1] to-[#05afd1] text-white py-1.5 md:py-2 px-4 md:px-6 text-center">
                     <p className="font-semibold text-xs md:text-sm flex items-center justify-center gap-2">
                       <Play className="w-3 h-3 md:w-3.5 md:h-3.5" />
                       {language === 'sr' ? 'Klikni Play Da Naučiš Više' : 'Click Play to Learn More'}
                     </p>
                   </div>
                   <div className="aspect-video bg-gradient-to-br from-gray-800 via-gray-900 to-black flex items-center justify-center relative group cursor-pointer">
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-violet-950/20 to-black/40" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#05afd1]/20 to-black/40" />
                     <div className="relative z-10 text-center">
-                      <div className="w-12 h-12 md:w-20 md:h-20 rounded-full bg-gradient-to-r from-violet-600 to-pink-600 flex items-center justify-center mb-2 md:mb-3 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                      <div className="w-12 h-12 md:w-20 md:h-20 rounded-full bg-gradient-to-r from-[#05afd1] to-[#05afd1] flex items-center justify-center mb-2 md:mb-3 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
                         <Play className="w-6 h-6 md:w-10 md:h-10 text-white ml-0.5 md:ml-1" />
                       </div>
-                      <div className="bg-violet-600/90 backdrop-blur-sm rounded-lg md:rounded-xl px-3 py-2 md:px-5 md:py-3 max-w-xs mx-auto border border-violet-500/50">
+                      <div className="bg-[#05afd1]/90 backdrop-blur-sm rounded-lg md:rounded-xl px-3 py-2 md:px-5 md:py-3 max-w-xs mx-auto border border-[#05afd1]/50">
                         <p className="text-white font-bold text-sm md:text-base mb-0.5">
                           {language === 'sr' ? 'Tvoj Video Se Pušta' : 'Your Video is Playing'}
                         </p>
@@ -280,7 +280,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                 <button
                   type="button"
                   onClick={goToFunnel}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-violet-500 hover:bg-violet-600 text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(139,92,246,0.65)]"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-[#05afd1] hover:bg-[#05afd1] text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(5,175,209,0.65)]"
                 >
                   {language === 'sr' ? 'Zakaži poziv' : 'Book a call'}
                   <ArrowRight className="w-4 h-4" />
@@ -296,14 +296,14 @@ export function SEOOdrzavanjeDetaljiPage() {
             <div className="max-w-5xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-3">
                 {language === 'sr' ? 'Upoznajte tim ' : 'Meet the Team '}
-                <span className="text-violet-400">{language === 'sr' ? 'iza AiSajt-a.' : 'Behind AiSajt.'}</span>
+                <span className="text-[#05afd1]">{language === 'sr' ? 'iza AiSajt-a.' : 'Behind AiSajt.'}</span>
               </h2>
               <p className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto mb-4">
                 {language === 'sr'
                   ? 'Upoznajte ljude koji su pomogli brojnim kompanijama da dobiju moderan sajt i jaču online prisutnost.'
                   : "Get to know the specialists who've helped many companies get a modern site and stronger online presence."}
               </p>
-              <div className="w-3 h-3 bg-violet-500 rounded-sm mx-auto mb-12" />
+              <div className="w-3 h-3 bg-[#05afd1] rounded-sm mx-auto mb-12" />
               <div className="max-w-4xl mx-auto">
                 {/* Bogdan i Strahinja – dva reda jedan pored drugog */}
                 <div className="grid grid-cols-2 gap-4 md:gap-8 mb-8 md:mb-10">
@@ -317,7 +317,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                       </div>
                       <div className="p-4 sm:p-5">
                         <p className="font-bold text-sm sm:text-lg">
-                          <span className="text-violet-400">{member.name.split(' ')[0]}</span>
+                          <span className="text-[#05afd1]">{member.name.split(' ')[0]}</span>
                           <span className="text-white"> {member.name.split(' ').slice(1).join(' ')}</span>
                         </p>
                         <p className="text-gray-400 text-xs sm:text-sm mt-0.5">{member.role}</p>
@@ -333,10 +333,10 @@ export function SEOOdrzavanjeDetaljiPage() {
                   </div>
                   <div className="p-5 md:p-6 md:flex-1 flex flex-col justify-center">
                     <p className="font-bold text-lg md:text-xl">
-                      <span className="text-violet-400">Marko</span>
+                      <span className="text-[#05afd1]">Marko</span>
                       <span className="text-white"> Devedzic</span>
                     </p>
-                    <p className="text-violet-400/90 text-sm font-medium mt-0.5">
+                    <p className="text-[#05afd1]/90 text-sm font-medium mt-0.5">
                       {language === 'sr' ? 'SEO i održavanje sajtova' : 'SEO & Website Maintenance'}
                     </p>
                     <p className="text-gray-400 text-sm md:text-base mt-3 leading-relaxed">
@@ -436,12 +436,12 @@ export function SEOOdrzavanjeDetaljiPage() {
                           <button
                             type="button"
                             onClick={() => setExpandedReviewIndex(isExpanded ? null : i)}
-                            className="text-violet-500 hover:text-violet-600 text-sm font-medium mt-2 self-start cursor-pointer hover:underline underline-offset-2"
+                            className="text-[#05afd1] hover:text-[#05afd1] text-sm font-medium mt-2 self-start cursor-pointer hover:underline underline-offset-2"
                           >
                             {language === 'sr' ? 'Pročitaj više' : 'Read more'}
                           </button>
                           {isExpanded && (
-                            <div className="absolute left-0 top-0 w-full rounded-xl border border-violet-300 bg-white shadow-2xl p-5 flex flex-col">
+                            <div className="absolute left-0 top-0 w-full rounded-xl border border-[#05afd1] bg-white shadow-2xl p-5 flex flex-col">
                               <div className="flex gap-0.5 mb-3">
                                 {stars(review.rating ?? 5)}
                               </div>
@@ -457,7 +457,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                               <button
                                 type="button"
                                 onClick={() => setExpandedReviewIndex(null)}
-                                className="text-violet-500 hover:text-violet-600 text-sm font-medium self-start cursor-pointer hover:underline underline-offset-2"
+                                className="text-[#05afd1] hover:text-[#05afd1] text-sm font-medium self-start cursor-pointer hover:underline underline-offset-2"
                               >
                                 {language === 'sr' ? 'Pročitaj manje' : 'Read less'}
                               </button>
@@ -490,7 +490,7 @@ export function SEOOdrzavanjeDetaljiPage() {
               <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight mb-2">
                 {language === 'sr' ? '50+ Uspešnih Projekata, Priče Uspeha.' : '50+ Successful Projects, Success Stories.'}
               </h2>
-              <h3 className="text-xl md:text-2xl font-bold text-violet-400 mb-6">
+              <h3 className="text-xl md:text-2xl font-bold text-[#05afd1] mb-6">
                 {language === 'sr' ? 'Jedan Dokazan Pristup.' : 'One Proven Approach.'}
               </h3>
               <p className="text-gray-400 text-base md:text-lg max-w-4xl mx-auto mb-10">
@@ -522,8 +522,8 @@ export function SEOOdrzavanjeDetaljiPage() {
                 </div>
               </div>
               <div className="mt-10 flex justify-center">
-                <div className="w-10 h-10 flex items-center justify-center text-violet-500">
-                  <div className="w-6 h-6 border-2 border-violet-500 rotate-45" />
+                <div className="w-10 h-10 flex items-center justify-center text-[#05afd1]">
+                  <div className="w-6 h-6 border-2 border-[#05afd1] rotate-45" />
                 </div>
               </div>
             </div>
@@ -535,8 +535,8 @@ export function SEOOdrzavanjeDetaljiPage() {
           <div className={`container mx-auto px-4 ${revealClass(ctaVisible)}`}>
             <div className="max-w-6xl mx-auto">
               <div className="relative rounded-3xl bg-gray-900/95 border border-gray-700/50 overflow-hidden">
-                <div className="absolute -top-40 -left-40 w-[500px] h-[400px] bg-violet-600/25 rounded-full blur-[120px] pointer-events-none" />
-                <div className="absolute -top-32 -right-32 w-[400px] h-[350px] bg-violet-500/15 rounded-full blur-[100px] pointer-events-none" />
+                <div className="absolute -top-40 -left-40 w-[500px] h-[400px] bg-[#05afd1]/25 rounded-full blur-[120px] pointer-events-none" />
+                <div className="absolute -top-32 -right-32 w-[400px] h-[350px] bg-[#05afd1]/15 rounded-full blur-[100px] pointer-events-none" />
                 <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 p-8 md:p-10 lg:p-12">
                   <div className="flex flex-col justify-center">
                     <div className="flex flex-col items-start gap-3 mb-6">
@@ -546,7 +546,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                       <img src="/images/ljudi.webp" alt="" className="h-8 w-auto rounded-full object-cover" />
                     </div>
                     <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mb-4">
-                      <span className="text-violet-400">
+                      <span className="text-[#05afd1]">
                         {language === 'sr' ? 'Stigli ste do ovde — sada ' : "You've made it this far — now "}
                       </span>
                       <span className="text-white">
@@ -556,13 +556,13 @@ export function SEOOdrzavanjeDetaljiPage() {
                     <p className="text-gray-400 text-sm leading-snug mb-3 md:leading-relaxed md:text-base md:mb-6 max-w-xl">
                       {language === 'sr' ? (
                         <>Potrebno je 30 sekundi da se{' '}
-                          <button type="button" onClick={goToFunnel} className="text-violet-300 font-bold hover:text-violet-200 underline underline-offset-2 cursor-pointer">
+                          <button type="button" onClick={goToFunnel} className="text-[#05afd1] font-bold hover:text-[#05afd1] underline underline-offset-2 cursor-pointer">
                             prijavite
                           </button>
                           {' '}i proverimo da li AiSajt može da vam pomogne da brže rastete — sa jasnoćom i rezultatima.</>
                       ) : (
                         <>Take 30 seconds to{' '}
-                          <button type="button" onClick={goToFunnel} className="text-violet-300 font-bold hover:text-violet-200 underline underline-offset-2 cursor-pointer">
+                          <button type="button" onClick={goToFunnel} className="text-[#05afd1] font-bold hover:text-[#05afd1] underline underline-offset-2 cursor-pointer">
                             apply now
                           </button>
                           {' '}and let's see if AiSajt is the right fit to help you scale faster—with clarity and results.</>
@@ -579,7 +579,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                         language === 'sr' ? 'Bez pritiska, bez nametljive prodaje' : 'No pressure, no hard pitch',
                       ].map((item) => (
                         <li key={item} className="flex items-center gap-3 text-gray-300 text-sm">
-                          <CheckCircle className="w-5 h-5 text-violet-400 flex-shrink-0" />
+                          <CheckCircle className="w-5 h-5 text-[#05afd1] flex-shrink-0" />
                           {item}
                         </li>
                       ))}
@@ -627,11 +627,11 @@ export function SEOOdrzavanjeDetaljiPage() {
               <p className="text-gray-500 text-xs">
                 © {new Date().getFullYear()} AiSajt
                 <span className="mx-1.5">•</span>
-                <a href="/privacy" className="hover:text-violet-400 transition-colors">Privacy</a>
+                <a href="/privacy" className="hover:text-[#05afd1] transition-colors">Privacy</a>
                 <span className="mx-1.5">•</span>
-                <a href="/terms" className="hover:text-violet-400 transition-colors">{language === 'sr' ? 'Uslovi' : 'Terms'}</a>
+                <a href="/terms" className="hover:text-[#05afd1] transition-colors">{language === 'sr' ? 'Uslovi' : 'Terms'}</a>
                 <span className="mx-1.5">•</span>
-                <a href="/terms#disclaimer" className="hover:text-violet-400 transition-colors">{language === 'sr' ? 'Izjava' : 'Disclaimer'}</a>
+                <a href="/terms#disclaimer" className="hover:text-[#05afd1] transition-colors">{language === 'sr' ? 'Izjava' : 'Disclaimer'}</a>
               </p>
             </div>
           </div>
@@ -643,17 +643,17 @@ export function SEOOdrzavanjeDetaljiPage() {
             stickyBarVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0 pointer-events-none'
           }`}
         >
-          <div className="inline-flex items-center gap-3 md:gap-5 px-4 py-2.5 md:px-6 md:py-3 rounded-2xl border border-violet-500/25 bg-black/55 backdrop-blur-xl shadow-[0_4px_32px_rgba(139,92,246,0.18)]">
+          <div className="inline-flex items-center gap-3 md:gap-5 px-4 py-2.5 md:px-6 md:py-3 rounded-2xl border border-[#05afd1]/25 bg-black/55 backdrop-blur-xl shadow-[0_4px_32px_rgba(5,175,209,0.18)]">
             <p className="text-gray-300 text-xs md:text-sm leading-snug whitespace-nowrap">
               {language === 'sr' ? (
-                <>Nauči kako da dobiješ nove klijente sa <span className="text-violet-400 font-semibold">AiSajt sistemom.</span></>
+                <>Nauči kako da dobiješ nove klijente sa <span className="text-[#05afd1] font-semibold">AiSajt sistemom.</span></>
               ) : (
-                <>Get new clients with the <span className="text-violet-400 font-semibold">AiSajt system.</span></>
+                <>Get new clients with the <span className="text-[#05afd1] font-semibold">AiSajt system.</span></>
               )}
             </p>
             <button
               onClick={goToFunnel}
-              className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs md:text-sm rounded-xl transition-all shadow-[0_0_16px_rgba(139,92,246,0.45)] hover:shadow-[0_0_24px_rgba(139,92,246,0.65)] whitespace-nowrap"
+              className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 bg-[#05afd1] hover:bg-[#05afd1] text-white font-bold text-xs md:text-sm rounded-xl transition-all shadow-[0_0_16px_rgba(5,175,209,0.45)] hover:shadow-[0_0_24px_rgba(5,175,209,0.65)] whitespace-nowrap"
             >
               {language === 'sr' ? 'Zakaži Poziv' : 'Book a Call'}
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -694,7 +694,7 @@ export function SEOOdrzavanjeDetaljiPage() {
               </div>
               <div className="mx-4 mt-3 px-3 py-2 bg-white/5 rounded-lg flex items-center justify-between">
                 <p className="text-gray-300 text-xs font-medium">{language === 'sr' ? 'Malo slobodnih termina.' : 'Only few slots left.'}</p>
-                <span className="text-violet-400 font-bold text-xs tabular-nums">⚡ {language === 'sr' ? 'Ograničeno' : 'Limited'}</span>
+                <span className="text-[#05afd1] font-bold text-xs tabular-nums">⚡ {language === 'sr' ? 'Ograničeno' : 'Limited'}</span>
               </div>
               <div className="px-4 pt-3 pb-1">
                 <div className="flex gap-1.5">
@@ -703,7 +703,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                       key={i}
                       onClick={() => setSelectedDay(i)}
                       className={`flex-1 flex flex-col items-center py-2.5 rounded-lg border text-xs font-medium transition-all ${
-                        selectedDay === i ? 'bg-violet-600 border-violet-500 text-white' : 'bg-white/5 border-white/10 text-gray-400 hover:border-violet-500/50 hover:text-white'
+                        selectedDay === i ? 'bg-[#05afd1] border-[#05afd1] text-white' : 'bg-white/5 border-white/10 text-gray-400 hover:border-[#05afd1]/50 hover:text-white'
                       }`}
                     >
                       <span className="text-[9px] uppercase tracking-wide leading-tight">{label}</span>
@@ -714,7 +714,7 @@ export function SEOOdrzavanjeDetaljiPage() {
               <div className="px-4 py-4">
                 <button
                   onClick={goToFunnel}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-violet-700 hover:from-violet-500 hover:to-violet-600 text-white font-bold text-sm transition-all shadow-lg hover:shadow-violet-500/30"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#05afd1] to-[#05afd1] hover:from-[#05afd1] hover:to-[#05afd1] text-white font-bold text-sm transition-all shadow-lg hover:shadow-[#05afd1]/30"
                 >
                   {language === 'sr' ? 'Zakaži Poziv' : 'Book a Call'}
                 </button>
@@ -723,7 +723,7 @@ export function SEOOdrzavanjeDetaljiPage() {
           </div>
           <button
             onClick={() => setWidgetOpen(v => !v)}
-            className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-violet-500 hover:border-violet-400 transition-all hover:scale-105 active:scale-95 bg-violet-700 flex items-center justify-center"
+            className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-[#05afd1] hover:border-[#05afd1] transition-all hover:scale-105 active:scale-95 bg-[#05afd1] flex items-center justify-center"
             aria-label="Zakaži poziv"
           >
             <img src="/images/aisajt_providno-removebg-preview.png" alt="AiSajt" className="w-9 h-9 object-contain" />

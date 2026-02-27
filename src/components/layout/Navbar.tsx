@@ -185,7 +185,7 @@ export function Navbar() {
               >
                 <button
                   onClick={() => setIsGuideOpen(!isGuideOpen)}
-                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-full font-semibold text-sm uppercase tracking-wide border-2 border-violet-600 text-violet-600 hover:bg-violet-600 hover:text-white transition-all duration-300"
+                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-full font-semibold text-sm uppercase tracking-wide border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-all duration-300"
                   aria-label={language === 'sr' ? 'Vodič i resursi za klijente' : 'Guide and resources for clients'}
                 >
                   {language === 'sr' ? 'POČNI OVDE' : 'START HERE'}
@@ -196,22 +196,22 @@ export function Navbar() {
                     isGuideOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
                   }`}
                 >
-                  <div className="px-4 py-3 border-b border-gray-100 bg-violet-50/50">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-violet-600">
+                  <div className="px-4 py-2.5 border-b-2 border-gray-200 bg-gray-50/80 cursor-default">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
                       {language === 'sr' ? 'Sve što vam treba za početak' : 'Everything you need to get started'}
                     </p>
                   </div>
                   <a
                     href="/izrada-sajta-detalji"
                     onClick={(e) => { e.preventDefault(); navigate('/izrada-sajta-detalji'); setIsGuideOpen(false); }}
-                    className="block w-full text-left px-5 py-3.5 text-gray-900 hover:bg-violet-50 font-medium text-sm transition-colors duration-300 border-b border-gray-50"
+                    className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-indigo-600 hover:via-blue-500 hover:to-cyan-500 hover:bg-indigo-50 font-bold text-sm transition-all duration-300"
                   >
                     {language === 'sr' ? 'Izrada Sajta Detalji' : 'Website Development Details'}
                   </a>
                   <a
                     href="/seo-optimizacija-detalji"
                     onClick={(e) => { e.preventDefault(); navigate('/seo-optimizacija-detalji'); setIsGuideOpen(false); }}
-                    className="block w-full text-left px-5 py-3.5 text-gray-900 hover:bg-violet-50 font-medium text-sm transition-colors duration-300"
+                    className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 hover:bg-violet-50 font-bold text-sm transition-all duration-300"
                   >
                     {language === 'sr' ? 'SEO Optimizacija Detalji' : 'SEO Optimization Details'}
                   </a>

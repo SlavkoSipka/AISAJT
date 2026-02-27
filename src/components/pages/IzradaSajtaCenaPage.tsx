@@ -246,6 +246,51 @@ export function IzradaSajtaCenaPage() {
           </div>
         </section>
 
+        {/* CTA sekcija za Izrada Sajta Detalji */}
+        <section className="py-12 md:py-16 bg-gradient-to-br from-pink-50/5 via-white to-white relative overflow-hidden">
+          <div className="container mx-auto px-4 desktop-vertical-nav-offset">
+            <div className="max-w-4xl mx-auto">
+              <Link
+                to="/izrada-sajta-detalji"
+                onClick={() => trackCTAClick('Izrada Sajta Detalji CTA', 'izrada_sajta_mid_section', language)}
+                className="group relative block bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-pink-500/20 hover:border-pink-500 overflow-hidden"
+              >
+                {/* Background gradient on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                {/* Decorative elements */}
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-pink-500/10 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div className="flex-1">
+                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 group-hover:text-pink-600 transition-colors duration-300">
+                        {language === 'sr' 
+                          ? 'Želiš da saznaš šta ti donosi dobar sajt?'
+                          : 'Want to learn what a good website brings you?'
+                        }
+                      </h3>
+                      <p className="text-gray-600 text-base md:text-lg leading-relaxed">
+                        {language === 'sr'
+                          ? 'Pogledaj video i saznaj šta ti donosi dobar sajt: više klijenata, jača online prisutnost i dokazani sistem privlačenja posla. Preko 50+ uspešnih projekata.'
+                          : 'Watch the video and learn what a good website brings you: more clients, stronger online presence and a proven system for attracting business. Over 50+ successful projects.'
+                        }
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <div className="inline-flex items-center gap-2 px-6 py-3 bg-pink-500 text-white font-semibold rounded-xl group-hover:bg-pink-600 group-hover:scale-105 transition-all duration-300 shadow-lg shadow-pink-500/30">
+                        <span>{language === 'sr' ? 'Pogledaj Video' : 'Watch Video'}</span>
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Cenovnik */}
         <section className="py-16 md:py-24 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-violet-50/30 via-indigo-50/20 to-pink-50/30"></div>

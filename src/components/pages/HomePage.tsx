@@ -762,10 +762,10 @@ export function HomePage() {
             {/* Pillar Cards Grid */}
             <div className="grid md:grid-cols-2 gap-6 md:gap-8 scroll-fade-in">
               
-              {/* Card 1: Izrada Sajta Cena */}
+              {/* Card 1: Izrada Sajta Detalji */}
               <Link 
-                to="/izrada-sajta-cena"
-                onClick={() => trackCTAClick('Izrada Sajta Cena', 'pillar_section', language)}
+                to="/izrada-sajta-detalji"
+                onClick={() => trackCTAClick('Izrada Sajta Detalji', 'pillar_section', language)}
                 className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-violet-300"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-violet-50/50 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -773,28 +773,28 @@ export function HomePage() {
                 <div className="relative z-10">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-2xl font-bold text-gray-900 group-hover:text-violet-600 transition-colors duration-300">
-                      {language === 'sr' ? 'Izrada Sajta' : 'Website Development'}
+                      {language === 'sr' ? 'Izrada Sajta Beograd' : 'Website Development Belgrade'}
                     </h3>
                     <ArrowRight className="w-6 h-6 text-violet-600 group-hover:translate-x-2 transition-transform duration-300" />
                   </div>
                   
                   <p className="text-gray-600 mb-4 leading-relaxed">
                     {language === 'sr' 
-                      ? 'Detaljni cenovnik usluga izrade web sajtova. Transparentne cene za prezentacione sajtove, online prodavnice i složene web aplikacije. Saznajte tačnu cenu za vaš projekat.'
-                      : 'Detailed website development pricing list. Transparent prices for presentation sites, online stores and complex web applications. Find out the exact price for your project.'
+                      ? 'Pogledaj šta ti donosi dobar sajt — više klijenata, jača online prisutnost i dokazani sistem privlačenja posla. Video i detalji od AiSajt tima. Preko 50+ uspešnih projekata.'
+                      : 'See what a good website brings you — more clients, stronger online presence and a proven system for attracting business. Video and details from AiSajt team. Over 50+ successful projects.'
                     }
                   </p>
                   
                   <div className="flex items-center gap-2 text-violet-600 font-semibold">
-                    {language === 'sr' ? 'Izrada Sajta Cenovnik →' : 'Website Pricing →'}
+                    {language === 'sr' ? 'Saznaj Šta Ti Donosi Dobar Sajt →' : 'See What a Good Website Brings You →'}
                   </div>
                 </div>
               </Link>
 
-              {/* Card 2: SEO Optimizacija Cena */}
+              {/* Card 2: SEO Optimizacija Detalji */}
               <Link 
-                to="/seo-optimizacija-cena"
-                onClick={() => trackCTAClick('SEO Optimizacija Cena', 'pillar_section', language)}
+                to="/seo-optimizacija-detalji"
+                onClick={() => trackCTAClick('SEO Optimizacija Detalji', 'pillar_section', language)}
                 className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-indigo-300"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -802,20 +802,20 @@ export function HomePage() {
                 <div className="relative z-10">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-2xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">
-                      {language === 'sr' ? 'SEO Optimizacija' : 'SEO Optimization'}
+                      {language === 'sr' ? 'SEO Održavanje Beograd' : 'SEO Maintenance Belgrade'}
                     </h3>
                     <ArrowRight className="w-6 h-6 text-indigo-600 group-hover:translate-x-2 transition-transform duration-300" />
                   </div>
                   
                   <p className="text-gray-600 mb-4 leading-relaxed">
                     {language === 'sr' 
-                      ? 'Kompletni cenovnik SEO optimizacije. On-page SEO, tehnička optimizacija, link building i lokalni SEO za Beograd i Srbiju. Garantovani rezultati na Google-u.'
-                      : 'Complete SEO optimization pricing. On-page SEO, technical optimization, link building and local SEO for Belgrade and Serbia. Guaranteed Google results.'
+                      ? 'Pogledaj šta ti donosi redovno SEO održavanje — više posetilaca, bolje pozicije na Google-u i kontinuirani rast organskog saobraćaja. Video i detalji od AiSajt tima.'
+                      : 'See what regular SEO maintenance brings you — more visitors, better Google rankings and continuous growth of organic traffic. Video and details from AiSajt team.'
                     }
                   </p>
                   
                   <div className="flex items-center gap-2 text-indigo-600 font-semibold">
-                    {language === 'sr' ? 'SEO Optimizacija Cenovnik →' : 'SEO Pricing →'}
+                    {language === 'sr' ? 'Saznaj Šta Ti Donosi SEO Održavanje →' : 'See What SEO Maintenance Brings You →'}
                   </div>
                 </div>
               </Link>

@@ -279,6 +279,51 @@ export function SEOPage() {
           </div>
         </section>
 
+        {/* CTA sekcija za SEO Optimizacija Detalji */}
+        <section className="py-12 md:py-16 bg-gradient-to-br from-[#05afd1]/5 via-white to-white relative overflow-hidden">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <Link
+                to="/seo-optimizacija-detalji"
+                onClick={() => trackCTAClick('SEO Optimizacija Detalji CTA', 'seo_mid_section', language)}
+                className="group relative block bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-[#05afd1]/20 hover:border-[#05afd1] overflow-hidden"
+              >
+                {/* Background gradient on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#05afd1]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                {/* Decorative elements */}
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#05afd1]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-[#05afd1]/10 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div className="flex-1">
+                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 group-hover:text-[#05afd1] transition-colors duration-300">
+                        {language === 'sr' 
+                          ? 'Želiš da saznaš našu detaljnu ponudu SEO optimizacije?'
+                          : 'Want to learn about our detailed SEO optimization offer?'
+                        }
+                      </h3>
+                      <p className="text-gray-600 text-base md:text-lg leading-relaxed">
+                        {language === 'sr'
+                          ? 'Pogledaj video i saznaj šta ti donosi redovno SEO održavanje — više posetilaca, bolje pozicije na Google-u i kontinuirani rast organskog saobraćaja.'
+                          : 'Watch the video and learn what regular SEO maintenance brings you — more visitors, better Google rankings and continuous growth of organic traffic.'
+                        }
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <div className="inline-flex items-center gap-2 px-6 py-3 bg-[#05afd1] text-white font-semibold rounded-xl group-hover:bg-[#05afd1] group-hover:scale-105 transition-all duration-300 shadow-lg shadow-[#05afd1]/30">
+                        <span>{language === 'sr' ? 'Pogledaj Video' : 'Watch Video'}</span>
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Šta je SEO optimizacija - Long-form content sa vizuelnim elementima */}
         <section className="py-16 md:py-24 bg-white relative overflow-hidden">
           {/* Background decorative elements */}
