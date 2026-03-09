@@ -392,10 +392,10 @@ export function FunnelPage() {
                 </p>
               </div>
 
-              {/* Video Section – manji padding na telefonu */}
-              <div className={`transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} -mx-4 md:mx-0`}>
+              {/* Video Section – na mobilnom BEZ animacije da play button radi odmah */}
+              <div className={`md:transform md:transition-all md:duration-1000 md:delay-700 ${isVisible ? 'md:translate-y-0 md:opacity-100' : 'md:translate-y-10 md:opacity-0'} -mx-4 md:mx-0`}>
                 <div className="relative rounded-none md:rounded-xl overflow-hidden shadow-2xl border-y md:border border-violet-500/20 bg-gradient-to-br from-gray-900 to-gray-800 w-full max-w-5xl mx-auto">
-                  {/* CTA bar – kompaktniji na telefonu */}
+                  {/* CTA bar */}
                   <div className="bg-gradient-to-r from-violet-600 to-violet-700 text-white py-1.5 md:py-2 px-4 md:px-6 text-center">
                     <p className="font-semibold text-xs md:text-sm flex items-center justify-center gap-2">
                       <Play className="w-3 h-3 md:w-3.5 md:h-3.5" />
@@ -406,26 +406,31 @@ export function FunnelPage() {
                   {/* Vimeo video */}
                   <div className="aspect-video relative bg-black">
 
-                    {/* MOBILNI: ne učitava iframe dok korisnik ne klikne — brže i pouzdanije */}
+                    {/* MOBILNI: play button uvek vidljiv i klikabilan — iframe se učitava tek posle tapa (user gesture → zvuk radi) */}
                     {isMobileDevice && !videoStarted && (
                       <button
                         type="button"
-                        className="absolute inset-0 w-full h-full flex flex-col items-center justify-center z-10 bg-gray-950"
+                        className="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-gray-950"
+                        style={{ touchAction: 'manipulation', zIndex: 20 }}
                         onClick={() => setVideoStarted(true)}
                       >
-                        <div className="w-20 h-20 rounded-full bg-violet-600 flex items-center justify-center mb-4 shadow-[0_0_40px_rgba(139,92,246,0.6)] active:scale-95 transition-transform duration-150">
-                          <Play className="w-9 h-9 text-white ml-1" />
+                        {/* Pulsing outer ring */}
+                        <div className="relative mb-5">
+                          <div className="absolute inset-0 rounded-full bg-violet-600/30 animate-ping" />
+                          <div className="relative w-20 h-20 rounded-full bg-violet-600 flex items-center justify-center shadow-[0_0_40px_rgba(139,92,246,0.7)] active:scale-90 transition-transform duration-100">
+                            <Play className="w-9 h-9 text-white ml-1.5" />
+                          </div>
                         </div>
-                        <p className="text-white font-bold text-base mb-1">
+                        <p className="text-white font-bold text-lg tracking-tight">
                           {language === 'sr' ? 'Pokreni Video' : 'Play Video'}
                         </p>
-                        <p className="text-gray-400 text-sm">
-                          {language === 'sr' ? 'Klikni da pogledaš' : 'Tap to watch'}
+                        <p className="text-violet-300 text-sm mt-1">
+                          {language === 'sr' ? 'Sa zvukom · Tapni da pogledaš' : 'With sound · Tap to watch'}
                         </p>
                       </button>
                     )}
 
-                    {/* Iframe – učitava se: na desktopu odmah (muted), na mobilnom tek posle klika (sa zvukom) */}
+                    {/* Iframe – mobilni: učitava se tek posle tapa (sa zvukom), desktop: odmah (muted) */}
                     {(!isMobileDevice || videoStarted) && (
                       <iframe
                         ref={iframeRef}
@@ -446,7 +451,7 @@ export function FunnelPage() {
                       />
                     )}
 
-                    {/* Desktop overlay – dok je muted na desktopu */}
+                    {/* Desktop overlay – dok je muted */}
                     {!isMobileDevice && !videoUnmuted && (
                       <div
                         className="absolute inset-0 flex items-center justify-center cursor-pointer group z-10"
@@ -807,7 +812,7 @@ export function FunnelPage() {
                         ref={carouselRef}
                         onScroll={handleCarouselScroll}
                         className="flex gap-4 overflow-x-auto px-4 pb-4 snap-x snap-mandatory"
-                        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+                        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' } as React.CSSProperties}
                       >
                         {[...cards, ...cards, ...cards].map((card, idx) => (
                           <div key={`${card.id}-${idx}`} className="snap-start flex-shrink-0 w-[80vw]">
