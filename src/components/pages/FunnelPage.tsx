@@ -64,30 +64,18 @@ export function FunnelPage() {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [videoUnmuted, setVideoUnmuted] = useState(false);
-  const [videoStarted, setVideoStarted] = useState(false);
-  const [isMobileDevice] = useState(() =>
-    typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches
-  );
-  // Separate src state for mobile so React reconciliation doesn't reset it
-  const MOBILE_SRC_IDLE =
-    'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&controls=1';
-  const MOBILE_SRC_PLAY =
-    'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1';
-  const [mobileSrc, setMobileSrc] = useState(MOBILE_SRC_IDLE);
+
+  const VIMEO_MUTED = 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&controls=0';
+  const VIMEO_SOUND = 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1';
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  // iOS Safari allows autoplay only when the iframe src is changed synchronously
-  // within the tap handler (treated as user-initiated navigation).
-  // We mutate the DOM ref directly first, then sync React state so reconciliation
-  // doesn't reset the src back to the idle URL.
-  const handleMobilePlayTap = () => {
+  const handleUnmute = () => {
     if (iframeRef.current) {
-      iframeRef.current.src = MOBILE_SRC_PLAY;
+      iframeRef.current.src = VIMEO_SOUND;
     }
-    setMobileSrc(MOBILE_SRC_PLAY);
-    setVideoStarted(true);
+    setVideoUnmuted(true);
   };
 
   useEffect(() => {
@@ -425,72 +413,28 @@ export function FunnelPage() {
                   {/* Vimeo video */}
                   <div className="aspect-video relative bg-black">
 
-                    {/* MOBILNI iframe – uvek u DOM-u (pre-loaded), src se menja sync u tap handleru */}
-                    {isMobileDevice && (
-                      <iframe
-                        ref={iframeRef}
-                        src={mobileSrc}
-                        frameBorder="0"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                        allowFullScreen
-                        title="Zeka-VSL"
-                      />
-                    )}
+                    {/* Iframe — isti za sve uređaje: autoplay muted u pozadini */}
+                    <iframe
+                      ref={iframeRef}
+                      src={videoUnmuted ? VIMEO_SOUND : VIMEO_MUTED}
+                      frameBorder="0"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      className="absolute inset-0 w-full h-full"
+                      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                      allowFullScreen
+                      title="Zeka-VSL"
+                    />
 
-                    {/* MOBILNI: play button overlay – vidljiv dok nije tapnut */}
-                    {isMobileDevice && !videoStarted && (
-                      <button
-                        type="button"
-                        className="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-gray-950"
-                        style={{ touchAction: 'manipulation', zIndex: 20 }}
-                        onClick={handleMobilePlayTap}
-                      >
-                        {/* Pulsing outer ring */}
-                        <div className="relative mb-5">
-                          <div className="absolute inset-0 rounded-full bg-violet-600/30 animate-ping" />
-                          <div className="relative w-20 h-20 rounded-full bg-violet-600 flex items-center justify-center shadow-[0_0_40px_rgba(139,92,246,0.7)] active:scale-90 transition-transform duration-100">
-                            <Play className="w-9 h-9 text-white ml-1.5" />
-                          </div>
-                        </div>
-                        <p className="text-white font-bold text-lg tracking-tight">
-                          {language === 'sr' ? 'Pokreni Video' : 'Play Video'}
-                        </p>
-                        <p className="text-violet-300 text-sm mt-1">
-                          {language === 'sr' ? 'Sa zvukom · Tapni da pogledaš' : 'With sound · Tap to watch'}
-                        </p>
-                      </button>
-                    )}
-
-                    {/* DESKTOP iframe – odmah (muted autoplay) */}
-                    {!isMobileDevice && (
-                      <iframe
-                        ref={iframeRef}
-                        key={videoUnmuted ? 'sound' : 'muted'}
-                        src={
-                          videoUnmuted
-                            ? 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1'
-                            : 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&controls=0'
-                        }
-                        frameBorder="0"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        className="absolute inset-0 w-full h-full"
-                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                        allowFullScreen
-                        title="Zeka-VSL"
-                      />
-                    )}
-
-                    {/* Desktop overlay – dok je muted */}
-                    {!isMobileDevice && !videoUnmuted && (
+                    {/* Overlay — dok je muted, klik/tap uključuje zvuk */}
+                    {!videoUnmuted && (
                       <div
                         className="absolute inset-0 flex items-center justify-center cursor-pointer group z-10"
-                        onClick={() => setVideoUnmuted(true)}
+                        style={{ touchAction: 'manipulation' }}
+                        onClick={handleUnmute}
                       >
                         <div className="text-center">
-                          <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-violet-600/80 backdrop-blur-sm flex items-center justify-center mb-2 md:mb-3 mx-auto group-hover:scale-110 group-hover:bg-violet-500/90 transition-all duration-300 shadow-lg">
-                            <Play className="w-5 h-5 md:w-7 md:h-7 text-white ml-0.5" />
+                          <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-violet-600/80 backdrop-blur-sm flex items-center justify-center mb-2 md:mb-3 mx-auto group-hover:scale-110 group-hover:bg-violet-500/90 active:scale-90 transition-all duration-300 shadow-lg">
+                            <Play className="w-6 h-6 md:w-7 md:h-7 text-white ml-0.5" />
                           </div>
                           <div className="bg-black/60 backdrop-blur-sm rounded-lg px-3 py-2 md:px-4 md:py-2.5 border border-white/10">
                             <p className="text-white font-bold text-xs md:text-sm mb-0.5">
