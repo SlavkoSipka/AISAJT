@@ -68,29 +68,25 @@ export function FunnelPage() {
   const [isMobileDevice] = useState(() =>
     typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches
   );
+  // Separate src state for mobile so React reconciliation doesn't reset it
+  const MOBILE_SRC_IDLE =
+    'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&controls=1';
+  const MOBILE_SRC_PLAY =
+    'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1';
+  const [mobileSrc, setMobileSrc] = useState(MOBILE_SRC_IDLE);
+
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const mobileVideoContainerRef = useRef<HTMLDivElement>(null);
 
-  // Must be synchronous DOM insertion inside the tap handler so iOS Safari
-  // still considers it a user gesture and allows autoplay with sound.
+  // iOS Safari allows autoplay only when the iframe src is changed synchronously
+  // within the tap handler (treated as user-initiated navigation).
+  // We mutate the DOM ref directly first, then sync React state so reconciliation
+  // doesn't reset the src back to the idle URL.
   const handleMobilePlayTap = () => {
-    const container = mobileVideoContainerRef.current;
-    if (container) {
-      const iframe = document.createElement('iframe');
-      iframe.src =
-        'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1';
-      iframe.setAttribute('frameborder', '0');
-      iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
-      iframe.className = 'absolute inset-0 w-full h-full';
-      iframe.setAttribute(
-        'allow',
-        'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share'
-      );
-      iframe.allowFullscreen = true;
-      iframe.title = 'Zeka-VSL';
-      container.appendChild(iframe);
+    if (iframeRef.current) {
+      iframeRef.current.src = MOBILE_SRC_PLAY;
     }
+    setMobileSrc(MOBILE_SRC_PLAY);
     setVideoStarted(true);
   };
 
@@ -427,9 +423,23 @@ export function FunnelPage() {
                   </div>
 
                   {/* Vimeo video */}
-                  <div ref={mobileVideoContainerRef} className="aspect-video relative bg-black">
+                  <div className="aspect-video relative bg-black">
 
-                    {/* MOBILNI: play button uvek vidljiv i klikabilan — iframe se umeće direktno u DOM (sync) da iOS Safari prepozna user gesture */}
+                    {/* MOBILNI iframe – uvek u DOM-u (pre-loaded), src se menja sync u tap handleru */}
+                    {isMobileDevice && (
+                      <iframe
+                        ref={iframeRef}
+                        src={mobileSrc}
+                        frameBorder="0"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                        allowFullScreen
+                        title="Zeka-VSL"
+                      />
+                    )}
+
+                    {/* MOBILNI: play button overlay – vidljiv dok nije tapnut */}
                     {isMobileDevice && !videoStarted && (
                       <button
                         type="button"
@@ -453,7 +463,7 @@ export function FunnelPage() {
                       </button>
                     )}
 
-                    {/* Iframe – desktop: odmah (muted autoplay). Mobilni iframe se ubacuje direktno u DOM putem handleMobilePlayTap. */}
+                    {/* DESKTOP iframe – odmah (muted autoplay) */}
                     {!isMobileDevice && (
                       <iframe
                         ref={iframeRef}
