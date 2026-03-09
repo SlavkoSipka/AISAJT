@@ -70,6 +70,29 @@ export function FunnelPage() {
   );
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const mobileVideoContainerRef = useRef<HTMLDivElement>(null);
+
+  // Must be synchronous DOM insertion inside the tap handler so iOS Safari
+  // still considers it a user gesture and allows autoplay with sound.
+  const handleMobilePlayTap = () => {
+    const container = mobileVideoContainerRef.current;
+    if (container) {
+      const iframe = document.createElement('iframe');
+      iframe.src =
+        'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1';
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+      iframe.className = 'absolute inset-0 w-full h-full';
+      iframe.setAttribute(
+        'allow',
+        'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share'
+      );
+      iframe.allowFullscreen = true;
+      iframe.title = 'Zeka-VSL';
+      container.appendChild(iframe);
+    }
+    setVideoStarted(true);
+  };
 
   useEffect(() => {
     const el = carouselRef.current;
@@ -404,15 +427,15 @@ export function FunnelPage() {
                   </div>
 
                   {/* Vimeo video */}
-                  <div className="aspect-video relative bg-black">
+                  <div ref={mobileVideoContainerRef} className="aspect-video relative bg-black">
 
-                    {/* MOBILNI: play button uvek vidljiv i klikabilan — iframe se učitava tek posle tapa (user gesture → zvuk radi) */}
+                    {/* MOBILNI: play button uvek vidljiv i klikabilan — iframe se umeće direktno u DOM (sync) da iOS Safari prepozna user gesture */}
                     {isMobileDevice && !videoStarted && (
                       <button
                         type="button"
                         className="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-gray-950"
                         style={{ touchAction: 'manipulation', zIndex: 20 }}
-                        onClick={() => setVideoStarted(true)}
+                        onClick={handleMobilePlayTap}
                       >
                         {/* Pulsing outer ring */}
                         <div className="relative mb-5">
@@ -430,17 +453,15 @@ export function FunnelPage() {
                       </button>
                     )}
 
-                    {/* Iframe – mobilni: učitava se tek posle tapa (sa zvukom), desktop: odmah (muted) */}
-                    {(!isMobileDevice || videoStarted) && (
+                    {/* Iframe – desktop: odmah (muted autoplay). Mobilni iframe se ubacuje direktno u DOM putem handleMobilePlayTap. */}
+                    {!isMobileDevice && (
                       <iframe
                         ref={iframeRef}
-                        key={isMobileDevice ? 'mobile-sound' : (videoUnmuted ? 'sound' : 'muted')}
+                        key={videoUnmuted ? 'sound' : 'muted'}
                         src={
-                          isMobileDevice
+                          videoUnmuted
                             ? 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1'
-                            : videoUnmuted
-                              ? 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1'
-                              : 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&controls=0'
+                            : 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&controls=0'
                         }
                         frameBorder="0"
                         referrerPolicy="strict-origin-when-cross-origin"
@@ -812,7 +833,7 @@ export function FunnelPage() {
                         ref={carouselRef}
                         onScroll={handleCarouselScroll}
                         className="flex gap-4 overflow-x-auto px-4 pb-4 snap-x snap-mandatory"
-                        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' } as React.CSSProperties}
+                        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
                       >
                         {[...cards, ...cards, ...cards].map((card, idx) => (
                           <div key={`${card.id}-${idx}`} className="snap-start flex-shrink-0 w-[80vw]">
