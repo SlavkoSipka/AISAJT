@@ -141,13 +141,15 @@ export function Hero({ language }: HeroProps) {
             <div className={`transform transition-all duration-1000 delay-1000 ${isVisible ? 'translate-x-0 opacity-100 scale-100' : 'translate-x-20 opacity-0 scale-90'}`}>
               {/* Logo Image with 3D effect */}
               <div className="relative">
-                <img 
-                  src="/images/aisajt.png" 
-                  alt="AI izrada sajtova - Profesionalna izrada veb sajta sa veštačkom inteligencijom"
-                  loading="eager"
-                  decoding="async"
-                  className="w-full max-w-md mx-auto drop-shadow-2xl animate-float"
-                />
+                <div className="w-full max-w-md mx-auto rounded-2xl bg-white/95 p-6 md:p-8 shadow-2xl ring-1 ring-gray-200/80">
+                  <img 
+                    src="/images/aisajt nav.png" 
+                    alt="AI izrada sajtova - Profesionalna izrada veb sajta sa veštačkom inteligencijom"
+                    loading="eager"
+                    decoding="async"
+                    className="w-full h-auto drop-shadow-xl animate-float object-contain"
+                  />
+                </div>
                 
                 {/* Floating devices mockup simulation */}
                 <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-gradient-to-br from-violet-100 to-indigo-100 rounded-3xl shadow-2xl transform rotate-12 transition-transform duration-700 hover:rotate-6">

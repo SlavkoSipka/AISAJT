@@ -63,6 +63,17 @@ export function FunnelPage() {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
+  const [videoUnmuted, setVideoUnmuted] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  /* ── Load Vimeo player.js ─────────────────────────────────────── */
+  useEffect(() => {
+    if (document.querySelector('script[src="https://player.vimeo.com/api/player.js"]')) return;
+    const script = document.createElement('script');
+    script.src = 'https://player.vimeo.com/api/player.js';
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
   /* ── Trailing cursor square ────────────────────────────────────── */
   const trailRef = useRef<HTMLDivElement>(null);
@@ -71,6 +82,9 @@ export function FunnelPage() {
   const rafId = useRef<number>(0);
 
   useEffect(() => {
+    // Skip cursor animation on touch devices
+    if (window.matchMedia('(hover: none)').matches) return;
+
     const onMove = (e: MouseEvent) => {
       mouse.current = { x: e.clientX, y: e.clientY };
       if (trailRef.current) trailRef.current.style.opacity = '1';
@@ -127,9 +141,16 @@ export function FunnelPage() {
   const [widgetOpen, setWidgetOpen] = useState(false);
   const [widgetAutoOpened, setWidgetAutoOpened] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0);
+  const [triedSubmit, setTriedSubmit] = useState(false);
 
   /* sticky bottom bar */
   const [stickyBarVisible, setStickyBarVisible] = useState(false);
+
+  /* scroll arrow – visible near top */
+  const [showScrollArrow, setShowScrollArrow] = useState(true);
+
+  /* booking form u viewportu – za skrivanje floating widgeta na mobilnom */
+  const [bookingInView, setBookingInView] = useState(false);
 
   /* reviews expand */
   const [expandedReviewIndex, setExpandedReviewIndex] = useState<number | null>(null);
@@ -153,6 +174,8 @@ export function FunnelPage() {
       const inHero = heroEl ? isElementInViewport(heroEl) : false;
       const inBooking = bookingEl ? isElementInViewport(bookingEl) : false;
       setStickyBarVisible(!inHero && !inBooking && window.scrollY > 60);
+      setShowScrollArrow(window.scrollY < 180);
+      setBookingInView(inBooking);
     };
 
     const isElementInViewport = (el: HTMLElement) => {
@@ -179,6 +202,8 @@ export function FunnelPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setTriedSubmit(true);
+    if (!formData.name || !formData.phone || !formData.email) return;
     setIsSubmitting(true);
     trackFormSubmitAttempt('funnel_booking', language);
 
@@ -217,15 +242,37 @@ export function FunnelPage() {
 
   return (
     <div className="min-h-screen bg-gray-950 overflow-x-hidden relative">
-      {/* ── Trailing cursor square ────────────────────────────────── */}
+      {/* ── Trailing cursor square – hidden on touch devices ─────────── */}
       <div
         ref={trailRef}
-        className="fixed top-0 left-0 z-[99999] pointer-events-none opacity-0 transition-opacity duration-200"
+        className="hidden md:block fixed top-0 left-0 z-[99999] pointer-events-none opacity-0 transition-opacity duration-200"
         style={{ willChange: 'transform' }}
       >
         <div className="w-2 h-2 bg-violet-500 shadow-[0_0_6px_rgba(139,92,246,0.7)]" />
       </div>
       {/* ─────────────────────────────────────────────────────────── */}
+
+      {/* Scroll arrow – vidljivo samo na vrhu stranice */}
+      <div
+        className={`hidden md:flex fixed bottom-8 left-10 z-50 flex-col items-start gap-1.5 cursor-pointer transition-all duration-500 ${
+          showScrollArrow ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'
+        }`}
+        onClick={() => document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' })}
+      >
+        <span className="text-violet-300 text-xs font-semibold tracking-widest uppercase">
+          {language === 'sr' ? 'Zakaži Besplatno' : 'Book Free'}
+        </span>
+        <div className="flex flex-col items-start gap-0.5 animate-bounce">
+          <div className="w-px h-4 bg-gradient-to-b from-violet-400/0 to-violet-400 ml-1.5" />
+          <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1L7 7L13 1" stroke="#a78bfa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-40">
+            <path d="M1 1L7 7L13 1" stroke="#a78bfa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
       {/* Violet glow samo na prve 2 sekcije (hero + booking); ispod toga samo tamna pozadina */}
       <div className="fixed top-0 left-0 right-0 h-[95vh] max-h-[1200px] pointer-events-none z-0">
         <div 
@@ -270,7 +317,7 @@ export function FunnelPage() {
         {/* Hero Section – zbijen na telefonu, raspored kao referenca */}
         <section className="pt-14 pb-6 md:pt-16 md:pb-14 relative overflow-hidden">
           <div className="container mx-auto px-4 relative z-10 w-full">
-            <div className="max-w-4xl mx-auto text-center">
+            <div className="max-w-5xl mx-auto text-center">
 
               {/* AiSajt Logo – manji margin na telefonu */}
               <div className={`mb-3 md:mb-8 transform transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'}`}>
@@ -319,8 +366,8 @@ export function FunnelPage() {
               </div>
 
               {/* Video Section – manji padding na telefonu */}
-              <div className={`transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-                <div className="relative rounded-lg md:rounded-xl overflow-hidden shadow-2xl border border-violet-500/20 bg-gradient-to-br from-gray-900 to-gray-800 max-w-3xl mx-auto">
+              <div className={`transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} -mx-4 md:mx-0`}>
+                <div className="relative rounded-none md:rounded-xl overflow-hidden shadow-2xl border-y md:border border-violet-500/20 bg-gradient-to-br from-gray-900 to-gray-800 w-full max-w-5xl mx-auto">
                   {/* CTA bar – kompaktniji na telefonu */}
                   <div className="bg-gradient-to-r from-violet-600 to-violet-700 text-white py-1.5 md:py-2 px-4 md:px-6 text-center">
                     <p className="font-semibold text-xs md:text-sm flex items-center justify-center gap-2">
@@ -329,22 +376,46 @@ export function FunnelPage() {
                     </p>
                   </div>
 
-                  {/* Video placeholder – manji play dugme na telefonu */}
-                  <div className="aspect-video bg-gradient-to-br from-gray-800 via-gray-900 to-black flex items-center justify-center relative group cursor-pointer">
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-violet-950/20 to-black/40"></div>
-                    <div className="relative z-10 text-center">
-                      <div className="w-12 h-12 md:w-20 md:h-20 rounded-full bg-gradient-to-r from-violet-600 to-pink-600 flex items-center justify-center mb-2 md:mb-3 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                        <Play className="w-6 h-6 md:w-10 md:h-10 text-white ml-0.5 md:ml-1" />
+                  {/* Vimeo video – autoplay muted u pozadini, klik = restartuje sa zvukom */}
+                  <div className="aspect-video relative bg-black">
+                    {/* Iframe – Vimeo embed sa originalnim parametrima */}
+                    <iframe
+                      ref={iframeRef}
+                      key={videoUnmuted ? 'sound' : 'muted'}
+                      src={
+                        videoUnmuted
+                          ? 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1'
+                          : 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&controls=0'
+                      }
+                      frameBorder="0"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      className="absolute inset-0 w-full h-full"
+                      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                      allowFullScreen
+                      title="Zeka-VSL"
+                    />
+
+                    {/* Play / unmute overlay – samo dok je muted; kad unmute, iframe prima sve evente pa kontrole rade */}
+                    {!videoUnmuted && (
+                      <div
+                        className="absolute inset-0 flex items-center justify-center cursor-pointer group z-10"
+                        onClick={() => setVideoUnmuted(true)}
+                      >
+                        <div className="text-center">
+                          <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-violet-600/80 backdrop-blur-sm flex items-center justify-center mb-2 md:mb-3 mx-auto group-hover:scale-110 group-hover:bg-violet-500/90 transition-all duration-300 shadow-lg">
+                            <Play className="w-5 h-5 md:w-7 md:h-7 text-white ml-0.5" />
+                          </div>
+                          <div className="bg-black/60 backdrop-blur-sm rounded-lg px-3 py-2 md:px-4 md:py-2.5 border border-white/10">
+                            <p className="text-white font-bold text-xs md:text-sm mb-0.5">
+                              {language === 'sr' ? '▶ Video se pušta' : '▶ Video is Playing'}
+                            </p>
+                            <p className="text-white/70 text-[10px] md:text-xs">
+                              {language === 'sr' ? 'Klikni da uključiš zvuk' : 'Click to unmute'}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="bg-violet-600/90 backdrop-blur-sm rounded-lg md:rounded-xl px-3 py-2 md:px-5 md:py-3 max-w-xs mx-auto border border-violet-500/50">
-                        <p className="text-white font-bold text-sm md:text-base mb-0.5">
-                          {language === 'sr' ? 'Tvoj Video Se Pušta' : 'Your Video is Playing'}
-                        </p>
-                        <p className="text-white/80 text-[10px] md:text-xs">
-                          {language === 'sr' ? 'Klikni Da Isključiš Zvuk' : 'Click To Unmute'}
-                        </p>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -353,31 +424,45 @@ export function FunnelPage() {
           </div>
         </section>
 
-        {/* Booking Section – bez negativnih margina, natural flow */}
-        <section id="booking-form" className="pt-12 md:pt-16 pb-16 md:pb-24 relative overflow-hidden z-10">
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="max-w-xl mx-auto text-center">
-              {/* Header van kartice - veći tekst, na sredinu */}
-              <p className="text-violet-400 text-sm font-medium tracking-wider uppercase mb-2">
-                {language === 'sr' ? 'Besplatna konsultacija' : 'Free consultation'}
-              </p>
-              <h2 className="text-3xl md:text-4xl font-semibold text-white tracking-tight mb-3">
-                {language === 'sr' ? (
-                  <>Kontaktiraj Nas <span className="text-violet-300">Odmah</span></>
-                ) : (
-                  <>Contact Us <span className="text-violet-300">Now</span></>
-                )}
-              </h2>
-              <p className="text-gray-500 text-sm md:text-base mb-6 max-w-lg mx-auto">
-                {language === 'sr' 
-                  ? 'Zakaži 1-na-1 poziv i saznaj kako možemo pomoći, plan strategije i prilike za rast.'
-                  : 'Book a 1-on-1 call and see how we can help, strategy plan and growth opportunities.'
-                }
-              </p>
+        {/* Booking Section */}
+        <section id="booking-form" className="pt-12 md:pt-16 pb-16 md:pb-24 relative overflow-hidden z-20 scroll-mt-20">
+          {/* Ambient glow */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-violet-600/20 rounded-full blur-[100px]" />
+          </div>
 
-              {/* Card - kutija (samo forma) */}
-              <div className="rounded-2xl border border-gray-700/80 bg-gray-900/40 backdrop-blur-sm overflow-hidden shadow-xl">
-                <div className="p-8 md:p-10">
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-xl mx-auto">
+
+              {/* Header */}
+              <div className="text-center mb-6">
+                <span className="inline-block bg-violet-500/20 border border-violet-500/40 text-violet-300 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
+                  {language === 'sr' ? '🎯 Besplatna konsultacija' : '🎯 Free consultation'}
+                </span>
+                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-3">
+                  {language === 'sr' ? (
+                    <>Zakaži Poziv <span className="text-violet-400">Odmah</span></>
+                  ) : (
+                    <>Book a Call <span className="text-violet-400">Now</span></>
+                  )}
+                </h2>
+                <p className="text-gray-400 text-sm md:text-base max-w-md mx-auto">
+                  {language === 'sr'
+                    ? 'Zakaži 1-na-1 poziv i saznaj kako možemo pomoći. Skroz besplatno.'
+                    : 'Book a 1-on-1 call and see how we can help. Completely free.'
+                  }
+                </p>
+              </div>
+
+              {/* Card */}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                {/* Gradient border effect */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-500 via-violet-600 to-pink-600 p-[2px]">
+                  <div className="absolute inset-0 rounded-2xl bg-gray-900" />
+                </div>
+
+
+                <div className="relative z-10 bg-gray-900 p-7 md:p-9">
                 {submitSuccess ? (
                   <div className="text-center py-8">
                     <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -400,10 +485,21 @@ export function FunnelPage() {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-sm"
-                        placeholder={language === 'sr' ? 'Ime i prezime *' : 'Full name *'}
+                        autoComplete="name"
+                        style={{ touchAction: 'manipulation' }}
+                        className={`w-full px-4 py-3 rounded-lg bg-gray-800/60 border text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-sm ${
+                          triedSubmit && !formData.name
+                            ? 'border-red-500 focus:ring-red-500'
+                            : 'border-gray-700'
+                        }`}
+                        placeholder={language === 'sr' ? 'Ime i prezime' : 'Full name'}
                       />
+                      {triedSubmit && !formData.name && (
+                        <p className="mt-1 text-red-400 text-xs flex items-center gap-1">
+                          <span className="text-red-400">*</span>
+                          {language === 'sr' ? 'Ovo polje je obavezno' : 'This field is required'}
+                        </p>
+                      )}
                     </div>
 
                     {/* Phone field */}
@@ -414,14 +510,26 @@ export function FunnelPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-sm"
-                        placeholder={language === 'sr' ? 'Broj telefona *' : 'Phone number *'}
+                        autoComplete="tel"
+                        inputMode="tel"
+                        style={{ touchAction: 'manipulation' }}
+                        className={`w-full px-4 py-3 rounded-lg bg-gray-800/60 border text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-sm ${
+                          triedSubmit && !formData.phone
+                            ? 'border-red-500 focus:ring-red-500'
+                            : 'border-gray-700'
+                        }`}
+                        placeholder={language === 'sr' ? 'Broj telefona' : 'Phone number'}
                       />
+                      {triedSubmit && !formData.phone && (
+                        <p className="mt-1 text-red-400 text-xs flex items-center gap-1">
+                          <span className="text-red-400">*</span>
+                          {language === 'sr' ? 'Ovo polje je obavezno' : 'This field is required'}
+                        </p>
+                      )}
                     </div>
 
                     {/* Email field - shows after phone is entered */}
-                    {formData.phone && (
+                    {(formData.phone || (triedSubmit && !formData.email)) && (
                       <div className="animate-fadeIn">
                         <input
                           type="email"
@@ -429,10 +537,22 @@ export function FunnelPage() {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-sm"
-                          placeholder={language === 'sr' ? 'Email adresa *' : 'Email address *'}
+                          autoComplete="email"
+                          inputMode="email"
+                          style={{ touchAction: 'manipulation' }}
+                          className={`w-full px-4 py-3 rounded-lg bg-gray-800/60 border text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-sm ${
+                            triedSubmit && !formData.email
+                              ? 'border-red-500 focus:ring-red-500'
+                              : 'border-gray-700'
+                          }`}
+                          placeholder={language === 'sr' ? 'Email adresa' : 'Email address'}
                         />
+                        {triedSubmit && !formData.email && (
+                          <p className="mt-1 text-red-400 text-xs flex items-center gap-1">
+                            <span className="text-red-400">*</span>
+                            {language === 'sr' ? 'Ovo polje je obavezno' : 'This field is required'}
+                          </p>
+                        )}
                       </div>
                     )}
 
@@ -478,33 +598,60 @@ export function FunnelPage() {
                       </div>
                     )}
 
-                    {/* Terms */}
-                    <p className="text-xs text-gray-500 leading-relaxed">
-                      {language === 'sr' 
-                        ? 'Unosom informacija, pristajete da vaši podaci budu sačuvani u skladu sa našom politikom privatnosti.'
-                        : 'By entering your information, you consent to your data being saved in accordance with our privacy policy.'
-                      }
-                    </p>
-
                     {/* Submit button */}
                     <button
                       type="submit"
-                      disabled={isSubmitting || !formData.name || !formData.phone || !formData.email}
-                      className="w-full py-3.5 px-6 rounded-lg bg-gradient-to-r from-violet-500 to-violet-600 text-white font-semibold hover:from-violet-400 hover:to-violet-500 transition-all duration-300 flex items-center justify-center gap-2 disabled:cursor-not-allowed shadow-[0_4px_20px_rgba(139,92,246,0.5)] hover:shadow-[0_4px_28px_rgba(139,92,246,0.7)] text-sm"
+                      disabled={isSubmitting}
+                      className="w-full py-4 px-6 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-base transition-all duration-200 flex items-center justify-center gap-2 shadow-[0_2px_16px_rgba(139,92,246,0.4)] hover:shadow-[0_4px_24px_rgba(139,92,246,0.6)] hover:scale-[1.01] active:scale-[0.99]"
                     >
                       {isSubmitting ? (
-                        <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       ) : (
                         <>
-                          {language === 'sr' ? 'Nastavi' : 'Continue'}
-                          <ArrowRight className="w-4 h-4" />
+                          {language === 'sr' ? 'Zakaži Besplatni Poziv' : 'Book Free Call'}
+                          <ArrowRight className="w-5 h-5" />
                         </>
                       )}
                     </button>
+
+                    {/* Privacy */}
+                    <p className="text-center text-gray-600 text-[11px] leading-relaxed border-t border-gray-800 pt-3 mt-1">
+                      {language === 'sr' ? (
+                        <>Vaši podaci su zaštićeni · <a href="/privacy" className="underline underline-offset-2 hover:text-gray-400 transition-colors">Politika privatnosti</a></>
+                      ) : (
+                        <>Your data is protected · <a href="/privacy" className="underline underline-offset-2 hover:text-gray-400 transition-colors">Privacy Policy</a></>
+                      )}
+                    </p>
                   </form>
                 )}
                 </div>
               </div>
+
+              {/* Kontakt kartica – direktan poziv */}
+              <a
+                href="tel:+381621552156"
+                className="mt-4 flex items-center gap-4 px-5 py-4 rounded-xl border border-gray-800 bg-gray-900/60 hover:bg-gray-800/80 hover:border-violet-500/40 transition-all duration-300 group"
+              >
+                <img
+                  src="/images/Strahinja izrada sajta.webp"
+                  alt="Strahinja Zekanovic"
+                  className="w-11 h-11 rounded-full object-cover object-top flex-shrink-0 ring-2 ring-violet-500/30"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-gray-500 text-[11px] mb-1 uppercase tracking-wider">
+                    {language === 'sr' ? 'Kontaktirajte me odmah pozivom' : 'Contact me directly by call'}
+                  </p>
+                  <p className="text-white font-bold text-base tracking-wide group-hover:text-violet-300 transition-colors duration-200">
+                    Strahinja · 062 155 2156
+                  </p>
+                </div>
+                <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-violet-600 flex items-center justify-center shadow-[0_2px_12px_rgba(139,92,246,0.4)] group-hover:bg-violet-500 group-hover:shadow-[0_4px_18px_rgba(139,92,246,0.6)] transition-all duration-200 overflow-visible">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink: 0}}>
+                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.12 1.2a2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 6.91a16 16 0 006.59 6.59l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+                  </svg>
+                </div>
+              </a>
+
             </div>
           </div>
         </section>
@@ -742,33 +889,32 @@ export function FunnelPage() {
                   ))}
                   <span className="text-gray-500">{language === 'sr' ? '50+ uspešnih projekata' : '50+ successful projects'}</span>
                 </p>
-                <button
-                  type="button"
-                  onClick={() => document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' })}
+                <a
+                  href="#booking-form"
                   className="inline-flex items-center gap-2 px-8 py-4 bg-violet-500 hover:bg-violet-600 text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(139,92,246,0.65)]"
                 >
                   {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
                   <ArrowRight className="w-4 h-4" />
-                </button>
+                </a>
               </div>
             </div>
           </div>
         </section>
 
         {/* Reviews / Recenzije */}
-        <section id="reviews" ref={reviewsRef as React.RefObject<HTMLElement>} className="py-16 md:py-24 relative overflow-hidden z-10 bg-black">
+        <section id="reviews" ref={reviewsRef as React.RefObject<HTMLElement>} className="py-10 md:py-24 relative overflow-hidden z-10 bg-black">
           <div className={`container mx-auto px-4 relative z-10 ${revealClass(reviewsVisible)}`}>
             <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-3">
+              <div className="text-center mb-6 md:mb-10">
+                <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight mb-2 md:mb-3">
                   {language === 'sr' ? 'Odlično' : 'Excellent'}
                 </h2>
-                <div className="flex justify-center gap-0.5 mb-2">
+                <div className="flex justify-center gap-0.5 mb-1.5 md:mb-2">
                   {[1, 2, 3, 4, 5].map((i) => (
-                    <Star key={i} className="w-8 h-8 text-green-500 fill-green-500" />
+                    <Star key={i} className="w-5 h-5 md:w-8 md:h-8 text-green-500 fill-green-500" />
                   ))}
                 </div>
-                <p className="text-white/90 text-sm md:text-base">
+                <p className="text-white/90 text-xs md:text-base">
                   {language === 'sr' ? (
                     <>Ocenjeno <strong>4.8 / 5</strong> na osnovu recenzija na{' '}
                       <span className="inline-flex items-center gap-1">
@@ -785,14 +931,14 @@ export function FunnelPage() {
                     </>
                   )}
                 </p>
-                <p className="text-gray-400 text-sm mt-4 text-left max-w-4xl mx-auto">
+                <p className="text-gray-400 text-xs md:text-sm mt-2 md:mt-4 text-left max-w-4xl mx-auto">
                   {language === 'sr' ? 'Prikazujemo naše 4 i 5 zvezdica recenzije.' : 'Showing our 4 & 5 star reviews.'}
                 </p>
               </div>
 
               <div
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 auto-rows-fr"
-                style={{ gridAutoRows: 'minmax(200px, auto)' }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 auto-rows-fr"
+                style={{ gridAutoRows: 'minmax(160px, auto)' }}
               >
                 {(language === 'sr' ? [
                   { name: 'Marko P.', date: 'pre 3 nedelje', title: 'Nisam očekivao ovako brze rezultate', body: 'Kontaktirao sam ih jer Google jednostavno nije prikazivao moj sajt. Bogdan mi je isti dan odgovorio i objasnio tačno šta je problem. Posle mesec dana rada vidim prve rezultate, upiti počinju da stižu organskim putem. Preporučujem svakome ko se muči sa vidljivošću.' },
@@ -813,26 +959,28 @@ export function FunnelPage() {
                 ]).map((review, i) => {
                   const isExpanded = expandedReviewIndex === i;
                   const isBigCard = [1, 4].includes(i);
+                  const is4Star = review.rating === 4;
+                  const mobileOrderClass = is4Star ? 'order-4 md:order-none' : ['order-1', 'order-2', 'order-3', 'order-5', 'order-6', 'order-7'][i] + ' md:order-none';
                   const stars = (rating: number) => [1, 2, 3, 4, 5].map((s) => (
-                    <Star key={s} className={`w-4 h-4 ${s <= rating ? 'text-green-500 fill-green-500' : 'text-gray-300 fill-gray-300'}`} />
+                    <Star key={s} className={`w-3 h-3 md:w-4 md:h-4 ${s <= rating ? 'text-green-500 fill-green-500' : 'text-gray-300 fill-gray-300'}`} />
                   ));
                   return (
                     <div
                       key={i}
-                      className={`relative rounded-xl border border-gray-200 bg-white shadow-lg p-5 flex flex-col text-left ${
+                      className={`relative rounded-lg md:rounded-xl border border-gray-200 bg-white shadow-md md:shadow-lg p-3.5 md:p-5 flex flex-col text-left ${
                         isBigCard ? 'md:row-span-2' : ''
-                      } ${isExpanded ? 'z-50' : 'z-0'}`}
+                      } ${isExpanded ? 'z-50' : 'z-0'} ${mobileOrderClass}`}
                     >
-                      <div className="flex gap-0.5 mb-3">
+                      <div className="flex gap-0.5 mb-1.5 md:mb-3">
                         {stars(review.rating ?? 5)}
                       </div>
-                      <p className="text-gray-500 text-xs mb-2">
+                      <p className="text-gray-500 text-[11px] md:text-xs mb-1 md:mb-2">
                         {review.name}, {review.date}
                       </p>
-                      <h3 className="font-bold text-gray-900 text-sm md:text-base mb-2">
+                      <h3 className="font-bold text-gray-900 text-xs md:text-base mb-1 md:mb-2 leading-tight">
                         {review.title}
                       </h3>
-                      <p className={`text-gray-600 text-sm leading-relaxed flex-1 ${!isBigCard ? 'line-clamp-3' : ''}`}>
+                      <p className={`text-gray-600 text-xs md:text-sm leading-relaxed flex-1 ${!isBigCard ? 'line-clamp-2 md:line-clamp-3' : ''}`}>
                         {review.body}
                       </p>
                       {!isBigCard && (
@@ -840,28 +988,28 @@ export function FunnelPage() {
                           <button
                             type="button"
                             onClick={() => setExpandedReviewIndex(isExpanded ? null : i)}
-                            className="text-violet-500 hover:text-violet-600 text-sm font-medium mt-2 self-start cursor-pointer hover:underline underline-offset-2"
+                            className="text-violet-500 hover:text-violet-600 text-xs md:text-sm font-medium mt-1.5 md:mt-2 self-start cursor-pointer hover:underline underline-offset-2"
                           >
                             {language === 'sr' ? 'Pročitaj više' : 'Read more'}
                           </button>
                           {isExpanded && (
-                            <div className="absolute left-0 top-0 w-full rounded-xl border border-violet-300 bg-white shadow-2xl p-5 flex flex-col">
-                              <div className="flex gap-0.5 mb-3">
+                            <div className="absolute left-0 top-0 w-full rounded-lg md:rounded-xl border border-violet-300 bg-white shadow-2xl p-3.5 md:p-5 flex flex-col">
+                              <div className="flex gap-0.5 mb-1.5 md:mb-3">
                                 {stars(review.rating ?? 5)}
                               </div>
-                              <p className="text-gray-500 text-xs mb-2">
+                              <p className="text-gray-500 text-[11px] md:text-xs mb-1 md:mb-2">
                                 {review.name}, {review.date}
                               </p>
-                              <h3 className="font-bold text-gray-900 text-sm md:text-base mb-2">
+                              <h3 className="font-bold text-gray-900 text-xs md:text-base mb-1 md:mb-2 leading-tight">
                                 {review.title}
                               </h3>
-                              <p className="text-gray-600 text-sm leading-relaxed mb-3">
+                              <p className="text-gray-600 text-xs md:text-sm leading-relaxed mb-2 md:mb-3">
                                 {review.body}
                               </p>
                               <button
                                 type="button"
                                 onClick={() => setExpandedReviewIndex(null)}
-                                className="text-violet-500 hover:text-violet-600 text-sm font-medium self-start cursor-pointer hover:underline underline-offset-2"
+                                className="text-violet-500 hover:text-violet-600 text-xs md:text-sm font-medium self-start cursor-pointer hover:underline underline-offset-2"
                               >
                                 {language === 'sr' ? 'Pročitaj manje' : 'Read less'}
                               </button>
@@ -955,14 +1103,17 @@ export function FunnelPage() {
                 </div>
                 {/* Dugme centrirano ispod sadržaja */}
                 <div className="relative flex justify-center pb-8 md:pb-10">
-                  <button
-                    type="button"
-                    onClick={() => document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' })}
+                  <a
+                    href="#booking-form"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }}
                     className="inline-flex items-center gap-2 px-10 py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)]"
                   >
                     {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
                     <ArrowRight className="w-4 h-4" />
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -1027,8 +1178,10 @@ export function FunnelPage() {
         </div>
         {/* ─────────────────────────────────────────────────────────────── */}
 
-        {/* ── Floating Book-a-Call Widget ──────────────────────────────── */}
-        <div className="fixed bottom-6 right-5 z-50 flex flex-col items-end gap-3">
+        {/* ── Floating Book-a-Call Widget – sakriven na mobilnom kada je forma u viewportu ─ */}
+        <div className={`fixed bottom-6 right-5 z-50 flex flex-col items-end gap-3 transition-opacity duration-300 ${
+          bookingInView ? 'hidden md:flex' : 'flex'
+        }`}>
 
           {/* Popup card */}
           <div

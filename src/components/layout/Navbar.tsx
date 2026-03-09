@@ -408,11 +408,13 @@ export function Navbar() {
             className="flex items-center justify-center mb-6 group"
             aria-label="AI Sajt - Početna stranica"
           >
-            <img 
-              src="/images/providna3.png" 
-              alt="AiSajt Logo" 
-              className="w-3/4 h-auto object-contain transition-transform duration-300 group-hover:scale-110"
-            />
+            <div className="w-full max-w-[140px] rounded-lg bg-gray-50 px-3 py-2.5 ring-1 ring-gray-200/80 shadow-sm">
+              <img 
+                src="/images/aisajt nav.png" 
+                alt="AiSajt Logo" 
+                className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
           </Link>
 
           {/* Horizontal Navigation Buttons - Minimal Design with Site Colors */}
