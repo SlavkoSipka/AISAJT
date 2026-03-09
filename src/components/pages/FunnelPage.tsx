@@ -64,7 +64,34 @@ export function FunnelPage() {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [videoUnmuted, setVideoUnmuted] = useState(false);
+  const [videoStarted, setVideoStarted] = useState(false);
+  const [isMobileDevice] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches
+  );
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    // Start at beginning of 2nd set so user can scroll both directions
+    const setWidth = el.scrollWidth / 3;
+    el.scrollLeft = setWidth;
+  }, []);
+
+  const handleCarouselScroll = () => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const setWidth = el.scrollWidth / 3;
+    // When near the start of 1st set, jump to equivalent position in 2nd set
+    if (el.scrollLeft < setWidth * 0.15) {
+      el.scrollLeft += setWidth;
+    }
+    // When near the end of 3rd set, jump to equivalent position in 2nd set
+    else if (el.scrollLeft > setWidth * 2 - setWidth * 0.15) {
+      el.scrollLeft -= setWidth;
+    }
+  };
 
   /* ── Load Vimeo player.js ─────────────────────────────────────── */
   useEffect(() => {
@@ -376,27 +403,51 @@ export function FunnelPage() {
                     </p>
                   </div>
 
-                  {/* Vimeo video – autoplay muted u pozadini, klik = restartuje sa zvukom */}
+                  {/* Vimeo video */}
                   <div className="aspect-video relative bg-black">
-                    {/* Iframe – Vimeo embed sa originalnim parametrima */}
-                    <iframe
-                      ref={iframeRef}
-                      key={videoUnmuted ? 'sound' : 'muted'}
-                      src={
-                        videoUnmuted
-                          ? 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1'
-                          : 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&controls=0'
-                      }
-                      frameBorder="0"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      className="absolute inset-0 w-full h-full"
-                      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                      allowFullScreen
-                      title="Zeka-VSL"
-                    />
 
-                    {/* Play / unmute overlay – samo dok je muted; kad unmute, iframe prima sve evente pa kontrole rade */}
-                    {!videoUnmuted && (
+                    {/* MOBILNI: ne učitava iframe dok korisnik ne klikne — brže i pouzdanije */}
+                    {isMobileDevice && !videoStarted && (
+                      <button
+                        type="button"
+                        className="absolute inset-0 w-full h-full flex flex-col items-center justify-center z-10 bg-gray-950"
+                        onClick={() => setVideoStarted(true)}
+                      >
+                        <div className="w-20 h-20 rounded-full bg-violet-600 flex items-center justify-center mb-4 shadow-[0_0_40px_rgba(139,92,246,0.6)] active:scale-95 transition-transform duration-150">
+                          <Play className="w-9 h-9 text-white ml-1" />
+                        </div>
+                        <p className="text-white font-bold text-base mb-1">
+                          {language === 'sr' ? 'Pokreni Video' : 'Play Video'}
+                        </p>
+                        <p className="text-gray-400 text-sm">
+                          {language === 'sr' ? 'Klikni da pogledaš' : 'Tap to watch'}
+                        </p>
+                      </button>
+                    )}
+
+                    {/* Iframe – učitava se: na desktopu odmah (muted), na mobilnom tek posle klika (sa zvukom) */}
+                    {(!isMobileDevice || videoStarted) && (
+                      <iframe
+                        ref={iframeRef}
+                        key={isMobileDevice ? 'mobile-sound' : (videoUnmuted ? 'sound' : 'muted')}
+                        src={
+                          isMobileDevice
+                            ? 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1'
+                            : videoUnmuted
+                              ? 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1'
+                              : 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&controls=0'
+                        }
+                        frameBorder="0"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        className="absolute inset-0 w-full h-full"
+                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                        allowFullScreen
+                        title="Zeka-VSL"
+                      />
+                    )}
+
+                    {/* Desktop overlay – dok je muted na desktopu */}
+                    {!isMobileDevice && !videoUnmuted && (
                       <div
                         className="absolute inset-0 flex items-center justify-center cursor-pointer group z-10"
                         onClick={() => setVideoUnmuted(true)}
@@ -615,13 +666,18 @@ export function FunnelPage() {
                     </button>
 
                     {/* Privacy */}
-                    <p className="text-center text-gray-600 text-[11px] leading-relaxed border-t border-gray-800 pt-3 mt-1">
-                      {language === 'sr' ? (
-                        <>Vaši podaci su zaštićeni · <a href="/privacy" className="underline underline-offset-2 hover:text-gray-400 transition-colors">Politika privatnosti</a></>
-                      ) : (
-                        <>Your data is protected · <a href="/privacy" className="underline underline-offset-2 hover:text-gray-400 transition-colors">Privacy Policy</a></>
-                      )}
-                    </p>
+                    <div className="border-t border-gray-800 pt-3 mt-1 space-y-1">
+                      <p className="text-center text-gray-400 text-xs font-medium">
+                        {language === 'sr' ? 'Kontaktiramo vas u narednih 24h' : 'We contact you within 24h'}
+                      </p>
+                      <p className="text-center text-gray-600 text-[11px]">
+                        {language === 'sr' ? (
+                          <>Vaši podaci su zaštićeni · <a href="/privacy" className="underline underline-offset-2 hover:text-gray-400 transition-colors">Politika privatnosti</a></>
+                        ) : (
+                          <>Your data is protected · <a href="/privacy" className="underline underline-offset-2 hover:text-gray-400 transition-colors">Privacy Policy</a></>
+                        )}
+                      </p>
+                    </div>
                   </form>
                 )}
                 </div>
@@ -679,8 +735,9 @@ export function FunnelPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 mt-10">
-                {[
+              {/* Kartice – na mobilnom horizontalni scroll carousel, na desktopu grid */}
+              {(() => {
+                const cards = [
                   { id: 'prestige', logo: '/images/logop.png', siteImg: '/images/prestige.png', title: 'Prestige Gradnja', url: 'https://prestigegradnja.rs/', tag: language === 'sr' ? 'Nekretnine, gradnja' : 'Real estate, construction', headline: language === 'sr' ? 'Sajt za nekretnine i apartmane — projekti i kontakt' : 'Site for real estate and apartments — projects and contact', text: language === 'sr' ? 'Moderan izgled i jasna ponuda. Klijent zadovoljan.' : 'Modern look and clear offer. Client satisfied.' },
                   { id: 'rc', logo: '/images/logo.png', siteImg: '/images/borakk.png', title: 'Custom RC Parts', url: 'https://customrc.parts/', tag: language === 'sr' ? 'E-commerce, RC delovi' : 'E-commerce, RC parts', headline: language === 'sr' ? 'Web prodavnica za RC delove — porudžbine i katalog' : 'Online store for RC parts — orders and catalog', text: language === 'sr' ? 'Funkcionalan shop sa kategorijama i plaćanjem. Rast prodaje preko sajta.' : 'Functional shop with categories and payment. Sales growth via site.' },
                   { id: 'kralj', logo: '/images/Beli%20logo2.png', siteImg: '/images/kralj.png', title: 'Kralj Residence', url: 'https://kraljresidence.rs/', tag: language === 'sr' ? 'apartmani i nekretnine' : 'Apartments & real estate', headline: language === 'sr' ? 'Moderan sajt za prodaju stanova - direktna prodaja' : 'Modern site for apartment sales — direct sales', text: language === 'sr' ? 'Responzivan sajt sa jasnom ponudom stanova. Zadovoljan klijent.' : 'Responsive site with clear property offer. Happy client.' },
@@ -692,7 +749,9 @@ export function FunnelPage() {
                   { id: 'lako', logo: '/images/logolak.png', siteImg: '/images/lako.png', title: 'Lako Sistem', url: 'https://lakosistem.rs/', tag: language === 'sr' ? 'Papirna galanterija' : 'Paper goods', headline: language === 'sr' ? 'Moderan prezentacioni web sajt - preglednost i autoritet. Zadovoljstvo i rezultati.' : 'Modern presentation website — clarity and authority. Satisfaction and results.', text: language === 'sr' ? 'Sajt prilagođen potrebama klijenta. Zadovoljstvo i rezultati.' : 'Site tailored to client needs. Satisfaction and results.' },
                   { id: 'panic', logo: '/images/logoin.png', siteImg: '/images/panic.png', title: 'IN-STAN', url: 'https://in-stan.rs/', tag: language === 'sr' ? 'Stolarija' : 'Joinery', headline: language === 'sr' ? 'Moderan funkcionalan sajt za stolariju sa katalogom' : 'Modern functional website for joinery with catalog', text: language === 'sr' ? 'Profesionalan sajt koji predstavlja brend na internetu.' : 'Professional site that represents the brand online.' },
                   { id: 'jastuci', logo: '/images/logo2.png', siteImg: '/images/jastuci.png', title: 'Vazdušni jastuci', url: 'https://vazdusnijastuci.rs/', tag: language === 'sr' ? 'Auto delovi' : 'Auto parts', headline: language === 'sr' ? 'Sajt za auto delove — katalog i upiti' : 'Site for auto parts — catalog and inquiries', text: language === 'sr' ? 'Pregledan katalog i kontakt forma. Više upita sa sajta.' : 'Clear catalog and contact form. More inquiries from site.' },
-                ].map((card) => (
+                ];
+
+                const cardEl = (card: typeof cards[0]) => (
                   <div
                     key={card.id}
                     className="group rounded-2xl border border-gray-700/60 bg-gray-900/60 backdrop-blur-sm overflow-hidden shadow-xl flex flex-col h-full transition-all duration-300 ease-out hover:border-violet-500/50 hover:shadow-violet-500/10 hover:shadow-2xl hover:-translate-y-1.5"
@@ -738,8 +797,33 @@ export function FunnelPage() {
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
+                );
+
+                return (
+                  <>
+                    {/* Mobilni: beskonačni horizontalni scroll carousel (3x kopije, jump bez vidljivog skoka) */}
+                    <div className="md:hidden mt-8 -mx-4">
+                      <div
+                        ref={carouselRef}
+                        onScroll={handleCarouselScroll}
+                        className="flex gap-4 overflow-x-auto px-4 pb-4 snap-x snap-mandatory"
+                        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+                      >
+                        {[...cards, ...cards, ...cards].map((card, idx) => (
+                          <div key={`${card.id}-${idx}`} className="snap-start flex-shrink-0 w-[80vw]">
+                            {cardEl(card)}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Desktop: grid */}
+                    <div className="hidden md:grid grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 mt-10">
+                      {cards.map((card) => cardEl(card))}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </section>
@@ -1029,7 +1113,7 @@ export function FunnelPage() {
         <section id="cta-final" ref={ctaRef as React.RefObject<HTMLElement>} className="py-16 md:py-24 bg-black relative z-10 -mt-1">
           <div className={`container mx-auto px-4 ${revealClass(ctaVisible)}`}>
             <div className="max-w-6xl mx-auto">
-              <div className="relative rounded-3xl bg-gray-900/95 border border-gray-700/50 overflow-hidden">
+              <div className="relative rounded-3xl bg-gray-900/95 border border-gray-700/50 overflow-visible">
                 {/* Svetlo u našim bojama – top-left i top-right */}
                 <div className="absolute -top-40 -left-40 w-[500px] h-[400px] bg-violet-600/25 rounded-full blur-[120px] pointer-events-none" />
                 <div className="absolute -top-32 -right-32 w-[400px] h-[350px] bg-violet-500/15 rounded-full blur-[100px] pointer-events-none" />
@@ -1102,18 +1186,22 @@ export function FunnelPage() {
                   </div>
                 </div>
                 {/* Dugme centrirano ispod sadržaja */}
-                <div className="relative flex justify-center pb-8 md:pb-10">
+                <div className="relative flex flex-col items-center gap-2 pb-8 md:pb-10 px-4">
                   <a
                     href="#booking-form"
                     onClick={(e) => {
                       e.preventDefault();
                       document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }}
-                    className="inline-flex items-center gap-2 px-10 py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)]"
+                    className="inline-flex items-center gap-2 px-10 py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)] touch-manipulation"
+                    style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
                     {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
                     <ArrowRight className="w-4 h-4" />
                   </a>
+                  <p className="text-gray-500 text-xs">
+                    {language === 'sr' ? 'Kontaktiramo vas u roku od 24h' : 'We contact you within 24h'}
+                  </p>
                 </div>
               </div>
             </div>
