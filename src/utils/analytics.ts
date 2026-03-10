@@ -70,11 +70,17 @@ export const trackGoogleAdsConversion = (
 const LEAD_DEDUPE_KEY = 'lead_tracked_at';
 const LEAD_DEDUPE_MS = 5000;
 
+const LEAD_SOURCE_LABELS: Record<string, string> = {
+  funnel_booking: 'Funnel Booking Form',
+  home_page: 'Home Contact Form',
+  contact_page: 'Contact Form',
+};
+
 /**
- * Track Lead Generation - Contact Form Submit
+ * Track Lead Generation - Form Submit (funnel, home, etc.)
  */
 export const trackLeadGeneration = (
-  source: 'contact_page' | 'home_page',
+  source: 'contact_page' | 'home_page' | 'funnel_booking',
   userName: string,
   language: string
 ) => {
@@ -95,12 +101,13 @@ export const trackLeadGeneration = (
     window._leadEventTracked = false;
   }, LEAD_DEDUPE_MS);
 
-  const leadValue = 15; // Najviši prioritet
+  const leadValue = 15;
+  const sourceLabel = LEAD_SOURCE_LABELS[source] ?? source;
 
   // Google Analytics 4 - Event
   trackEvent('generate_lead', {
     event_category: 'Lead Generation',
-    event_label: `${source === 'contact_page' ? 'Contact Form' : 'Home Contact Form'} - Success`,
+    event_label: `${sourceLabel} - Success`,
     value: leadValue,
     currency: 'EUR',
     lead_source: source,
@@ -110,15 +117,46 @@ export const trackLeadGeneration = (
 
   // Meta Pixel (Facebook Ads) - Standard Event
   trackFBEvent('Lead', {
-    content_name: `${source === 'contact_page' ? 'Contact' : 'Home'} Form Submission`,
+    content_name: `${sourceLabel} Submission`,
     content_category: 'Lead Generation - Tier 1',
     value: leadValue,
     currency: 'EUR',
+    lead_source: source,
     status: 'success'
   });
 
   // Google Ads Conversion Tracking
-  trackGoogleAdsConversion('contact_form_submit', leadValue);
+  trackGoogleAdsConversion('funnel_lead', leadValue);
+};
+
+/**
+ * Track Phone Click - visoka namera ali bez podataka o korisniku
+ * Koristi Facebook standardni 'Contact' event (odvojeno od 'Lead')
+ */
+export const trackPhoneClick = (
+  phone: string,
+  location: string,
+  language: string
+) => {
+  if (isLocalhost()) return;
+
+  // Google Analytics 4 - Event
+  trackEvent('phone_click', {
+    event_category: 'Lead Generation',
+    event_label: `Phone Click - ${location}`,
+    phone_number: phone,
+    location: location,
+    language: language
+  });
+
+  // Meta Pixel - Standard 'Contact' Event (odvojeno od Lead)
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'Contact', {
+      content_name: 'Phone Call Click',
+      content_category: location,
+      language: language
+    });
+  }
 };
 
 /**

@@ -4,7 +4,7 @@ import { ArrowRight, CheckCircle, Play, ExternalLink, Star } from 'lucide-react'
 import toast, { Toaster } from 'react-hot-toast';
 import { useLanguage } from '../../hooks/useLanguage';
 import { SEOHelmet } from '../seo/SEOHelmet';
-import { trackCTAClick, trackFormSubmitAttempt, trackFormError } from '../../utils/analytics';
+import { trackCTAClick, trackFormSubmitAttempt, trackFormError, trackPhoneClick } from '../../utils/analytics';
 import { submitFunnelForm } from '../../utils/hubspot';
 
 /* ─── useCountUp hook ─────────────────────────────────────────────────── */
@@ -666,6 +666,7 @@ export function FunnelPage() {
               {/* Kontakt kartica – direktan poziv */}
               <a
                 href="tel:+381621552156"
+                onClick={() => trackPhoneClick('+381621552156', 'funnel_booking', language)}
                 className="mt-4 flex items-center gap-4 px-5 py-4 rounded-xl border border-gray-800 bg-gray-900/60 hover:bg-gray-800/80 hover:border-violet-500/40 transition-all duration-300 group"
               >
                 <img

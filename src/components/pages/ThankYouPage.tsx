@@ -24,9 +24,9 @@ export function ThankYouPage() {
     if (leadTracked.current) return;
     leadTracked.current = true;
     trackLeadGeneration(
-      source as 'contact_page' | 'home_page',
+      source as 'contact_page' | 'home_page' | 'funnel_booking',
       userName,
-      language as 'sr' | 'en'
+      language
     );
 
     window.scrollTo(0, 0);
