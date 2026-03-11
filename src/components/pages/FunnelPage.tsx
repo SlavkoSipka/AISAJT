@@ -956,6 +956,10 @@ export function FunnelPage() {
                 </p>
                 <a
                   href="#booking-form"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
                   className="inline-flex items-center gap-2 px-8 py-4 bg-violet-500 hover:bg-violet-600 text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(139,92,246,0.65)]"
                 >
                   {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
