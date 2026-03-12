@@ -70,6 +70,7 @@ export function FunnelPage() {
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const touchState = useRef<{ startX: number; startY: number; decided: boolean; isHorizontal: boolean }>({ startX: 0, startY: 0, decided: false, isHorizontal: false });
 
   const handleUnmute = () => {
     if (iframeRef.current) {
@@ -81,21 +82,62 @@ export function FunnelPage() {
   useEffect(() => {
     const el = carouselRef.current;
     if (!el) return;
-    // Start at beginning of 2nd set so user can scroll both directions
     const setWidth = el.scrollWidth / 3;
     el.scrollLeft = setWidth;
+  }, []);
+
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+
+    const onTouchStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      touchState.current = { startX: t.clientX, startY: t.clientY, decided: false, isHorizontal: false };
+      el.style.overflowX = 'auto';
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      const state = touchState.current;
+      if (state.decided) {
+        if (!state.isHorizontal) {
+          el.style.overflowX = 'hidden';
+        }
+        return;
+      }
+      const t = e.touches[0];
+      const dx = Math.abs(t.clientX - state.startX);
+      const dy = Math.abs(t.clientY - state.startY);
+      const threshold = 8;
+      if (dx < threshold && dy < threshold) return;
+      state.decided = true;
+      state.isHorizontal = dx > dy * 1.2;
+      if (!state.isHorizontal) {
+        el.style.overflowX = 'hidden';
+      }
+    };
+
+    const onTouchEnd = () => {
+      touchState.current.decided = false;
+      el.style.overflowX = 'auto';
+    };
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: true });
+    el.addEventListener('touchend', onTouchEnd, { passive: true });
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
+    };
   }, []);
 
   const handleCarouselScroll = () => {
     const el = carouselRef.current;
     if (!el) return;
     const setWidth = el.scrollWidth / 3;
-    // When near the start of 1st set, jump to equivalent position in 2nd set
     if (el.scrollLeft < setWidth * 0.15) {
       el.scrollLeft += setWidth;
-    }
-    // When near the end of 3rd set, jump to equivalent position in 2nd set
-    else if (el.scrollLeft > setWidth * 2 - setWidth * 0.15) {
+    } else if (el.scrollLeft > setWidth * 2 - setWidth * 0.15) {
       el.scrollLeft -= setWidth;
     }
   };
@@ -342,7 +384,7 @@ export function FunnelPage() {
         {/* Fixed Home button in top right corner */}
         <button
           onClick={() => navigate('/')}
-          className="fixed top-5 left-4 right-auto md:left-auto md:right-6 z-50 px-4 py-2 md:px-5 md:py-2.5 border border-violet-500/30 bg-gray-950/80 backdrop-blur-md text-violet-300 text-xs md:text-sm font-semibold tracking-wide rounded-full hover:bg-violet-600/20 hover:text-white hover:border-violet-400 transition-all duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(139,92,246,0.15)]"
+          className="fixed top-5 left-4 right-auto md:left-auto md:right-6 z-50 px-4 py-2.5 md:px-5 md:py-2.5 border border-violet-500/30 bg-gray-950/80 backdrop-blur-md text-violet-300 text-xs md:text-sm font-semibold tracking-wide rounded-full hover:bg-violet-600/20 hover:text-white hover:border-violet-400 transition-all duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(139,92,246,0.15)] touch-manipulation active:scale-95"
         >
           {language === 'sr' ? 'Početna' : 'Home'}
           <ExternalLink className="w-3.5 h-3.5" />
@@ -606,7 +648,7 @@ export function FunnelPage() {
                             return (
                               <label
                                 key={opt.value}
-                                className="flex items-center gap-3 cursor-pointer group"
+                                className="flex items-center gap-3 cursor-pointer group touch-manipulation py-0.5"
                               >
                                 <span className={`relative flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${isChecked ? 'border-violet-500' : 'border-gray-500 group-hover:border-gray-400'}`}>
                                   {isChecked && (
@@ -633,7 +675,7 @@ export function FunnelPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-4 px-6 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-base transition-all duration-200 flex items-center justify-center gap-2 shadow-[0_2px_16px_rgba(139,92,246,0.4)] hover:shadow-[0_4px_24px_rgba(139,92,246,0.6)] hover:scale-[1.01] active:scale-[0.99]"
+                      className="w-full py-4 px-6 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-base transition-all duration-200 flex items-center justify-center gap-2 shadow-[0_2px_16px_rgba(139,92,246,0.4)] hover:shadow-[0_4px_24px_rgba(139,92,246,0.6)] hover:scale-[1.01] active:scale-[0.99] touch-manipulation"
                     >
                       {isSubmitting ? (
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -667,7 +709,7 @@ export function FunnelPage() {
               <a
                 href="tel:+381621552156"
                 onClick={() => trackPhoneClick('+381621552156', 'funnel_booking', language)}
-                className="mt-4 flex items-center gap-4 px-5 py-4 rounded-xl border border-gray-800 bg-gray-900/60 hover:bg-gray-800/80 hover:border-violet-500/40 transition-all duration-300 group"
+                className="mt-4 flex items-center gap-4 px-5 py-4 rounded-xl border border-gray-800 bg-gray-900/60 hover:bg-gray-800/80 hover:border-violet-500/40 transition-all duration-300 group touch-manipulation active:scale-[0.98]"
               >
                 <img
                   src="/images/Strahinja izrada sajta.webp"
@@ -769,11 +811,11 @@ export function FunnelPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-violet-600/20 border border-violet-500/30 text-violet-300 text-xs font-semibold whitespace-nowrap transition-all duration-200 hover:bg-violet-600 hover:text-white hover:border-violet-500 hover:scale-105 active:scale-95 flex-shrink-0 opacity-0 group-hover:opacity-100"
+                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-violet-600/20 border border-violet-500/30 text-violet-300 text-xs font-semibold whitespace-nowrap transition-all duration-200 hover:bg-violet-600 hover:text-white hover:border-violet-500 hover:scale-105 active:scale-95 flex-shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 touch-manipulation"
                           title={language === 'sr' ? 'Otvori sajt u novom prozoru' : 'Open site in new window'}
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
-                          <span className="hidden sm:inline">{language === 'sr' ? 'Poseti sajt' : 'Visit site'}</span>
+                          <span>{language === 'sr' ? 'Poseti sajt' : 'Visit site'}</span>
                         </a>
                       </div>
                     </div>
@@ -788,7 +830,7 @@ export function FunnelPage() {
                         ref={carouselRef}
                         onScroll={handleCarouselScroll}
                         className="flex gap-4 overflow-x-auto px-4 pb-4 snap-x snap-mandatory"
-                        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+                        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', touchAction: 'pan-x pan-y' } as React.CSSProperties}
                       >
                         {[...cards, ...cards, ...cards].map((card, idx) => (
                           <div key={`${card.id}-${idx}`} className="snap-start flex-shrink-0 w-[80vw]">
@@ -960,7 +1002,7 @@ export function FunnelPage() {
                     e.preventDefault();
                     document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-violet-500 hover:bg-violet-600 text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(139,92,246,0.65)]"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-violet-500 hover:bg-violet-600 text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-all shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(139,92,246,0.65)] touch-manipulation active:scale-95"
                 >
                   {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
                   <ArrowRight className="w-4 h-4" />
@@ -1057,30 +1099,32 @@ export function FunnelPage() {
                           <button
                             type="button"
                             onClick={() => setExpandedReviewIndex(isExpanded ? null : i)}
-                            className="text-violet-500 hover:text-violet-600 text-xs md:text-sm font-medium mt-1.5 md:mt-2 self-start cursor-pointer hover:underline underline-offset-2"
+                            className="inline-flex items-center gap-1 px-3 py-2 md:px-0 md:py-0 rounded-lg md:rounded-none bg-violet-50 md:bg-transparent border border-violet-200 md:border-0 text-violet-600 md:text-violet-500 hover:text-violet-700 md:hover:text-violet-600 text-sm md:text-sm font-semibold md:font-medium mt-2 md:mt-2 self-start cursor-pointer md:hover:underline underline-offset-2 touch-manipulation active:scale-95 transition-transform"
                           >
                             {language === 'sr' ? 'Pročitaj više' : 'Read more'}
+                            <svg className="w-3.5 h-3.5 md:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                           </button>
                           {isExpanded && (
-                            <div className="absolute left-0 top-0 w-full rounded-lg md:rounded-xl border border-violet-300 bg-white shadow-2xl p-3.5 md:p-5 flex flex-col">
+                            <div className="absolute left-0 top-0 w-full rounded-lg md:rounded-xl border border-violet-300 bg-white shadow-2xl p-4 md:p-5 flex flex-col z-50">
                               <div className="flex gap-0.5 mb-1.5 md:mb-3">
                                 {stars(review.rating ?? 5)}
                               </div>
                               <p className="text-gray-500 text-[11px] md:text-xs mb-1 md:mb-2">
                                 {review.name}, {review.date}
                               </p>
-                              <h3 className="font-bold text-gray-900 text-xs md:text-base mb-1 md:mb-2 leading-tight">
+                              <h3 className="font-bold text-gray-900 text-sm md:text-base mb-1.5 md:mb-2 leading-tight">
                                 {review.title}
                               </h3>
-                              <p className="text-gray-600 text-xs md:text-sm leading-relaxed mb-2 md:mb-3">
+                              <p className="text-gray-600 text-sm md:text-sm leading-relaxed mb-3 md:mb-3">
                                 {review.body}
                               </p>
                               <button
                                 type="button"
                                 onClick={() => setExpandedReviewIndex(null)}
-                                className="text-violet-500 hover:text-violet-600 text-xs md:text-sm font-medium self-start cursor-pointer hover:underline underline-offset-2"
+                                className="inline-flex items-center gap-1 px-3 py-2 md:px-0 md:py-0 rounded-lg md:rounded-none bg-violet-50 md:bg-transparent border border-violet-200 md:border-0 text-violet-600 md:text-violet-500 hover:text-violet-700 md:hover:text-violet-600 text-sm md:text-sm font-semibold md:font-medium self-start cursor-pointer md:hover:underline underline-offset-2 touch-manipulation active:scale-95 transition-transform"
                               >
                                 {language === 'sr' ? 'Pročitaj manje' : 'Read less'}
+                                <svg className="w-3.5 h-3.5 md:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
                               </button>
                             </div>
                           )}
@@ -1317,7 +1361,7 @@ export function FunnelPage() {
                     <button
                       key={i}
                       onClick={() => setSelectedDay(i)}
-                      className={`flex-1 flex flex-col items-center py-2.5 rounded-lg border text-xs font-medium transition-all ${
+                      className={`flex-1 flex flex-col items-center py-2.5 rounded-lg border text-xs font-medium transition-all touch-manipulation ${
                         selectedDay === i
                           ? 'bg-violet-600 border-violet-500 text-white'
                           : 'bg-white/5 border-white/10 text-gray-400 hover:border-violet-500/50 hover:text-white'
@@ -1338,7 +1382,7 @@ export function FunnelPage() {
                       document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' });
                     }, 150);
                   }}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-violet-700 hover:from-violet-500 hover:to-violet-600 text-white font-bold text-sm transition-all shadow-lg hover:shadow-violet-500/30"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-violet-700 hover:from-violet-500 hover:to-violet-600 text-white font-bold text-sm transition-all shadow-lg hover:shadow-violet-500/30 touch-manipulation active:scale-[0.98]"
                 >
                   {language === 'sr' ? 'Zakaži Poziv' : 'Book a Call'}
                 </button>
@@ -1349,7 +1393,7 @@ export function FunnelPage() {
           {/* Toggle bubble */}
           <button
             onClick={() => setWidgetOpen(v => !v)}
-            className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-violet-500 hover:border-violet-400 transition-all hover:scale-105 active:scale-95 bg-violet-700 flex items-center justify-center"
+            className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-violet-500 hover:border-violet-400 transition-all hover:scale-105 active:scale-95 bg-violet-700 flex items-center justify-center touch-manipulation"
             aria-label="Zakaži poziv"
           >
             <img
