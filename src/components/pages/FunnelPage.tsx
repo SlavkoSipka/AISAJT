@@ -169,7 +169,9 @@ export function FunnelPage() {
 
   /* booking widget */
   const [widgetOpen, setWidgetOpen] = useState(false);
+  const [widgetAnimated, setWidgetAnimated] = useState(false);
   const [widgetAutoOpened, setWidgetAutoOpened] = useState(false);
+  const [bubbleVisible, setBubbleVisible] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0);
   const [triedSubmit, setTriedSubmit] = useState(false);
 
@@ -185,17 +187,33 @@ export function FunnelPage() {
   /* reviews expand */
   const [expandedReviewIndex, setExpandedReviewIndex] = useState<number | null>(null);
 
+  const openWidget = () => {
+    setWidgetOpen(true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setWidgetAnimated(true));
+    });
+  };
+
+  const closeWidget = () => {
+    setWidgetAnimated(false);
+    setTimeout(() => setWidgetOpen(false), 300);
+  };
+
   /* auto-open widget + sticky bar visibility */
   useEffect(() => {
     const onScroll = () => {
-      /* widget auto-open */
-      if (!widgetAutoOpened) {
-        const scrolled = window.scrollY + window.innerHeight;
-        const total = document.documentElement.scrollHeight;
-        if (scrolled >= total * 0.72) {
-          setWidgetOpen(true);
-          setWidgetAutoOpened(true);
-        }
+      const scrolled = window.scrollY + window.innerHeight;
+      const total = document.documentElement.scrollHeight;
+
+      /* bubble appears at 40% scroll */
+      if (!bubbleVisible && scrolled >= total * 0.4) {
+        setBubbleVisible(true);
+      }
+
+      /* widget auto-open at 72% */
+      if (!widgetAutoOpened && scrolled >= total * 0.72) {
+        openWidget();
+        setWidgetAutoOpened(true);
       }
 
       /* sticky bar: show only when hero AND booking-form are both out of view */
@@ -215,7 +233,7 @@ export function FunnelPage() {
 
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, [widgetAutoOpened]);
+  }, [widgetAutoOpened, bubbleVisible]);
 
   /* fixed day labels */
   const dayLabels = language === 'sr'
@@ -1228,26 +1246,25 @@ export function FunnelPage() {
         </div>
         {/* ─────────────────────────────────────────────────────────────── */}
 
-        {/* ── Floating Book-a-Call Widget – sakriven na mobilnom kada je forma u viewportu ─ */}
-        <div className={`fixed bottom-6 right-5 z-50 flex flex-col items-end gap-3 transition-opacity duration-300 ${
+        {/* ── Floating Book-a-Call Widget ─ */}
+        <div className={`fixed bottom-6 right-5 z-50 flex flex-col items-end gap-3 ${
           bookingInView ? 'hidden md:flex' : 'flex'
         }`}>
 
-          {/* Popup card */}
+          {/* Popup card — mounted when widgetOpen, animated via widgetAnimated */}
           {widgetOpen && (
           <div
-            className="transition-all duration-300 ease-out origin-bottom-right opacity-100 scale-100 translate-y-0 pointer-events-auto"
+            className={`transition-all duration-300 ease-out origin-bottom-right ${
+              widgetAnimated
+                ? 'opacity-100 scale-100 translate-y-0'
+                : 'opacity-0 scale-90 translate-y-4'
+            }`}
           >
             <div className="w-80 rounded-2xl bg-[#1a1a1a] border border-white/10 shadow-2xl overflow-hidden">
-              {/* Header */}
               <div className="px-4 pt-4 pb-3 flex items-start gap-3">
                 <div className="relative flex-shrink-0">
                   <div className="w-10 h-10 rounded-full overflow-hidden">
-                    <img
-                      src="/images/Strahinja izrada sajta.webp"
-                      alt="Strahinja Zekanovic"
-                      className="w-full h-full object-cover object-top"
-                    />
+                    <img src="/images/Strahinja izrada sajta.webp" alt="Strahinja Zekanovic" className="w-full h-full object-cover object-top" />
                   </div>
                   <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-[#1a1a1a]" />
                 </div>
@@ -1257,7 +1274,7 @@ export function FunnelPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setWidgetOpen(false)}
+                  onClick={closeWidget}
                   className="flex-shrink-0 w-10 h-10 -mr-2 -mt-1 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors touch-manipulation active:scale-90"
                   style={{ WebkitTapHighlightColor: 'transparent' }}
                   aria-label="Zatvori"
@@ -1268,7 +1285,6 @@ export function FunnelPage() {
                 </button>
               </div>
 
-              {/* Title */}
               <div className="px-4 pb-3 border-b border-white/8">
                 <p className="text-white font-bold text-sm">
                   {language === 'sr' ? 'AiSajt Strategijski Poziv' : 'AiSajt Strategy Call'}
@@ -1278,7 +1294,6 @@ export function FunnelPage() {
                 </p>
               </div>
 
-              {/* Urgency */}
               <div className="mx-4 mt-3 px-3 py-2 bg-white/5 rounded-lg flex items-center justify-between">
                 <p className="text-gray-300 text-xs font-medium">
                   {language === 'sr' ? 'Malo slobodnih termina.' : 'Only few slots left.'}
@@ -1286,7 +1301,6 @@ export function FunnelPage() {
                 <span className="text-violet-400 font-bold text-xs tabular-nums">⚡ {language === 'sr' ? 'Ograničeno' : 'Limited'}</span>
               </div>
 
-              {/* Day picker */}
               <div className="px-4 pt-3 pb-1">
                 <div className="flex gap-1.5">
                   {dayLabels.map((label, i) => (
@@ -1305,13 +1319,12 @@ export function FunnelPage() {
                 </div>
               </div>
 
-              {/* CTA button */}
               <div className="px-4 py-4">
                 <button
                   type="button"
                   onClick={() => {
-                    setWidgetOpen(false);
-                    document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' });
+                    closeWidget();
+                    setTimeout(() => document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' }), 150);
                   }}
                   className="w-full py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-violet-700 md:hover:from-violet-500 md:hover:to-violet-600 text-white font-bold text-sm transition-colors shadow-lg touch-manipulation active:scale-[0.97] select-none cursor-pointer"
                   style={{ WebkitTapHighlightColor: 'transparent' }}
@@ -1323,11 +1336,15 @@ export function FunnelPage() {
           </div>
           )}
 
-          {/* Toggle bubble */}
+          {/* Toggle bubble — smooth appear */}
           <button
             type="button"
-            onClick={() => setWidgetOpen(v => !v)}
-            className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-violet-500 md:hover:border-violet-400 transition-colors active:bg-violet-600 bg-violet-700 flex items-center justify-center touch-manipulation select-none cursor-pointer"
+            onClick={() => widgetOpen ? closeWidget() : openWidget()}
+            className={`relative w-14 h-14 rounded-full shadow-2xl border-2 border-violet-500 md:hover:border-violet-400 active:bg-violet-600 bg-violet-700 flex items-center justify-center touch-manipulation select-none cursor-pointer transition-all duration-500 ease-out ${
+              bubbleVisible
+                ? 'opacity-100 scale-100 translate-y-0'
+                : 'opacity-0 scale-50 translate-y-4 pointer-events-none'
+            }`}
             style={{ WebkitTapHighlightColor: 'transparent' }}
             aria-label="Zakaži poziv"
           >
@@ -1336,11 +1353,9 @@ export function FunnelPage() {
               alt="AiSajt"
               className="w-9 h-9 object-contain"
             />
-            {/* Green dot */}
             <span className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-gray-950" />
           </button>
         </div>
-        {/* ─────────────────────────────────────────────────────────────── */}
 
       </main>
     </div>
