@@ -954,17 +954,14 @@ export function FunnelPage() {
                   ))}
                   <span className="text-gray-500">{language === 'sr' ? '50+ uspešnih projekata' : '50+ successful projects'}</span>
                 </p>
-                <a
-                  href="#booking-form"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-violet-500 hover:bg-violet-600 text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(139,92,246,0.65)]"
+                <button
+                  type="button"
+                  onClick={() => document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(139,92,246,0.65)] touch-manipulation cursor-pointer"
                 >
                   {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
                   <ArrowRight className="w-4 h-4" />
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -1172,18 +1169,14 @@ export function FunnelPage() {
                 </div>
                 {/* Dugme centrirano ispod sadržaja */}
                 <div className="relative flex flex-col items-center gap-2 pb-8 md:pb-10 px-4">
-                  <a
-                    href="#booking-form"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }}
-                    className="inline-flex items-center gap-2 px-10 py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)] touch-manipulation"
-                    style={{ WebkitTapHighlightColor: 'transparent' }}
+                  <button
+                    type="button"
+                    onClick={() => document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                    className="inline-flex items-center gap-2 px-10 py-4 bg-white hover:bg-gray-100 active:bg-gray-200 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)] touch-manipulation cursor-pointer"
                   >
                     {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
                     <ArrowRight className="w-4 h-4" />
-                  </a>
+                  </button>
                   <p className="text-gray-500 text-xs">
                     {language === 'sr' ? 'Kontaktiramo vas u roku od 24h' : 'We contact you within 24h'}
                   </p>
@@ -1257,12 +1250,9 @@ export function FunnelPage() {
         }`}>
 
           {/* Popup card */}
+          {widgetOpen && (
           <div
-            className={`transition-all duration-300 ease-out origin-bottom-right ${
-              widgetOpen
-                ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
-                : 'opacity-0 scale-90 translate-y-4 pointer-events-none'
-            }`}
+            className="transition-all duration-300 ease-out origin-bottom-right opacity-100 scale-100 translate-y-0 pointer-events-auto"
           >
             <div className="w-80 rounded-2xl bg-[#1a1a1a] border border-white/10 shadow-2xl overflow-hidden">
               {/* Header */}
@@ -1345,6 +1335,7 @@ export function FunnelPage() {
               </div>
             </div>
           </div>
+          )}
 
           {/* Toggle bubble */}
           <button
