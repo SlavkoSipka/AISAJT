@@ -81,7 +81,6 @@ export function FunnelPage() {
   useEffect(() => {
     const el = carouselRef.current;
     if (!el) return;
-    // Start at beginning of 2nd set so user can scroll both directions
     const setWidth = el.scrollWidth / 3;
     el.scrollLeft = setWidth;
   }, []);
@@ -90,12 +89,9 @@ export function FunnelPage() {
     const el = carouselRef.current;
     if (!el) return;
     const setWidth = el.scrollWidth / 3;
-    // When near the start of 1st set, jump to equivalent position in 2nd set
     if (el.scrollLeft < setWidth * 0.15) {
       el.scrollLeft += setWidth;
-    }
-    // When near the end of 3rd set, jump to equivalent position in 2nd set
-    else if (el.scrollLeft > setWidth * 2 - setWidth * 0.15) {
+    } else if (el.scrollLeft > setWidth * 2 - setWidth * 0.15) {
       el.scrollLeft -= setWidth;
     }
   };
@@ -342,7 +338,7 @@ export function FunnelPage() {
         {/* Fixed Home button in top right corner */}
         <button
           onClick={() => navigate('/')}
-          className="fixed top-5 left-4 right-auto md:left-auto md:right-6 z-50 px-4 py-2 md:px-5 md:py-2.5 border border-violet-500/30 bg-gray-950/80 backdrop-blur-md text-violet-300 text-xs md:text-sm font-semibold tracking-wide rounded-full hover:bg-violet-600/20 hover:text-white hover:border-violet-400 transition-all duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(139,92,246,0.15)]"
+          className="fixed top-5 left-4 right-auto md:left-auto md:right-6 z-50 px-4 py-2.5 md:px-5 md:py-2.5 border border-violet-500/30 bg-gray-950/80 backdrop-blur-md text-violet-300 text-xs md:text-sm font-semibold tracking-wide rounded-full md:hover:bg-violet-600/20 md:hover:text-white md:hover:border-violet-400 transition-colors duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(139,92,246,0.15)] touch-manipulation active:bg-violet-600/30 select-none cursor-pointer"
         >
           {language === 'sr' ? 'Početna' : 'Home'}
           <ExternalLink className="w-3.5 h-3.5" />
@@ -606,7 +602,7 @@ export function FunnelPage() {
                             return (
                               <label
                                 key={opt.value}
-                                className="flex items-center gap-3 cursor-pointer group"
+                                className="flex items-center gap-3 cursor-pointer group touch-manipulation py-0.5"
                               >
                                 <span className={`relative flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${isChecked ? 'border-violet-500' : 'border-gray-500 group-hover:border-gray-400'}`}>
                                   {isChecked && (
@@ -633,7 +629,7 @@ export function FunnelPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-4 px-6 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-base transition-all duration-200 flex items-center justify-center gap-2 shadow-[0_2px_16px_rgba(139,92,246,0.4)] hover:shadow-[0_4px_24px_rgba(139,92,246,0.6)] hover:scale-[1.01] active:scale-[0.99]"
+                      className="w-full py-4 px-6 rounded-xl bg-violet-600 md:hover:bg-violet-500 text-white font-semibold text-base transition-colors duration-200 flex items-center justify-center gap-2 shadow-[0_2px_16px_rgba(139,92,246,0.4)] touch-manipulation active:bg-violet-700 select-none cursor-pointer"
                     >
                       {isSubmitting ? (
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -667,7 +663,8 @@ export function FunnelPage() {
               <a
                 href="tel:+381621552156"
                 onClick={() => trackPhoneClick('+381621552156', 'funnel_booking', language)}
-                className="mt-4 flex items-center gap-4 px-5 py-4 rounded-xl border border-gray-800 bg-gray-900/60 hover:bg-gray-800/80 hover:border-violet-500/40 transition-all duration-300 group"
+                className="mt-4 flex items-center gap-4 px-5 py-4 rounded-xl border border-gray-800 bg-gray-900/60 md:hover:bg-gray-800/80 md:hover:border-violet-500/40 transition-colors duration-300 group touch-manipulation active:bg-gray-800/90"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
                 <img
                   src="/images/Strahinja izrada sajta.webp"
@@ -735,7 +732,7 @@ export function FunnelPage() {
                 const cardEl = (card: typeof cards[0]) => (
                   <div
                     key={card.id}
-                    className="group rounded-2xl border border-gray-700/60 bg-gray-900/60 backdrop-blur-sm overflow-hidden shadow-xl flex flex-col h-full transition-all duration-300 ease-out hover:border-violet-500/50 hover:shadow-violet-500/10 hover:shadow-2xl hover:-translate-y-1.5"
+                    className="group rounded-2xl border border-gray-700/60 bg-gray-900/60 backdrop-blur-sm overflow-hidden shadow-xl flex flex-col h-full transition-colors duration-300 ease-out md:hover:border-violet-500/50 md:hover:shadow-violet-500/10 md:hover:shadow-2xl"
                   >
                     <div className="p-5 md:p-6 flex flex-col flex-1 min-h-0">
                       <div className="flex-1 flex flex-col min-h-0">
@@ -768,12 +765,12 @@ export function FunnelPage() {
                           href={card.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-violet-600/20 border border-violet-500/30 text-violet-300 text-xs font-semibold whitespace-nowrap transition-all duration-200 hover:bg-violet-600 hover:text-white hover:border-violet-500 hover:scale-105 active:scale-95 flex-shrink-0 opacity-0 group-hover:opacity-100"
+                          className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-violet-600/20 border border-violet-500/30 text-violet-300 text-xs font-semibold whitespace-nowrap transition-colors duration-200 md:hover:bg-violet-600 md:hover:text-white md:hover:border-violet-500 flex-shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 touch-manipulation"
+                          style={{ WebkitTapHighlightColor: 'transparent' }}
                           title={language === 'sr' ? 'Otvori sajt u novom prozoru' : 'Open site in new window'}
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
-                          <span className="hidden sm:inline">{language === 'sr' ? 'Poseti sajt' : 'Visit site'}</span>
+                          <span>{language === 'sr' ? 'Poseti sajt' : 'Visit site'}</span>
                         </a>
                       </div>
                     </div>
@@ -782,19 +779,24 @@ export function FunnelPage() {
 
                 return (
                   <>
-                    {/* Mobilni: beskonačni horizontalni scroll carousel (3x kopije, jump bez vidljivog skoka) */}
+                    {/* Mobile: swipe carousel with peek effect */}
                     <div className="md:hidden mt-8 -mx-4">
                       <div
                         ref={carouselRef}
                         onScroll={handleCarouselScroll}
                         className="flex gap-4 overflow-x-auto px-4 pb-4 snap-x snap-mandatory"
-                        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+                        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none' } as React.CSSProperties}
                       >
                         {[...cards, ...cards, ...cards].map((card, idx) => (
-                          <div key={`${card.id}-${idx}`} className="snap-start flex-shrink-0 w-[80vw]">
+                          <div key={`${card.id}-${idx}`} className="snap-start flex-shrink-0 w-[82vw]">
                             {cardEl(card)}
                           </div>
                         ))}
+                      </div>
+                      <div className="flex justify-center mt-3">
+                        <span className="text-gray-600 text-[11px] tracking-wider uppercase">
+                          {language === 'sr' ? '← Prevuci za još →' : '← Swipe for more →'}
+                        </span>
                       </div>
                     </div>
 
@@ -957,7 +959,8 @@ export function FunnelPage() {
                 <button
                   type="button"
                   onClick={() => document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(139,92,246,0.65)] touch-manipulation cursor-pointer"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-violet-500 md:hover:bg-violet-600 text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(139,92,246,0.65)] touch-manipulation active:scale-95 select-none cursor-pointer"
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
                   <ArrowRight className="w-4 h-4" />
@@ -1033,9 +1036,9 @@ export function FunnelPage() {
                   return (
                     <div
                       key={i}
-                      className={`relative rounded-lg md:rounded-xl border border-gray-200 bg-white shadow-md md:shadow-lg p-3.5 md:p-5 flex flex-col text-left ${
+                      className={`rounded-lg md:rounded-xl border bg-white shadow-md md:shadow-lg p-3.5 md:p-5 flex flex-col text-left transition-all duration-200 ${
                         isBigCard ? 'md:row-span-2' : ''
-                      } ${isExpanded ? 'z-50' : 'z-0'} ${mobileOrderClass}`}
+                      } ${isExpanded ? 'border-violet-300 shadow-violet-100' : 'border-gray-200'} ${mobileOrderClass}`}
                     >
                       <div className="flex gap-0.5 mb-1.5 md:mb-3">
                         {stars(review.rating ?? 5)}
@@ -1046,42 +1049,22 @@ export function FunnelPage() {
                       <h3 className="font-bold text-gray-900 text-xs md:text-base mb-1 md:mb-2 leading-tight">
                         {review.title}
                       </h3>
-                      <p className={`text-gray-600 text-xs md:text-sm leading-relaxed flex-1 ${!isBigCard ? 'line-clamp-2 md:line-clamp-3' : ''}`}>
+                      <p className={`text-gray-600 text-xs md:text-sm leading-relaxed flex-1 ${!isBigCard && !isExpanded ? 'line-clamp-2 md:line-clamp-3' : ''}`}>
                         {review.body}
                       </p>
                       {!isBigCard && (
-                        <>
-                          <button
-                            type="button"
-                            onClick={() => setExpandedReviewIndex(isExpanded ? null : i)}
-                            className="text-violet-500 hover:text-violet-600 text-xs md:text-sm font-medium mt-1.5 md:mt-2 self-start cursor-pointer hover:underline underline-offset-2"
-                          >
-                            {language === 'sr' ? 'Pročitaj više' : 'Read more'}
-                          </button>
-                          {isExpanded && (
-                            <div className="absolute left-0 top-0 w-full rounded-lg md:rounded-xl border border-violet-300 bg-white shadow-2xl p-3.5 md:p-5 flex flex-col">
-                              <div className="flex gap-0.5 mb-1.5 md:mb-3">
-                                {stars(review.rating ?? 5)}
-                              </div>
-                              <p className="text-gray-500 text-[11px] md:text-xs mb-1 md:mb-2">
-                                {review.name}, {review.date}
-                              </p>
-                              <h3 className="font-bold text-gray-900 text-xs md:text-base mb-1 md:mb-2 leading-tight">
-                                {review.title}
-                              </h3>
-                              <p className="text-gray-600 text-xs md:text-sm leading-relaxed mb-2 md:mb-3">
-                                {review.body}
-                              </p>
-                              <button
-                                type="button"
-                                onClick={() => setExpandedReviewIndex(null)}
-                                className="text-violet-500 hover:text-violet-600 text-xs md:text-sm font-medium self-start cursor-pointer hover:underline underline-offset-2"
-                              >
-                                {language === 'sr' ? 'Pročitaj manje' : 'Read less'}
-                              </button>
-                            </div>
-                          )}
-                        </>
+                        <button
+                          type="button"
+                          onClick={() => setExpandedReviewIndex(isExpanded ? null : i)}
+                          className="inline-flex items-center gap-1.5 px-4 py-2.5 md:px-0 md:py-0 rounded-lg md:rounded-none bg-violet-50 md:bg-transparent border border-violet-200 md:border-0 text-violet-600 md:text-violet-500 md:hover:text-violet-600 text-sm font-semibold md:font-medium mt-2.5 md:mt-2 self-start cursor-pointer md:hover:underline underline-offset-2 touch-manipulation select-none"
+                          style={{ WebkitTapHighlightColor: 'transparent' }}
+                        >
+                          {isExpanded
+                            ? (language === 'sr' ? 'Pročitaj manje' : 'Read less')
+                            : (language === 'sr' ? 'Pročitaj više' : 'Read more')
+                          }
+                          <svg className={`w-4 h-4 md:hidden transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg>
+                        </button>
                       )}
                     </div>
                   );
@@ -1172,7 +1155,8 @@ export function FunnelPage() {
                   <button
                     type="button"
                     onClick={() => document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                    className="inline-flex items-center gap-2 px-10 py-4 bg-white hover:bg-gray-100 active:bg-gray-200 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)] touch-manipulation cursor-pointer"
+                    className="inline-flex items-center gap-2 px-10 py-4 bg-white md:hover:bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)] touch-manipulation select-none cursor-pointer active:bg-gray-200"
+                    style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
                     {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
                     <ArrowRight className="w-4 h-4" />
@@ -1272,12 +1256,14 @@ export function FunnelPage() {
                   <p className="text-gray-400 text-xs">Strahinja Zekanović · Co-founder</p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setWidgetOpen(false)}
-                  className="text-gray-500 hover:text-gray-300 transition-colors mt-0.5 flex-shrink-0"
+                  className="flex-shrink-0 w-10 h-10 -mr-2 -mt-1 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors touch-manipulation active:scale-90"
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                   aria-label="Zatvori"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
@@ -1307,7 +1293,7 @@ export function FunnelPage() {
                     <button
                       key={i}
                       onClick={() => setSelectedDay(i)}
-                      className={`flex-1 flex flex-col items-center py-2.5 rounded-lg border text-xs font-medium transition-all ${
+                      className={`flex-1 flex flex-col items-center py-2.5 rounded-lg border text-xs font-medium transition-all touch-manipulation ${
                         selectedDay === i
                           ? 'bg-violet-600 border-violet-500 text-white'
                           : 'bg-white/5 border-white/10 text-gray-400 hover:border-violet-500/50 hover:text-white'
@@ -1322,13 +1308,13 @@ export function FunnelPage() {
               {/* CTA button */}
               <div className="px-4 py-4">
                 <button
+                  type="button"
                   onClick={() => {
                     setWidgetOpen(false);
-                    setTimeout(() => {
-                      document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 150);
+                    document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-violet-700 hover:from-violet-500 hover:to-violet-600 text-white font-bold text-sm transition-all shadow-lg hover:shadow-violet-500/30"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-violet-700 md:hover:from-violet-500 md:hover:to-violet-600 text-white font-bold text-sm transition-colors shadow-lg touch-manipulation active:scale-[0.97] select-none cursor-pointer"
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   {language === 'sr' ? 'Zakaži Poziv' : 'Book a Call'}
                 </button>
@@ -1339,8 +1325,10 @@ export function FunnelPage() {
 
           {/* Toggle bubble */}
           <button
+            type="button"
             onClick={() => setWidgetOpen(v => !v)}
-            className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-violet-500 hover:border-violet-400 transition-all hover:scale-105 active:scale-95 bg-violet-700 flex items-center justify-center"
+            className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-violet-500 md:hover:border-violet-400 transition-colors active:bg-violet-600 bg-violet-700 flex items-center justify-center touch-manipulation select-none cursor-pointer"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
             aria-label="Zakaži poziv"
           >
             <img
