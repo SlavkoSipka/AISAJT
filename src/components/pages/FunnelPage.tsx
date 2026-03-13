@@ -320,7 +320,7 @@ export function FunnelPage() {
         {/* Fixed Home button in top right corner */}
         <button
           onClick={() => navigate('/')}
-          className="fixed top-5 left-4 right-auto md:left-auto md:right-6 z-50 px-4 py-2.5 md:px-5 md:py-2.5 border border-violet-500/30 bg-gray-950/80 backdrop-blur-md text-violet-300 text-xs md:text-sm font-semibold tracking-wide rounded-full hover:bg-violet-600/20 hover:text-white hover:border-violet-400 transition-all duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(139,92,246,0.15)] touch-manipulation active:scale-95"
+          className="fixed top-5 left-4 right-auto md:left-auto md:right-6 z-50 px-4 py-2.5 md:px-5 md:py-2.5 border border-violet-500/30 bg-gray-950/80 backdrop-blur-md text-violet-300 text-xs md:text-sm font-semibold tracking-wide rounded-full md:hover:bg-violet-600/20 md:hover:text-white md:hover:border-violet-400 transition-colors duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(139,92,246,0.15)] touch-manipulation active:bg-violet-600/30 select-none cursor-pointer"
         >
           {language === 'sr' ? 'Početna' : 'Home'}
           <ExternalLink className="w-3.5 h-3.5" />
@@ -611,7 +611,7 @@ export function FunnelPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-4 px-6 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-base transition-all duration-200 flex items-center justify-center gap-2 shadow-[0_2px_16px_rgba(139,92,246,0.4)] hover:shadow-[0_4px_24px_rgba(139,92,246,0.6)] hover:scale-[1.01] active:scale-[0.99] touch-manipulation"
+                      className="w-full py-4 px-6 rounded-xl bg-violet-600 md:hover:bg-violet-500 text-white font-semibold text-base transition-colors duration-200 flex items-center justify-center gap-2 shadow-[0_2px_16px_rgba(139,92,246,0.4)] touch-manipulation active:bg-violet-700 select-none cursor-pointer"
                     >
                       {isSubmitting ? (
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -645,7 +645,8 @@ export function FunnelPage() {
               <a
                 href="tel:+381621552156"
                 onClick={() => trackPhoneClick('+381621552156', 'funnel_booking', language)}
-                className="mt-4 flex items-center gap-4 px-5 py-4 rounded-xl border border-gray-800 bg-gray-900/60 hover:bg-gray-800/80 hover:border-violet-500/40 transition-all duration-300 group touch-manipulation active:scale-[0.98]"
+                className="mt-4 flex items-center gap-4 px-5 py-4 rounded-xl border border-gray-800 bg-gray-900/60 md:hover:bg-gray-800/80 md:hover:border-violet-500/40 transition-colors duration-300 group touch-manipulation active:bg-gray-800/90"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
                 <img
                   src="/images/Strahinja izrada sajta.webp"
@@ -713,7 +714,7 @@ export function FunnelPage() {
                 const cardEl = (card: typeof cards[0]) => (
                   <div
                     key={card.id}
-                    className="group rounded-2xl border border-gray-700/60 bg-gray-900/60 backdrop-blur-sm overflow-hidden shadow-xl flex flex-col h-full transition-all duration-300 ease-out hover:border-violet-500/50 hover:shadow-violet-500/10 hover:shadow-2xl hover:-translate-y-1.5"
+                    className="group rounded-2xl border border-gray-700/60 bg-gray-900/60 backdrop-blur-sm overflow-hidden shadow-xl flex flex-col h-full transition-colors duration-300 ease-out md:hover:border-violet-500/50 md:hover:shadow-violet-500/10 md:hover:shadow-2xl"
                   >
                     <div className="p-5 md:p-6 flex flex-col flex-1 min-h-0">
                       <div className="flex-1 flex flex-col min-h-0">
@@ -746,8 +747,8 @@ export function FunnelPage() {
                           href={card.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-violet-600/20 border border-violet-500/30 text-violet-300 text-xs font-semibold whitespace-nowrap transition-all duration-200 hover:bg-violet-600 hover:text-white hover:border-violet-500 hover:scale-105 active:scale-95 flex-shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 touch-manipulation"
+                          className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-violet-600/20 border border-violet-500/30 text-violet-300 text-xs font-semibold whitespace-nowrap transition-colors duration-200 md:hover:bg-violet-600 md:hover:text-white md:hover:border-violet-500 flex-shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 touch-manipulation"
+                          style={{ WebkitTapHighlightColor: 'transparent' }}
                           title={language === 'sr' ? 'Otvori sajt u novom prozoru' : 'Open site in new window'}
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
@@ -780,37 +781,42 @@ export function FunnelPage() {
                         <button
                           type="button"
                           onClick={() => setActiveCard(i => (i - 1 + cards.length) % cards.length)}
-                          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 z-10 w-10 h-10 rounded-full bg-gray-900/90 border border-violet-500/40 flex items-center justify-center shadow-lg touch-manipulation active:scale-90 transition-transform"
+                          className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-gray-800 border-2 border-violet-500/60 flex items-center justify-center shadow-xl touch-manipulation active:bg-violet-600 active:border-violet-500 select-none cursor-pointer"
+                          style={{ WebkitTapHighlightColor: 'transparent' }}
                           aria-label="Previous"
                         >
-                          <ChevronLeft className="w-5 h-5 text-violet-300" />
+                          <ChevronLeft className="w-6 h-6 text-white" />
                         </button>
 
                         {/* Right arrow */}
                         <button
                           type="button"
                           onClick={() => setActiveCard(i => (i + 1) % cards.length)}
-                          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 z-10 w-10 h-10 rounded-full bg-gray-900/90 border border-violet-500/40 flex items-center justify-center shadow-lg touch-manipulation active:scale-90 transition-transform"
+                          className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-gray-800 border-2 border-violet-500/60 flex items-center justify-center shadow-xl touch-manipulation active:bg-violet-600 active:border-violet-500 select-none cursor-pointer"
+                          style={{ WebkitTapHighlightColor: 'transparent' }}
                           aria-label="Next"
                         >
-                          <ChevronRight className="w-5 h-5 text-violet-300" />
+                          <ChevronRight className="w-6 h-6 text-white" />
                         </button>
                       </div>
 
                       {/* Dot indicators */}
-                      <div className="flex justify-center gap-1.5 mt-4">
+                      <div className="flex justify-center gap-0.5 mt-4">
                         {cards.map((_, idx) => (
                           <button
                             key={idx}
                             type="button"
                             onClick={() => setActiveCard(idx)}
-                            className={`rounded-full transition-all duration-300 touch-manipulation ${
+                            className="p-1.5 touch-manipulation select-none cursor-pointer"
+                            style={{ WebkitTapHighlightColor: 'transparent' }}
+                            aria-label={`Card ${idx + 1}`}
+                          >
+                            <span className={`block rounded-full transition-all duration-300 ${
                               idx === activeCard
                                 ? 'w-6 h-2 bg-violet-500'
                                 : 'w-2 h-2 bg-gray-600'
-                            }`}
-                            aria-label={`Card ${idx + 1}`}
-                          />
+                            }`} />
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -971,17 +977,17 @@ export function FunnelPage() {
                   ))}
                   <span className="text-gray-500">{language === 'sr' ? '50+ uspešnih projekata' : '50+ successful projects'}</span>
                 </p>
-                <a
-                  href="#booking-form"
-                  onClick={(e) => {
-                    e.preventDefault();
+                <button
+                  type="button"
+                  onClick={() => {
                     document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-violet-500 hover:bg-violet-600 text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-all shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(139,92,246,0.65)] touch-manipulation active:scale-95"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-violet-500 md:hover:bg-violet-600 text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(139,92,246,0.65)] touch-manipulation active:scale-95 select-none cursor-pointer"
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
                   <ArrowRight className="w-4 h-4" />
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -1072,18 +1078,15 @@ export function FunnelPage() {
                       {!isBigCard && (
                         <button
                           type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setExpandedReviewIndex(isExpanded ? null : i);
-                          }}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2.5 md:px-0 md:py-0 rounded-lg md:rounded-none bg-violet-50 md:bg-transparent border border-violet-200 md:border-0 text-violet-600 md:text-violet-500 hover:text-violet-700 md:hover:text-violet-600 text-sm font-semibold md:font-medium mt-2.5 md:mt-2 self-start cursor-pointer md:hover:underline underline-offset-2 touch-manipulation active:scale-95 transition-all select-none"
+                          onClick={() => setExpandedReviewIndex(isExpanded ? null : i)}
+                          className="inline-flex items-center gap-1.5 px-4 py-2.5 md:px-0 md:py-0 rounded-lg md:rounded-none bg-violet-50 md:bg-transparent border border-violet-200 md:border-0 text-violet-600 md:text-violet-500 md:hover:text-violet-600 text-sm font-semibold md:font-medium mt-2.5 md:mt-2 self-start cursor-pointer md:hover:underline underline-offset-2 touch-manipulation select-none"
                           style={{ WebkitTapHighlightColor: 'transparent' }}
                         >
                           {isExpanded
                             ? (language === 'sr' ? 'Pročitaj manje' : 'Read less')
                             : (language === 'sr' ? 'Pročitaj više' : 'Read more')
                           }
-                          <svg className={`w-3.5 h-3.5 md:hidden transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg>
+                          <svg className={`w-4 h-4 md:hidden transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg>
                         </button>
                       )}
                     </div>
@@ -1177,7 +1180,7 @@ export function FunnelPage() {
                     onClick={() => {
                       document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }}
-                    className="inline-flex items-center gap-2 px-10 py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-all shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)] touch-manipulation active:scale-95 select-none cursor-pointer"
+                    className="inline-flex items-center gap-2 px-10 py-4 bg-white md:hover:bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)] touch-manipulation select-none cursor-pointer active:bg-gray-200"
                     style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
                     {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
@@ -1281,12 +1284,14 @@ export function FunnelPage() {
                   <p className="text-gray-400 text-xs">Strahinja Zekanović · Co-founder</p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setWidgetOpen(false)}
-                  className="text-gray-500 hover:text-gray-300 transition-colors mt-0.5 flex-shrink-0"
+                  className="flex-shrink-0 w-10 h-10 -mr-2 -mt-1 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors touch-manipulation active:scale-90"
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                   aria-label="Zatvori"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
@@ -1331,13 +1336,13 @@ export function FunnelPage() {
               {/* CTA button */}
               <div className="px-4 py-4">
                 <button
+                  type="button"
                   onClick={() => {
                     setWidgetOpen(false);
-                    setTimeout(() => {
-                      document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 150);
+                    document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-violet-700 hover:from-violet-500 hover:to-violet-600 text-white font-bold text-sm transition-all shadow-lg hover:shadow-violet-500/30 touch-manipulation active:scale-[0.98]"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-violet-700 md:hover:from-violet-500 md:hover:to-violet-600 text-white font-bold text-sm transition-colors shadow-lg touch-manipulation active:scale-[0.97] select-none cursor-pointer"
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   {language === 'sr' ? 'Zakaži Poziv' : 'Book a Call'}
                 </button>
@@ -1347,8 +1352,10 @@ export function FunnelPage() {
 
           {/* Toggle bubble */}
           <button
+            type="button"
             onClick={() => setWidgetOpen(v => !v)}
-            className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-violet-500 hover:border-violet-400 transition-all hover:scale-105 active:scale-95 bg-violet-700 flex items-center justify-center touch-manipulation"
+            className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-violet-500 md:hover:border-violet-400 transition-colors active:bg-violet-600 bg-violet-700 flex items-center justify-center touch-manipulation select-none cursor-pointer"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
             aria-label="Zakaži poziv"
           >
             <img
