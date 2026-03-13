@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, CheckCircle, Play, ExternalLink, Star } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, CheckCircle, Play, ExternalLink, Star } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useLanguage } from '../../hooks/useLanguage';
 import { SEOHelmet } from '../seo/SEOHelmet';
@@ -69,77 +69,13 @@ export function FunnelPage() {
   const VIMEO_SOUND = 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1';
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const touchState = useRef<{ startX: number; startY: number; decided: boolean; isHorizontal: boolean }>({ startX: 0, startY: 0, decided: false, isHorizontal: false });
+  const [activeCard, setActiveCard] = useState(0);
 
   const handleUnmute = () => {
     if (iframeRef.current) {
       iframeRef.current.src = VIMEO_SOUND;
     }
     setVideoUnmuted(true);
-  };
-
-  useEffect(() => {
-    const el = carouselRef.current;
-    if (!el) return;
-    const setWidth = el.scrollWidth / 3;
-    el.scrollLeft = setWidth;
-  }, []);
-
-  useEffect(() => {
-    const el = carouselRef.current;
-    if (!el) return;
-
-    const onTouchStart = (e: TouchEvent) => {
-      const t = e.touches[0];
-      touchState.current = { startX: t.clientX, startY: t.clientY, decided: false, isHorizontal: false };
-      el.style.overflowX = 'auto';
-    };
-
-    const onTouchMove = (e: TouchEvent) => {
-      const state = touchState.current;
-      if (state.decided) {
-        if (!state.isHorizontal) {
-          el.style.overflowX = 'hidden';
-        }
-        return;
-      }
-      const t = e.touches[0];
-      const dx = Math.abs(t.clientX - state.startX);
-      const dy = Math.abs(t.clientY - state.startY);
-      const threshold = 8;
-      if (dx < threshold && dy < threshold) return;
-      state.decided = true;
-      state.isHorizontal = dx > dy * 1.2;
-      if (!state.isHorizontal) {
-        el.style.overflowX = 'hidden';
-      }
-    };
-
-    const onTouchEnd = () => {
-      touchState.current.decided = false;
-      el.style.overflowX = 'auto';
-    };
-
-    el.addEventListener('touchstart', onTouchStart, { passive: true });
-    el.addEventListener('touchmove', onTouchMove, { passive: true });
-    el.addEventListener('touchend', onTouchEnd, { passive: true });
-    return () => {
-      el.removeEventListener('touchstart', onTouchStart);
-      el.removeEventListener('touchmove', onTouchMove);
-      el.removeEventListener('touchend', onTouchEnd);
-    };
-  }, []);
-
-  const handleCarouselScroll = () => {
-    const el = carouselRef.current;
-    if (!el) return;
-    const setWidth = el.scrollWidth / 3;
-    if (el.scrollLeft < setWidth * 0.15) {
-      el.scrollLeft += setWidth;
-    } else if (el.scrollLeft > setWidth * 2 - setWidth * 0.15) {
-      el.scrollLeft -= setWidth;
-    }
   };
 
   /* ── Load Vimeo player.js ─────────────────────────────────────── */
@@ -824,18 +760,57 @@ export function FunnelPage() {
 
                 return (
                   <>
-                    {/* Mobilni: beskonačni horizontalni scroll carousel (3x kopije, jump bez vidljivog skoka) */}
-                    <div className="md:hidden mt-8 -mx-4">
-                      <div
-                        ref={carouselRef}
-                        onScroll={handleCarouselScroll}
-                        className="flex gap-4 overflow-x-auto px-4 pb-4 snap-x snap-mandatory"
-                        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', touchAction: 'pan-x pan-y' } as React.CSSProperties}
-                      >
-                        {[...cards, ...cards, ...cards].map((card, idx) => (
-                          <div key={`${card.id}-${idx}`} className="snap-start flex-shrink-0 w-[80vw]">
-                            {cardEl(card)}
+                    {/* Mobile: arrow-based card slider */}
+                    <div className="md:hidden mt-8">
+                      <div className="relative px-2">
+                        <div className="overflow-hidden">
+                          <div
+                            className="flex transition-transform duration-300 ease-out"
+                            style={{ transform: `translateX(-${activeCard * 100}%)` }}
+                          >
+                            {cards.map((card) => (
+                              <div key={card.id} className="w-full flex-shrink-0 px-2">
+                                {cardEl(card)}
+                              </div>
+                            ))}
                           </div>
+                        </div>
+
+                        {/* Left arrow */}
+                        <button
+                          type="button"
+                          onClick={() => setActiveCard(i => (i - 1 + cards.length) % cards.length)}
+                          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 z-10 w-10 h-10 rounded-full bg-gray-900/90 border border-violet-500/40 flex items-center justify-center shadow-lg touch-manipulation active:scale-90 transition-transform"
+                          aria-label="Previous"
+                        >
+                          <ChevronLeft className="w-5 h-5 text-violet-300" />
+                        </button>
+
+                        {/* Right arrow */}
+                        <button
+                          type="button"
+                          onClick={() => setActiveCard(i => (i + 1) % cards.length)}
+                          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 z-10 w-10 h-10 rounded-full bg-gray-900/90 border border-violet-500/40 flex items-center justify-center shadow-lg touch-manipulation active:scale-90 transition-transform"
+                          aria-label="Next"
+                        >
+                          <ChevronRight className="w-5 h-5 text-violet-300" />
+                        </button>
+                      </div>
+
+                      {/* Dot indicators */}
+                      <div className="flex justify-center gap-1.5 mt-4">
+                        {cards.map((_, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => setActiveCard(idx)}
+                            className={`rounded-full transition-all duration-300 touch-manipulation ${
+                              idx === activeCard
+                                ? 'w-6 h-2 bg-violet-500'
+                                : 'w-2 h-2 bg-gray-600'
+                            }`}
+                            aria-label={`Card ${idx + 1}`}
+                          />
                         ))}
                       </div>
                     </div>
@@ -1078,9 +1053,9 @@ export function FunnelPage() {
                   return (
                     <div
                       key={i}
-                      className={`relative rounded-lg md:rounded-xl border border-gray-200 bg-white shadow-md md:shadow-lg p-3.5 md:p-5 flex flex-col text-left ${
+                      className={`rounded-lg md:rounded-xl border bg-white shadow-md md:shadow-lg p-3.5 md:p-5 flex flex-col text-left transition-all duration-200 ${
                         isBigCard ? 'md:row-span-2' : ''
-                      } ${isExpanded ? 'z-50' : 'z-0'} ${mobileOrderClass}`}
+                      } ${isExpanded ? 'border-violet-300 shadow-violet-100' : 'border-gray-200'} ${mobileOrderClass}`}
                     >
                       <div className="flex gap-0.5 mb-1.5 md:mb-3">
                         {stars(review.rating ?? 5)}
@@ -1091,44 +1066,25 @@ export function FunnelPage() {
                       <h3 className="font-bold text-gray-900 text-xs md:text-base mb-1 md:mb-2 leading-tight">
                         {review.title}
                       </h3>
-                      <p className={`text-gray-600 text-xs md:text-sm leading-relaxed flex-1 ${!isBigCard ? 'line-clamp-2 md:line-clamp-3' : ''}`}>
+                      <p className={`text-gray-600 text-xs md:text-sm leading-relaxed flex-1 ${!isBigCard && !isExpanded ? 'line-clamp-2 md:line-clamp-3' : ''}`}>
                         {review.body}
                       </p>
                       {!isBigCard && (
-                        <>
-                          <button
-                            type="button"
-                            onClick={() => setExpandedReviewIndex(isExpanded ? null : i)}
-                            className="inline-flex items-center gap-1 px-3 py-2 md:px-0 md:py-0 rounded-lg md:rounded-none bg-violet-50 md:bg-transparent border border-violet-200 md:border-0 text-violet-600 md:text-violet-500 hover:text-violet-700 md:hover:text-violet-600 text-sm md:text-sm font-semibold md:font-medium mt-2 md:mt-2 self-start cursor-pointer md:hover:underline underline-offset-2 touch-manipulation active:scale-95 transition-transform"
-                          >
-                            {language === 'sr' ? 'Pročitaj više' : 'Read more'}
-                            <svg className="w-3.5 h-3.5 md:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                          </button>
-                          {isExpanded && (
-                            <div className="absolute left-0 top-0 w-full rounded-lg md:rounded-xl border border-violet-300 bg-white shadow-2xl p-4 md:p-5 flex flex-col z-50">
-                              <div className="flex gap-0.5 mb-1.5 md:mb-3">
-                                {stars(review.rating ?? 5)}
-                              </div>
-                              <p className="text-gray-500 text-[11px] md:text-xs mb-1 md:mb-2">
-                                {review.name}, {review.date}
-                              </p>
-                              <h3 className="font-bold text-gray-900 text-sm md:text-base mb-1.5 md:mb-2 leading-tight">
-                                {review.title}
-                              </h3>
-                              <p className="text-gray-600 text-sm md:text-sm leading-relaxed mb-3 md:mb-3">
-                                {review.body}
-                              </p>
-                              <button
-                                type="button"
-                                onClick={() => setExpandedReviewIndex(null)}
-                                className="inline-flex items-center gap-1 px-3 py-2 md:px-0 md:py-0 rounded-lg md:rounded-none bg-violet-50 md:bg-transparent border border-violet-200 md:border-0 text-violet-600 md:text-violet-500 hover:text-violet-700 md:hover:text-violet-600 text-sm md:text-sm font-semibold md:font-medium self-start cursor-pointer md:hover:underline underline-offset-2 touch-manipulation active:scale-95 transition-transform"
-                              >
-                                {language === 'sr' ? 'Pročitaj manje' : 'Read less'}
-                                <svg className="w-3.5 h-3.5 md:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
-                              </button>
-                            </div>
-                          )}
-                        </>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setExpandedReviewIndex(isExpanded ? null : i);
+                          }}
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2.5 md:px-0 md:py-0 rounded-lg md:rounded-none bg-violet-50 md:bg-transparent border border-violet-200 md:border-0 text-violet-600 md:text-violet-500 hover:text-violet-700 md:hover:text-violet-600 text-sm font-semibold md:font-medium mt-2.5 md:mt-2 self-start cursor-pointer md:hover:underline underline-offset-2 touch-manipulation active:scale-95 transition-all select-none"
+                          style={{ WebkitTapHighlightColor: 'transparent' }}
+                        >
+                          {isExpanded
+                            ? (language === 'sr' ? 'Pročitaj manje' : 'Read less')
+                            : (language === 'sr' ? 'Pročitaj više' : 'Read more')
+                          }
+                          <svg className={`w-3.5 h-3.5 md:hidden transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg>
+                        </button>
                       )}
                     </div>
                   );
@@ -1216,18 +1172,17 @@ export function FunnelPage() {
                 </div>
                 {/* Dugme centrirano ispod sadržaja */}
                 <div className="relative flex flex-col items-center gap-2 pb-8 md:pb-10 px-4">
-                  <a
-                    href="#booking-form"
-                    onClick={(e) => {
-                      e.preventDefault();
+                  <button
+                    type="button"
+                    onClick={() => {
                       document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }}
-                    className="inline-flex items-center gap-2 px-10 py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)] touch-manipulation"
+                    className="inline-flex items-center gap-2 px-10 py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-all shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)] touch-manipulation active:scale-95 select-none cursor-pointer"
                     style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
                     {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
                     <ArrowRight className="w-4 h-4" />
-                  </a>
+                  </button>
                   <p className="text-gray-500 text-xs">
                     {language === 'sr' ? 'Kontaktiramo vas u roku od 24h' : 'We contact you within 24h'}
                   </p>
