@@ -1,6 +1,16 @@
 [build]
   publish = "dist"
   command = "npm run build"
+  functions = "netlify/functions"
+
+# Lokalni razvoj: Netlify pokreće Vite i proxy na ovaj port (ne 8888 — često zauzet od Jupyter-a → 426 / čudni odgovori).
+# Pokretanje: npm run dev:netlify  → http://localhost:8889
+[dev]
+  framework = "vite"
+  command = "npm run dev"
+  port = 8889
+  targetPort = 5173
+  publish = "dist"
 
 # Serve sitemap.xml with correct Content-Type
 [[headers]]

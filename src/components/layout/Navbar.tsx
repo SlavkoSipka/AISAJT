@@ -219,6 +219,18 @@ export function Navbar() {
               </div>
 
               <a
+                href="/portal/login"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/portal/login');
+                }}
+                className="px-5 py-2.5 rounded-full font-semibold text-sm uppercase tracking-wide text-violet-600 border-2 border-violet-600 hover:bg-violet-600 hover:text-white transition-all duration-300"
+                aria-label={language === 'sr' ? 'Prijava na portal' : 'Portal login'}
+              >
+                {language === 'sr' ? 'PRIJAVA' : 'LOGIN'}
+              </a>
+
+              <a
                 href="/funnel"
                 onClick={(e) => {
                   e.preventDefault();
@@ -380,6 +392,19 @@ export function Navbar() {
           </div>
           
           <a
+            href="/portal/login"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/portal/login');
+              setIsMenuOpen(false);
+            }}
+            className="w-full text-center px-6 py-3 rounded-lg font-semibold text-violet-600 border-2 border-violet-600 hover:bg-violet-600 hover:text-white transition-all duration-300 block"
+            aria-label={language === 'sr' ? 'Prijava na portal' : 'Portal login'}
+          >
+            {language === 'sr' ? 'PRIJAVA' : 'LOGIN'}
+          </a>
+
+          <a
             href="/funnel"
             onClick={(e) => {
               e.preventDefault();
@@ -538,14 +563,27 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Contact Button at Bottom - Same as Horizontal Navbar */}
+          {/* Login Button */}
+          <a
+            href="/portal/login"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/portal/login');
+            }}
+            className="block w-full text-center px-6 py-3 rounded-full font-semibold text-violet-600 border-2 border-violet-600 hover:bg-violet-600 hover:text-white transition-all duration-300 text-sm uppercase tracking-wide"
+            aria-label={language === 'sr' ? 'Prijava na portal' : 'Portal login'}
+          >
+            {language === 'sr' ? 'Prijava' : 'Login'}
+          </a>
+
+          {/* Contact Button at Bottom */}
           <a
             href="/funnel"
             onClick={(e) => {
               e.preventDefault();
               navigate('/funnel');
             }}
-            className="block w-full bg-gray-900 text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 text-sm uppercase tracking-wide text-center"
+            className="block w-full bg-gray-900 text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 text-sm uppercase tracking-wide text-center mt-2"
             aria-label="Kontaktirajte nas"
           >
             {t.contact}

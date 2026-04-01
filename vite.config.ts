@@ -1,8 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
+// Port mora da se poklopi sa netlify.toml [dev] targetPort. Bez ručnog HMR — Netlify proxy + Vite default HMR rade zajedno.
 export default defineConfig({
   plugins: [react()],
+  server: {
+    port: 5173,
+    strictPort: true,
+  },
   build: {
     minify: 'terser',
     terserOptions: {
@@ -44,6 +49,14 @@ export default defineConfig({
           // GSAP
           if (id.includes('gsap')) {
             return 'gsap-vendor';
+          }
+          // Supabase
+          if (id.includes('@supabase')) {
+            return 'supabase-vendor';
+          }
+          // Portal code
+          if (id.includes('/portal/')) {
+            return 'portal';
           }
         }
       }

@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+
+.portal-root {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background-color: #F7F6F3;
+  color: #1A1916;
+  min-height: 100vh;
+}
+
+.portal-card {
+  background-color: #FFFFFF;
+  border: 0.5px solid #E0DDD6;
+  border-radius: 12px;
+  padding: 16px 18px;
+  transition: all 0.15s ease;
+}
+
+.portal-sidebar {
+  background-color: #FFFFFF;
+  border-right: 0.5px solid #E0DDD6;
+  width: 220px;
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+}
+
+.portal-input {
+  background-color: #F7F6F3;
+  border: 0.5px solid #E0DDD6;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #1A1916;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 13px;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.portal-input:focus {
+  outline: none;
+  border-color: #6B4FBB;
+}
+
+.portal-input::placeholder {
+  color: #9A9890;
+}
+
+.portal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.portal-btn-primary {
+  background-color: #6B4FBB;
+  color: #FFFFFF;
+}
+
+.portal-btn-primary:hover {
+  background-color: #5A3FA8;
+}
+
+.portal-btn-secondary {
+  background-color: #F7F6F3;
+  color: #3D3C38;
+  border: 0.5px solid #E0DDD6;
+}
+
+.portal-btn-secondary:hover {
+  background-color: #F0EDE7;
+}
+
+.portal-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.portal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.portal-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #E0DDD6;
+  border-radius: 3px;
+}
+
+.portal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #9A9890;
+}
+
+@keyframes portal-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.portal-animate-in {
+  animation: portal-fade-in 0.3s ease forwards;
+}
+
+@media (max-width: 767px) {
+  .portal-sidebar {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    min-height: auto;
+    height: 64px;
+    border-right: none;
+    border-top: 0.5px solid #E0DDD6;
+    z-index: 50;
+  }
+}
