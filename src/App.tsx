@@ -37,6 +37,14 @@ const PortalAdminNewClient = lazy(() => import('./portal/pages/AdminNewClient').
 
 const PortalAuthGuard = lazy(() => import('./portal/guards/AuthGuard').then(m => ({ default: m.AuthGuard })));
 const PortalRoleGuard = lazy(() => import('./portal/guards/RoleGuard').then(m => ({ default: m.RoleGuard })));
+const PortalLayout = lazy(() => import('./portal/components/layout/PortalLayout').then(m => ({ default: m.PortalLayout })));
+
+// SEO panel
+const SeoClientDashboard = lazy(() => import('./portal/pages/SeoClientDashboard').then(m => ({ default: m.SeoClientDashboard })));
+const SeoAdminOverview = lazy(() => import('./portal/pages/SeoAdminOverview').then(m => ({ default: m.SeoAdminOverview })));
+const SeoAdminProject = lazy(() => import('./portal/pages/SeoAdminProject').then(m => ({ default: m.SeoAdminProject })));
+const SeoAdminNewSeoProject = lazy(() => import('./portal/pages/SeoAdminNewSeoProject').then(m => ({ default: m.SeoAdminNewSeoProject })));
+const SeoPublicReport = lazy(() => import('./portal/pages/SeoPublicReport').then(m => ({ default: m.SeoPublicReport })));
 
 function PortalRoutesWithAuth() {
   return (
@@ -119,32 +127,53 @@ function AppContent() {
           <Route path="/blog/category/:categorySlug" element={<BlogCategoryPage />} />
 
           {/* Portal — jedan AuthProvider za sve /portal/* (izbegava dupli useAuth + beskonačan loader na refresh) */}
+          <Route path="/portal/izvestaj/:token" element={<SeoPublicReport />} />
           <Route path="/portal" element={<PortalRoutesWithAuth />}>
             <Route path="login" element={<PortalLoginPage />} />
-            <Route path="dashboard" element={
-              <PortalAuthGuard><PortalRoleGuard requiredRole="client"><PortalClientDashboard /></PortalRoleGuard></PortalAuthGuard>
-            } />
-            <Route path="dashboard/poruke" element={
-              <PortalAuthGuard><PortalRoleGuard requiredRole="client"><PortalClientMessages /></PortalRoleGuard></PortalAuthGuard>
-            } />
-            <Route path="dashboard/fajlovi" element={
-              <PortalAuthGuard><PortalRoleGuard requiredRole="client"><PortalClientFiles /></PortalRoleGuard></PortalAuthGuard>
-            } />
-            <Route path="admin" element={
-              <PortalAuthGuard><PortalRoleGuard requiredRole="admin"><PortalAdminOverview /></PortalRoleGuard></PortalAuthGuard>
-            } />
-            <Route path="admin/klijenti" element={
-              <PortalAuthGuard><PortalRoleGuard requiredRole="admin"><PortalAdminClients /></PortalRoleGuard></PortalAuthGuard>
-            } />
-            <Route path="admin/klijenti/novi" element={
-              <PortalAuthGuard><PortalRoleGuard requiredRole="admin"><PortalAdminNewClient /></PortalRoleGuard></PortalAuthGuard>
-            } />
-            <Route path="admin/projekti/novi" element={
-              <PortalAuthGuard><PortalRoleGuard requiredRole="admin"><PortalAdminNewProject /></PortalRoleGuard></PortalAuthGuard>
-            } />
-            <Route path="admin/projekti/:id" element={
-              <PortalAuthGuard><PortalRoleGuard requiredRole="admin"><PortalAdminProject /></PortalRoleGuard></PortalAuthGuard>
-            } />
+
+            {/* All authenticated pages share sidebar layout (sidebar stays persistent across tab switches) */}
+            <Route element={<PortalAuthGuard><PortalLayout /></PortalAuthGuard>}>
+              <Route path="dashboard" element={
+                <PortalRoleGuard requiredRole="client"><PortalClientDashboard /></PortalRoleGuard>
+              } />
+              <Route path="dashboard/poruke" element={
+                <PortalRoleGuard requiredRole="client"><PortalClientMessages /></PortalRoleGuard>
+              } />
+              <Route path="dashboard/fajlovi" element={
+                <PortalRoleGuard requiredRole="client"><PortalClientFiles /></PortalRoleGuard>
+              } />
+              <Route path="admin" element={
+                <PortalRoleGuard requiredRole="admin"><PortalAdminOverview /></PortalRoleGuard>
+              } />
+              <Route path="admin/klijenti" element={
+                <PortalRoleGuard requiredRole="admin"><PortalAdminClients /></PortalRoleGuard>
+              } />
+              <Route path="admin/klijenti/novi" element={
+                <PortalRoleGuard requiredRole="admin"><PortalAdminNewClient /></PortalRoleGuard>
+              } />
+              <Route path="admin/projekti/novi" element={
+                <PortalRoleGuard requiredRole="admin"><PortalAdminNewProject /></PortalRoleGuard>
+              } />
+              <Route path="admin/projekti/:id" element={
+                <PortalRoleGuard requiredRole="admin"><PortalAdminProject /></PortalRoleGuard>
+              } />
+
+              {/* SEO panel — client */}
+              <Route path="seo" element={
+                <PortalRoleGuard requiredRole="client"><SeoClientDashboard /></PortalRoleGuard>
+              } />
+
+              {/* SEO panel — admin */}
+              <Route path="admin/seo" element={
+                <PortalRoleGuard requiredRole="admin"><SeoAdminOverview /></PortalRoleGuard>
+              } />
+              <Route path="admin/seo/novi" element={
+                <PortalRoleGuard requiredRole="admin"><SeoAdminNewSeoProject /></PortalRoleGuard>
+              } />
+              <Route path="admin/seo/:id" element={
+                <PortalRoleGuard requiredRole="admin"><SeoAdminProject /></PortalRoleGuard>
+              } />
+            </Route>
           </Route>
         </Routes>
       </Suspense>

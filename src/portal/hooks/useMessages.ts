@@ -1,9 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from './useAuth';
 import type { Message, Profile } from '../lib/types';
 
+let channelCounter = 0;
+
 export function useMessages(projectId: string | undefined, limit?: number) {
+  const instanceId = useRef(++channelCounter);
   const { profile } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,7 +63,7 @@ export function useMessages(projectId: string | undefined, limit?: number) {
     if (!projectId) return;
 
     const channel = supabase
-      .channel(`messages:${projectId}`)
+      .channel(`messages:${projectId}:${instanceId.current}`)
       .on('postgres_changes', {
         event: 'INSERT',
         schema: 'public',

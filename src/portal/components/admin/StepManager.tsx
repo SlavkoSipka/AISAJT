@@ -119,14 +119,14 @@ export function StepManager({ steps, projectId, onUpdate }: StepManagerProps) {
   };
 
   const statusButtons: { value: StepStatus; icon: React.ReactNode; label: string; activeColor: string }[] = [
-    { value: 'pending', icon: <Circle size={12} />, label: 'Čeka', activeColor: 'text-[#9A9890] bg-[#F0EDE7]' },
-    { value: 'active', icon: <ArrowRight size={12} />, label: 'Aktivan', activeColor: 'text-[#6B4FBB] bg-[#EDE9FF]' },
-    { value: 'done', icon: <Check size={12} />, label: 'Gotovo', activeColor: 'text-[#22A06B] bg-[#E8F6EF]' },
+    { value: 'pending', icon: <Circle size={12} />, label: 'Čeka', activeColor: 'text-[#9aa3b2] bg-[#f7f8fa]' },
+    { value: 'active', icon: <ArrowRight size={12} />, label: 'Aktivan', activeColor: 'text-[#00bcd4] bg-[#e6f7fa]' },
+    { value: 'done', icon: <Check size={12} />, label: 'Gotovo', activeColor: 'text-[#0faa6e] bg-[#e6f8f2]' },
   ];
 
   return (
     <div>
-      <h4 className="text-[13px] font-medium text-[#1A1916] mb-3">
+      <h4 className="text-[13px] font-medium text-[#1a2030] mb-3">
         Koraci projekta
       </h4>
 
@@ -136,12 +136,12 @@ export function StepManager({ steps, projectId, onUpdate }: StepManagerProps) {
             key={step.id}
             className={`rounded-lg border px-3 py-2.5 transition-all duration-150 ${
               step.status === 'active'
-                ? 'border-[#6B4FBB]/20 bg-[#EDE9FF]/30'
-                : 'border-[#E0DDD6] bg-white'
+                ? 'border-[#00bcd4]/20 bg-[#e6f7fa]/30'
+                : 'border-[#e3e7ee] bg-white'
             }`}
           >
             <div className="flex items-start gap-3">
-              <span className="text-[12px] text-[#9A9890] mt-1 font-medium w-5 shrink-0">
+              <span className="text-[12px] text-[#9aa3b2] mt-1 font-medium w-5 shrink-0">
                 {idx + 1}.
               </span>
 
@@ -151,7 +151,7 @@ export function StepManager({ steps, projectId, onUpdate }: StepManagerProps) {
                   onBlur={e => {
                     if (e.target.value !== step.title) handleUpdateField(step.id, 'title', e.target.value);
                   }}
-                  className="bg-transparent text-[13px] text-[#1A1916] font-medium w-full outline-none focus:text-[#6B4FBB] transition-colors"
+                  className="bg-transparent text-[13px] text-[#1a2030] font-medium w-full outline-none focus:text-[#00bcd4] transition-colors"
                 />
                 <input
                   defaultValue={step.description || ''}
@@ -159,7 +159,7 @@ export function StepManager({ steps, projectId, onUpdate }: StepManagerProps) {
                   onBlur={e => {
                     if (e.target.value !== (step.description || '')) handleUpdateField(step.id, 'description', e.target.value);
                   }}
-                  className="bg-transparent text-[12px] text-[#7A7870] w-full outline-none mt-0.5"
+                  className="bg-transparent text-[12px] text-[#5a6478] w-full outline-none mt-0.5"
                 />
                 <input
                   type="date"
@@ -167,13 +167,13 @@ export function StepManager({ steps, projectId, onUpdate }: StepManagerProps) {
                   onBlur={e => {
                     if (e.target.value !== (step.estimated_date || '')) handleUpdateField(step.id, 'estimated_date', e.target.value);
                   }}
-                  className="bg-transparent text-[11px] text-[#9A9890] outline-none mt-1"
+                  className="bg-transparent text-[11px] text-[#9aa3b2] outline-none mt-1"
                 />
               </div>
 
               <div className="flex items-center gap-0.5 shrink-0">
                 {savingId === step.id ? (
-                  <Loader2 size={14} className="text-[#6B4FBB] animate-spin" />
+                  <Loader2 size={14} className="text-[#00bcd4] animate-spin" />
                 ) : (
                   statusButtons.map(btn => (
                     <button
@@ -186,7 +186,7 @@ export function StepManager({ steps, projectId, onUpdate }: StepManagerProps) {
                       className={`p-1.5 rounded-md transition-all duration-150 ${
                         step.status === btn.value
                           ? btn.activeColor
-                          : 'text-[#B8B5AE] hover:text-[#7A7870]'
+                          : 'text-[#9aa3b2] hover:text-[#5a6478]'
                       }`}
                     >
                       {btn.icon}
@@ -198,7 +198,7 @@ export function StepManager({ steps, projectId, onUpdate }: StepManagerProps) {
                   title="Obriši korak"
                   onClick={() => handleDeleteStep(step)}
                   disabled={deletingId === step.id}
-                  className="p-1.5 rounded-md text-[#B8B5AE] hover:text-[#FF4D4D] hover:bg-[#FF4D4D]/8 transition-all ml-0.5 disabled:opacity-40"
+                  className="p-1.5 rounded-md text-[#9aa3b2] hover:text-[#e53e3e] hover:bg-[#e53e3e]/8 transition-all ml-0.5 disabled:opacity-40"
                 >
                   {deletingId === step.id ? (
                     <Loader2 size={14} className="animate-spin" />
@@ -213,11 +213,11 @@ export function StepManager({ steps, projectId, onUpdate }: StepManagerProps) {
       </div>
 
       {/* Add step */}
-      <div className="mt-3 border border-dashed border-[#E0DDD6] rounded-lg p-3 space-y-3">
+      <div className="mt-3 border border-dashed border-[#e3e7ee] rounded-lg p-3 space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-end gap-3">
           <div className="flex-1 space-y-2">
             <div>
-              <label className="flex items-center gap-1.5 text-[11px] text-[#9A9890] mb-1">
+              <label className="flex items-center gap-1.5 text-[11px] text-[#9aa3b2] mb-1">
                 <ListOrdered size={12} />
                 Korak po redu (umetanje)
               </label>
@@ -239,7 +239,7 @@ export function StepManager({ steps, projectId, onUpdate }: StepManagerProps) {
                   );
                 })}
               </select>
-              <p className="text-[11px] text-[#B8B5AE] mt-1">
+              <p className="text-[11px] text-[#9aa3b2] mt-1">
                 Novi korak dobija ovaj redni broj; postojeći se pomeraju nadole.
               </p>
             </div>

@@ -42,13 +42,13 @@ export function DeployManager({ deploys, onUpdate, onDelete }: DeployManagerProp
 
   return (
     <div>
-      <h4 className="text-[13px] font-medium text-[#1A1916] mb-3 flex items-center gap-2">
-        <Rocket size={14} className="text-[#6B4FBB]" />
+      <h4 className="text-[13px] font-medium text-[#1a2030] mb-3 flex items-center gap-2">
+        <Rocket size={14} className="text-[#00bcd4]" />
         Deploy-i ({deploys.length})
       </h4>
 
       {deploys.length === 0 ? (
-        <p className="text-[13px] text-[#9A9890] text-center py-4">
+        <p className="text-[13px] text-[#9aa3b2] text-center py-4">
           Nema deploy zapisa. Webhook ce ih automatski kreirati.
         </p>
       ) : (
@@ -61,15 +61,15 @@ export function DeployManager({ deploys, onUpdate, onDelete }: DeployManagerProp
                 key={deploy.id}
                 className={`rounded-lg border px-3 py-2.5 transition-all ${
                   deploy.is_visible
-                    ? 'border-[#22A06B]/20 bg-[#E8F6EF]/30'
-                    : 'border-[#E0DDD6] bg-[#F7F6F3]'
+                    ? 'border-[#0faa6e]/20 bg-[#e6f8f2]/30'
+                    : 'border-[#e3e7ee] bg-[#f7f8fa]'
                 }`}
               >
                 <div className="flex items-start gap-2">
                   <div className="flex-1 min-w-0">
                     {/* Date + deploy ID */}
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[11px] text-[#9A9890]">
+                      <span className="text-[11px] text-[#9aa3b2]">
                         {new Date(deploy.deployed_at).toLocaleDateString('sr-Latn', {
                           day: 'numeric',
                           month: 'short',
@@ -82,7 +82,7 @@ export function DeployManager({ deploys, onUpdate, onDelete }: DeployManagerProp
                         })}
                       </span>
                       {deploy.is_visible && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#E8F6EF] text-[#22A06B] font-medium">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#e6f8f2] text-[#0faa6e] font-medium">
                           Vidljiv
                         </span>
                       )}
@@ -91,7 +91,7 @@ export function DeployManager({ deploys, onUpdate, onDelete }: DeployManagerProp
                           href={deploy.deploy_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[11px] text-[#6B4FBB] hover:underline flex items-center gap-0.5"
+                          className="text-[11px] text-[#00bcd4] hover:underline flex items-center gap-0.5"
                         >
                           <ExternalLink size={9} />
                         </a>
@@ -100,7 +100,7 @@ export function DeployManager({ deploys, onUpdate, onDelete }: DeployManagerProp
 
                     {/* Commit message hint */}
                     {deploy.commit_message && (
-                      <p className="text-[11px] text-[#B8B5AE] mb-1 truncate">
+                      <p className="text-[11px] text-[#9aa3b2] mb-1 truncate">
                         Commit: {deploy.commit_message}
                       </p>
                     )}
@@ -133,9 +133,9 @@ export function DeployManager({ deploys, onUpdate, onDelete }: DeployManagerProp
                         className="text-[12px] mt-0.5 text-left w-full"
                       >
                         {deploy.admin_summary ? (
-                          <span className="text-[#1A1916]">{deploy.admin_summary}</span>
+                          <span className="text-[#1a2030]">{deploy.admin_summary}</span>
                         ) : (
-                          <span className="text-[#B8B5AE] italic">+ Dodaj opis za klijenta...</span>
+                          <span className="text-[#9aa3b2] italic">+ Dodaj opis za klijenta...</span>
                         )}
                       </button>
                     )}
@@ -144,7 +144,7 @@ export function DeployManager({ deploys, onUpdate, onDelete }: DeployManagerProp
                   {/* Actions */}
                   <div className="flex items-center gap-0.5 shrink-0 mt-0.5">
                     {savingId === deploy.id && !isEditing ? (
-                      <Loader2 size={14} className="text-[#6B4FBB] animate-spin" />
+                      <Loader2 size={14} className="text-[#00bcd4] animate-spin" />
                     ) : (
                       <>
                         <button
@@ -153,8 +153,8 @@ export function DeployManager({ deploys, onUpdate, onDelete }: DeployManagerProp
                           onClick={() => toggleVisibility(deploy)}
                           className={`p-1.5 rounded-md transition-all ${
                             deploy.is_visible
-                              ? 'text-[#22A06B] bg-[#E8F6EF] hover:bg-[#22A06B]/15'
-                              : 'text-[#B8B5AE] hover:text-[#6B4FBB] hover:bg-[#EDE9FF]'
+                              ? 'text-[#0faa6e] bg-[#e6f8f2] hover:bg-[#0faa6e]/15'
+                              : 'text-[#9aa3b2] hover:text-[#00bcd4] hover:bg-[#e6f7fa]'
                           }`}
                         >
                           {deploy.is_visible ? <Eye size={14} /> : <EyeOff size={14} />}
@@ -164,7 +164,7 @@ export function DeployManager({ deploys, onUpdate, onDelete }: DeployManagerProp
                           title="Obriši"
                           onClick={() => handleDelete(deploy)}
                           disabled={deletingId === deploy.id}
-                          className="p-1.5 rounded-md text-[#B8B5AE] hover:text-[#FF4D4D] hover:bg-[#FF4D4D]/8 transition-all disabled:opacity-40"
+                          className="p-1.5 rounded-md text-[#9aa3b2] hover:text-[#e53e3e] hover:bg-[#e53e3e]/8 transition-all disabled:opacity-40"
                         >
                           {deletingId === deploy.id ? (
                             <Loader2 size={14} className="animate-spin" />

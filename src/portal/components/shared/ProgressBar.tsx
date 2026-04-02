@@ -11,19 +11,19 @@ export function ProgressBar({ percentage, showLabel = true, height = 5 }: Progre
     <div className="w-full">
       {showLabel && (
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[12px] text-[#9A9890]">Napredak</span>
-          <span className="text-[12px] font-semibold text-[#6B4FBB]">
+          <span className="text-[12px] text-[#9aa3b2]">Napredak</span>
+          <span className="text-[12px] font-semibold text-[#00bcd4]">
             {Math.round(clamped)}%
           </span>
         </div>
       )}
       <div
         className="w-full rounded-[10px] overflow-hidden"
-        style={{ height, background: '#F0EDE7' }}
+        style={{ height, background: '#e3e7ee' }}
       >
         <div
           className="rounded-[10px] transition-all duration-500 ease-out"
-          style={{ width: `${clamped}%`, height, background: '#6B4FBB' }}
+          style={{ width: `${clamped}%`, height, background: '#00bcd4' }}
         />
       </div>
     </div>

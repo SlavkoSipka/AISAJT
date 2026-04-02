@@ -92,29 +92,29 @@ export function NewProjectForm() {
   };
 
   const fieldClass = 'portal-input text-[13px]';
-  const labelClass = 'block text-[11px] text-[#9A9890] font-medium mb-1.5';
+  const labelClass = 'block text-[11px] text-[#9aa3b2] font-medium mb-1.5';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5 max-w-2xl">
       <div className="portal-card">
-        <h4 className="text-[13px] font-medium text-[#1A1916] mb-1 flex items-center gap-2">
-          <FolderPlus size={16} className="text-[#6B4FBB]" />
+        <h4 className="text-[13px] font-medium text-[#1a2030] mb-1 flex items-center gap-2">
+          <FolderPlus size={16} className="text-[#00bcd4]" />
           Klijent
         </h4>
-        <p className="text-[12px] text-[#9A9890] mb-4">
+        <p className="text-[12px] text-[#9aa3b2] mb-4">
           Izaberite postojećeg klijenta. Nema klijenta?{' '}
-          <Link to="/portal/admin/klijenti/novi" className="text-[#6B4FBB] hover:underline">
+          <Link to="/portal/admin/klijenti/novi" className="text-[#00bcd4] hover:underline">
             Dodaj novog klijenta
           </Link>
         </p>
 
         {loadingClients ? (
-          <div className="flex items-center gap-2 text-[#9A9890] text-[13px]">
+          <div className="flex items-center gap-2 text-[#9aa3b2] text-[13px]">
             <Loader2 size={14} className="animate-spin" />
             Učitavanje...
           </div>
         ) : clients.length === 0 ? (
-          <div className="rounded-lg bg-[#EDE9FF]/40 border border-[#6B4FBB]/15 px-4 py-3 text-[13px] text-[#6B4FBB] flex items-center gap-2">
+          <div className="rounded-lg bg-[#e6f7fa]/40 border border-[#00bcd4]/15 px-4 py-3 text-[13px] text-[#00bcd4] flex items-center gap-2">
             <UserPlus size={16} />
             Nema klijenata.{' '}
             <Link to="/portal/admin/klijenti/novi" className="underline font-medium">
@@ -138,14 +138,14 @@ export function NewProjectForm() {
             </select>
             <ChevronDown
               size={14}
-              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#9A9890]"
+              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#9aa3b2]"
             />
           </div>
         )}
       </div>
 
       <div className="portal-card">
-        <h4 className="text-[13px] font-medium text-[#1A1916] mb-4">
+        <h4 className="text-[13px] font-medium text-[#1a2030] mb-4">
           Podaci o projektu
         </h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -181,7 +181,7 @@ export function NewProjectForm() {
       </div>
 
       <div className="portal-card">
-        <h4 className="text-[13px] font-medium text-[#1A1916] mb-4">
+        <h4 className="text-[13px] font-medium text-[#1a2030] mb-4">
           Paket
         </h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -208,7 +208,7 @@ export function NewProjectForm() {
       </div>
 
       {error && (
-        <div className="text-[#FF4D4D] text-[13px] bg-[#FF4D4D]/8 rounded-lg px-4 py-3">
+        <div className="text-[#e53e3e] text-[13px] bg-[#e53e3e]/8 rounded-lg px-4 py-3">
           {error}
         </div>
       )}

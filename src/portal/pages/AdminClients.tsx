@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Sidebar } from '../components/layout/Sidebar';
 import { Topbar } from '../components/layout/Topbar';
 import { Loader2, UserPlus, User, FolderOpen } from 'lucide-react';
 import type { Profile } from '../lib/types';
@@ -57,13 +56,11 @@ export function AdminClients() {
   }, []);
 
   return (
-    <div className="portal-root">
-      <Sidebar />
-      <div className="md:ml-[220px] min-h-screen pb-20 md:pb-0">
-        <Topbar title="Klijenti" />
-        <main className="px-6 py-5">
+    <>
+      <Topbar title="Klijenti" />
+      <main className="px-6 py-5">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-[16px] font-semibold text-[#1A1916] tracking-[-0.3px]">
+            <h2 className="text-[16px] font-semibold text-[#1a2030] tracking-[-0.3px]">
               Klijenti ({clients.length})
             </h2>
             <Link
@@ -77,13 +74,13 @@ export function AdminClients() {
 
           {loading ? (
             <div className="flex justify-center py-16">
-              <Loader2 className="w-6 h-6 text-[#6B4FBB] animate-spin" />
+              <Loader2 className="w-6 h-6 text-[#00bcd4] animate-spin" />
             </div>
           ) : clients.length === 0 ? (
             <div className="portal-card text-center py-16">
-              <User size={36} className="text-[#B8B5AE] mx-auto mb-3" />
-              <p className="text-[#3D3C38] font-medium text-[14px] mb-1">Nema klijenata</p>
-              <p className="text-[#9A9890] text-[13px] mb-5">
+              <User size={36} className="text-[#9aa3b2] mx-auto mb-3" />
+              <p className="text-[#1a2030] font-medium text-[14px] mb-1">Nema klijenata</p>
+              <p className="text-[#9aa3b2] text-[13px] mb-5">
                 Dodajte prvog klijenta da biste počeli.
               </p>
               <Link
@@ -98,14 +95,14 @@ export function AdminClients() {
             <div className="portal-card overflow-x-auto">
               <table className="w-full min-w-[500px]">
                 <thead>
-                  <tr className="border-b border-[#E0DDD6]">
-                    <th className="text-left py-3 px-4 text-[11px] text-[#9A9890] font-medium">
+                  <tr className="border-b border-[#e3e7ee]">
+                    <th className="text-left py-3 px-4 text-[11px] text-[#9aa3b2] font-medium">
                       Klijent
                     </th>
-                    <th className="text-left py-3 px-4 text-[11px] text-[#9A9890] font-medium">
+                    <th className="text-left py-3 px-4 text-[11px] text-[#9aa3b2] font-medium">
                       Projekti
                     </th>
-                    <th className="text-left py-3 px-4 text-[11px] text-[#9A9890] font-medium">
+                    <th className="text-left py-3 px-4 text-[11px] text-[#9aa3b2] font-medium">
                       Dodat
                     </th>
                     <th className="py-3 px-4" />
@@ -115,29 +112,29 @@ export function AdminClients() {
                   {clients.map(({ profile, projectCount }) => (
                     <tr
                       key={profile.id}
-                      className="border-b border-[#F0EDE7] hover:bg-[#F7F6F3] transition-colors"
+                      className="border-b border-[#e3e7ee] hover:bg-[#f7f8fa] transition-colors"
                     >
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-[#EDE9FF] flex items-center justify-center shrink-0">
-                            <User size={14} className="text-[#6B4FBB]" />
+                          <div className="w-8 h-8 rounded-full bg-[#e6f7fa] flex items-center justify-center shrink-0">
+                            <User size={14} className="text-[#00bcd4]" />
                           </div>
                           <div>
-                            <p className="text-[13px] font-medium text-[#1A1916]">
+                            <p className="text-[13px] font-medium text-[#1a2030]">
                               {profile.full_name || '—'}
                             </p>
-                            <p className="text-[11px] text-[#B8B5AE]">{profile.id.slice(0, 8)}…</p>
+                            <p className="text-[11px] text-[#9aa3b2]">{profile.id.slice(0, 8)}…</p>
                           </div>
                         </div>
                       </td>
                       <td className="py-3 px-4">
-                        <div className="flex items-center gap-1.5 text-[13px] text-[#3D3C38]">
-                          <FolderOpen size={14} className="text-[#9A9890]" />
+                        <div className="flex items-center gap-1.5 text-[13px] text-[#1a2030]">
+                          <FolderOpen size={14} className="text-[#9aa3b2]" />
                           {projectCount}
                         </div>
                       </td>
                       <td className="py-3 px-4">
-                        <span className="text-[13px] text-[#3D3C38]">
+                        <span className="text-[13px] text-[#1a2030]">
                           {new Date(profile.created_at).toLocaleDateString('sr-Latn', {
                             day: 'numeric',
                             month: 'short',
@@ -149,7 +146,7 @@ export function AdminClients() {
                         <Link
                           to="/portal/admin/projekti/novi"
                           state={{ clientId: profile.id, clientName: profile.full_name }}
-                          className="text-[12px] text-[#6B4FBB] hover:underline transition-colors"
+                          className="text-[12px] text-[#00bcd4] hover:underline transition-colors"
                         >
                           + Novi projekat
                         </Link>
@@ -161,7 +158,6 @@ export function AdminClients() {
             </div>
           )}
         </main>
-      </div>
-    </div>
+    </>
   );
 }

@@ -10,7 +10,7 @@ interface MessageReplyProps {
 export function MessageReply({ messages, currentUserId, onSend }: MessageReplyProps) {
   return (
     <div>
-      <h4 className="text-[13px] font-medium text-[#1A1916] mb-3">
+      <h4 className="text-[13px] font-medium text-[#1a2030] mb-3">
         Poruke sa klijentom
       </h4>
       <MessageThread

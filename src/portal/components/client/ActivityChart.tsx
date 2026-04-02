@@ -37,7 +37,7 @@ export function ActivityChart({ deploys }: ActivityChartProps) {
 
   return (
     <div className="portal-card portal-animate-in" style={{ animationDelay: '0.2s' }}>
-      <h3 className="text-[13px] font-medium text-[#1A1916] mb-[14px]">
+      <h3 className="text-[13px] font-medium text-[#1a2030] mb-[14px]">
         Aktivnost ove nedelje
       </h3>
       <div className="flex items-end justify-between gap-2" style={{ height: 50 }}>
@@ -50,7 +50,7 @@ export function ActivityChart({ deploys }: ActivityChartProps) {
                 className="w-full rounded-t-[3px] transition-all"
                 style={{
                   height: Math.max(h, 2),
-                  background: isCurrent ? '#6B4FBB' : '#EDE9FF',
+                  background: isCurrent ? '#00bcd4' : '#e6f7fa',
                 }}
               />
             </div>
@@ -59,7 +59,7 @@ export function ActivityChart({ deploys }: ActivityChartProps) {
       </div>
       <div className="flex justify-between mt-1.5">
         {DAYS.map((d, i) => (
-          <span key={d} className="flex-1 text-center text-[9px]" style={{ color: i === todayIdx ? '#6B4FBB' : '#B8B5AE' }}>
+          <span key={d} className="flex-1 text-center text-[9px]" style={{ color: i === todayIdx ? '#00bcd4' : '#9aa3b2' }}>
             {d}
           </span>
         ))}

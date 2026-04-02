@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { ProjectsTable } from '../components/admin/ProjectsTable';
-import { Sidebar } from '../components/layout/Sidebar';
 import { Topbar } from '../components/layout/Topbar';
 import { Loader2, PlusCircle } from 'lucide-react';
 import type { ProjectWithClient, Project, Profile, ProjectStep } from '../lib/types';
@@ -62,13 +61,11 @@ export function AdminOverview() {
   }, []);
 
   return (
-    <div className="portal-root">
-      <Sidebar />
-      <div className="md:ml-[220px] min-h-screen pb-20 md:pb-0">
-        <Topbar title="Svi projekti" />
-        <main className="px-6 py-5">
+    <>
+      <Topbar title="Svi projekti" />
+      <main className="px-6 py-5">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-[16px] font-semibold text-[#1A1916] tracking-[-0.3px]">
+            <h2 className="text-[16px] font-semibold text-[#1a2030] tracking-[-0.3px]">
               Projekti ({projects.length})
             </h2>
             <Link
@@ -82,13 +79,12 @@ export function AdminOverview() {
 
           {loading ? (
             <div className="flex justify-center py-16">
-              <Loader2 className="w-6 h-6 text-[#6B4FBB] animate-spin" />
+              <Loader2 className="w-6 h-6 text-[#00bcd4] animate-spin" />
             </div>
           ) : (
             <ProjectsTable projects={projects} />
           )}
         </main>
-      </div>
-    </div>
+    </>
   );
 }

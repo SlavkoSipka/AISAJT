@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Sidebar } from '../components/layout/Sidebar';
 import { Topbar } from '../components/layout/Topbar';
 import { readErrorFromResponse } from '../lib/http';
 import { Loader2, UserPlus, Copy, Check, ArrowLeft } from 'lucide-react';
@@ -70,14 +69,12 @@ export function AdminNewClient() {
   };
 
   return (
-    <div className="portal-root">
-      <Sidebar />
-      <div className="md:ml-[220px] min-h-screen pb-20 md:pb-0">
-        <Topbar title="Novi klijent" />
-        <main className="px-6 py-5">
+    <>
+      <Topbar title="Novi klijent" />
+      <main className="px-6 py-5">
           <Link
             to="/portal/admin/klijenti"
-            className="flex items-center gap-1.5 text-[13px] text-[#7A7870] hover:text-[#1A1916] mb-5 transition-colors w-fit"
+            className="flex items-center gap-1.5 text-[13px] text-[#5a6478] hover:text-[#1a2030] mb-5 transition-colors w-fit"
           >
             <ArrowLeft size={14} />
             Nazad na klijente
@@ -86,17 +83,17 @@ export function AdminNewClient() {
           {!created ? (
             <div className="max-w-md">
               <div className="portal-card portal-animate-in">
-                <h3 className="text-[14px] font-medium text-[#1A1916] mb-1 flex items-center gap-2">
-                  <UserPlus size={16} className="text-[#6B4FBB]" />
+                <h3 className="text-[14px] font-medium text-[#1a2030] mb-1 flex items-center gap-2">
+                  <UserPlus size={16} className="text-[#00bcd4]" />
                   Dodaj novog klijenta
                 </h3>
-                <p className="text-[12px] text-[#9A9890] mb-5">
+                <p className="text-[12px] text-[#9aa3b2] mb-5">
                   Postavite lozinku koju će klijent koristiti za prijavu.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-[11px] text-[#9A9890] font-medium mb-1.5">
+                    <label className="block text-[11px] text-[#9aa3b2] font-medium mb-1.5">
                       Ime i prezime *
                     </label>
                     <input
@@ -109,7 +106,7 @@ export function AdminNewClient() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-[#9A9890] font-medium mb-1.5">
+                    <label className="block text-[11px] text-[#9aa3b2] font-medium mb-1.5">
                       Email *
                     </label>
                     <input
@@ -123,7 +120,7 @@ export function AdminNewClient() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-[#9A9890] font-medium mb-1.5">
+                    <label className="block text-[11px] text-[#9aa3b2] font-medium mb-1.5">
                       Lozinka * (min. {MIN_PASSWORD_LENGTH} karaktera)
                     </label>
                     <input
@@ -138,7 +135,7 @@ export function AdminNewClient() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-[#9A9890] font-medium mb-1.5">
+                    <label className="block text-[11px] text-[#9aa3b2] font-medium mb-1.5">
                       Potvrdi lozinku *
                     </label>
                     <input
@@ -177,25 +174,25 @@ export function AdminNewClient() {
                     <Check size={18} className="text-[#22A06B]" />
                   </div>
                   <div>
-                    <h3 className="text-[14px] font-medium text-[#1A1916]">
+                    <h3 className="text-[14px] font-medium text-[#1a2030]">
                       Klijent je kreiran!
                     </h3>
-                    <p className="text-[12px] text-[#9A9890]">
+                    <p className="text-[12px] text-[#9aa3b2]">
                       Klijent se prijavljuje sa emailom ispod i lozinkom koju ste postavili.
                     </p>
                   </div>
                 </div>
 
-                <div className="rounded-lg bg-[#F7F6F3] border border-[#E0DDD6] px-4 py-3">
+                <div className="rounded-lg bg-[#f7f8fa] border border-[#e3e7ee] px-4 py-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-[11px] text-[#9A9890] mb-0.5">Email za prijavu</p>
-                      <p className="text-[13px] font-medium text-[#1A1916]">{created.email}</p>
+                      <p className="text-[11px] text-[#9aa3b2] mb-0.5">Email za prijavu</p>
+                      <p className="text-[13px] font-medium text-[#1a2030]">{created.email}</p>
                     </div>
                     <button
                       type="button"
                       onClick={copyEmail}
-                      className="text-[#9A9890] hover:text-[#6B4FBB] transition-colors p-1.5 rounded"
+                      className="text-[#9aa3b2] hover:text-[#00bcd4] transition-colors p-1.5 rounded"
                       title="Kopiraj email"
                     >
                       {copiedEmail ? <Check size={14} className="text-[#22A06B]" /> : <Copy size={14} />}
@@ -222,7 +219,6 @@ export function AdminNewClient() {
             </div>
           )}
         </main>
-      </div>
-    </div>
+    </>
   );
 }

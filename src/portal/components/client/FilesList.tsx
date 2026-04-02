@@ -10,9 +10,9 @@ interface FilesListProps {
 }
 
 const fileIcons: Record<string, React.ReactNode> = {
-  image: <Image size={16} className="text-[#6B4FBB]" />,
-  pdf: <FileText size={16} className="text-[#FF4D4D]" />,
-  document: <File size={16} className="text-[#E8902A]" />,
+  image: <Image size={16} className="text-[#00bcd4]" />,
+  pdf: <FileText size={16} className="text-[#e53e3e]" />,
+  document: <File size={16} className="text-[#e8970a]" />,
 };
 
 export function FilesList({ files, uploading, onUpload, compact }: FilesListProps) {
@@ -43,8 +43,8 @@ export function FilesList({ files, uploading, onUpload, compact }: FilesListProp
         onClick={() => inputRef.current?.click()}
         className={`border border-dashed rounded-lg p-6 text-center cursor-pointer transition-all duration-150 ${
           dragOver
-            ? 'border-[#6B4FBB] bg-[#EDE9FF]/30'
-            : 'border-[#E0DDD6] hover:border-[#B8B5AE]'
+            ? 'border-[#00bcd4] bg-[#e6f7fa]/30'
+            : 'border-[#e3e7ee] hover:border-[#9aa3b2]'
         }`}
       >
         <input
@@ -54,12 +54,12 @@ export function FilesList({ files, uploading, onUpload, compact }: FilesListProp
           className="hidden"
         />
         {uploading ? (
-          <Loader2 className="w-5 h-5 text-[#6B4FBB] animate-spin mx-auto" />
+          <Loader2 className="w-5 h-5 text-[#00bcd4] animate-spin mx-auto" />
         ) : (
           <>
-            <Upload size={20} className="text-[#9A9890] mx-auto mb-2" />
-            <p className="text-[13px] text-[#3D3C38]">
-              Prevucite fajl ovde ili <span className="text-[#6B4FBB]">kliknite</span>
+            <Upload size={20} className="text-[#9aa3b2] mx-auto mb-2" />
+            <p className="text-[13px] text-[#1a2030]">
+              Prevucite fajl ovde ili <span className="text-[#00bcd4]">kliknite</span>
             </p>
           </>
         )}
@@ -73,12 +73,12 @@ export function FilesList({ files, uploading, onUpload, compact }: FilesListProp
               href={file.file_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#F7F6F3] hover:bg-[#F0EDE7] border border-[#F0EDE7] transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#f7f8fa] hover:bg-[#f0f2f5] border border-[#e3e7ee] transition-all duration-150"
             >
               {fileIcons[file.file_type || 'document']}
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] text-[#1A1916] truncate">{file.file_name}</p>
-                <p className="text-[11px] text-[#B8B5AE]">
+                <p className="text-[13px] text-[#1a2030] truncate">{file.file_name}</p>
+                <p className="text-[11px] text-[#9aa3b2]">
                   {file.uploader?.full_name || 'Nepoznat'} &middot;{' '}
                   {new Date(file.created_at).toLocaleDateString('sr-Latn')}
                 </p>
@@ -89,7 +89,7 @@ export function FilesList({ files, uploading, onUpload, compact }: FilesListProp
       )}
 
       {files.length === 0 && !uploading && (
-        <p className="text-[13px] text-[#9A9890] text-center py-4 mt-2">
+        <p className="text-[13px] text-[#9aa3b2] text-center py-4 mt-2">
           Nema otpremljenih fajlova.
         </p>
       )}

@@ -14,7 +14,7 @@ export function RoleGuard({ children, requiredRole }: RoleGuardProps) {
   if (loading) {
     return (
       <div className="portal-root flex items-center justify-center min-h-screen">
-        <Loader2 className="w-6 h-6 text-[#6B4FBB] animate-spin" />
+        <Loader2 className="w-6 h-6 text-[#00bcd4] animate-spin" />
       </div>
     );
   }

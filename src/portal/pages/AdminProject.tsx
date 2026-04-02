@@ -11,7 +11,6 @@ import { DeployManager } from '../components/admin/DeployManager';
 import { FilesList } from '../components/client/FilesList';
 import { StatusBadge } from '../components/shared/StatusBadge';
 import { ProgressBar } from '../components/shared/ProgressBar';
-import { Sidebar } from '../components/layout/Sidebar';
 import { Topbar } from '../components/layout/Topbar';
 import {
   Loader2,
@@ -98,25 +97,20 @@ export function AdminProject() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="portal-root flex items-center justify-center min-h-screen">
-        <Loader2 className="w-6 h-6 text-[#6B4FBB] animate-spin" />
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <Loader2 className="w-6 h-6 text-[#00bcd4] animate-spin" />
+    </div>
+  );
 
   if (!project) {
     return (
-      <div className="portal-root">
-        <Sidebar />
-        <div className="md:ml-[220px] min-h-screen">
-          <Topbar title="Projekat nije pronađen" />
-          <main className="p-6 text-center text-[#3D3C38]">
-            Projekat sa ovim ID-jem ne postoji.
-          </main>
-        </div>
-      </div>
+      <>
+        <Topbar title="Projekat nije pronađen" />
+        <main className="p-6 text-center text-[#1a2030]">
+          Projekat sa ovim ID-jem ne postoji.
+        </main>
+      </>
     );
   }
 
@@ -125,14 +119,12 @@ export function AdminProject() {
     : 0;
 
   return (
-    <div className="portal-root">
-      <Sidebar />
-      <div className="md:ml-[220px] min-h-screen pb-20 md:pb-0">
-        <Topbar title={project.name} />
-        <main className="px-6 py-5">
+    <>
+      <Topbar title={project.name} />
+      <main className="px-6 py-5">
           <button
             onClick={() => navigate('/portal/admin')}
-            className="flex items-center gap-1.5 text-[13px] text-[#7A7870] hover:text-[#1A1916] mb-4 transition-colors"
+            className="flex items-center gap-1.5 text-[13px] text-[#5a6478] hover:text-[#1a2030] mb-4 transition-colors"
           >
             <ArrowLeft size={14} />
             Nazad na projekte
@@ -143,18 +135,18 @@ export function AdminProject() {
             <div className="lg:col-span-3 space-y-5">
               <div className="portal-card portal-animate-in">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-[13px] font-medium text-[#1A1916]">
+                  <h3 className="text-[13px] font-medium text-[#1a2030]">
                     Informacije o projektu
                   </h3>
                   <div className="flex items-center gap-2">
                     <StatusBadge status={project.status} />
-                    {saving && <Loader2 size={14} className="text-[#6B4FBB] animate-spin" />}
+                    {saving && <Loader2 size={14} className="text-[#00bcd4] animate-spin" />}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[11px] text-[#9A9890] mb-1 block">Naziv</label>
+                    <label className="text-[11px] text-[#9aa3b2] mb-1 block">Naziv</label>
                     <input
                       defaultValue={project.name}
                       onBlur={e => {
@@ -164,9 +156,9 @@ export function AdminProject() {
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] text-[#9A9890] mb-1 block">Domen</label>
+                    <label className="text-[11px] text-[#9aa3b2] mb-1 block">Domen</label>
                     <div className="flex items-center gap-2">
-                      <Globe size={14} className="text-[#9A9890] shrink-0" />
+                      <Globe size={14} className="text-[#9aa3b2] shrink-0" />
                       <input
                         defaultValue={project.domain || ''}
                         onBlur={e => handleProjectUpdate('domain', e.target.value || null)}
@@ -176,7 +168,7 @@ export function AdminProject() {
                     </div>
                   </div>
                   <div>
-                    <label className="text-[11px] text-[#9A9890] mb-1 block">Preview URL</label>
+                    <label className="text-[11px] text-[#9aa3b2] mb-1 block">Preview URL</label>
                     <input
                       defaultValue={project.netlify_preview_url || ''}
                       onBlur={e => handleProjectUpdate('netlify_preview_url', e.target.value || null)}
@@ -185,7 +177,7 @@ export function AdminProject() {
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] text-[#9A9890] mb-1 block">Status</label>
+                    <label className="text-[11px] text-[#9aa3b2] mb-1 block">Status</label>
                     <select
                       defaultValue={project.status}
                       onChange={e => handleProjectUpdate('status', e.target.value)}
@@ -197,7 +189,7 @@ export function AdminProject() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-[11px] text-[#9A9890] mb-1 block">Paket</label>
+                    <label className="text-[11px] text-[#9aa3b2] mb-1 block">Paket</label>
                     <input
                       defaultValue={project.package_name || ''}
                       onBlur={e => handleProjectUpdate('package_name', e.target.value || null)}
@@ -206,7 +198,7 @@ export function AdminProject() {
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] text-[#9A9890] mb-1 block">Cena (EUR)</label>
+                    <label className="text-[11px] text-[#9aa3b2] mb-1 block">Cena (EUR)</label>
                     <input
                       type="number"
                       defaultValue={project.package_price || ''}
@@ -225,7 +217,7 @@ export function AdminProject() {
                     href={ensureHttpsUrl(project.netlify_preview_url)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[12px] text-[#6B4FBB] hover:underline mt-3"
+                    className="inline-flex items-center gap-1.5 text-[12px] text-[#00bcd4] hover:underline mt-3"
                   >
                     <ExternalLink size={12} />
                     Otvori preview
@@ -253,7 +245,7 @@ export function AdminProject() {
               </div>
 
               <div className="portal-card portal-animate-in" style={{ animationDelay: '0.15s' }}>
-                <h4 className="text-[13px] font-medium text-[#1A1916] mb-3">
+                <h4 className="text-[13px] font-medium text-[#1a2030] mb-3">
                   Fajlovi
                 </h4>
                 <FilesList
@@ -274,16 +266,16 @@ export function AdminProject() {
 
               {client && (
                 <div className="portal-card portal-animate-in" style={{ animationDelay: '0.25s' }}>
-                  <h4 className="text-[13px] font-medium text-[#1A1916] mb-3">
+                  <h4 className="text-[13px] font-medium text-[#1a2030] mb-3">
                     Klijent
                   </h4>
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-full bg-[#EDE9FF] flex items-center justify-center">
-                      <User size={16} className="text-[#6B4FBB]" />
+                    <div className="w-10 h-10 rounded-full bg-[#e6f7fa] flex items-center justify-center">
+                      <User size={16} className="text-[#00bcd4]" />
                     </div>
                     <div>
-                      <p className="text-[13px] font-medium text-[#1A1916]">{client.full_name}</p>
-                      <p className="text-[11px] text-[#B8B5AE]">{client.id}</p>
+                      <p className="text-[13px] font-medium text-[#1a2030]">{client.full_name}</p>
+                      <p className="text-[11px] text-[#9aa3b2]">{client.id}</p>
                     </div>
                   </div>
                   <button
@@ -298,7 +290,6 @@ export function AdminProject() {
             </div>
           </div>
         </main>
-      </div>
-    </div>
+    </>
   );
 }

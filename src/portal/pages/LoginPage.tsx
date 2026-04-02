@@ -54,33 +54,33 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#F7F6F3', fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#f0f2f5', fontFamily: "'DM Sans', system-ui, sans-serif" }}>
       <div className="w-full max-w-[420px]" style={{ animation: 'portal-fade-in 0.4s ease forwards' }}>
         {/* Logo + heading */}
         <div className="text-center mb-8">
-          <h1 className="text-[24px] font-semibold text-[#1A1916] tracking-[-0.5px] mb-1">
+          <h1 className="text-[24px] font-semibold text-[#1a2030] tracking-[-0.5px] mb-1">
             Klijentski portal
           </h1>
-          <p className="text-[#7A7870] text-[13px]">
+          <p className="text-[#5a6478] text-[13px]">
             Prijavite se da pratite napredak vašeg projekta
           </p>
         </div>
 
         {/* Card */}
-        <div style={{ background: '#FFFFFF', border: '0.5px solid #E0DDD6', borderRadius: 12, padding: '28px 24px' }}>
+        <div style={{ background: '#FFFFFF', border: '0.5px solid #e3e7ee', borderRadius: 12, padding: '28px 24px' }}>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-[12px] text-[#7A7870] font-medium mb-1.5">
+              <label className="block text-[12px] text-[#5a6478] font-medium mb-1.5">
                 Email adresa
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-3.5 py-2.5 text-[13px] text-[#1A1916] rounded-lg outline-none transition-colors"
-                style={{ background: '#F7F6F3', border: '0.5px solid #E0DDD6' }}
-                onFocus={e => (e.target.style.borderColor = '#6B4FBB')}
-                onBlur={e => (e.target.style.borderColor = '#E0DDD6')}
+                className="w-full px-3.5 py-2.5 text-[13px] text-[#1a2030] rounded-lg outline-none transition-colors"
+                style={{ background: '#f7f8fa', border: '0.5px solid #e3e7ee' }}
+                onFocus={e => (e.target.style.borderColor = '#00bcd4')}
+                onBlur={e => (e.target.style.borderColor = '#e3e7ee')}
                 placeholder="vas@email.com"
                 required
                 autoComplete="email"
@@ -88,7 +88,7 @@ export function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-[12px] text-[#7A7870] font-medium mb-1.5">
+              <label className="block text-[12px] text-[#5a6478] font-medium mb-1.5">
                 Lozinka
               </label>
               <div className="relative">
@@ -96,10 +96,10 @@ export function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  className="w-full px-3.5 py-2.5 pr-10 text-[13px] text-[#1A1916] rounded-lg outline-none transition-colors"
-                  style={{ background: '#F7F6F3', border: '0.5px solid #E0DDD6' }}
-                  onFocus={e => (e.target.style.borderColor = '#6B4FBB')}
-                  onBlur={e => (e.target.style.borderColor = '#E0DDD6')}
+                  className="w-full px-3.5 py-2.5 pr-10 text-[13px] text-[#1a2030] rounded-lg outline-none transition-colors"
+                  style={{ background: '#f7f8fa', border: '0.5px solid #e3e7ee' }}
+                  onFocus={e => (e.target.style.borderColor = '#00bcd4')}
+                  onBlur={e => (e.target.style.borderColor = '#e3e7ee')}
                   placeholder="••••••••"
                   required
                   autoComplete="current-password"
@@ -107,7 +107,7 @@ export function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9A9890] hover:text-[#7A7870] transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9aa3b2] hover:text-[#5a6478] transition-colors"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -115,7 +115,7 @@ export function LoginPage() {
             </div>
 
             {error && (
-              <div className="text-[13px] rounded-lg px-3 py-2.5" style={{ color: '#FF4D4D', background: 'rgba(255,77,77,0.06)' }}>
+              <div className="text-[13px] rounded-lg px-3 py-2.5" style={{ color: '#e53e3e', background: 'rgba(229,62,62,0.06)' }}>
                 {error}
               </div>
             )}
@@ -124,9 +124,9 @@ export function LoginPage() {
               type="submit"
               disabled={loading}
               className="w-full h-11 rounded-lg text-[13px] font-semibold text-white flex items-center justify-center transition-colors disabled:opacity-50"
-              style={{ background: '#6B4FBB' }}
-              onMouseEnter={e => { if (!loading) (e.target as HTMLElement).style.background = '#5A3FA8'; }}
-              onMouseLeave={e => (e.target as HTMLElement).style.background = '#6B4FBB'}
+              style={{ background: '#00bcd4' }}
+              onMouseEnter={e => { if (!loading) (e.target as HTMLElement).style.background = '#0097a7'; }}
+              onMouseLeave={e => (e.target as HTMLElement).style.background = '#00bcd4'}
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -137,7 +137,7 @@ export function LoginPage() {
           </form>
         </div>
 
-        <p className="text-center text-[#B8B5AE] text-[12px] mt-6 leading-relaxed">
+        <p className="text-center text-[#9aa3b2] text-[12px] mt-6 leading-relaxed">
           Nalog kreira vaš projektni menadžer.
           <br />
           Kontaktirajte nas ako imate problem sa prijavom.

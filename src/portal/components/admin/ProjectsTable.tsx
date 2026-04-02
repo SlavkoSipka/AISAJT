@@ -52,13 +52,13 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
       : <ChevronDown size={12} className="inline ml-0.5" />;
   };
 
-  const headerClass = 'text-[11px] text-[#9A9890] font-medium cursor-pointer hover:text-[#7A7870] transition-colors select-none';
+  const headerClass = 'text-[11px] text-[#9aa3b2] font-medium cursor-pointer hover:text-[#5a6478] transition-colors select-none';
 
   return (
     <div className="portal-card overflow-x-auto">
       <table className="w-full min-w-[700px]">
         <thead>
-          <tr className="border-b border-[#E0DDD6]">
+          <tr className="border-b border-[#e3e7ee]">
             <th className={`text-left py-3 px-4 ${headerClass}`} onClick={() => toggleSort('name')}>
               Klijent / Projekat <SortIcon col="name" />
             </th>
@@ -86,20 +86,20 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
               <tr
                 key={project.id}
                 onClick={() => navigate(`/portal/admin/projekti/${project.id}`)}
-                className="border-b border-[#F0EDE7] hover:bg-[#F7F6F3] cursor-pointer transition-colors"
+                className="border-b border-[#e3e7ee] hover:bg-[#f7f8fa] cursor-pointer transition-colors"
               >
                 <td className="py-3 px-4">
-                  <p className="text-[13px] font-medium text-[#1A1916]">{project.name}</p>
-                  <p className="text-[12px] text-[#9A9890]">{project.client?.full_name}</p>
+                  <p className="text-[13px] font-medium text-[#1a2030]">{project.name}</p>
+                  <p className="text-[12px] text-[#9aa3b2]">{project.client?.full_name}</p>
                 </td>
                 <td className="py-3 px-4">
-                  <span className="text-[13px] text-[#3D3C38]">{project.domain || '—'}</span>
+                  <span className="text-[13px] text-[#5a6478]">{project.domain || '—'}</span>
                 </td>
                 <td className="py-3 px-4">
                   <StatusBadge status={project.status} />
                 </td>
                 <td className="py-3 px-4">
-                  <span className="text-[13px] text-[#3D3C38]">
+                  <span className="text-[13px] text-[#5a6478]">
                     {activeStep ? activeStep.title : '—'}
                   </span>
                 </td>
@@ -108,12 +108,12 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                 </td>
                 <td className="py-3 px-4 text-center">
                   {(project.unread_count || 0) > 0 ? (
-                    <span className="inline-flex items-center gap-1 text-[11px] bg-[#FF4D4D]/10 text-[#FF4D4D] px-2 py-0.5 rounded-full font-medium">
+                    <span className="inline-flex items-center gap-1 text-[11px] bg-[#e53e3e]/10 text-[#e53e3e] px-2 py-0.5 rounded-full font-medium">
                       <MessageSquare size={10} />
                       {project.unread_count}
                     </span>
                   ) : (
-                    <span className="text-[12px] text-[#B8B5AE]">—</span>
+                    <span className="text-[12px] text-[#9aa3b2]">—</span>
                   )}
                 </td>
               </tr>
@@ -123,7 +123,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
       </table>
 
       {sorted.length === 0 && (
-        <p className="text-[13px] text-[#9A9890] text-center py-12">
+        <p className="text-[13px] text-[#9aa3b2] text-center py-12">
           Nema projekata. Kreirajte prvi!
         </p>
       )}

@@ -7,6 +7,12 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
+    proxy: {
+      '/.netlify/functions': {
+        target: 'https://aisajt.com',
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     minify: 'terser',

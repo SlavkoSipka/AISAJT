@@ -4,11 +4,11 @@ interface StatusBadgeProps {
 }
 
 const config: Record<string, { bg: string; text: string; dot: string; label: string }> = {
-  active:    { bg: '#E8F6EF', text: '#22A06B', dot: '#22A06B', label: 'Aktivan' },
-  paused:    { bg: '#FFF3E0', text: '#E8902A', dot: '#E8902A', label: 'Pauziran' },
-  completed: { bg: '#EDE9FF', text: '#6B4FBB', dot: '#6B4FBB', label: 'Završen' },
-  pending:   { bg: '#F0EDE7', text: '#9A9890', dot: '#9A9890', label: 'Na čekanju' },
-  done:      { bg: '#E8F6EF', text: '#22A06B', dot: '#22A06B', label: 'Gotovo' },
+  active:    { bg: '#e6f8f2', text: '#0faa6e', dot: '#0faa6e', label: 'Aktivan' },
+  paused:    { bg: '#fef6e4', text: '#e8970a', dot: '#e8970a', label: 'Pauziran' },
+  completed: { bg: '#e6f7fa', text: '#00bcd4', dot: '#00bcd4', label: 'Završen' },
+  pending:   { bg: '#f7f8fa', text: '#9aa3b2', dot: '#9aa3b2', label: 'Na čekanju' },
+  done:      { bg: '#e6f8f2', text: '#0faa6e', dot: '#0faa6e', label: 'Gotovo' },
 };
 
 export function StatusBadge({ status, size = 'sm' }: StatusBadgeProps) {

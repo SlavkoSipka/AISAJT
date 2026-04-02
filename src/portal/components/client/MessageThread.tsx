@@ -41,7 +41,7 @@ export function MessageThread({ messages, currentUserId, onSend, compact }: Mess
     <div className="flex flex-col h-full">
       <div className={`flex-1 overflow-y-auto portal-scrollbar space-y-3 ${compact ? 'max-h-[280px]' : 'max-h-[500px]'} p-1`}>
         {messages.length === 0 && (
-          <p className="text-[13px] text-[#9A9890] text-center py-8">
+          <p className="text-[13px] text-[#9aa3b2] text-center py-8">
             Još nema poruka. Započnite konverzaciju!
           </p>
         )}
@@ -53,21 +53,21 @@ export function MessageThread({ messages, currentUserId, onSend, compact }: Mess
             <div key={msg.id} className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[80%] ${isOwn ? 'order-2' : ''}`}>
                 <div className={`flex items-center gap-2 mb-1 ${isOwn ? 'justify-end' : ''}`}>
-                  <span className="text-[11px] text-[#B8B5AE]">
+                  <span className="text-[11px] text-[#9aa3b2]">
                     {senderName}
                   </span>
-                  <span className="text-[11px] text-[#B8B5AE]">
+                  <span className="text-[11px] text-[#9aa3b2]">
                     {new Date(msg.created_at).toLocaleTimeString('sr-Latn', { hour: '2-digit', minute: '2-digit' })}
                   </span>
                   {!isOwn && !msg.is_read && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#6B4FBB]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00bcd4]" />
                   )}
                 </div>
                 <div
                   className="px-3.5 py-2.5 text-[13px] leading-[1.5]"
                   style={{
-                    background: isOwn ? '#EDE9FF' : '#F4F2EE',
-                    color: '#3D3C38',
+                    background: isOwn ? '#e6f7fa' : '#f7f8fa',
+                    color: '#1a2030',
                     borderRadius: isOwn ? '10px 10px 3px 10px' : '10px 10px 10px 3px',
                   }}
                 >
@@ -80,7 +80,7 @@ export function MessageThread({ messages, currentUserId, onSend, compact }: Mess
         <div ref={bottomRef} />
       </div>
 
-      <div className="flex items-end gap-2 mt-3 pt-3 border-t border-[#E0DDD6]">
+      <div className="flex items-end gap-2 mt-3 pt-3 border-t border-[#e3e7ee]">
         <textarea
           value={input}
           onChange={e => setInput(e.target.value)}
@@ -93,7 +93,7 @@ export function MessageThread({ messages, currentUserId, onSend, compact }: Mess
         <button
           onClick={handleSend}
           disabled={!input.trim() || sending}
-          className="h-[34px] w-[34px] rounded-lg bg-[#6B4FBB] flex items-center justify-center shrink-0 disabled:opacity-40 transition-all hover:bg-[#5A3FA8]"
+          className="h-[34px] w-[34px] rounded-lg bg-[#00bcd4] flex items-center justify-center shrink-0 disabled:opacity-40 transition-all hover:bg-[#0097a7]"
         >
           <Send size={14} color="white" />
         </button>
