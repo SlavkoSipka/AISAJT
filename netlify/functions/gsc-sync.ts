@@ -83,7 +83,7 @@ async function fetchGscMetrics(
     body: JSON.stringify({ startDate, endDate, dimensions: [] }),
   });
   const data = await res.json() as GscResponse;
-  if (!res.ok) throw new Error(data.error?.message || `GSC HTTP ${res.status}`);
+  if (!res.ok) throw new Error(`GSC HTTP ${res.status} for property "${propertyUrl}": ${data.error?.message || JSON.stringify(data)}`);
   const row = data.rows?.[0];
   return row || { clicks: 0, impressions: 0, ctr: 0, position: 0 };
 }
