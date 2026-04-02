@@ -21,14 +21,16 @@ const statusLabels: Record<string, string> = {
 
 export function Sidebar() {
   const { isAdmin, signOut } = useAuth();
-  const { project } = useProject();
+  const { project, seoProject } = useProject();
   const { unreadCount } = useMessages(project?.id);
 
-  const projectName = project?.name;
-  const projectDomain = project?.domain || undefined;
+  const projectName = project?.name || seoProject?.domain;
+  const projectDomain = project?.domain || seoProject?.domain || undefined;
   const projectStatus = project?.status || 'active';
-  const packageName = project?.package_name || undefined;
-  const packagePrice = project?.package_price;
+
+  // SEO package info
+  const seoPackageName = seoProject?.package_name || undefined;
+  const seoPackagePrice = seoProject?.package_price;
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -58,9 +60,14 @@ export function Sidebar() {
           {!isAdmin && projectName && (
             <div className="mt-3 bg-[rgba(255,255,255,0.07)] rounded-lg p-[10px]">
               <p className="text-[12px] text-[rgba(255,255,255,0.4)]">Projekat</p>
-              <p className="text-[13px] font-medium text-white truncate mt-0.5">{projectName}</p>
+              <p className="text-[13px] font-medium text-white truncate mt-0.5">{project?.name || seoProject?.domain}</p>
               {projectDomain && (
                 <p className="text-[12px] text-[rgba(255,255,255,0.4)] mt-0.5">{projectDomain}</p>
+              )}
+              {seoPackageName && (
+                <p className="text-[11px] text-[#00e5ff] mt-1.5">
+                  SEO: {seoPackageName}{seoPackagePrice ? ` — €${seoPackagePrice}/mes` : ''}
+                </p>
               )}
               <div className="flex items-center gap-1.5 mt-2">
                 <span

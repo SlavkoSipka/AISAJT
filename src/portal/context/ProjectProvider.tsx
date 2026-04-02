@@ -9,10 +9,11 @@ import {
 } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from './PortalAuthProvider';
-import type { Project, ProjectStep } from '../lib/types';
+import type { Project, ProjectStep, SeoProject } from '../lib/types';
 
 type ProjectContextValue = {
   project: Project | null;
+  seoProject: SeoProject | null;
   steps: ProjectStep[];
   loading: boolean;
   progressPercentage: number;
@@ -26,6 +27,7 @@ const ProjectContext = createContext<ProjectContextValue | null>(null);
 export function ProjectProvider({ children }: { children: React.ReactNode }) {
   const { profile } = useAuth();
   const [project, setProject] = useState<Project | null>(null);
+  const [seoProject, setSeoProject] = useState<SeoProject | null>(null);
   const [steps, setSteps] = useState<ProjectStep[]>([]);
   const [loading, setLoading] = useState(true);
   const hasFetched = useRef(false);
@@ -58,6 +60,20 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
       setSteps((stepsData as ProjectStep[]) || []);
     }
 
+    // Also fetch SEO project
+    const { data: seoProjects } = await supabase
+      .from('seo_projects')
+      .select('*')
+      .eq('client_id', profile.id)
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    if (seoProjects && seoProjects.length > 0) {
+      setSeoProject(seoProjects[0] as SeoProject);
+    } else {
+      setSeoProject(null);
+    }
+
     hasFetched.current = true;
     setLoading(false);
   }, [profile]);
@@ -80,6 +96,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       project,
+      seoProject,
       steps,
       loading,
       progressPercentage,
@@ -87,7 +104,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
       estimatedCompletion,
       refetch: fetchProject,
     }),
-    [project, steps, loading, progressPercentage, activeStep, estimatedCompletion, fetchProject]
+    [project, seoProject, steps, loading, progressPercentage, activeStep, estimatedCompletion, fetchProject]
   );
 
   return (

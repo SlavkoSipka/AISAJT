@@ -101,6 +101,36 @@ export interface SeoMetrics {
   new_backlinks: number;
   total_backlinks: number;
   is_gsc_synced: boolean;
+  ctr: number;
+  created_at: string;
+}
+
+/** Daily data point returned by gsc-query function */
+export interface GscDailyPoint {
+  date: string;    // YYYY-MM-DD
+  clicks: number;
+  impressions: number;
+  ctr: number;     // 0..1
+  position: number;
+}
+
+export interface GscQueryResponse {
+  days: GscDailyPoint[];
+  totals: { clicks: number; impressions: number; ctr: number; position: number };
+  range: '3d' | '28d' | '3m' | '6m' | 'all';
+  startDate: string;
+  endDate: string;
+}
+
+/** Admin-approved daily GSC data stored in DB (what client sees) */
+export interface SeoGscDaily {
+  id: string;
+  seo_project_id: string;
+  date: string;    // YYYY-MM-DD
+  clicks: number;
+  impressions: number;
+  ctr: number;     // 0..1
+  position: number;
   created_at: string;
 }
 
@@ -203,6 +233,11 @@ export interface Database {
         Row: SeoProgress;
         Insert: Omit<SeoProgress, 'id'> & { id?: string };
         Update: Partial<SeoProgress>;
+      };
+      seo_gsc_daily: {
+        Row: SeoGscDaily;
+        Insert: Omit<SeoGscDaily, 'id' | 'created_at'> & { id?: string };
+        Update: Partial<SeoGscDaily>;
       };
       seo_alerts: {
         Row: SeoAlert;

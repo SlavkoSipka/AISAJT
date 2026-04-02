@@ -66,26 +66,44 @@ async function getAccessToken(sa: { client_email: string; private_key: string })
   return data.access_token;
 }
 
-// ── GSC query ────────────────────────────────────────────────────────────────
-interface GscRow { clicks: number; impressions: number; ctr: number; position: number }
+// ── GSC queries ──────────────────────────────────────────────────────────────
+interface GscRow { keys?: string[]; clicks: number; impressions: number; ctr: number; position: number }
 interface GscResponse { rows?: GscRow[]; error?: { message: string } }
 
-async function fetchGscMetrics(
+async function queryGsc(
   accessToken: string,
   propertyUrl: string,
   startDate: string,
   endDate: string,
-): Promise<GscRow> {
+  dimensions: string[] = [],
+  rowLimit = 10,
+): Promise<GscRow[]> {
   const url = `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(propertyUrl)}/searchAnalytics/query`;
   const res = await fetch(url, {
     method: 'POST',
     headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ startDate, endDate, dimensions: [] }),
+    body: JSON.stringify({ startDate, endDate, dimensions, rowLimit }),
   });
   const data = await res.json() as GscResponse;
   if (!res.ok) throw new Error(`GSC HTTP ${res.status} for property "${propertyUrl}": ${data.error?.message || JSON.stringify(data)}`);
-  const row = data.rows?.[0];
-  return row || { clicks: 0, impressions: 0, ctr: 0, position: 0 };
+  return data.rows || [];
+}
+
+async function fetchGscMetrics(
+  accessToken: string, propertyUrl: string, startDate: string, endDate: string,
+): Promise<GscRow> {
+  const rows = await queryGsc(accessToken, propertyUrl, startDate, endDate, [], 1);
+  return rows[0] || { clicks: 0, impressions: 0, ctr: 0, position: 0 };
+}
+
+async function fetchTopKeywords(
+  accessToken: string, propertyUrl: string, startDate: string, endDate: string, limit = 10,
+): Promise<{ keyword: string; position: number }[]> {
+  const rows = await queryGsc(accessToken, propertyUrl, startDate, endDate, ['query'], limit);
+  return rows.map(r => ({
+    keyword: r.keys?.[0] || '',
+    position: Math.round(r.position * 10) / 10,
+  }));
 }
 
 // ── Handler ──────────────────────────────────────────────────────────────────
@@ -121,18 +139,36 @@ export default async (req: Request, _ctx: Context) => {
     const sa = JSON.parse(saJson) as { client_email: string; private_key: string };
     const accessToken = await getAccessToken(sa);
 
-    // Last full calendar month
+    // Last full calendar month (GSC data lags ~3 days, so fall back to month before if too early)
     const now = new Date();
-    const firstOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const lastOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-    const startDate = firstOfLastMonth.toISOString().split('T')[0];
-    const endDate = lastOfLastMonth.toISOString().split('T')[0];
+    let targetMonth: number, targetYear: number;
+
+    // If we're in the first 4 days of the month, GSC may not have last month's data yet — use month before
+    if (now.getDate() <= 4) {
+      targetMonth = now.getMonth() - 1; // 2 months ago (0-indexed)
+      targetYear = now.getFullYear();
+    } else {
+      targetMonth = now.getMonth(); // last month (0-indexed, getMonth()-1+1 for Date constructor)
+      targetYear = now.getFullYear();
+    }
+
+    // Normalize: month-1 for target (since we want "last" or "2 months ago")
+    const m = now.getDate() <= 4 ? now.getMonth() - 2 : now.getMonth() - 1;
+    const y = now.getFullYear();
+    const firstDay = new Date(y, m, 1);
+    const lastDay = new Date(y, m + 1, 0);
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const startDate = `${firstDay.getFullYear()}-${pad(firstDay.getMonth() + 1)}-${pad(firstDay.getDate())}`;
+    const endDate = `${lastDay.getFullYear()}-${pad(lastDay.getMonth() + 1)}-${pad(lastDay.getDate())}`;
     const monthKey = startDate; // YYYY-MM-01
 
     const gsc = await fetchGscMetrics(accessToken, project.gsc_property_id, startDate, endDate);
+    const topKeywords = await fetchTopKeywords(accessToken, project.gsc_property_id, startDate, endDate, 10);
 
     const clicks = Math.round(gsc.clicks);
     const impressions = Math.round(gsc.impressions);
+    const ctr = Math.round(gsc.ctr * 10000) / 10000; // e.g. 0.0345
     const avg_position = gsc.position > 0 ? Math.round(gsc.position * 10) / 10 : null;
 
     // Check if a row already exists for this month
@@ -144,24 +180,22 @@ export default async (req: Request, _ctx: Context) => {
       .maybeSingle();
 
     if (existing) {
-      // Update only GSC fields — preserve manually-entered backlinks and organic_visits
-      // (admin can override organic_visits manually; GSC gives us clicks/impressions separately)
       await supabase.from('seo_metrics').update({
         clicks,
         impressions,
+        ctr,
         avg_position,
         is_gsc_synced: true,
-        // Update organic_visits only if it was 0 (not manually set yet)
         ...(existing.organic_visits === 0 ? { organic_visits: clicks } : {}),
       }).eq('id', existing.id);
     } else {
-      // Insert new row
       await supabase.from('seo_metrics').insert({
         seo_project_id,
         month: monthKey,
         organic_visits: clicks,
         clicks,
         impressions,
+        ctr,
         avg_position,
         new_backlinks: 0,
         total_backlinks: 0,
@@ -169,12 +203,51 @@ export default async (req: Request, _ctx: Context) => {
       });
     }
 
+    // ── Upsert top keywords from GSC ──────────────────────────────────────────
+    // Move current_position → previous_position for existing GSC keywords, then update
+    if (topKeywords.length > 0) {
+      // Get existing GSC keywords for this project
+      const { data: existingKws } = await supabase
+        .from('seo_keywords')
+        .select('id, keyword, current_position')
+        .eq('seo_project_id', seo_project_id)
+        .eq('source', 'gsc');
+
+      const existingMap = new Map((existingKws || []).map(k => [k.keyword.toLowerCase(), k]));
+
+      for (const tk of topKeywords) {
+        const key = tk.keyword.toLowerCase();
+        const existing_kw = existingMap.get(key);
+
+        if (existing_kw) {
+          // Update: shift current → previous, set new current
+          await supabase.from('seo_keywords').update({
+            previous_position: existing_kw.current_position,
+            current_position: Math.round(tk.position),
+          }).eq('id', existing_kw.id);
+          existingMap.delete(key); // mark as processed
+        } else {
+          // Insert new GSC keyword
+          await supabase.from('seo_keywords').insert({
+            seo_project_id,
+            keyword: tk.keyword,
+            current_position: Math.round(tk.position),
+            previous_position: null,
+            source: 'gsc',
+          });
+        }
+      }
+    }
+
     return new Response(JSON.stringify({
       success: true,
       month: monthKey,
+      date_range: `${startDate} → ${endDate}`,
       clicks,
       impressions,
+      ctr,
       avg_position,
+      keywords_synced: topKeywords.length,
     }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
   } catch (e: unknown) {

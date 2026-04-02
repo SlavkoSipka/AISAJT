@@ -1,27 +1,19 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useSeoProject } from '../hooks/useSeoProject';
 import { Topbar } from '../components/layout/Topbar';
 import { Loader2, ArrowLeft, Plus, Trash2, RefreshCw, CheckCircle2, AlertTriangle, Link2, Pencil, X, Save, FileDown, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
-import type { SeoMetrics, SeoKeyword, SeoTask, SeoProgress, SeoAlert, SeoTaskStatus } from '../lib/types';
-import { Line } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip as ChartTooltip,
-  Legend,
-} from 'chart.js';
+import type { SeoMetrics, SeoKeyword, SeoTask, SeoProgress, SeoAlert, SeoTaskStatus, GscDailyPoint, GscQueryResponse } from '../lib/types';
+import { SeoMultiChart, ChartToggle, DateRangeTab, C as ClientC } from './SeoClientDashboard';
+import type { ChartMetric, DateRange } from './SeoClientDashboard';
+import { ChevronUp, ChevronDown } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import '../portal.css';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, ChartTooltip, Legend);
+const dateRangeLabels: Record<DateRange, string> = { '3d': '3 dana', '28d': '28 dana', '3m': '3 mes.', '6m': '6 mes.', 'all': 'Sve' };
 
 const TASK_STATUSES: { value: SeoTaskStatus; label: string; color: string }[] = [
   { value: 'done',    label: 'Gotovo',    color: '#0faa6e' },
@@ -32,96 +24,6 @@ const TASK_STATUSES: { value: SeoTaskStatus; label: string; color: string }[] = 
 
 const PROGRESS_COLORS = ['cyan', 'green', 'amber', 'purple', 'red'];
 const COLOR_HEX: Record<string, string> = { cyan: '#00bcd4', green: '#0faa6e', amber: '#e8970a', purple: '#6c4fdb', red: '#e53e3e' };
-
-// ── Hero Traffic Chart ──────────────────────────────────────────────────────
-function TrafficChart({ data }: { data: SeoMetrics[] }) {
-  if (data.length < 2) {
-    return (
-      <div className="flex items-center justify-center text-[12px] text-[#9aa3b2]" style={{ height: 220 }}>
-        Potrebna su bar 2 meseca podataka za grafikon
-      </div>
-    );
-  }
-
-  const labels = data.map(d =>
-    new Date(d.month + 'T00:00:00').toLocaleDateString('sr-Latn', { month: 'short', year: '2-digit' })
-  );
-
-  const chartData = {
-    labels,
-    datasets: [
-      {
-        label: 'Organski poseti',
-        data: data.map(d => d.organic_visits),
-        borderColor: '#1D9E75',
-        backgroundColor: 'rgba(29,158,117,0.08)',
-        fill: true,
-        tension: 0.35,
-        pointRadius: 4,
-        pointBackgroundColor: '#fff',
-        pointBorderColor: '#1D9E75',
-        pointBorderWidth: 2,
-        pointHoverRadius: 6,
-      },
-      {
-        label: 'GSC klikovi',
-        data: data.map(d => d.clicks),
-        borderColor: '#1a1f4e',
-        backgroundColor: 'rgba(26,31,78,0.06)',
-        fill: true,
-        tension: 0.35,
-        pointRadius: 4,
-        pointBackgroundColor: '#fff',
-        pointBorderColor: '#1a1f4e',
-        pointBorderWidth: 2,
-        pointHoverRadius: 6,
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: { mode: 'index' as const, intersect: false },
-    plugins: {
-      legend: { display: true, position: 'top' as const, labels: { font: { size: 11, family: 'DM Sans' }, boxWidth: 12, padding: 16, usePointStyle: true } },
-      tooltip: {
-        backgroundColor: '#1a2030',
-        titleFont: { size: 12, family: 'DM Sans' },
-        bodyFont: { size: 11, family: 'DM Sans' },
-        padding: 10,
-        cornerRadius: 8,
-        callbacks: {
-          label: (ctx: { dataset: { label?: string }; parsed: { y: number } }) => ` ${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()}`,
-        },
-      },
-    },
-    scales: {
-      x: { grid: { display: false }, ticks: { font: { size: 10, family: 'DM Sans' }, color: '#9aa3b2' } },
-      y: { grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false }, ticks: { font: { size: 10, family: 'DM Sans' }, color: '#9aa3b2' }, beginAtZero: true },
-    },
-  };
-
-  return (
-    <div style={{ height: 220 }}>
-      <Line data={chartData} options={options} />
-    </div>
-  );
-}
-
-// ── Metric delta badge ──────────────────────────────────────────────────────
-function DeltaBadge({ current, previous, suffix = '', invertColor = false }: { current: number; previous: number; suffix?: string; invertColor?: boolean }) {
-  if (previous === 0) return null;
-  const pct = Math.round(((current - previous) / previous) * 100);
-  const isPositive = invertColor ? pct < 0 : pct > 0;
-  const bg = pct === 0 ? '#f7f8fa' : isPositive ? '#e6f8f2' : '#fff0f0';
-  const color = pct === 0 ? '#9aa3b2' : isPositive ? '#0faa6e' : '#e53e3e';
-  return (
-    <span className="inline-flex items-center gap-0.5 text-[10px] font-medium px-1.5 py-0.5 rounded-full ml-1.5" style={{ background: bg, color }}>
-      {pct > 0 ? '+' : ''}{pct}%{suffix}
-    </span>
-  );
-}
 
 // ── Keyword trend indicator ─────────────────────────────────────────────────
 function KeywordTrend({ current, previous }: { current: number | null; previous: number | null }) {
@@ -190,6 +92,69 @@ export function SeoAdminProject() {
   const [gscSyncing, setGscSyncing] = useState(false);
   const [gscMsg, setGscMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
   const [exporting, setExporting] = useState(false);
+
+  // Chart state — same chart as client sees
+  const [chartMetrics, setChartMetrics] = useState<ChartMetric[]>(['visits', 'impressions', 'ctr']);
+  const [dateRange, setDateRange] = useState<DateRange>('all');
+  const [gscDaily, setGscDaily] = useState<GscDailyPoint[]>([]);
+  const [gscDailyLoading, setGscDailyLoading] = useState(true);
+
+  // Daily editor state
+  const [dailyDraft, setDailyDraft] = useState<GscDailyPoint[]>([]);
+  const [dailyHasChanges, setDailyHasChanges] = useState(false);
+  const [dailySaving, setDailySaving] = useState(false);
+  const [showDailyEditor, setShowDailyEditor] = useState(false);
+  const [newDay, setNewDay] = useState({ date: '', clicks: 0, impressions: 0, ctr: 0, position: 0 });
+
+  // Load seo_gsc_daily data
+  useEffect(() => {
+    if (!id) return;
+    setGscDailyLoading(true);
+    supabase
+      .from('seo_gsc_daily')
+      .select('*')
+      .eq('seo_project_id', id)
+      .order('date', { ascending: true })
+      .then(({ data }) => {
+        const mapped = (data || []).map((d: any) => ({
+          date: d.date, clicks: d.clicks, impressions: d.impressions, ctr: d.ctr, position: d.position,
+        }));
+        setGscDaily(mapped);
+        setDailyDraft(mapped);
+        setGscDailyLoading(false);
+      });
+  }, [id]);
+
+  const toggleChartMetric = (m: ChartMetric) => {
+    setChartMetrics(prev =>
+      prev.includes(m) ? (prev.length > 1 ? prev.filter(x => x !== m) : prev) : [...prev, m]
+    );
+  };
+
+  // Build chart data from seo_gsc_daily filtered by range (same as client)
+  const filteredGscDaily = (() => {
+    if (dateRange === 'all') return gscDaily;
+    const rangeDays: Record<string, number> = { '3d': 3, '28d': 28, '3m': 90, '6m': 180 };
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - (rangeDays[dateRange] || 28));
+    const cutoffStr = cutoff.toISOString().split('T')[0];
+    return gscDaily.filter(d => d.date >= cutoffStr);
+  })();
+  const gscChartData: SeoMetrics[] = filteredGscDaily.map(d => ({
+    id: '', seo_project_id: '', created_at: '',
+    month: d.date, organic_visits: d.clicks, clicks: d.clicks,
+    impressions: d.impressions, ctr: d.ctr, avg_position: d.position,
+    new_backlinks: 0, total_backlinks: 0, is_gsc_synced: true,
+  }));
+  const filteredMetricsHistory = (() => {
+    if (dateRange === 'all') return metricsHistory;
+    const rangeDays: Record<string, number> = { '3d': 3, '28d': 28, '3m': 90, '6m': 180 };
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - (rangeDays[dateRange] || 28));
+    const cutoffStr = cutoff.toISOString().split('T')[0];
+    return metricsHistory.filter(m => m.month >= cutoffStr);
+  })();
+  const adminChartData = gscChartData.length > 0 ? gscChartData : filteredMetricsHistory;
 
   // ── PDF Export ──────────────────────────────────────────────────────────────
   const handleExportPDF = async () => {
@@ -306,20 +271,57 @@ export function SeoAdminProject() {
     setGscSyncing(true);
     setGscMsg(null);
     try {
+      // 1. Sync monthly metrics (existing)
       const res = await fetch('/.netlify/functions/gsc-sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ seo_project_id: id }),
       });
       const data = await res.json();
-      if (res.ok) {
-        setGscMsg({ type: 'ok', text: `Sinhronizovano: ${data.clicks?.toLocaleString()} klikova, pozicija ${data.avg_position}` });
-        toastOk('GSC podaci sinhronizovani');
-        await refetch();
-      } else {
+      if (!res.ok) {
         setGscMsg({ type: 'err', text: data.error || 'Greška pri sinhronizaciji' });
         toastErr('Greška pri GSC sinhronizaciji');
+        setGscSyncing(false);
+        return;
       }
+
+      // 2. Also fetch daily data and save to seo_gsc_daily
+      try {
+        const dailyRes = await fetch('/.netlify/functions/gsc-query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ seo_project_id: id, range: 'all' }),
+        });
+        if (dailyRes.ok) {
+          const dailyData: GscQueryResponse = await dailyRes.json();
+          const newDays = dailyData.days || [];
+          if (newDays.length > 0) {
+            // Delete existing, then insert all
+            await supabase.from('seo_gsc_daily').delete().eq('seo_project_id', id);
+            const rows = newDays.map(d => ({
+              seo_project_id: id!,
+              date: d.date,
+              clicks: d.clicks,
+              impressions: d.impressions,
+              ctr: d.ctr,
+              position: d.position,
+            }));
+            for (let i = 0; i < rows.length; i += 200) {
+              await supabase.from('seo_gsc_daily').insert(rows.slice(i, i + 200) as any);
+            }
+            // Reload chart data
+            setGscDaily(newDays);
+            setDailyDraft(newDays);
+            setDailyHasChanges(false);
+          }
+        }
+      } catch {
+        // Daily sync is best-effort; monthly sync already succeeded
+      }
+
+      setGscMsg({ type: 'ok', text: `Sinhronizovano (${data.date_range || data.month}): ${data.clicks?.toLocaleString()} klikova, CTR ${((data.ctr || 0) * 100).toFixed(1)}%, pozicija ${data.avg_position}, ${data.keywords_synced || 0} keywords` });
+      toastOk('GSC podaci sinhronizovani');
+      await refetch();
     } catch {
       setGscMsg({ type: 'err', text: 'Mrežna greška' });
       toastErr('Mrežna greška');
@@ -367,7 +369,7 @@ export function SeoAdminProject() {
     if (!id || !newKeyword.trim()) return;
     setSaving('keywords');
     const pos = newKeywordPos.trim() ? Number(newKeywordPos) : null;
-    await supabase.from('seo_keywords').insert({ seo_project_id: id, keyword: newKeyword.trim(), current_position: pos, previous_position: null });
+    await supabase.from('seo_keywords').insert({ seo_project_id: id, keyword: newKeyword.trim(), current_position: pos, previous_position: null, source: 'manual' });
     setNewKeyword('');
     setNewKeywordPos('');
     toastOk('Keyword dodat');
@@ -451,6 +453,52 @@ export function SeoAdminProject() {
     await refetch();
   };
 
+  // ── Daily data editor handlers ────────────────────────────────────────────
+  const handleEditDay = (date: string, field: keyof GscDailyPoint, value: number) => {
+    setDailyDraft(prev => prev.map(d => d.date === date ? { ...d, [field]: value } : d));
+    setDailyHasChanges(true);
+  };
+
+  const handleDeleteDay = (date: string) => {
+    setDailyDraft(prev => prev.filter(d => d.date !== date));
+    setDailyHasChanges(true);
+  };
+
+  const handleAddDay = () => {
+    if (!newDay.date || dailyDraft.some(d => d.date === newDay.date)) return;
+    setDailyDraft(prev => [...prev, { ...newDay }].sort((a, b) => a.date.localeCompare(b.date)));
+    setNewDay({ date: '', clicks: 0, impressions: 0, ctr: 0, position: 0 });
+    setDailyHasChanges(true);
+  };
+
+  const handleSaveDaily = async () => {
+    if (!id) return;
+    setDailySaving(true);
+    try {
+      await supabase.from('seo_gsc_daily').delete().eq('seo_project_id', id);
+      if (dailyDraft.length > 0) {
+        const rows = dailyDraft.map(d => ({
+          seo_project_id: id!,
+          date: d.date,
+          clicks: d.clicks,
+          impressions: d.impressions,
+          ctr: d.ctr,
+          position: d.position,
+        }));
+        for (let i = 0; i < rows.length; i += 200) {
+          const { error } = await supabase.from('seo_gsc_daily').insert(rows.slice(i, i + 200) as any);
+          if (error) throw error;
+        }
+      }
+      setGscDaily(dailyDraft);
+      setDailyHasChanges(false);
+      toastOk('Dnevni podaci sačuvani — grafik ažuriran');
+    } catch {
+      toastErr('Greška pri čuvanju dnevnih podataka');
+    }
+    setDailySaving(false);
+  };
+
   if (loading) return (
     <div className="flex items-center justify-center min-h-[60vh]">
       <Loader2 className="w-6 h-6 text-[#00bcd4] animate-spin" />
@@ -481,55 +529,190 @@ export function SeoAdminProject() {
               <span className="text-[#e3e7ee]">/</span>
               <span className="text-[13px] font-medium text-[#1a2030]">{seoProject.domain}</span>
             </div>
-            <button onClick={handleExportPDF} disabled={exporting}
-              className="portal-btn portal-btn-secondary text-[12px] py-2 px-3 disabled:opacity-40 flex items-center gap-1.5">
-              {exporting ? <Loader2 size={13} className="animate-spin" /> : <FileDown size={13} />}
-              Izvezi izveštaj
-            </button>
+            <div className="flex items-center gap-2">
+              <button onClick={() => navigate(`/portal/admin/seo/${id}/preview`)}
+                className="portal-btn portal-btn-secondary text-[12px] py-2 px-3 flex items-center gap-1.5"
+                style={{ background: '#1a1f4e', color: '#fff', border: 'none' }}>
+                <TrendingUp size={13} />
+                Pregled klijenta
+              </button>
+              <button onClick={handleExportPDF} disabled={exporting}
+                className="portal-btn portal-btn-secondary text-[12px] py-2 px-3 disabled:opacity-40 flex items-center gap-1.5">
+                {exporting ? <Loader2 size={13} className="animate-spin" /> : <FileDown size={13} />}
+                Izvezi izveštaj
+              </button>
+            </div>
           </div>
 
-          {/* ── Hero Traffic Chart ──────────────────────────────── */}
+          {/* ── Chart — same as client sees ──────────────────────────── */}
           <div ref={reportRef}>
-          <Section title="Saobraćaj kroz vreme" action={
-            latestMetrics ? (
-              <span className="text-[10px] text-[#9aa3b2]">
-                Poslednje ažuriranje: {new Date(latestMetrics.month + 'T00:00:00').toLocaleDateString('sr-Latn', { month: 'long', year: 'numeric' })}
-              </span>
-            ) : null
+          <Section title="Pregled performansi (klijent grafik)" action={
+            <div className="flex items-center gap-2">
+              <ChartToggle label="Posete" color={ClientC.cyan} active={chartMetrics.includes('visits')} onClick={() => toggleChartMetric('visits')} />
+              <ChartToggle label="Impresije" color={ClientC.purple} active={chartMetrics.includes('impressions')} onClick={() => toggleChartMetric('impressions')} />
+              <ChartToggle label="CTR" color="#f59e0b" active={chartMetrics.includes('ctr')} onClick={() => toggleChartMetric('ctr')} />
+            </div>
           }>
-            <TrafficChart data={metricsHistory} />
-            {/* Summary metrics below chart */}
-            {latestMetrics && (
-              <div className="flex items-center gap-6 pt-3 mt-3 border-t border-[#f0f2f5]">
-                <div>
-                  <p className="text-[9px] text-[#9aa3b2] uppercase tracking-wide">Poseti</p>
-                  <p className="text-[16px] font-bold text-[#1D9E75]">
-                    {(latestMetrics.organic_visits ?? 0).toLocaleString()}
-                    {previousMetrics && (previousMetrics.organic_visits ?? 0) > 0 && <DeltaBadge current={latestMetrics.organic_visits ?? 0} previous={previousMetrics.organic_visits ?? 0} />}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[9px] text-[#9aa3b2] uppercase tracking-wide">Klikovi</p>
-                  <p className="text-[16px] font-bold text-[#1a1f4e]">
-                    {(latestMetrics.clicks ?? 0).toLocaleString()}
-                    {previousMetrics && (previousMetrics.clicks ?? 0) > 0 && <DeltaBadge current={latestMetrics.clicks ?? 0} previous={previousMetrics.clicks ?? 0} />}
-                  </p>
-                </div>
-                {latestMetrics.avg_position != null && (
+            <div className="flex gap-0.5 mb-2.5" style={{ background: '#f7f8fa', borderRadius: 8, padding: 2, width: 'fit-content' }}>
+              {(['3d', '28d', '3m', '6m', 'all'] as DateRange[]).map(r => (
+                <DateRangeTab key={r} value={r} active={dateRange === r} onClick={() => setDateRange(r)} />
+              ))}
+            </div>
+            {gscDailyLoading ? (
+              <div className="flex items-center justify-center gap-2" style={{ height: 220 }}>
+                <Loader2 size={16} className="animate-spin" style={{ color: '#00bcd4' }} />
+                <span className="text-[12px] text-[#9aa3b2]">Učitava se…</span>
+              </div>
+            ) : (
+              <SeoMultiChart data={adminChartData} active={chartMetrics} rangeKey={dateRange} />
+            )}
+            {/* Summary */}
+            {!gscDailyLoading && adminChartData.length >= 1 && (() => {
+              const totalClicks = adminChartData.reduce((s, m) => s + m.organic_visits, 0);
+              const totalImp = adminChartData.reduce((s, m) => s + m.impressions, 0);
+              const avgCtr = adminChartData.reduce((s, m) => s + (m.ctr ?? 0), 0) / adminChartData.length;
+              return (
+                <div className="flex items-center gap-6 pt-3 mt-3 border-t border-[#f0f2f5] flex-wrap">
                   <div>
-                    <p className="text-[9px] text-[#9aa3b2] uppercase tracking-wide">Avg. pozicija</p>
-                    <p className="text-[16px] font-bold text-[#0faa6e]">
-                      {latestMetrics.avg_position.toFixed(1)}
-                      {previousMetrics?.avg_position != null && <DeltaBadge current={latestMetrics.avg_position} previous={previousMetrics.avg_position} invertColor />}
-                    </p>
+                    <p className="text-[9px] text-[#9aa3b2] uppercase tracking-wide">Klikovi</p>
+                    <p className="text-[16px] font-bold" style={{ color: ClientC.cyan }}>{totalClicks.toLocaleString()}</p>
+                  </div>
+                  {totalImp > 0 && <div>
+                    <p className="text-[9px] text-[#9aa3b2] uppercase tracking-wide">Impresije</p>
+                    <p className="text-[16px] font-bold" style={{ color: ClientC.purple }}>{totalImp.toLocaleString()}</p>
+                  </div>}
+                  {avgCtr > 0 && <div>
+                    <p className="text-[9px] text-[#9aa3b2] uppercase tracking-wide">CTR</p>
+                    <p className="text-[16px] font-bold" style={{ color: '#f59e0b' }}>{(avgCtr * 100).toFixed(2)}%</p>
+                  </div>}
+                  <div>
+                    <p className="text-[9px] text-[#9aa3b2] uppercase tracking-wide">Period</p>
+                    <p className="text-[13px] font-semibold text-[#5a6478]">{dateRangeLabels[dateRange]} — {gscChartData.length > 0 ? `${filteredGscDaily.length} dana` : `${filteredMetricsHistory.length} meseci`}</p>
+                  </div>
+                </div>
+              );
+            })()}
+          </Section>
+
+          {/* ── Daily data editor ──────────────────────────────────────── */}
+          <Section title="Dnevni podaci za grafik" action={
+            <div className="flex items-center gap-2">
+              {dailyHasChanges && (
+                <span className="text-[10px] text-[#e8970a] font-medium">● Nesačuvane izmene</span>
+              )}
+              <button onClick={handleSaveDaily} disabled={!dailyHasChanges || dailySaving}
+                className="portal-btn portal-btn-primary text-[11px] py-1.5 px-3 disabled:opacity-40 flex items-center gap-1.5">
+                {dailySaving ? <Loader2 size={12} className="animate-spin" /> : <Save size={12} />}
+                Sačuvaj
+              </button>
+            </div>
+          }>
+            <button
+              onClick={() => setShowDailyEditor(!showDailyEditor)}
+              className="flex items-center gap-1.5 text-[12px] font-medium mb-3 transition-colors"
+              style={{ color: '#00bcd4' }}>
+              {showDailyEditor ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+              {showDailyEditor ? 'Sakrij editor' : `Prikaži editor (${dailyDraft.length} dana)`}
+            </button>
+
+            {showDailyEditor && (
+              <div>
+                {dailyDraft.length > 0 && (
+                  <div className="overflow-x-auto mb-3" style={{ maxHeight: 400 }}>
+                    <table className="w-full text-[12px]">
+                      <thead>
+                        <tr className="border-b border-[#e3e7ee]">
+                          <th className="py-2 text-left text-[#9aa3b2] font-medium">Datum</th>
+                          <th className="py-2 text-right text-[#9aa3b2] font-medium">Klikovi</th>
+                          <th className="py-2 text-right text-[#9aa3b2] font-medium">Impresije</th>
+                          <th className="py-2 text-right text-[#9aa3b2] font-medium">CTR (%)</th>
+                          <th className="py-2 text-right text-[#9aa3b2] font-medium">Pozicija</th>
+                          <th className="py-2 w-8" />
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {dailyDraft.map(d => (
+                          <tr key={d.date} className="border-b border-[#f7f8fa] last:border-none group hover:bg-[#f7f8fa] transition-colors">
+                            <td className="py-1.5 text-[#1a2030] font-medium">{d.date}</td>
+                            <td className="py-1.5 text-right">
+                              <input type="number" min="0"
+                                className="bg-transparent text-[12px] text-right w-16 outline-none focus:text-[#00bcd4]"
+                                defaultValue={d.clicks}
+                                key={`${d.date}-c-${d.clicks}`}
+                                onBlur={e => handleEditDay(d.date, 'clicks', +e.target.value)} />
+                            </td>
+                            <td className="py-1.5 text-right">
+                              <input type="number" min="0"
+                                className="bg-transparent text-[12px] text-right w-16 outline-none focus:text-[#00bcd4]"
+                                defaultValue={d.impressions}
+                                key={`${d.date}-i-${d.impressions}`}
+                                onBlur={e => handleEditDay(d.date, 'impressions', +e.target.value)} />
+                            </td>
+                            <td className="py-1.5 text-right">
+                              <input type="number" min="0" max="100" step="0.01"
+                                className="bg-transparent text-[12px] text-right w-16 outline-none focus:text-[#00bcd4]"
+                                defaultValue={+(d.ctr * 100).toFixed(2)}
+                                key={`${d.date}-ctr-${d.ctr}`}
+                                onBlur={e => handleEditDay(d.date, 'ctr', +e.target.value / 100)} />
+                            </td>
+                            <td className="py-1.5 text-right">
+                              <input type="number" min="0" step="0.1"
+                                className="bg-transparent text-[12px] text-right w-16 outline-none focus:text-[#00bcd4]"
+                                defaultValue={+d.position.toFixed(1)}
+                                key={`${d.date}-p-${d.position}`}
+                                onBlur={e => handleEditDay(d.date, 'position', +e.target.value)} />
+                            </td>
+                            <td className="py-1.5 text-center">
+                              <button onClick={() => handleDeleteDay(d.date)}
+                                className="p-1 text-[#e3e7ee] hover:text-[#e53e3e] opacity-0 group-hover:opacity-100 transition-all">
+                                <Trash2 size={12} />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 )}
-                <div>
-                  <p className="text-[9px] text-[#9aa3b2] uppercase tracking-wide">Backlinks</p>
-                  <p className="text-[16px] font-bold text-[#1a2030]">
-                    {latestMetrics.total_backlinks ?? 0}
-                    {previousMetrics && (previousMetrics.total_backlinks ?? 0) > 0 && <DeltaBadge current={latestMetrics.total_backlinks ?? 0} previous={previousMetrics.total_backlinks ?? 0} />}
-                  </p>
+
+                {/* Add new day */}
+                <div className="border border-dashed border-[#e3e7ee] rounded-lg p-3">
+                  <div className="flex items-end gap-2 flex-wrap">
+                    <div>
+                      <label className="text-[10px] text-[#9aa3b2] mb-1 block">Datum</label>
+                      <input type="date" className="portal-input text-[12px]"
+                        value={newDay.date}
+                        onChange={e => setNewDay(p => ({ ...p, date: e.target.value }))} />
+                    </div>
+                    <div className="w-16">
+                      <label className="text-[10px] text-[#9aa3b2] mb-1 block">Klikovi</label>
+                      <input type="number" min="0" className="portal-input text-[12px] text-center"
+                        value={newDay.clicks || ''}
+                        onChange={e => setNewDay(p => ({ ...p, clicks: +e.target.value }))} />
+                    </div>
+                    <div className="w-16">
+                      <label className="text-[10px] text-[#9aa3b2] mb-1 block">Impresije</label>
+                      <input type="number" min="0" className="portal-input text-[12px] text-center"
+                        value={newDay.impressions || ''}
+                        onChange={e => setNewDay(p => ({ ...p, impressions: +e.target.value }))} />
+                    </div>
+                    <div className="w-16">
+                      <label className="text-[10px] text-[#9aa3b2] mb-1 block">CTR %</label>
+                      <input type="number" min="0" max="100" step="0.01" className="portal-input text-[12px] text-center"
+                        value={newDay.ctr || ''}
+                        onChange={e => setNewDay(p => ({ ...p, ctr: +e.target.value / 100 }))} />
+                    </div>
+                    <div className="w-16">
+                      <label className="text-[10px] text-[#9aa3b2] mb-1 block">Pozicija</label>
+                      <input type="number" min="0" step="0.1" className="portal-input text-[12px] text-center"
+                        value={newDay.position || ''}
+                        onChange={e => setNewDay(p => ({ ...p, position: +e.target.value }))} />
+                    </div>
+                    <button onClick={handleAddDay} disabled={!newDay.date}
+                      className="portal-btn portal-btn-primary text-[11px] py-2 px-3 disabled:opacity-40 shrink-0">
+                      <Plus size={13} /> Dodaj dan
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -703,7 +886,12 @@ export function SeoAdminProject() {
                       {keywords.map(kw => (
                         <div key={kw.id}
                           className="grid grid-cols-[1fr_52px_52px_36px_28px] gap-2 items-center rounded-lg border border-[#e3e7ee] bg-white px-3 py-2 group hover:border-[#cdd3de] transition-all">
-                          <span className="text-[13px] text-[#1a2030] truncate">{kw.keyword}</span>
+                          <span className="text-[13px] text-[#1a2030] truncate flex items-center gap-1.5">
+                            {kw.keyword}
+                            {kw.source === 'gsc' && (
+                              <span className="text-[8px] font-semibold uppercase tracking-wider bg-[#00bcd4]/10 text-[#00bcd4] px-1.5 py-0.5 rounded-full leading-none shrink-0">GSC</span>
+                            )}
+                          </span>
                           <input type="number" min="0" max="999"
                             className="bg-transparent text-[13px] text-[#9aa3b2] text-center w-full outline-none focus:text-[#00bcd4]"
                             placeholder="—"

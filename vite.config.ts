@@ -9,7 +9,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '/.netlify/functions': {
-        target: 'https://aisajt.com',
+        target: 'http://localhost:8889',
         changeOrigin: true,
       },
     },

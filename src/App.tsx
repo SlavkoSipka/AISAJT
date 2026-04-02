@@ -43,6 +43,7 @@ const PortalLayout = lazy(() => import('./portal/components/layout/PortalLayout'
 const SeoClientDashboard = lazy(() => import('./portal/pages/SeoClientDashboard').then(m => ({ default: m.SeoClientDashboard })));
 const SeoAdminOverview = lazy(() => import('./portal/pages/SeoAdminOverview').then(m => ({ default: m.SeoAdminOverview })));
 const SeoAdminProject = lazy(() => import('./portal/pages/SeoAdminProject').then(m => ({ default: m.SeoAdminProject })));
+const SeoAdminPreview = lazy(() => import('./portal/pages/SeoAdminPreview').then(m => ({ default: m.SeoAdminPreview })));
 const SeoAdminNewSeoProject = lazy(() => import('./portal/pages/SeoAdminNewSeoProject').then(m => ({ default: m.SeoAdminNewSeoProject })));
 const SeoPublicReport = lazy(() => import('./portal/pages/SeoPublicReport').then(m => ({ default: m.SeoPublicReport })));
 
@@ -172,6 +173,9 @@ function AppContent() {
               } />
               <Route path="admin/seo/:id" element={
                 <PortalRoleGuard requiredRole="admin"><SeoAdminProject /></PortalRoleGuard>
+              } />
+              <Route path="admin/seo/:id/preview" element={
+                <PortalRoleGuard requiredRole="admin"><SeoAdminPreview /></PortalRoleGuard>
               } />
             </Route>
           </Route>

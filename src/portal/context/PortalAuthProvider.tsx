@@ -81,6 +81,7 @@ export function PortalAuthProvider({ children }: { children: React.ReactNode }) 
       queueMicrotask(() => {
         void (async () => {
           if (!mountedRef.current) return;
+          setLoading(true);
           setSession(nextSession);
           if (nextSession?.user) {
             await fetchProfile(nextSession.user.id);
