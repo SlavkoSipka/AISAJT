@@ -10,37 +10,41 @@ function getFileType(fileName: string): string {
   return 'document';
 }
 
-export function useFiles(projectId: string | undefined) {
+export function useFiles(clientId: string | undefined) {
   const { profile } = useAuth();
   const [files, setFiles] = useState<ProjectFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
 
   const fetchFiles = useCallback(async () => {
-    if (!projectId) return;
+    if (!clientId) {
+      setFiles([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
 
     const { data } = await supabase
       .from('project_files')
       .select('*, uploader:profiles!uploaded_by(id, full_name, role)')
-      .eq('project_id', projectId)
+      .eq('client_id', clientId)
       .order('created_at', { ascending: false });
 
     setFiles((data as unknown as ProjectFile[]) || []);
     setLoading(false);
-  }, [projectId]);
+  }, [clientId]);
 
   useEffect(() => {
     fetchFiles();
   }, [fetchFiles]);
 
   const uploadFile = useCallback(async (file: File) => {
-    if (!projectId || !profile) return;
+    if (!clientId || !profile) return;
     setUploading(true);
 
     try {
       const safeName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-      const path = `${projectId}/${safeName}`;
+      const path = `${clientId}/files/${safeName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('project-files')
@@ -53,7 +57,7 @@ export function useFiles(projectId: string | undefined) {
         .getPublicUrl(path);
 
       await supabase.from('project_files').insert({
-        project_id: projectId,
+        client_id: clientId,
         uploaded_by: profile.id,
         file_name: file.name,
         file_url: urlData.publicUrl,
@@ -64,7 +68,7 @@ export function useFiles(projectId: string | undefined) {
     } finally {
       setUploading(false);
     }
-  }, [projectId, profile, fetchFiles]);
+  }, [clientId, profile, fetchFiles]);
 
   return { files, loading, uploading, uploadFile, refetch: fetchFiles };
 }

@@ -2,6 +2,11 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useSeoProject } from '../hooks/useSeoProject';
+import { useAuth } from '../hooks/useAuth';
+import { useMessages } from '../hooks/useMessages';
+import { useFiles } from '../hooks/useFiles';
+import { MessageThread } from '../components/client/MessageThread';
+import { FilesList } from '../components/client/FilesList';
 import { Topbar } from '../components/layout/Topbar';
 import { Loader2, ArrowLeft, Plus, Trash2, RefreshCw, CheckCircle2, AlertTriangle, Link2, Pencil, X, Save, FileDown, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
@@ -88,6 +93,10 @@ export function SeoAdminProject() {
 
   const { seoProject, metricsHistory, latestMetrics, previousMetrics, keywords, tasks, progress, alerts, loading, refetch } = useSeoProject(id);
 
+  const { profile: adminProfile } = useAuth();
+  const { messages, sendMessage } = useMessages(seoProject?.client_id);
+  const { files, uploading, uploadFile } = useFiles(seoProject?.client_id);
+
   const [saving, setSaving] = useState<string | null>(null);
   const [gscSyncing, setGscSyncing] = useState(false);
   const [gscMsg, setGscMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
@@ -132,14 +141,11 @@ export function SeoAdminProject() {
   };
 
   // Build chart data from seo_gsc_daily filtered by range (same as client)
-  const filteredGscDaily = (() => {
-    if (dateRange === 'all') return gscDaily;
-    const rangeDays: Record<string, number> = { '3d': 3, '28d': 28, '3m': 90, '6m': 180 };
-    const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - (rangeDays[dateRange] || 28));
-    const cutoffStr = cutoff.toISOString().split('T')[0];
-    return gscDaily.filter(d => d.date >= cutoffStr);
-  })();
+  // Use slice(-N) instead of date cutoff to avoid GSC data lag (GSC is typically 2-4 days behind)
+  const RANGE_POINTS: Record<string, number> = { '3d': 3, '28d': 28, '3m': 90, '6m': 180 };
+  const filteredGscDaily = dateRange === 'all'
+    ? gscDaily
+    : gscDaily.slice(-( RANGE_POINTS[dateRange] ?? 28));
   const gscChartData: SeoMetrics[] = filteredGscDaily.map(d => ({
     id: '', seo_project_id: '', created_at: '',
     month: d.date, organic_visits: d.clicks, clicks: d.clicks,
@@ -148,11 +154,9 @@ export function SeoAdminProject() {
   }));
   const filteredMetricsHistory = (() => {
     if (dateRange === 'all') return metricsHistory;
-    const rangeDays: Record<string, number> = { '3d': 3, '28d': 28, '3m': 90, '6m': 180 };
-    const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - (rangeDays[dateRange] || 28));
-    const cutoffStr = cutoff.toISOString().split('T')[0];
-    return metricsHistory.filter(m => m.month >= cutoffStr);
+    // Map date ranges to number of months for monthly fallback data
+    const rangeMonths: Record<string, number> = { '3d': 1, '28d': 1, '3m': 3, '6m': 6 };
+    return metricsHistory.slice(-(rangeMonths[dateRange] ?? 1));
   })();
   const adminChartData = gscChartData.length > 0 ? gscChartData : filteredMetricsHistory;
 
@@ -258,6 +262,26 @@ export function SeoAdminProject() {
   const [newTask, setNewTask] = useState<{ title: string; subtitle: string; status: SeoTaskStatus }>({ title: '', subtitle: '', status: 'next' });
   const [newProgress, setNewProgress] = useState<{ category: string; percentage: number; color: string }>({ category: '', percentage: 0, color: 'cyan' });
   const [newAlert, setNewAlert] = useState('');
+
+  // ── Package renewal ─────────────────────────────────────────────────────────
+  const [renewalSaving, setRenewalSaving] = useState(false);
+  
+  const handleRenewPackage = async () => {
+    if (!id || !seoProject.renewal_date) return;
+    setRenewalSaving(true);
+    try {
+      const currentDate = new Date(seoProject.renewal_date);
+      const nextDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
+      const newRenewalDate = nextDate.toISOString().split('T')[0];
+      
+      await supabase.from('seo_projects').update({ renewal_date: newRenewalDate }).eq('id', id);
+      toastOk(`Paket produžen do ${nextDate.toLocaleDateString('sr-Latn', { day: 'numeric', month: 'long', year: 'numeric' })}`);
+      await refetch();
+    } catch {
+      toastErr('Greška pri produžavanju paketa');
+    }
+    setRenewalSaving(false);
+  };
 
   // ── GSC project settings ────────────────────────────────────────────────────
   const handleGscUpdate = async (field: string, value: string | boolean) => {
@@ -536,10 +560,11 @@ export function SeoAdminProject() {
                 <TrendingUp size={13} />
                 Pregled klijenta
               </button>
-              <button onClick={handleExportPDF} disabled={exporting}
-                className="portal-btn portal-btn-secondary text-[12px] py-2 px-3 disabled:opacity-40 flex items-center gap-1.5">
-                {exporting ? <Loader2 size={13} className="animate-spin" /> : <FileDown size={13} />}
-                Izvezi izveštaj
+              <button onClick={() => navigate(`/portal/admin/seo/${id}/report`)}
+                className="portal-btn portal-btn-secondary text-[12px] py-2 px-3 flex items-center gap-1.5"
+                style={{ background: '#00bcd4', color: '#fff', border: 'none' }}>
+                <FileDown size={13} />
+                Generiši izveštaj
               </button>
             </div>
           </div>
@@ -554,9 +579,15 @@ export function SeoAdminProject() {
             </div>
           }>
             <div className="flex gap-0.5 mb-2.5" style={{ background: '#f7f8fa', borderRadius: 8, padding: 2, width: 'fit-content' }}>
-              {(['3d', '28d', '3m', '6m', 'all'] as DateRange[]).map(r => (
-                <DateRangeTab key={r} value={r} active={dateRange === r} onClick={() => setDateRange(r)} />
-              ))}
+              {(['3d', '28d', '3m', '6m', 'all'] as DateRange[])
+                .filter(r => {
+                  if (r === '6m' && gscDaily.length > 0 && gscDaily.length < 180) return false;
+                  if (r === '3m' && gscDaily.length > 0 && gscDaily.length < 90) return false;
+                  return true;
+                })
+                .map(r => (
+                  <DateRangeTab key={r} value={r} active={dateRange === r} onClick={() => setDateRange(r)} />
+                ))}
             </div>
             {gscDailyLoading ? (
               <div className="flex items-center justify-center gap-2" style={{ height: 220 }}>
@@ -723,6 +754,41 @@ export function SeoAdminProject() {
             {/* ══ LEFT COLUMN ══════════════════════════════════════════════ */}
             <div>
 
+              {/* ── Package Info & Renewal ───────────────────────────── */}
+              {seoProject.package_name && (
+                <Section title="SEO Paket" action={
+                  renewalSaving ? <Loader2 size={13} className="text-[#00bcd4] animate-spin" /> : null
+                }>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 rounded-lg border border-[#e3e7ee] bg-[#f7f8fa]">
+                      <div>
+                        <p className="text-[12px] font-medium text-[#1a2030]">{seoProject.package_name}</p>
+                        {seoProject.package_price && (
+                          <p className="text-[11px] text-[#9aa3b2] mt-0.5">€{seoProject.package_price}/mesec</p>
+                        )}
+                      </div>
+                    </div>
+                    {seoProject.renewal_date && (
+                      <>
+                        <div className="flex items-center justify-between p-3 rounded-lg border border-[#e3e7ee] bg-[#f7f8fa]">
+                          <div>
+                            <p className="text-[11px] font-medium text-[#9aa3b2] uppercase tracking-wide mb-1">Paket se obnavlja</p>
+                            <p className="text-[13px] font-semibold text-[#1a2030]">
+                              {new Date(seoProject.renewal_date).toLocaleDateString('sr-Latn', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            </p>
+                          </div>
+                        </div>
+                        <button onClick={handleRenewPackage} disabled={renewalSaving}
+                          className="portal-btn portal-btn-primary w-full text-[12px] disabled:opacity-40">
+                          {renewalSaving ? <Loader2 size={13} className="animate-spin" /> : null}
+                          Produži paket za +1 mesec
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </Section>
+              )}
+
               {/* ── GSC Connection ────────────────────────────────────── */}
               <Section title="Google Search Console" action={
                 <div className="flex items-center gap-1.5">
@@ -745,6 +811,19 @@ export function SeoAdminProject() {
                       onClick={() => handleGscUpdate('gsc_auto_update', !seoProject.gsc_auto_update)}
                       className={`relative w-10 h-6 rounded-full transition-colors duration-200 ${seoProject.gsc_auto_update ? 'bg-[#00bcd4]' : 'bg-[#e3e7ee]'}`}>
                       <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all duration-200 ${seoProject.gsc_auto_update ? 'left-5' : 'left-1'}`} />
+                    </button>
+                  </div>
+
+                  {/* Backlinks visibility toggle */}
+                  <div className="flex items-center justify-between p-3 rounded-lg border border-[#e3e7ee] bg-[#f7f8fa]">
+                    <div>
+                      <p className="text-[12px] font-medium text-[#1a2030]">Prikaži backlinks klijentu</p>
+                      <p className="text-[11px] text-[#9aa3b2] mt-0.5">Ako je isključeno — sekcija je zamagljena sa ponudom nadogradnje</p>
+                    </div>
+                    <button
+                      onClick={() => handleGscUpdate('show_backlinks', !seoProject.show_backlinks)}
+                      className={`relative w-10 h-6 rounded-full transition-colors duration-200 ${seoProject.show_backlinks ? 'bg-[#00bcd4]' : 'bg-[#e3e7ee]'}`}>
+                      <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all duration-200 ${seoProject.show_backlinks ? 'left-5' : 'left-1'}`} />
                     </button>
                   </div>
 
@@ -1168,6 +1247,25 @@ export function SeoAdminProject() {
             </div>
           </div>
           </div>{/* close reportRef */}
+
+          {/* ══ Chat + Files (per klijentu, van PDF izveštaja) ═══════════════ */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
+            <Section title="Poruke sa klijentom">
+              <MessageThread
+                messages={messages}
+                currentUserId={adminProfile?.id || ''}
+                onSend={sendMessage}
+              />
+            </Section>
+
+            <Section title="Fajlovi klijenta">
+              <FilesList
+                files={files}
+                uploading={uploading}
+                onUpload={uploadFile}
+              />
+            </Section>
+          </div>
         </main>
     </>
   );

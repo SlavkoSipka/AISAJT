@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { Topbar } from '../components/layout/Topbar';
 import { useSeoProject } from '../hooks/useSeoProject';
@@ -330,32 +331,57 @@ export function SeoMultiChart({ data, active, rangeKey }: { data: SeoMetrics[]; 
   );
 }
 
-// ── Info tooltip ────────────────────────────────────────────────────────────
+// ── Info tooltip ─────────────────────────────────────────────────────────────
+// Rendered via React Portal at document.body so it escapes any stacking context
+// (including the fixed sidebar at z-index: 40 and animated parent containers).
 function InfoTip({ text }: { text: string }) {
-  const [show, setShow] = useState(false);
+  const [show, setShow]   = useState(false);
+  const [pos,  setPos]    = useState({ top: 0, left: 0 });
+  const iconRef = useRef<SVGSVGElement>(null);
+
+  const updatePos = useCallback(() => {
+    const rect = iconRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setPos({
+      top:  rect.top + window.scrollY - 8,   // 8px gap above icon
+      left: rect.left + rect.width / 2,       // horizontally centered on icon
+    });
+  }, []);
+
+  const handleEnter = () => { updatePos(); setShow(true); };
+  const handleLeave = () => setShow(false);
+
   return (
     <span
       style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', marginLeft: 5, cursor: 'help' }}
-      onMouseEnter={() => setShow(true)}
-      onMouseLeave={() => setShow(false)}
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
     >
-      <svg viewBox="0 0 16 16" fill="none" style={{ width: 13, height: 13, color: C.text3, opacity: 0.5, transition: 'opacity 0.2s' }}
-        onMouseEnter={e => { e.currentTarget.style.opacity = '1'; }}
-        onMouseLeave={e => { e.currentTarget.style.opacity = '0.5'; }}>
+      <svg
+        ref={iconRef}
+        viewBox="0 0 16 16" fill="none"
+        style={{ width: 13, height: 13, color: C.text3, opacity: show ? 1 : 0.5, transition: 'opacity 0.2s' }}
+      >
         <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.3" />
         <path d="M8 7v4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
         <circle cx="8" cy="5" r="0.7" fill="currentColor" />
       </svg>
-      {show && (
+
+      {show && createPortal(
         <span style={{
-          position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)',
-          marginBottom: 6, padding: '7px 11px', borderRadius: 7, fontSize: 11, lineHeight: 1.45,
+          position: 'absolute',
+          top:  pos.top,
+          left: pos.left,
+          transform: 'translate(-50%, -100%)',
+          marginTop: -6,
+          padding: '7px 11px', borderRadius: 7, fontSize: 11, lineHeight: 1.45,
           color: '#fff', background: '#1a2030', whiteSpace: 'pre-line', width: 220,
-          boxShadow: '0 4px 16px rgba(0,0,0,0.18)', zIndex: 50, pointerEvents: 'none',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.22)', zIndex: 9999, pointerEvents: 'none',
           textTransform: 'none', letterSpacing: 'normal', fontWeight: 400,
         }}>
           {text}
-        </span>
+        </span>,
+        document.body,
       )}
     </span>
   );
@@ -712,11 +738,9 @@ export function SeoClientDashboard() {
   // Use daily data when available; fall back to monthly DB data (filtered by range)
   const filteredMetricsHistory = (() => {
     if (dateRange === 'all') return metricsHistory;
-    const rangeDays: Record<string, number> = { '3d': 3, '28d': 28, '3m': 90, '6m': 180 };
-    const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - (rangeDays[dateRange] || 28));
-    const cutoffStr = cutoff.toISOString().split('T')[0];
-    return metricsHistory.filter(m => m.month >= cutoffStr);
+    // Map date ranges to number of months for monthly fallback data
+    const rangeMonths: Record<string, number> = { '3d': 1, '28d': 1, '3m': 3, '6m': 6 };
+    return metricsHistory.slice(-(rangeMonths[dateRange] ?? 1));
   })();
   const chartData = gscDaily.length > 0 ? gscDailyAsMetrics : filteredMetricsHistory;
   const chartLabel = dateRange === 'all'
@@ -789,11 +813,55 @@ export function SeoClientDashboard() {
             numericValue={keywords.length}
             delta={`${topInTop10} u top 10`}
             deltaType="up" />
-          <MetricCard label="Novi backlinks" accent={C.amber} delay={0.2}
-            info="Linkovi sa drugih sajtova ka vašem. Više kvalitetnih linkova = veći autoritet sajta u očima Googla."
-            displayValue={latestMetrics ? `+${latestMetrics.new_backlinks}` : '—'}
-            delta={latestMetrics ? `${latestMetrics.total_backlinks} ukupno` : 'Nema podataka'}
-            deltaType={latestMetrics && latestMetrics.new_backlinks > 0 ? 'up' : 'neutral'} />
+          {seoProject.show_backlinks ? (
+            <MetricCard label="Novi backlinks" accent={C.amber} delay={0.2}
+              info="Linkovi sa drugih sajtova ka vašem. Više kvalitetnih linkova = veći autoritet sajta u očima Googla."
+              displayValue={latestMetrics ? `+${latestMetrics.new_backlinks}` : '—'}
+              delta={latestMetrics ? `${latestMetrics.total_backlinks} ukupno` : 'Nema podataka'}
+              deltaType={latestMetrics && latestMetrics.new_backlinks > 0 ? 'up' : 'neutral'} />
+          ) : (
+            <div style={{ position: 'relative', borderRadius: 10, overflow: 'hidden' }}>
+              {/* Blurred card beneath */}
+              <div style={{ filter: 'blur(3px)', pointerEvents: 'none', userSelect: 'none', opacity: 0.5 }}>
+                <MetricCard label="Novi backlinks" accent={C.amber} delay={0.2}
+                  displayValue="+12"
+                  delta="38 ukupno"
+                  deltaType="up" />
+              </div>
+              {/* Locked overlay */}
+              <div
+                onClick={() => navigate('/portal/dashboard/poruke')}
+                style={{
+                  position: 'absolute', inset: 0,
+                  background: 'rgba(26,31,78,0.82)',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                  gap: 6, borderRadius: 10, cursor: 'pointer',
+                  backdropFilter: 'blur(1px)',
+                  transition: 'background 0.2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(26,31,78,0.92)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(26,31,78,0.82)'; }}
+              >
+                <svg viewBox="0 0 20 20" fill="none" style={{ width: 20, height: 20 }}>
+                  <rect x="4" y="9" width="12" height="9" rx="2" stroke="#00bcd4" strokeWidth="1.5" />
+                  <path d="M7 9V6a3 3 0 016 0v3" stroke="#00bcd4" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+                <p style={{ fontSize: 11, fontWeight: 700, color: '#fff', letterSpacing: 0.2, textAlign: 'center', lineHeight: 1.3, margin: 0 }}>
+                  Backlinks praćenje
+                </p>
+                <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.6)', textAlign: 'center', margin: 0 }}>
+                  Dostupno u višem paketu
+                </p>
+                <span style={{
+                  marginTop: 2, fontSize: 9, fontWeight: 600,
+                  background: '#00bcd4', color: '#fff',
+                  padding: '3px 10px', borderRadius: 99,
+                }}>
+                  Nadogradite plan →
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Chart — full width, dominant */}
@@ -807,9 +875,16 @@ export function SeoClientDashboard() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: 2, marginBottom: 10, background: '#f7f8fa', borderRadius: 8, padding: 2, width: 'fit-content' }}>
-            {(['3d', '28d', '3m', '6m', 'all'] as DateRange[]).map(r => (
-              <DateRangeTab key={r} value={r} active={dateRange === r} onClick={() => setDateRange(r)} />
-            ))}
+            {(['3d', '28d', '3m', '6m', 'all'] as DateRange[])
+              .filter(r => {
+                // Sakrij opseg ako bi dao isti rezultat kao "Sve" (nema dovoljno istorije)
+                if (r === '6m' && allGscDaily.length > 0 && allGscDaily.length < 180) return false;
+                if (r === '3m' && allGscDaily.length > 0 && allGscDaily.length < 90) return false;
+                return true;
+              })
+              .map(r => (
+                <DateRangeTab key={r} value={r} active={dateRange === r} onClick={() => setDateRange(r)} />
+              ))}
           </div>
           {gscDailyLoading ? (
             <div style={{ height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>

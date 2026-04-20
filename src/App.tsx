@@ -34,6 +34,7 @@ const PortalAdminProject = lazy(() => import('./portal/pages/AdminProject').then
 const PortalAdminNewProject = lazy(() => import('./portal/pages/AdminNewProject').then(m => ({ default: m.AdminNewProject })));
 const PortalAdminClients = lazy(() => import('./portal/pages/AdminClients').then(m => ({ default: m.AdminClients })));
 const PortalAdminNewClient = lazy(() => import('./portal/pages/AdminNewClient').then(m => ({ default: m.AdminNewClient })));
+const PortalAdminMessages = lazy(() => import('./portal/pages/AdminMessages').then(m => ({ default: m.AdminMessages })));
 
 const PortalAuthGuard = lazy(() => import('./portal/guards/AuthGuard').then(m => ({ default: m.AuthGuard })));
 const PortalRoleGuard = lazy(() => import('./portal/guards/RoleGuard').then(m => ({ default: m.RoleGuard })));
@@ -46,6 +47,7 @@ const SeoAdminProject = lazy(() => import('./portal/pages/SeoAdminProject').then
 const SeoAdminPreview = lazy(() => import('./portal/pages/SeoAdminPreview').then(m => ({ default: m.SeoAdminPreview })));
 const SeoAdminNewSeoProject = lazy(() => import('./portal/pages/SeoAdminNewSeoProject').then(m => ({ default: m.SeoAdminNewSeoProject })));
 const SeoPublicReport = lazy(() => import('./portal/pages/SeoPublicReport').then(m => ({ default: m.SeoPublicReport })));
+const SeoReportPage = lazy(() => import('./portal/pages/SeoReportPage').then(m => ({ default: m.SeoReportPage })));
 
 function PortalRoutesWithAuth() {
   return (
@@ -146,6 +148,9 @@ function AppContent() {
               <Route path="admin" element={
                 <PortalRoleGuard requiredRole="admin"><PortalAdminOverview /></PortalRoleGuard>
               } />
+              <Route path="admin/poruke" element={
+                <PortalRoleGuard requiredRole="admin"><PortalAdminMessages /></PortalRoleGuard>
+              } />
               <Route path="admin/klijenti" element={
                 <PortalRoleGuard requiredRole="admin"><PortalAdminClients /></PortalRoleGuard>
               } />
@@ -176,6 +181,9 @@ function AppContent() {
               } />
               <Route path="admin/seo/:id/preview" element={
                 <PortalRoleGuard requiredRole="admin"><SeoAdminPreview /></PortalRoleGuard>
+              } />
+              <Route path="admin/seo/:id/report" element={
+                <PortalRoleGuard requiredRole="admin"><SeoReportPage /></PortalRoleGuard>
               } />
             </Route>
           </Route>

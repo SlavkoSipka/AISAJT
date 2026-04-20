@@ -22,6 +22,7 @@ export function SeoAdminNewSeoProject() {
     packageName: '',
     packagePrice: '',
     renewalDate: '',
+    showBacklinks: true,
   });
 
   useEffect(() => {
@@ -54,6 +55,7 @@ export function SeoAdminNewSeoProject() {
         package_name: form.packageName.trim() || null,
         package_price: form.packagePrice ? Number(form.packagePrice) : null,
         renewal_date: form.renewalDate || null,
+        show_backlinks: form.showBacklinks,
       })
       .select()
       .single();
@@ -162,6 +164,19 @@ export function SeoAdminNewSeoProject() {
                   value={form.renewalDate}
                   onChange={set('renewalDate')}
                 />
+              </div>
+
+              <div className="flex items-center justify-between p-3 rounded-lg border border-[#e3e7ee] bg-[#f7f8fa]">
+                <div>
+                  <p className="text-[12px] font-medium text-[#1a2030]">Prikaži backlinks klijentu</p>
+                  <p className="text-[11px] text-[#9aa3b2] mt-0.5">Ako je isključeno — sekcija je zamagljena sa ponudom nadogradnje</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setForm(p => ({ ...p, showBacklinks: !p.showBacklinks }))}
+                  className={`relative w-10 h-6 rounded-full transition-colors duration-200 ${form.showBacklinks ? 'bg-[#00bcd4]' : 'bg-[#e3e7ee]'}`}>
+                  <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all duration-200 ${form.showBacklinks ? 'left-5' : 'left-1'}`} />
+                </button>
               </div>
 
               {error && (

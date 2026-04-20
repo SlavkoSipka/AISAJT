@@ -4,7 +4,7 @@ import type { Message } from '../../lib/types';
 interface MessageReplyProps {
   messages: Message[];
   currentUserId: string;
-  onSend: (body: string) => Promise<void>;
+  onSend: (body: string, attachment?: File) => Promise<void>;
 }
 
 export function MessageReply({ messages, currentUserId, onSend }: MessageReplyProps) {

@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../hooks/useAuth';
 import { useProject } from '../../hooks/useProject';
 import { useMessages } from '../../hooks/useMessages';
@@ -20,9 +22,34 @@ const statusLabels: Record<string, string> = {
 };
 
 export function Sidebar() {
-  const { isAdmin, signOut } = useAuth();
+  const { isAdmin, signOut, profile } = useAuth();
   const { project, seoProject } = useProject();
-  const { unreadCount } = useMessages(project?.id);
+  const { unreadCount } = useMessages(profile?.id);
+  const [adminUnread, setAdminUnread] = useState(0);
+
+  useEffect(() => {
+    if (!isAdmin || !profile?.id) return;
+
+    const fetchAdminUnread = async () => {
+      const { count } = await supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_read', false)
+        .neq('sender_id', profile.id);
+      setAdminUnread(count || 0);
+    };
+
+    fetchAdminUnread();
+
+    const channel = supabase
+      .channel('admin-sidebar-unread')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, fetchAdminUnread)
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [isAdmin, profile?.id]);
 
   const projectName = project?.name || seoProject?.domain;
   const projectDomain = project?.domain || seoProject?.domain || undefined;
@@ -97,6 +124,17 @@ export function Sidebar() {
               <NavLink to="/portal/admin/klijenti" className={navLinkClass}>
                 <UserCircle2 size={16} />
                 Klijenti
+              </NavLink>
+              <NavLink to="/portal/admin/poruke" className={navLinkClass}>
+                <div className="relative">
+                  <MessageSquare size={16} />
+                  {adminUnread > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-[#e53e3e] text-[10px] text-white flex items-center justify-center font-medium">
+                      {adminUnread > 9 ? '9+' : adminUnread}
+                    </span>
+                  )}
+                </div>
+                Poruke
               </NavLink>
               <NavLink to="/portal/admin/projekti/novi" className={navLinkClass}>
                 <PlusCircle size={16} />
@@ -176,6 +214,19 @@ export function Sidebar() {
             }>
               <UserCircle2 size={20} />
               Klijenti
+            </NavLink>
+            <NavLink to="/portal/admin/poruke" className={({ isActive }) =>
+              `flex flex-col items-center gap-1 text-[11px] py-1 px-2 relative ${isActive ? 'text-[#00d4f5]' : 'text-[rgba(255,255,255,0.55)]'}`
+            }>
+              <div className="relative">
+                <MessageSquare size={20} />
+                {adminUnread > 0 && (
+                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-[#e53e3e] text-[9px] text-white flex items-center justify-center font-medium">
+                    {adminUnread > 9 ? '9+' : adminUnread}
+                  </span>
+                )}
+              </div>
+              Poruke
             </NavLink>
             <NavLink to="/portal/admin/seo" end className={({ isActive }) =>
               `flex flex-col items-center gap-1 text-[11px] py-1 px-2 ${isActive ? 'text-[#00d4f5]' : 'text-[rgba(255,255,255,0.55)]'}`

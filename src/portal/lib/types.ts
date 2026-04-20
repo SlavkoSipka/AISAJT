@@ -36,17 +36,24 @@ export interface ProjectStep {
 
 export interface Message {
   id: string;
-  project_id: string;
+  client_id: string;
+  project_id: string | null;
   sender_id: string;
   body: string;
   is_read: boolean;
   created_at: string;
   sender?: Profile;
+  attachment_url?: string | null;
+  attachment_name?: string | null;
+  attachment_type?: string | null;
+  attachment_size?: number | null;
+  _pending?: boolean;
 }
 
 export interface ProjectFile {
   id: string;
-  project_id: string;
+  client_id: string;
+  project_id: string | null;
   uploaded_by: string;
   file_name: string;
   file_url: string;
@@ -87,6 +94,8 @@ export interface SeoProject {
   // Google Search Console
   gsc_property_id: string | null;
   gsc_auto_update: boolean;
+  // Feature flags
+  show_backlinks: boolean;
   created_at: string;
 }
 

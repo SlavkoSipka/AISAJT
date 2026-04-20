@@ -36,8 +36,8 @@ export function AdminProject() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  const { messages, sendMessage } = useMessages(id);
-  const { files, uploading, uploadFile } = useFiles(id);
+  const { messages, sendMessage } = useMessages(project?.client_id);
+  const { files, uploading, uploadFile } = useFiles(project?.client_id);
   const { deploys, updateDeploy, deleteDeploy } = useDeploys(id);
 
   const fetchData = useCallback(async () => {

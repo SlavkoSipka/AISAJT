@@ -17,12 +17,12 @@ import '../portal.css';
 export function ClientDashboard() {
   const { profile } = useAuth();
   const { project, steps, loading, progressPercentage, estimatedCompletion } = useProject();
-  const { messages, unreadCount, sendMessage, markAsRead } = useMessages(project?.id, 3);
+  const { messages, unreadCount, sendMessage, markAsRead } = useMessages(profile?.id, 3);
   const { deploys } = useDeploys(project?.id);
 
   useEffect(() => {
-    if (project?.id) markAsRead();
-  }, [project?.id, markAsRead]);
+    if (profile?.id) markAsRead();
+  }, [profile?.id, markAsRead]);
 
   if (loading) {
     return (

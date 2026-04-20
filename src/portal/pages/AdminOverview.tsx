@@ -30,7 +30,7 @@ export function AdminOverview() {
     const [{ data: profiles }, { data: steps }, { data: unreadCounts }] = await Promise.all([
       supabase.from('profiles').select('*').in('id', clientIds),
       supabase.from('project_steps').select('*').in('project_id', projectIds).order('position'),
-      supabase.from('messages').select('project_id').eq('is_read', false),
+      supabase.from('messages').select('client_id').eq('is_read', false).in('client_id', clientIds),
     ]);
 
     const profileMap = new Map((profiles as Profile[] || []).map(p => [p.id, p]));
@@ -40,16 +40,16 @@ export function AdminOverview() {
       stepsMap.get(s.project_id)!.push(s);
     });
 
-    const unreadMap = new Map<string, number>();
-    (unreadCounts as { project_id: string }[] || []).forEach(m => {
-      unreadMap.set(m.project_id, (unreadMap.get(m.project_id) || 0) + 1);
+    const unreadByClient = new Map<string, number>();
+    (unreadCounts as { client_id: string }[] || []).forEach(m => {
+      unreadByClient.set(m.client_id, (unreadByClient.get(m.client_id) || 0) + 1);
     });
 
     const enriched: ProjectWithClient[] = (projectsData as Project[]).map(p => ({
       ...p,
       client: profileMap.get(p.client_id) || { id: p.client_id, full_name: 'Nepoznat', role: 'client' as const, avatar_url: null, created_at: '' },
       steps: stepsMap.get(p.id) || [],
-      unread_count: unreadMap.get(p.id) || 0,
+      unread_count: unreadByClient.get(p.client_id) || 0,
     }));
 
     setProjects(enriched);
