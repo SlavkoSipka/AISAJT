@@ -5,6 +5,7 @@ import { useSeoProject } from '../hooks/useSeoProject';
 import { Loader2, ArrowLeft, RefreshCw, Save, ChevronDown, ChevronUp, ExternalLink, MessageCircle, Trash2, Plus, Eye } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import type { SeoMetrics, GscDailyPoint, GscQueryResponse } from '../lib/types';
+import { getSeoPlanDisplay } from '../lib/seoPlans';
 import {
   C, SeoMultiChart, MetricCard, KeywordRow, TaskTimeline,
   ProgressRing, ChartToggle, DateRangeTab,
@@ -219,6 +220,7 @@ export function SeoAdminPreview() {
   const posDelta = latestMetrics?.avg_position != null && previousMetrics?.avg_position != null
     ? +(previousMetrics.avg_position - latestMetrics.avg_position).toFixed(1)
     : null;
+  const planDisplay = getSeoPlanDisplay(seoProject.package_name, seoProject.package_price);
 
   const hasDailyData = filteredDraft.length > 0;
   const filteredMetricsHistory = (() => {
@@ -322,9 +324,9 @@ export function SeoAdminPreview() {
               </div>
               <div>
                 <p style={{ fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13, color: C.text }}>{seoProject.domain}</p>
-                {seoProject.package_name && (
+                {planDisplay && (
                   <p style={{ fontSize: 10, color: C.text3, marginTop: 1 }}>
-                    {seoProject.package_name}{seoProject.package_price ? ` — €${seoProject.package_price}/mes` : ''}
+                    {planDisplay}
                   </p>
                 )}
               </div>

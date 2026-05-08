@@ -20,7 +20,7 @@ export default async (req: Request, _context: Context) => {
 
   try {
     const body = await req.json();
-    const { clientId, projectName, domain, packageName, packagePrice, netlifyPreviewUrl } = body;
+    const { clientId, projectName, domain, netlifyPreviewUrl } = body;
 
     if (!clientId || !projectName) {
       return new Response(
@@ -52,8 +52,8 @@ export default async (req: Request, _context: Context) => {
         name: projectName,
         domain: domain || null,
         netlify_preview_url: netlifyPreviewUrl || null,
-        package_name: packageName || null,
-        package_price: packagePrice || null,
+        package_name: null,
+        package_price: null,
         status: 'active',
       })
       .select()

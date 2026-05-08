@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase';
 import { Topbar } from '../components/layout/Topbar';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import type { Profile } from '../lib/types';
+import { SEO_PLAN_OPTIONS, getSeoPlanByKey, type SeoPlanKey } from '../lib/seoPlans';
 import '../portal.css';
 
 export function SeoAdminNewSeoProject() {
@@ -16,11 +17,15 @@ export function SeoAdminNewSeoProject() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    clientId: string;
+    domain: string;
+    planKey: SeoPlanKey;
+    renewalDate: string;
+  }>({
     clientId: preselectedClientId,
     domain: '',
-    packageName: '',
-    packagePrice: '',
+    planKey: 'start' as SeoPlanKey,
     renewalDate: '',
     showBacklinks: true,
   });
@@ -47,13 +52,15 @@ export function SeoAdminNewSeoProject() {
     setSubmitting(true);
     setError('');
 
+    const selectedPlan = getSeoPlanByKey(form.planKey);
+
     const { data, error: insertError } = await supabase
       .from('seo_projects')
       .insert({
         client_id: form.clientId,
         domain: form.domain.trim(),
-        package_name: form.packageName.trim() || null,
-        package_price: form.packagePrice ? Number(form.packagePrice) : null,
+        package_name: selectedPlan.name,
+        package_price: selectedPlan.price,
         renewal_date: form.renewalDate || null,
         show_backlinks: form.showBacklinks,
       })
@@ -69,7 +76,7 @@ export function SeoAdminNewSeoProject() {
     navigate(`/portal/admin/seo/${data.id}`);
   };
 
-  const set = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+  const set = (field: 'clientId' | 'domain' | 'renewalDate') => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm(p => ({ ...p, [field]: e.target.value }));
 
   return (
@@ -132,28 +139,19 @@ export function SeoAdminNewSeoProject() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[11px] font-medium text-[#5a6478] mb-1.5">Naziv paketa</label>
-                  <input
-                    type="text"
-                    className="portal-input"
-                    placeholder="Grow"
-                    value={form.packageName}
-                    onChange={set('packageName')}
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-medium text-[#5a6478] mb-1.5">Cena (EUR/mes)</label>
-                  <input
-                    type="number"
-                    min="0"
-                    className="portal-input"
-                    placeholder="250"
-                    value={form.packagePrice}
-                    onChange={set('packagePrice')}
-                  />
-                </div>
+              <div>
+                <label className="block text-[11px] font-medium text-[#5a6478] mb-1.5">SEO plan</label>
+                <select
+                  className="portal-input"
+                  value={form.planKey}
+                  onChange={e => setForm(p => ({ ...p, planKey: e.target.value as SeoPlanKey }))}
+                >
+                  {SEO_PLAN_OPTIONS.map(plan => (
+                    <option key={plan.key} value={plan.key}>
+                      {plan.name} — €{plan.price}/mes
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>

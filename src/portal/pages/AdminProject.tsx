@@ -188,24 +188,6 @@ export function AdminProject() {
                       <option value="completed">Završen</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="text-[11px] text-[#9aa3b2] mb-1 block">Paket</label>
-                    <input
-                      defaultValue={project.package_name || ''}
-                      onBlur={e => handleProjectUpdate('package_name', e.target.value || null)}
-                      className="portal-input text-[13px]"
-                      placeholder="Grow"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[11px] text-[#9aa3b2] mb-1 block">Cena (EUR)</label>
-                    <input
-                      type="number"
-                      defaultValue={project.package_price || ''}
-                      onBlur={e => handleProjectUpdate('package_price', e.target.value ? Number(e.target.value) : null)}
-                      className="portal-input text-[13px]"
-                    />
-                  </div>
                 </div>
 
                 <div className="mt-4">

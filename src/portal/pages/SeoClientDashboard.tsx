@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Topbar } from '../components/layout/Topbar';
 import { useSeoProject } from '../hooks/useSeoProject';
 import { supabase } from '../lib/supabase';
+import { getSeoPlanDisplay } from '../lib/seoPlans';
 import { Loader2, Check, ChevronDown, ChevronUp, ExternalLink, MessageCircle } from 'lucide-react';
 import type { SeoMetrics, SeoKeyword, SeoTask, SeoProgress, SeoAlert, GscDailyPoint } from '../lib/types';
 import '../portal.css';
@@ -754,6 +755,7 @@ export function SeoClientDashboard() {
   const posDelta = latestMetrics?.avg_position != null && previousMetrics?.avg_position != null
     ? +(previousMetrics.avg_position - latestMetrics.avg_position).toFixed(1)
     : null;
+  const planDisplay = getSeoPlanDisplay(seoProject.package_name, seoProject.package_price);
 
   return (
     <div style={{ background: C.bg, minHeight: '100%' }}>
@@ -782,9 +784,9 @@ export function SeoClientDashboard() {
             </div>
             <div>
               <p style={{ fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13, color: C.text }}>{seoProject.domain}</p>
-              {seoProject.package_name && (
+              {planDisplay && (
                 <p style={{ fontSize: 10, color: C.text3, marginTop: 1 }}>
-                  {seoProject.package_name}{seoProject.package_price ? ` — €${seoProject.package_price}/mes` : ''}
+                  {planDisplay}
                 </p>
               )}
             </div>

@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../hooks/useAuth';
 import { useProject } from '../../hooks/useProject';
 import { useMessages } from '../../hooks/useMessages';
+import { getSeoPlanDisplay } from '../../lib/seoPlans';
 import {
   LayoutDashboard,
   MessageSquare,
@@ -56,8 +57,7 @@ export function Sidebar() {
   const projectStatus = project?.status || 'active';
 
   // SEO package info
-  const seoPackageName = seoProject?.package_name || undefined;
-  const seoPackagePrice = seoProject?.package_price;
+  const seoPlanDisplay = getSeoPlanDisplay(seoProject?.package_name, seoProject?.package_price);
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -91,9 +91,9 @@ export function Sidebar() {
               {projectDomain && (
                 <p className="text-[12px] text-[rgba(255,255,255,0.4)] mt-0.5">{projectDomain}</p>
               )}
-              {seoPackageName && (
+              {seoPlanDisplay && (
                 <p className="text-[11px] text-[#00e5ff] mt-1.5">
-                  SEO: {seoPackageName}{seoPackagePrice ? ` — €${seoPackagePrice}/mes` : ''}
+                  SEO: {seoPlanDisplay}
                 </p>
               )}
               <div className="flex items-center gap-1.5 mt-2">

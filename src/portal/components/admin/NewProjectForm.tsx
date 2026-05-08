@@ -10,8 +10,6 @@ interface FormData {
   clientId: string;
   projectName: string;
   domain: string;
-  packageName: string;
-  packagePrice: string;
   netlifyPreviewUrl: string;
 }
 
@@ -19,8 +17,6 @@ const initialForm: FormData = {
   clientId: '',
   projectName: '',
   domain: '',
-  packageName: '',
-  packagePrice: '',
   netlifyPreviewUrl: '',
 };
 
@@ -73,8 +69,6 @@ export function NewProjectForm() {
           clientId: form.clientId,
           projectName: form.projectName,
           domain: form.domain || null,
-          packageName: form.packageName || null,
-          packagePrice: form.packagePrice ? Number(form.packagePrice) : null,
           netlifyPreviewUrl: form.netlifyPreviewUrl || null,
         }),
       });
@@ -175,33 +169,6 @@ export function NewProjectForm() {
               onChange={e => update('netlifyPreviewUrl', e.target.value)}
               className={fieldClass}
               placeholder="https://..."
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="portal-card">
-        <h4 className="text-[13px] font-medium text-[#1a2030] mb-4">
-          Paket
-        </h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className={labelClass}>Naziv paketa</label>
-            <input
-              value={form.packageName}
-              onChange={e => update('packageName', e.target.value)}
-              className={fieldClass}
-              placeholder='npr. "Grow"'
-            />
-          </div>
-          <div>
-            <label className={labelClass}>Cena (EUR)</label>
-            <input
-              type="number"
-              value={form.packagePrice}
-              onChange={e => update('packagePrice', e.target.value)}
-              className={fieldClass}
-              placeholder="250"
             />
           </div>
         </div>

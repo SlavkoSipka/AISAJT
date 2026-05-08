@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase';
 import { Topbar } from '../components/layout/Topbar';
 import { Loader2, PlusCircle, TrendingUp, Globe } from 'lucide-react';
 import type { SeoProject, SeoMetrics, Profile, SeoProjectWithClient } from '../lib/types';
+import { getSeoPlanDisplay } from '../lib/seoPlans';
 import '../portal.css';
 
 export function SeoAdminOverview() {
@@ -108,7 +109,9 @@ export function SeoAdminOverview() {
                   </tr>
                 </thead>
                 <tbody>
-                  {projects.map(p => (
+                  {projects.map(p => {
+                    const planDisplay = getSeoPlanDisplay(p.package_name, p.package_price);
+                    return (
                     <tr
                       key={p.id}
                       onClick={() => navigate(`/portal/admin/seo/${p.id}`)}
@@ -122,13 +125,10 @@ export function SeoAdminOverview() {
                         </div>
                       </td>
                       <td className="px-4 py-3">
-                        {p.package_name ? (
-                          <span className="text-[12px] font-medium text-[#1a2030]">{p.package_name}</span>
+                        {planDisplay ? (
+                          <span className="text-[12px] font-medium text-[#1a2030]">{planDisplay}</span>
                         ) : (
                           <span className="text-[12px] text-[#9aa3b2]">—</span>
-                        )}
-                        {p.package_price && (
-                          <p className="text-[11px] text-[#9aa3b2] mt-0.5">€{p.package_price}/mes</p>
                         )}
                       </td>
                       <td className="px-4 py-3 text-right">
@@ -166,7 +166,8 @@ export function SeoAdminOverview() {
                         )}
                       </td>
                     </tr>
-                  ))}
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

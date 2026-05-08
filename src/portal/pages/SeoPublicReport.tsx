@@ -14,6 +14,7 @@ import {
   Legend,
 } from 'chart.js';
 import type { SeoProject, SeoMetrics, SeoKeyword, SeoTask, SeoProgress, SeoAlert } from '../lib/types';
+import { getSeoPlanDisplay } from '../lib/seoPlans';
 import '../portal.css';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, ChartTooltip, Legend);
@@ -159,6 +160,7 @@ export function SeoPublicReport() {
     ? +(prev.avg_position - latest.avg_position).toFixed(1) : null;
   const lastUpdate = latest
     ? new Date(latest.month + 'T00:00:00').toLocaleDateString('sr-Latn', { month: 'long', year: 'numeric' }) : null;
+  const planDisplay = getSeoPlanDisplay(project.package_name, project.package_price);
 
   const card = { background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: 18 };
   const cardTitle: React.CSSProperties = { fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: C.text3, marginBottom: 16 };
@@ -183,9 +185,9 @@ export function SeoPublicReport() {
             {lastUpdate && <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginTop: 1 }}>Poslednje ažuriranje: {lastUpdate}</p>}
           </div>
         </div>
-        {project.package_name && (
+        {planDisplay && (
           <div style={{ fontSize: 11, color: '#fff', background: 'rgba(255,255,255,0.12)', padding: '4px 12px', borderRadius: 99 }}>
-            {project.package_name}{project.package_price ? ` — €${project.package_price}/mes` : ''}
+            {planDisplay}
           </div>
         )}
       </div>
