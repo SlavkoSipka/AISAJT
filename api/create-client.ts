@@ -1,7 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.VITE_SUPABASE_URL!;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+import { getSupabaseAdmin } from './supabase-server';
 
 const DEFAULT_STEPS = [
   { position: 1, title: 'Prikupljanje materijala', description: 'Prikupljamo sve potrebne materijale: logo, tekstove, fotografije i vaše zahteve za sajt.' },
@@ -25,9 +22,7 @@ export default async function handler(req: Request): Promise<Response> {
       return new Response(JSON.stringify({ error: 'Obavezna polja: clientEmail, clientName, projectName' }), { status: 400 });
     }
 
-    const supabase = createClient(supabaseUrl, serviceRoleKey, {
-      auth: { autoRefreshToken: false, persistSession: false },
-    });
+    const supabase = getSupabaseAdmin();
 
     const tempPassword = `AiSajt_${Math.random().toString(36).slice(2, 10)}!`;
 

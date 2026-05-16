@@ -1,7 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.VITE_SUPABASE_URL!;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+import { getSupabaseAdmin } from './supabase-server';
 
 interface DeployPayload {
   id?: string;
@@ -43,9 +40,7 @@ export default async function handler(req: Request): Promise<Response> {
       return new Response(JSON.stringify({ error: 'No deploy URL in payload' }), { status: 400 });
     }
 
-    const supabase = createClient(supabaseUrl, serviceRoleKey, {
-      auth: { autoRefreshToken: false, persistSession: false },
-    });
+    const supabase = getSupabaseAdmin();
 
     const normalizedUrl = deployUrl.replace(/\/$/, '').toLowerCase();
 

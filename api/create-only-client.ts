@@ -1,7 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.VITE_SUPABASE_URL!;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+import { getSupabaseAdmin } from './supabase-server';
 
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -35,9 +32,7 @@ export default async function handler(req: Request): Promise<Response> {
       );
     }
 
-    const supabase = createClient(supabaseUrl, serviceRoleKey, {
-      auth: { autoRefreshToken: false, persistSession: false },
-    });
+    const supabase = getSupabaseAdmin();
 
     const { data: userData, error: userError } = await supabase.auth.admin.createUser({
       email: clientEmail.trim(),

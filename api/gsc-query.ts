@@ -9,13 +9,8 @@
 
 export const config = { maxDuration: 60 };
 
-import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
-
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-);
+import { getSupabaseAdmin } from './supabase-server';
 
 function base64url(buf: Buffer | string): string {
   const b = typeof buf === 'string' ? Buffer.from(buf) : buf;
@@ -111,8 +106,10 @@ export default async function handler(req: any, res: any): Promise<void> {
   }
 
   try {
+    const supabase = getSupabaseAdmin();
     const body = await readJsonBody(req) as { seo_project_id?: string; range?: string; startDate?: string; endDate?: string };
 
+    body.seo_project_id = typeof body.seo_project_id === 'string' ? body.seo_project_id.trim() : body.seo_project_id;
     if (!body.seo_project_id) {
       res.status(400).json({ error: 'seo_project_id is required' });
       return;
@@ -135,7 +132,13 @@ export default async function handler(req: any, res: any): Promise<void> {
       .from('seo_projects').select('id, gsc_property_id').eq('id', body.seo_project_id).single();
 
     if (projErr || !project) {
-      res.status(404).json({ error: 'Project not found' });
+      res.status(404).json({
+        error: 'Project not found',
+        _hint: 'Vercel server env mora pokazati na isti Supabase projekat (SUPABASE_URL ili VITE_SUPABASE_URL).',
+        _supabase: projErr
+          ? { message: projErr.message, code: projErr.code, details: projErr.details }
+          : null,
+      });
       return;
     }
     if (!project.gsc_property_id) {

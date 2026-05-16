@@ -10,17 +10,12 @@
  * Required env vars (same as gsc-sync):
  *   CRON_SECRET                  — shared secret with GitHub Actions
  *   GOOGLE_SERVICE_ACCOUNT_JSON  — service account JSON
- *   VITE_SUPABASE_URL
- *   SUPABASE_SERVICE_ROLE_KEY
+ *   SUPABASE_URL or VITE_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY on Vercel
  */
 
-import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
-
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-);
+import { getSupabaseAdmin } from './supabase-server';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 function base64url(buf: Buffer | string): string {
   const b = typeof buf === 'string' ? Buffer.from(buf) : buf;
@@ -78,7 +73,7 @@ async function queryGsc(
 function pad(n: number) { return String(n).padStart(2, '0'); }
 function fmtDate(d: Date) { return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
 
-async function syncProject(projectId: string, property: string, token: string): Promise<string> {
+async function syncProject(supabase: SupabaseClient, projectId: string, property: string, token: string): Promise<string> {
   const now = new Date();
 
   const m = now.getDate() <= 4 ? now.getMonth() - 2 : now.getMonth() - 1;
@@ -199,6 +194,7 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   try {
+    const supabase = getSupabaseAdmin();
     const sa = JSON.parse(saJson) as { client_email: string; private_key: string };
     const token = await getAccessToken(sa);
 
@@ -217,7 +213,7 @@ export default async function handler(req: Request): Promise<Response> {
 
     for (const project of projects) {
       try {
-        const detail = await syncProject(project.id, project.gsc_property_id!, token);
+    const detail = await syncProject(supabase, project.id, project.gsc_property_id!, token);
         results.push({ project_id: project.id, status: 'ok', detail });
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : 'unknown error';

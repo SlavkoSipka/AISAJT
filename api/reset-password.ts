@@ -1,7 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.VITE_SUPABASE_URL!;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+import { getSupabaseAdmin } from './supabase-server';
 
 export default async function handler(req: Request): Promise<Response> {
   if (req.method !== 'POST') {
@@ -15,9 +12,7 @@ export default async function handler(req: Request): Promise<Response> {
       return new Response(JSON.stringify({ error: 'userId is required' }), { status: 400 });
     }
 
-    const supabase = createClient(supabaseUrl, serviceRoleKey, {
-      auth: { autoRefreshToken: false, persistSession: false },
-    });
+    const supabase = getSupabaseAdmin();
 
     const { data: user, error: userError } = await supabase.auth.admin.getUserById(userId);
 

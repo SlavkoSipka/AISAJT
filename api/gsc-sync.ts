@@ -6,19 +6,14 @@
  *
  * Required env vars:
  *   GOOGLE_SERVICE_ACCOUNT_JSON  — full contents of the service account JSON file
- *   VITE_SUPABASE_URL            — Supabase project URL
+ *   SUPABASE_URL or VITE_SUPABASE_URL — Supabase project URL (server)
  *   SUPABASE_SERVICE_ROLE_KEY    — Supabase service role key
  */
 
 export const config = { maxDuration: 60 };
 
-import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
-
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-);
+import { getSupabaseAdmin } from './supabase-server';
 
 function base64url(buf: Buffer | string): string {
   const b = typeof buf === 'string' ? Buffer.from(buf) : buf;
@@ -129,8 +124,9 @@ export default async function handler(req: any, res: any): Promise<void> {
   const mark = (name: string) => { timings[name] = Date.now() - t0; phase = name; };
 
   try {
+    const supabase = getSupabaseAdmin();
     const body = await readJsonBody(req);
-    const seo_project_id = body?.seo_project_id as string | undefined;
+    const seo_project_id = (body?.seo_project_id as string | undefined)?.trim();
     mark('parsed_body');
 
     if (!seo_project_id) {
@@ -143,7 +139,14 @@ export default async function handler(req: any, res: any): Promise<void> {
     mark('fetched_project');
 
     if (projErr || !project) {
-      res.status(404).json({ error: 'Projekat nije pronađen', _timings: timings });
+      res.status(404).json({
+        error: 'Projekat nije pronađen',
+        _hint: 'Proveri da Vercel ima isti Supabase kao frontend: SUPABASE_URL ili VITE_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY.',
+        _supabase: projErr
+          ? { message: projErr.message, code: projErr.code, details: projErr.details }
+          : null,
+        _timings: timings,
+      });
       return;
     }
 
