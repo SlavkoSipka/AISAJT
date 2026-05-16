@@ -14,7 +14,7 @@
  */
 
 import crypto from 'crypto';
-import { getSupabaseAdmin } from './supabase-server';
+import { getSupabaseAdmin } from './supabase-server.js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 function base64url(buf: Buffer | string): string {

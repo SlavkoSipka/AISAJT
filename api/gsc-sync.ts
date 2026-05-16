@@ -11,8 +11,8 @@
  */
 
 import crypto from 'crypto';
-import { getSupabaseAdmin } from './supabase-server';
-import { readJsonBody } from './read-json-body';
+import { getSupabaseAdmin } from './supabase-server.js';
+import { readJsonBody } from './read-json-body.js';
 
 export const config = { maxDuration: 60 };
 

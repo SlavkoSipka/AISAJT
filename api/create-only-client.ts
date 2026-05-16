@@ -1,4 +1,4 @@
-import { getSupabaseAdmin } from './supabase-server';
+import { getSupabaseAdmin } from './supabase-server.js';
 
 const MIN_PASSWORD_LENGTH = 8;
 
