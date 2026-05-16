@@ -93,16 +93,29 @@ const RANGE_DAYS: Record<Range, number> = {
   'all': 480,
 };
 
-export default async function handler(req: Request): Promise<Response> {
+async function readJsonBody(req: any): Promise<any> {
+  if (req.body && typeof req.body === 'object') return req.body;
+  if (typeof req.body === 'string' && req.body.length > 0) {
+    try { return JSON.parse(req.body); } catch { /* fall through */ }
+  }
+  const chunks: Buffer[] = [];
+  for await (const chunk of req) chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  const raw = Buffer.concat(chunks).toString('utf-8');
+  return raw ? JSON.parse(raw) : {};
+}
+
+export default async function handler(req: any, res: any): Promise<void> {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
   }
 
   try {
-    const body = await req.json() as { seo_project_id?: string; range?: string; startDate?: string; endDate?: string };
+    const body = await readJsonBody(req) as { seo_project_id?: string; range?: string; startDate?: string; endDate?: string };
 
     if (!body.seo_project_id) {
-      return new Response(JSON.stringify({ error: 'seo_project_id is required' }), { status: 400 });
+      res.status(400).json({ error: 'seo_project_id is required' });
+      return;
     }
 
     const hasExplicitDates = !!(body.startDate && body.endDate);
@@ -110,25 +123,30 @@ export default async function handler(req: Request): Promise<Response> {
 
     if (hasExplicitDates) {
       if (!ISO.test(body.startDate!) || !ISO.test(body.endDate!)) {
-        return new Response(JSON.stringify({ error: 'startDate/endDate must be YYYY-MM-DD' }), { status: 400 });
+        res.status(400).json({ error: 'startDate/endDate must be YYYY-MM-DD' });
+        return;
       }
     } else if (!body.range || !VALID_RANGES.includes(body.range as Range)) {
-      return new Response(JSON.stringify({ error: 'range must be 3d, 28d, 3m, 6m, or all (or provide startDate+endDate)' }), { status: 400 });
+      res.status(400).json({ error: 'range must be 3d, 28d, 3m, 6m, or all (or provide startDate+endDate)' });
+      return;
     }
 
     const { data: project, error: projErr } = await supabase
       .from('seo_projects').select('id, gsc_property_id').eq('id', body.seo_project_id).single();
 
     if (projErr || !project) {
-      return new Response(JSON.stringify({ error: 'Project not found' }), { status: 404 });
+      res.status(404).json({ error: 'Project not found' });
+      return;
     }
     if (!project.gsc_property_id) {
-      return new Response(JSON.stringify({ error: 'GSC property not configured' }), { status: 400 });
+      res.status(400).json({ error: 'GSC property not configured' });
+      return;
     }
 
     const saJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
     if (!saJson) {
-      return new Response(JSON.stringify({ error: 'GOOGLE_SERVICE_ACCOUNT_JSON not set' }), { status: 500 });
+      res.status(500).json({ error: 'GOOGLE_SERVICE_ACCOUNT_JSON not set' });
+      return;
     }
 
     const sa = JSON.parse(saJson) as { client_email: string; private_key: string };
@@ -171,13 +189,10 @@ export default async function handler(req: Request): Promise<Response> {
       position: days.length > 0 ? days.reduce((s, d) => s + d.position, 0) / days.length : 0,
     };
 
-    return new Response(JSON.stringify({ days, totals, range: body.range || 'custom', startDate: startStr, endDate: endStr }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    res.status(200).json({ days, totals, range: body.range || 'custom', startDate: startStr, endDate: endStr });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Internal error';
     console.error('gsc-query error:', msg);
-    return new Response(JSON.stringify({ error: msg }), { status: 500 });
+    res.status(500).json({ error: msg });
   }
 }

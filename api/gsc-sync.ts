@@ -106,9 +106,21 @@ async function fetchTopKeywords(
   }));
 }
 
-export default async function handler(req: Request): Promise<Response> {
+async function readJsonBody(req: any): Promise<any> {
+  if (req.body && typeof req.body === 'object') return req.body;
+  if (typeof req.body === 'string' && req.body.length > 0) {
+    try { return JSON.parse(req.body); } catch { /* fall through */ }
+  }
+  const chunks: Buffer[] = [];
+  for await (const chunk of req) chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  const raw = Buffer.concat(chunks).toString('utf-8');
+  return raw ? JSON.parse(raw) : {};
+}
+
+export default async function handler(req: any, res: any): Promise<void> {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
   }
 
   const t0 = Date.now();
@@ -117,11 +129,13 @@ export default async function handler(req: Request): Promise<Response> {
   const mark = (name: string) => { timings[name] = Date.now() - t0; phase = name; };
 
   try {
-    const { seo_project_id } = await req.json() as { seo_project_id?: string };
+    const body = await readJsonBody(req);
+    const seo_project_id = body?.seo_project_id as string | undefined;
     mark('parsed_body');
 
     if (!seo_project_id) {
-      return new Response(JSON.stringify({ error: 'seo_project_id je obavezno' }), { status: 400 });
+      res.status(400).json({ error: 'seo_project_id je obavezno' });
+      return;
     }
 
     const { data: project, error: projErr } = await supabase
@@ -129,16 +143,19 @@ export default async function handler(req: Request): Promise<Response> {
     mark('fetched_project');
 
     if (projErr || !project) {
-      return new Response(JSON.stringify({ error: 'Projekat nije pronađen', _timings: timings }), { status: 404 });
+      res.status(404).json({ error: 'Projekat nije pronađen', _timings: timings });
+      return;
     }
 
     if (!project.gsc_property_id) {
-      return new Response(JSON.stringify({ error: 'GSC property nije podešen za ovaj projekat', _timings: timings }), { status: 400 });
+      res.status(400).json({ error: 'GSC property nije podešen za ovaj projekat', _timings: timings });
+      return;
     }
 
     const saJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
     if (!saJson) {
-      return new Response(JSON.stringify({ error: 'GOOGLE_SERVICE_ACCOUNT_JSON nije podešen u env vars', _timings: timings }), { status: 500 });
+      res.status(500).json({ error: 'GOOGLE_SERVICE_ACCOUNT_JSON nije podešen u env vars', _timings: timings });
+      return;
     }
 
     const sa = JSON.parse(saJson) as { client_email: string; private_key: string };
@@ -209,7 +226,7 @@ export default async function handler(req: Request): Promise<Response> {
 
       const existingMap = new Map((existingKws || []).map(k => [k.keyword.toLowerCase(), k]));
 
-      const updates: Promise<unknown>[] = [];
+      const updates: PromiseLike<unknown>[] = [];
       const inserts: Array<Record<string, unknown>> = [];
 
       for (const tk of topKeywords) {
@@ -220,7 +237,7 @@ export default async function handler(req: Request): Promise<Response> {
             supabase.from('seo_keywords').update({
               previous_position: existing_kw.current_position,
               current_position: Math.round(tk.position),
-            }).eq('id', existing_kw.id)
+            }).eq('id', existing_kw.id) as unknown as PromiseLike<unknown>
           );
         } else {
           inserts.push({
@@ -234,7 +251,7 @@ export default async function handler(req: Request): Promise<Response> {
       }
 
       if (inserts.length > 0) {
-        updates.push(supabase.from('seo_keywords').insert(inserts));
+        updates.push(supabase.from('seo_keywords').insert(inserts) as unknown as PromiseLike<unknown>);
       }
       await Promise.all(updates);
     }
@@ -242,7 +259,7 @@ export default async function handler(req: Request): Promise<Response> {
 
     console.log('gsc-sync timings:', timings);
 
-    return new Response(JSON.stringify({
+    res.status(200).json({
       success: true,
       month: monthKey,
       date_range: `${startDate} → ${endDate}`,
@@ -252,11 +269,10 @@ export default async function handler(req: Request): Promise<Response> {
       avg_position,
       keywords_synced: topKeywords.length,
       _timings: timings,
-    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-
+    });
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'Nepoznata greška';
     console.error('gsc-sync error after phase:', phase, 'timings:', timings, 'msg:', msg);
-    return new Response(JSON.stringify({ error: msg, _failedAt: phase, _timings: timings }), { status: 500 });
+    res.status(500).json({ error: msg, _failedAt: phase, _timings: timings });
   }
 }
