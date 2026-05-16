@@ -11,7 +11,7 @@
  */
 
 import crypto from 'crypto';
-import { getSupabaseAdmin } from './supabase-server.js';
+import { getSupabaseAdmin, getSupabaseEnvDebug } from './supabase-server.js';
 import { readJsonBody } from './read-json-body.js';
 
 export const config = { maxDuration: 60 };
@@ -125,16 +125,32 @@ export default async function handler(req: any, res: any): Promise<void> {
     }
 
     const { data: project, error: projErr } = await supabase
-      .from('seo_projects').select('*').eq('id', seo_project_id).single();
+      .from('seo_projects').select('*').eq('id', seo_project_id).maybeSingle();
     mark('fetched_project');
 
-    if (projErr || !project) {
+    if (projErr) {
+      const dbg = getSupabaseEnvDebug();
+      res.status(500).json({
+        error: 'Greška pri učitavanju projekta iz Supabase',
+        _supabase: { message: projErr.message, code: projErr.code, details: projErr.details },
+        _supabase_hostname: dbg.hostname,
+        _jwt_role_claim: dbg.jwtRoleClaim,
+        _timings: timings,
+      });
+      return;
+    }
+
+    if (!project) {
+      const dbg = getSupabaseEnvDebug();
       res.status(404).json({
         error: 'Projekat nije pronađen',
-        _hint: 'Proveri da Vercel ima isti Supabase kao frontend: SUPABASE_URL ili VITE_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY.',
-        _supabase: projErr
-          ? { message: projErr.message, code: projErr.code, details: projErr.details }
-          : null,
+        _requested_seo_project_id: seo_project_id,
+        _supabase_hostname: dbg.hostname,
+        _jwt_role_claim_in_service_key: dbg.jwtRoleClaim ?? '(nije JWT — proveri da je ceo service_role secret bez razmaka/novih redova)',
+        _hint:
+          'Često uzrok je: (1) na Vercelu je SUPABASE_URL drugi projekat nego u dashboardu gde si video red, '
+          + '(2) u Zahtevu ide pogrešan id — mora seo_projects.id (UUID iz liste SEO projekata u admin panelu URL-u), '
+          + '(3) ranije anon ključ umesto service_role — sada blokirano startup-om ako je role anon.',
         _timings: timings,
       });
       return;

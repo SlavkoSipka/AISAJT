@@ -8,7 +8,7 @@
  */
 
 import crypto from 'crypto';
-import { getSupabaseAdmin } from './supabase-server.js';
+import { getSupabaseAdmin, getSupabaseEnvDebug } from './supabase-server.js';
 import { readJsonBody } from './read-json-body.js';
 
 export const config = { maxDuration: 60 };
@@ -119,15 +119,29 @@ export default async function handler(req: any, res: any): Promise<void> {
     }
 
     const { data: project, error: projErr } = await supabase
-      .from('seo_projects').select('id, gsc_property_id').eq('id', body.seo_project_id).single();
+      .from('seo_projects').select('id, gsc_property_id').eq('id', body.seo_project_id).maybeSingle();
 
-    if (projErr || !project) {
+    if (projErr) {
+      const dbg = getSupabaseEnvDebug();
+      res.status(500).json({
+        error: 'Database error loading project',
+        _supabase: { message: projErr.message, code: projErr.code, details: projErr.details },
+        _supabase_hostname: dbg.hostname,
+        _jwt_role_claim: dbg.jwtRoleClaim,
+      });
+      return;
+    }
+
+    if (!project) {
+      const dbg = getSupabaseEnvDebug();
       res.status(404).json({
         error: 'Project not found',
-        _hint: 'Vercel server env mora pokazati na isti Supabase projekat (SUPABASE_URL ili VITE_SUPABASE_URL).',
-        _supabase: projErr
-          ? { message: projErr.message, code: projErr.code, details: projErr.details }
-          : null,
+        _requested_seo_project_id: body.seo_project_id,
+        _supabase_hostname: dbg.hostname,
+        _jwt_role_claim_in_service_key:
+          dbg.jwtRoleClaim ?? '(not JWT — paste full service_role secret from Supabase)',
+        _hint:
+          'Row exists in Table Editor but API returns empty: wrong Supabase URL on Vercel, wrong seo_projects.id UUID, or was anon key (now rejected at startup if role anon). Compare _supabase_hostname to dashboard.',
       });
       return;
     }
