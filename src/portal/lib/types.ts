@@ -126,7 +126,7 @@ export interface GscDailyPoint {
 export interface GscQueryResponse {
   days: GscDailyPoint[];
   totals: { clicks: number; impressions: number; ctr: number; position: number };
-  range: '3d' | '28d' | '3m' | '6m' | 'all';
+  range: '3d' | '28d' | '3m' | '6m' | 'all' | 'custom';
   startDate: string;
   endDate: string;
 }

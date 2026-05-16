@@ -1,12 +1,13 @@
 /**
- * gsc-query — On-demand GSC data for short date ranges (3d / 28d)
+ * gsc-query — On-demand GSC data for arbitrary date ranges
  *
- * Returns daily breakdown from Google Search Console.
- * Used by the client dashboard for real-time 3-day and 28-day views.
- *
- * POST body: { seo_project_id: string, range: '3d' | '28d' }
+ * POST body: { seo_project_id: string, range?: '3d'|'28d'|'3m'|'6m'|'all', startDate?: string, endDate?: string }
+ *   - If startDate/endDate provided, they override `range`.
+ *   - Dates are YYYY-MM-DD.
  * Response:  { days: [{ date, clicks, impressions, ctr, position }], totals: {...} }
  */
+
+export const config = { runtime: 'nodejs', maxDuration: 60 };
 
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
@@ -98,16 +99,22 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   try {
-    const body = await req.json() as { seo_project_id?: string; range?: string };
+    const body = await req.json() as { seo_project_id?: string; range?: string; startDate?: string; endDate?: string };
 
     if (!body.seo_project_id) {
       return new Response(JSON.stringify({ error: 'seo_project_id is required' }), { status: 400 });
     }
-    if (!body.range || !VALID_RANGES.includes(body.range as Range)) {
-      return new Response(JSON.stringify({ error: 'range must be 3d, 28d, 3m, 6m, or all' }), { status: 400 });
-    }
 
-    const range = body.range as Range;
+    const hasExplicitDates = !!(body.startDate && body.endDate);
+    const ISO = /^\d{4}-\d{2}-\d{2}$/;
+
+    if (hasExplicitDates) {
+      if (!ISO.test(body.startDate!) || !ISO.test(body.endDate!)) {
+        return new Response(JSON.stringify({ error: 'startDate/endDate must be YYYY-MM-DD' }), { status: 400 });
+      }
+    } else if (!body.range || !VALID_RANGES.includes(body.range as Range)) {
+      return new Response(JSON.stringify({ error: 'range must be 3d, 28d, 3m, 6m, or all (or provide startDate+endDate)' }), { status: 400 });
+    }
 
     const { data: project, error: projErr } = await supabase
       .from('seo_projects').select('id, gsc_property_id').eq('id', body.seo_project_id).single();
@@ -127,20 +134,25 @@ export default async function handler(req: Request): Promise<Response> {
     const sa = JSON.parse(saJson) as { client_email: string; private_key: string };
     const accessToken = await getAccessToken(sa);
 
-    const now = new Date();
-    const endDate = new Date(now);
-    endDate.setDate(endDate.getDate() - 3);
+    let startStr: string;
+    let endStr: string;
 
-    const daysBack = RANGE_DAYS[range];
-    const startDate = new Date(endDate);
-    startDate.setDate(startDate.getDate() - daysBack + 1);
+    if (hasExplicitDates) {
+      startStr = body.startDate!;
+      endStr = body.endDate!;
+    } else {
+      const range = body.range as Range;
+      const now = new Date();
+      const endDate = new Date(now);
+      endDate.setDate(endDate.getDate() - 3);
+      const daysBack = RANGE_DAYS[range];
+      const startDate = new Date(endDate);
+      startDate.setDate(startDate.getDate() - daysBack + 1);
+      startStr = formatDate(startDate);
+      endStr = formatDate(endDate);
+    }
 
-    const rows = await queryGscDaily(
-      accessToken,
-      project.gsc_property_id,
-      formatDate(startDate),
-      formatDate(endDate),
-    );
+    const rows = await queryGscDaily(accessToken, project.gsc_property_id, startStr, endStr);
 
     const days = rows
       .map(r => ({
@@ -159,7 +171,7 @@ export default async function handler(req: Request): Promise<Response> {
       position: days.length > 0 ? days.reduce((s, d) => s + d.position, 0) / days.length : 0,
     };
 
-    return new Response(JSON.stringify({ days, totals, range, startDate: formatDate(startDate), endDate: formatDate(endDate) }), {
+    return new Response(JSON.stringify({ days, totals, range: body.range || 'custom', startDate: startStr, endDate: endStr }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });

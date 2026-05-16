@@ -91,21 +91,68 @@ export function SeoAdminPreview() {
     is_gsc_synced: true,
   }));
 
-  // Sync from GSC — always fetches ALL data
+  // Sync from GSC — incremental (only fetches missing days); chunked for first-time pulls
   const handleSyncGsc = async () => {
     if (!seoProject) return;
     setSyncing(true);
     try {
-      const res = await fetch('/.netlify/functions/gsc-query', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ seo_project_id: seoProject.id, range: 'all' }),
-      });
-      if (!res.ok) throw new Error('GSC error');
-      const data: GscQueryResponse = await res.json();
-      const newDays = data.days || [];
+      const pad = (n: number) => String(n).padStart(2, '0');
+      const fmt = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
-      // Merge: new days override existing, keep days not in new set
+      // GSC ima ~3 dana kašnjenja
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() - 3);
+      const endStr = fmt(endDate);
+
+      // Određivanje startDate: dan posle poslednjeg postojećeg, ili 480 dana unazad ako je prazno
+      let startStr: string;
+      if (allDraft.length > 0) {
+        const lastDate = allDraft[allDraft.length - 1].date;
+        const next = new Date(lastDate + 'T00:00:00');
+        next.setDate(next.getDate() + 1);
+        startStr = fmt(next);
+      } else {
+        const start = new Date(endDate);
+        start.setDate(start.getDate() - 479);
+        startStr = fmt(start);
+      }
+
+      if (startStr > endStr) {
+        toastOk('Već je sve sinhronizovano');
+        setSyncing(false);
+        return;
+      }
+
+      // Razdvajanje u chunk-ove od ~90 dana (svaki chunk staje u par sekundi)
+      const CHUNK_DAYS = 90;
+      const chunks: Array<{ startDate: string; endDate: string }> = [];
+      let cursor = new Date(startStr + 'T00:00:00');
+      const finalEnd = new Date(endStr + 'T00:00:00');
+      while (cursor <= finalEnd) {
+        const chunkEnd = new Date(cursor);
+        chunkEnd.setDate(chunkEnd.getDate() + CHUNK_DAYS - 1);
+        if (chunkEnd > finalEnd) chunkEnd.setTime(finalEnd.getTime());
+        chunks.push({ startDate: fmt(cursor), endDate: fmt(chunkEnd) });
+        cursor = new Date(chunkEnd);
+        cursor.setDate(cursor.getDate() + 1);
+      }
+
+      // Paralelni pozivi — svaki je nezavisan, traje 2-5s
+      const results = await Promise.all(
+        chunks.map(c =>
+          fetch('/api/gsc-query', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ seo_project_id: seoProject.id, ...c }),
+          }).then(async r => {
+            if (!r.ok) throw new Error(`GSC ${r.status}`);
+            return (await r.json()) as GscQueryResponse;
+          })
+        )
+      );
+
+      const newDays = results.flatMap(r => r.days || []);
+
       setAllDraft(prev => {
         const map = new Map(prev.map(d => [d.date, d]));
         newDays.forEach(d => map.set(d.date, d));
