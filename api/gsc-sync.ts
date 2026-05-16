@@ -10,11 +10,11 @@
  *   SUPABASE_SERVICE_ROLE_KEY    — Supabase service role key
  */
 
-export const config = { maxDuration: 60 };
-
 import crypto from 'crypto';
 import { getSupabaseAdmin } from './supabase-server';
-import { sendJson } from './send-json';
+import { readJsonBody } from './read-json-body';
+
+export const config = { maxDuration: 60 };
 
 function base64url(buf: Buffer | string): string {
   const b = typeof buf === 'string' ? Buffer.from(buf) : buf;
@@ -102,20 +102,9 @@ async function fetchTopKeywords(
   }));
 }
 
-async function readJsonBody(req: any): Promise<any> {
-  if (req.body && typeof req.body === 'object') return req.body;
-  if (typeof req.body === 'string' && req.body.length > 0) {
-    try { return JSON.parse(req.body); } catch { /* fall through */ }
-  }
-  const chunks: Buffer[] = [];
-  for await (const chunk of req) chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
-  const raw = Buffer.concat(chunks).toString('utf-8');
-  return raw ? JSON.parse(raw) : {};
-}
-
 export default async function handler(req: any, res: any): Promise<void> {
   if (req.method !== 'POST') {
-    sendJson(res, 405, { error: 'Method not allowed' });
+    res.status(405).json({ error: 'Method not allowed' });
     return;
   }
 
@@ -131,7 +120,7 @@ export default async function handler(req: any, res: any): Promise<void> {
     mark('parsed_body');
 
     if (!seo_project_id) {
-      sendJson(res, 400, { error: 'seo_project_id je obavezno' });
+      res.status(400).json({ error: 'seo_project_id je obavezno' });
       return;
     }
 
@@ -140,7 +129,7 @@ export default async function handler(req: any, res: any): Promise<void> {
     mark('fetched_project');
 
     if (projErr || !project) {
-      sendJson(res, 404, {
+      res.status(404).json({
         error: 'Projekat nije pronađen',
         _hint: 'Proveri da Vercel ima isti Supabase kao frontend: SUPABASE_URL ili VITE_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY.',
         _supabase: projErr
@@ -152,13 +141,13 @@ export default async function handler(req: any, res: any): Promise<void> {
     }
 
     if (!project.gsc_property_id) {
-      sendJson(res, 400, { error: 'GSC property nije podešen za ovaj projekat', _timings: timings });
+      res.status(400).json({ error: 'GSC property nije podešen za ovaj projekat', _timings: timings });
       return;
     }
 
     const saJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
     if (!saJson) {
-      sendJson(res, 500, { error: 'GOOGLE_SERVICE_ACCOUNT_JSON nije podešen u env vars', _timings: timings });
+      res.status(500).json({ error: 'GOOGLE_SERVICE_ACCOUNT_JSON nije podešen u env vars', _timings: timings });
       return;
     }
 
@@ -263,7 +252,7 @@ export default async function handler(req: any, res: any): Promise<void> {
 
     console.log('gsc-sync timings:', timings);
 
-    sendJson(res, 200, {
+    res.status(200).json({
       success: true,
       month: monthKey,
       date_range: `${startDate} → ${endDate}`,
@@ -277,6 +266,10 @@ export default async function handler(req: any, res: any): Promise<void> {
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'Nepoznata greška';
     console.error('gsc-sync error after phase:', phase, 'timings:', timings, 'msg:', msg);
-    sendJson(res, 500, { error: msg, _failedAt: phase, _timings: timings });
+    try {
+      res.status(500).json({ error: msg, _failedAt: phase, _timings: timings });
+    } catch {
+      console.error('gsc-sync could not serialize 500 response');
+    }
   }
 }

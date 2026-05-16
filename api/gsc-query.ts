@@ -7,11 +7,11 @@
  * Response:  { days: [{ date, clicks, impressions, ctr, position }], totals: {...} }
  */
 
-export const config = { maxDuration: 60 };
-
 import crypto from 'crypto';
 import { getSupabaseAdmin } from './supabase-server';
-import { sendJson } from './send-json';
+import { readJsonBody } from './read-json-body';
+
+export const config = { maxDuration: 60 };
 
 function base64url(buf: Buffer | string): string {
   const b = typeof buf === 'string' ? Buffer.from(buf) : buf;
@@ -89,20 +89,9 @@ const RANGE_DAYS: Record<Range, number> = {
   'all': 480,
 };
 
-async function readJsonBody(req: any): Promise<any> {
-  if (req.body && typeof req.body === 'object') return req.body;
-  if (typeof req.body === 'string' && req.body.length > 0) {
-    try { return JSON.parse(req.body); } catch { /* fall through */ }
-  }
-  const chunks: Buffer[] = [];
-  for await (const chunk of req) chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
-  const raw = Buffer.concat(chunks).toString('utf-8');
-  return raw ? JSON.parse(raw) : {};
-}
-
 export default async function handler(req: any, res: any): Promise<void> {
   if (req.method !== 'POST') {
-    sendJson(res, 405, { error: 'Method not allowed' });
+    res.status(405).json({ error: 'Method not allowed' });
     return;
   }
 
@@ -112,7 +101,7 @@ export default async function handler(req: any, res: any): Promise<void> {
 
     body.seo_project_id = typeof body.seo_project_id === 'string' ? body.seo_project_id.trim() : body.seo_project_id;
     if (!body.seo_project_id) {
-      sendJson(res, 400, { error: 'seo_project_id is required' });
+      res.status(400).json({ error: 'seo_project_id is required' });
       return;
     }
 
@@ -121,11 +110,11 @@ export default async function handler(req: any, res: any): Promise<void> {
 
     if (hasExplicitDates) {
       if (!ISO.test(body.startDate!) || !ISO.test(body.endDate!)) {
-        sendJson(res, 400, { error: 'startDate/endDate must be YYYY-MM-DD' });
+        res.status(400).json({ error: 'startDate/endDate must be YYYY-MM-DD' });
         return;
       }
     } else if (!body.range || !VALID_RANGES.includes(body.range as Range)) {
-      sendJson(res, 400, { error: 'range must be 3d, 28d, 3m, 6m, or all (or provide startDate+endDate)' });
+      res.status(400).json({ error: 'range must be 3d, 28d, 3m, 6m, or all (or provide startDate+endDate)' });
       return;
     }
 
@@ -133,7 +122,7 @@ export default async function handler(req: any, res: any): Promise<void> {
       .from('seo_projects').select('id, gsc_property_id').eq('id', body.seo_project_id).single();
 
     if (projErr || !project) {
-      sendJson(res, 404, {
+      res.status(404).json({
         error: 'Project not found',
         _hint: 'Vercel server env mora pokazati na isti Supabase projekat (SUPABASE_URL ili VITE_SUPABASE_URL).',
         _supabase: projErr
@@ -143,13 +132,13 @@ export default async function handler(req: any, res: any): Promise<void> {
       return;
     }
     if (!project.gsc_property_id) {
-      sendJson(res, 400, { error: 'GSC property not configured' });
+      res.status(400).json({ error: 'GSC property not configured' });
       return;
     }
 
     const saJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
     if (!saJson) {
-      sendJson(res, 500, { error: 'GOOGLE_SERVICE_ACCOUNT_JSON not set' });
+      res.status(500).json({ error: 'GOOGLE_SERVICE_ACCOUNT_JSON not set' });
       return;
     }
 
@@ -193,10 +182,14 @@ export default async function handler(req: any, res: any): Promise<void> {
       position: days.length > 0 ? days.reduce((s, d) => s + d.position, 0) / days.length : 0,
     };
 
-    sendJson(res, 200, { days, totals, range: body.range || 'custom', startDate: startStr, endDate: endStr });
+    res.status(200).json({ days, totals, range: body.range || 'custom', startDate: startStr, endDate: endStr });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Internal error';
     console.error('gsc-query error:', msg);
-    sendJson(res, 500, { error: msg });
+    try {
+      res.status(500).json({ error: msg });
+    } catch {
+      console.error('gsc-query could not send 500');
+    }
   }
 }
