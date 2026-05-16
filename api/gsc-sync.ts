@@ -138,8 +138,10 @@ export default async function handler(req: Request): Promise<Response> {
     const endDate = `${lastDay.getFullYear()}-${pad(lastDay.getMonth() + 1)}-${pad(lastDay.getDate())}`;
     const monthKey = startDate;
 
-    const gsc = await fetchGscMetrics(accessToken, project.gsc_property_id, startDate, endDate);
-    const topKeywords = await fetchTopKeywords(accessToken, project.gsc_property_id, startDate, endDate, 10);
+    const [gsc, topKeywords] = await Promise.all([
+      fetchGscMetrics(accessToken, project.gsc_property_id, startDate, endDate),
+      fetchTopKeywords(accessToken, project.gsc_property_id, startDate, endDate, 10),
+    ]);
 
     const clicks = Math.round(gsc.clicks);
     const impressions = Math.round(gsc.impressions);

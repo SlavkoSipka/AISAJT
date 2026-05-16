@@ -309,40 +309,6 @@ export function SeoAdminProject() {
         return;
       }
 
-      // 2. Also fetch daily data and save to seo_gsc_daily
-      try {
-        const dailyRes = await fetch('/.netlify/functions/gsc-query', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ seo_project_id: id, range: 'all' }),
-        });
-        if (dailyRes.ok) {
-          const dailyData: GscQueryResponse = await dailyRes.json();
-          const newDays = dailyData.days || [];
-          if (newDays.length > 0) {
-            // Delete existing, then insert all
-            await supabase.from('seo_gsc_daily').delete().eq('seo_project_id', id);
-            const rows = newDays.map(d => ({
-              seo_project_id: id!,
-              date: d.date,
-              clicks: d.clicks,
-              impressions: d.impressions,
-              ctr: d.ctr,
-              position: d.position,
-            }));
-            for (let i = 0; i < rows.length; i += 200) {
-              await supabase.from('seo_gsc_daily').insert(rows.slice(i, i + 200) as any);
-            }
-            // Reload chart data
-            setGscDaily(newDays);
-            setDailyDraft(newDays);
-            setDailyHasChanges(false);
-          }
-        }
-      } catch {
-        // Daily sync is best-effort; monthly sync already succeeded
-      }
-
       setGscMsg({ type: 'ok', text: `Sinhronizovano (${data.date_range || data.month}): ${data.clicks?.toLocaleString()} klikova, CTR ${((data.ctr || 0) * 100).toFixed(1)}%, pozicija ${data.avg_position}, ${data.keywords_synced || 0} keywords` });
       toastOk('GSC podaci sinhronizovani');
       await refetch();
