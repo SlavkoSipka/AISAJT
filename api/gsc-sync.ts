@@ -14,6 +14,7 @@ export const config = { maxDuration: 60 };
 
 import crypto from 'crypto';
 import { getSupabaseAdmin } from './supabase-server';
+import { sendJson } from './send-json';
 
 function base64url(buf: Buffer | string): string {
   const b = typeof buf === 'string' ? Buffer.from(buf) : buf;
@@ -114,7 +115,7 @@ async function readJsonBody(req: any): Promise<any> {
 
 export default async function handler(req: any, res: any): Promise<void> {
   if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' });
+    sendJson(res, 405, { error: 'Method not allowed' });
     return;
   }
 
@@ -130,7 +131,7 @@ export default async function handler(req: any, res: any): Promise<void> {
     mark('parsed_body');
 
     if (!seo_project_id) {
-      res.status(400).json({ error: 'seo_project_id je obavezno' });
+      sendJson(res, 400, { error: 'seo_project_id je obavezno' });
       return;
     }
 
@@ -139,7 +140,7 @@ export default async function handler(req: any, res: any): Promise<void> {
     mark('fetched_project');
 
     if (projErr || !project) {
-      res.status(404).json({
+      sendJson(res, 404, {
         error: 'Projekat nije pronađen',
         _hint: 'Proveri da Vercel ima isti Supabase kao frontend: SUPABASE_URL ili VITE_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY.',
         _supabase: projErr
@@ -151,13 +152,13 @@ export default async function handler(req: any, res: any): Promise<void> {
     }
 
     if (!project.gsc_property_id) {
-      res.status(400).json({ error: 'GSC property nije podešen za ovaj projekat', _timings: timings });
+      sendJson(res, 400, { error: 'GSC property nije podešen za ovaj projekat', _timings: timings });
       return;
     }
 
     const saJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
     if (!saJson) {
-      res.status(500).json({ error: 'GOOGLE_SERVICE_ACCOUNT_JSON nije podešen u env vars', _timings: timings });
+      sendJson(res, 500, { error: 'GOOGLE_SERVICE_ACCOUNT_JSON nije podešen u env vars', _timings: timings });
       return;
     }
 
@@ -262,7 +263,7 @@ export default async function handler(req: any, res: any): Promise<void> {
 
     console.log('gsc-sync timings:', timings);
 
-    res.status(200).json({
+    sendJson(res, 200, {
       success: true,
       month: monthKey,
       date_range: `${startDate} → ${endDate}`,
@@ -276,6 +277,6 @@ export default async function handler(req: any, res: any): Promise<void> {
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'Nepoznata greška';
     console.error('gsc-sync error after phase:', phase, 'timings:', timings, 'msg:', msg);
-    res.status(500).json({ error: msg, _failedAt: phase, _timings: timings });
+    sendJson(res, 500, { error: msg, _failedAt: phase, _timings: timings });
   }
 }

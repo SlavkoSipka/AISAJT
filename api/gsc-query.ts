@@ -11,6 +11,7 @@ export const config = { maxDuration: 60 };
 
 import crypto from 'crypto';
 import { getSupabaseAdmin } from './supabase-server';
+import { sendJson } from './send-json';
 
 function base64url(buf: Buffer | string): string {
   const b = typeof buf === 'string' ? Buffer.from(buf) : buf;
@@ -101,7 +102,7 @@ async function readJsonBody(req: any): Promise<any> {
 
 export default async function handler(req: any, res: any): Promise<void> {
   if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' });
+    sendJson(res, 405, { error: 'Method not allowed' });
     return;
   }
 
@@ -111,7 +112,7 @@ export default async function handler(req: any, res: any): Promise<void> {
 
     body.seo_project_id = typeof body.seo_project_id === 'string' ? body.seo_project_id.trim() : body.seo_project_id;
     if (!body.seo_project_id) {
-      res.status(400).json({ error: 'seo_project_id is required' });
+      sendJson(res, 400, { error: 'seo_project_id is required' });
       return;
     }
 
@@ -120,11 +121,11 @@ export default async function handler(req: any, res: any): Promise<void> {
 
     if (hasExplicitDates) {
       if (!ISO.test(body.startDate!) || !ISO.test(body.endDate!)) {
-        res.status(400).json({ error: 'startDate/endDate must be YYYY-MM-DD' });
+        sendJson(res, 400, { error: 'startDate/endDate must be YYYY-MM-DD' });
         return;
       }
     } else if (!body.range || !VALID_RANGES.includes(body.range as Range)) {
-      res.status(400).json({ error: 'range must be 3d, 28d, 3m, 6m, or all (or provide startDate+endDate)' });
+      sendJson(res, 400, { error: 'range must be 3d, 28d, 3m, 6m, or all (or provide startDate+endDate)' });
       return;
     }
 
@@ -132,7 +133,7 @@ export default async function handler(req: any, res: any): Promise<void> {
       .from('seo_projects').select('id, gsc_property_id').eq('id', body.seo_project_id).single();
 
     if (projErr || !project) {
-      res.status(404).json({
+      sendJson(res, 404, {
         error: 'Project not found',
         _hint: 'Vercel server env mora pokazati na isti Supabase projekat (SUPABASE_URL ili VITE_SUPABASE_URL).',
         _supabase: projErr
@@ -142,13 +143,13 @@ export default async function handler(req: any, res: any): Promise<void> {
       return;
     }
     if (!project.gsc_property_id) {
-      res.status(400).json({ error: 'GSC property not configured' });
+      sendJson(res, 400, { error: 'GSC property not configured' });
       return;
     }
 
     const saJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
     if (!saJson) {
-      res.status(500).json({ error: 'GOOGLE_SERVICE_ACCOUNT_JSON not set' });
+      sendJson(res, 500, { error: 'GOOGLE_SERVICE_ACCOUNT_JSON not set' });
       return;
     }
 
@@ -192,10 +193,10 @@ export default async function handler(req: any, res: any): Promise<void> {
       position: days.length > 0 ? days.reduce((s, d) => s + d.position, 0) / days.length : 0,
     };
 
-    res.status(200).json({ days, totals, range: body.range || 'custom', startDate: startStr, endDate: endStr });
+    sendJson(res, 200, { days, totals, range: body.range || 'custom', startDate: startStr, endDate: endStr });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Internal error';
     console.error('gsc-query error:', msg);
-    res.status(500).json({ error: msg });
+    sendJson(res, 500, { error: msg });
   }
 }
