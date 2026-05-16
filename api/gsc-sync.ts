@@ -13,8 +13,11 @@
 import crypto from 'crypto';
 import { getSupabaseAdmin, getSupabaseEnvDebug } from './supabase-server.js';
 import { readJsonBody } from './read-json-body.js';
+import { hintPost } from './postgrest-hint.js';
 
 export const config = { maxDuration: 60 };
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function base64url(buf: Buffer | string): string {
   const b = typeof buf === 'string' ? Buffer.from(buf) : buf;
@@ -123,6 +126,13 @@ export default async function handler(req: any, res: any): Promise<void> {
       res.status(400).json({ error: 'seo_project_id je obavezno' });
       return;
     }
+    if (!UUID_RE.test(seo_project_id)) {
+      res.status(400).json({
+        error: 'seo_project_id mora biti validan UUID kolone seo_projects.id',
+        _received: seo_project_id,
+      });
+      return;
+    }
 
     const { data: project, error: projErr } = await supabase
       .from('seo_projects').select('*').eq('id', seo_project_id).maybeSingle();
@@ -130,9 +140,16 @@ export default async function handler(req: any, res: any): Promise<void> {
 
     if (projErr) {
       const dbg = getSupabaseEnvDebug();
+      const pb = projErr as { message: string; code?: string; details?: string; hint?: string };
       res.status(500).json({
-        error: 'Greška pri učitavanju projekta iz Supabase',
-        _supabase: { message: projErr.message, code: projErr.code, details: projErr.details },
+        error: pb.message || 'Greška pri učitavanju projekta iz Supabase',
+        _hint_technical: hintPost(pb.message),
+        _supabase: {
+          message: pb.message,
+          code: pb.code,
+          details: pb.details,
+          hint: pb.hint,
+        },
         _supabase_hostname: dbg.hostname,
         _jwt_role_claim: dbg.jwtRoleClaim,
         _timings: timings,

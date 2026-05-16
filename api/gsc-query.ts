@@ -10,6 +10,7 @@
 import crypto from 'crypto';
 import { getSupabaseAdmin, getSupabaseEnvDebug } from './supabase-server.js';
 import { readJsonBody } from './read-json-body.js';
+import { hintPost } from './postgrest-hint.js';
 
 export const config = { maxDuration: 60 };
 
@@ -123,9 +124,16 @@ export default async function handler(req: any, res: any): Promise<void> {
 
     if (projErr) {
       const dbg = getSupabaseEnvDebug();
+      const pb = projErr as { message: string; code?: string; details?: string; hint?: string };
       res.status(500).json({
-        error: 'Database error loading project',
-        _supabase: { message: projErr.message, code: projErr.code, details: projErr.details },
+        error: pb.message || 'Database error loading project',
+        _hint_technical: hintPost(pb.message),
+        _supabase: {
+          message: pb.message,
+          code: pb.code,
+          details: pb.details,
+          hint: pb.hint,
+        },
         _supabase_hostname: dbg.hostname,
         _jwt_role_claim: dbg.jwtRoleClaim,
       });

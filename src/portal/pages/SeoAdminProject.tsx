@@ -309,10 +309,16 @@ export function SeoAdminProject() {
       console.log(`[gsc-sync] HTTP ${res.status} after ${elapsed}ms`, data);
 
       if (!res.ok) {
-        const err = data.error || `HTTP ${res.status} (${elapsed}ms) ${text.slice(0, 200)}`;
-        console.error('gsc-sync error:', err, 'failedAt:', data._failedAt, 'timings:', data._timings);
-        setGscMsg({ type: 'err', text: `${err}${data._failedAt ? ` [pukao na: ${data._failedAt}]` : ''}` });
-        toastErr(`GSC: ${err}`);
+        const pb = data._supabase;
+        const supLine = pb?.message ? ` (${pb.message})` : '';
+        const hintLine = data._hint_technical ? ` ${data._hint_technical}` : '';
+        const err = `${data.error || `HTTP ${res.status} (${elapsed}ms)`}${supLine}${hintLine}`;
+        console.error('gsc-sync error:', data);
+        setGscMsg({
+          type: 'err',
+          text: `${err}${data._failedAt ? ` [pukao na: ${data._failedAt}]` : ''}`.slice(0, 1200),
+        });
+        toastErr(`GSC: ${data.error || 'Greška'}${supLine}`.slice(0, 400));
         setGscSyncing(false);
         return;
       }
