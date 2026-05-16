@@ -1,16 +1,17 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// Port mora da se poklopi sa netlify.toml [dev] targetPort. Bez ručnog HMR — Netlify proxy + Vite default HMR rade zajedno.
 export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
     strictPort: true,
     proxy: {
+      // Za lokalni dev koristi: vercel dev (serviRA i frontend i /api/ funkcije)
       '/.netlify/functions': {
-        target: 'http://localhost:8889',
+        target: 'http://localhost:3000',
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/.netlify\/functions/, '/api'),
       },
     },
   },

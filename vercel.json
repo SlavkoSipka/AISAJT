@@ -3,6 +3,7 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
+    { "source": "/.netlify/functions/:path*", "destination": "/api/:path*" },
     { "source": "/((?!seo-panel\\.html).*)", "destination": "/index.html" }
   ],
   "headers": [
