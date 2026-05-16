@@ -6,6 +6,11 @@
     { "source": "/.netlify/functions/:path*", "destination": "/api/:path*" },
     { "source": "/((?!seo-panel\\.html).*)", "destination": "/index.html" }
   ],
+  "functions": {
+    "api/gsc-sync.ts": { "maxDuration": 60 },
+    "api/gsc-query.ts": { "maxDuration": 60 },
+    "api/gsc-auto-sync-all.ts": { "maxDuration": 60 }
+  },
   "headers": [
     {
       "source": "/sitemap.xml",
