@@ -7,7 +7,7 @@
  * Response:  { days: [{ date, clicks, impressions, ctr, position }], totals: {...} }
  */
 
-export const config = { runtime: 'nodejs', maxDuration: 60 };
+export const config = { maxDuration: 60 };
 
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';

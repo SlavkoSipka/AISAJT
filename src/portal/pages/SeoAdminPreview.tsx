@@ -137,31 +137,51 @@ export function SeoAdminPreview() {
         cursor.setDate(cursor.getDate() + 1);
       }
 
-      // Paralelni pozivi — svaki je nezavisan, traje 2-5s
-      const results = await Promise.all(
-        chunks.map(c =>
-          fetch('/api/gsc-query', {
+      // Sekvencijalni pozivi (Vercel free tier ima nisku konkurentnost — paralelno ume da queue-uje i timeout-uje)
+      const allNewDays: GscDailyPoint[] = [];
+      const errors: string[] = [];
+      for (const c of chunks) {
+        try {
+          const r = await fetch('/api/gsc-query', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ seo_project_id: seoProject.id, ...c }),
-          }).then(async r => {
-            if (!r.ok) throw new Error(`GSC ${r.status}`);
-            return (await r.json()) as GscQueryResponse;
-          })
-        )
-      );
+          });
+          const text = await r.text();
+          if (!r.ok) {
+            errors.push(`${c.startDate}→${c.endDate}: HTTP ${r.status} ${text.slice(0, 200)}`);
+            continue;
+          }
+          const data = JSON.parse(text) as GscQueryResponse;
+          allNewDays.push(...(data.days || []));
+        } catch (e) {
+          errors.push(`${c.startDate}→${c.endDate}: ${(e as Error).message}`);
+        }
+      }
 
-      const newDays = results.flatMap(r => r.days || []);
+      if (allNewDays.length === 0 && errors.length > 0) {
+        console.error('GSC sync errors:', errors);
+        toastErr(`Greška: ${errors[0]}`);
+        setSyncing(false);
+        return;
+      }
 
       setAllDraft(prev => {
         const map = new Map(prev.map(d => [d.date, d]));
-        newDays.forEach(d => map.set(d.date, d));
+        allNewDays.forEach(d => map.set(d.date, d));
         return Array.from(map.values()).sort((a, b) => a.date.localeCompare(b.date));
       });
       setHasChanges(true);
-      toastOk(`Povučeno ${newDays.length} dana iz GSC`);
-    } catch {
-      toastErr('Greška pri sinhronizaciji sa GSC');
+
+      if (errors.length > 0) {
+        console.warn('GSC sync partial errors:', errors);
+        toastOk(`Povučeno ${allNewDays.length} dana (${errors.length} chunkova nije uspelo)`);
+      } else {
+        toastOk(`Povučeno ${allNewDays.length} dana iz GSC`);
+      }
+    } catch (e) {
+      console.error('GSC sync fatal:', e);
+      toastErr(`Greška: ${(e as Error).message}`);
     }
     setSyncing(false);
   };
