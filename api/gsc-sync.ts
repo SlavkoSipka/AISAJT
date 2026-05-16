@@ -111,8 +111,14 @@ export default async function handler(req: Request): Promise<Response> {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
   }
 
+  const t0 = Date.now();
+  const timings: Record<string, number> = {};
+  let phase = 'init';
+  const mark = (name: string) => { timings[name] = Date.now() - t0; phase = name; };
+
   try {
     const { seo_project_id } = await req.json() as { seo_project_id?: string };
+    mark('parsed_body');
 
     if (!seo_project_id) {
       return new Response(JSON.stringify({ error: 'seo_project_id je obavezno' }), { status: 400 });
@@ -120,22 +126,24 @@ export default async function handler(req: Request): Promise<Response> {
 
     const { data: project, error: projErr } = await supabase
       .from('seo_projects').select('*').eq('id', seo_project_id).single();
+    mark('fetched_project');
 
     if (projErr || !project) {
-      return new Response(JSON.stringify({ error: 'Projekat nije pronađen' }), { status: 404 });
+      return new Response(JSON.stringify({ error: 'Projekat nije pronađen', _timings: timings }), { status: 404 });
     }
 
     if (!project.gsc_property_id) {
-      return new Response(JSON.stringify({ error: 'GSC property nije podešen za ovaj projekat' }), { status: 400 });
+      return new Response(JSON.stringify({ error: 'GSC property nije podešen za ovaj projekat', _timings: timings }), { status: 400 });
     }
 
     const saJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
     if (!saJson) {
-      return new Response(JSON.stringify({ error: 'GOOGLE_SERVICE_ACCOUNT_JSON nije podešen u env vars' }), { status: 500 });
+      return new Response(JSON.stringify({ error: 'GOOGLE_SERVICE_ACCOUNT_JSON nije podešen u env vars', _timings: timings }), { status: 500 });
     }
 
     const sa = JSON.parse(saJson) as { client_email: string; private_key: string };
     const accessToken = await getAccessToken(sa);
+    mark('got_access_token');
 
     const now = new Date();
     const m = now.getDate() <= 4 ? now.getMonth() - 2 : now.getMonth() - 1;
@@ -152,6 +160,7 @@ export default async function handler(req: Request): Promise<Response> {
       fetchGscMetrics(accessToken, project.gsc_property_id, startDate, endDate),
       fetchTopKeywords(accessToken, project.gsc_property_id, startDate, endDate, 10),
     ]);
+    mark('gsc_fetched');
 
     const clicks = Math.round(gsc.clicks);
     const impressions = Math.round(gsc.impressions);
@@ -164,6 +173,7 @@ export default async function handler(req: Request): Promise<Response> {
       .eq('seo_project_id', seo_project_id)
       .eq('month', monthKey)
       .maybeSingle();
+    mark('fetched_existing_metric');
 
     if (existing) {
       await supabase.from('seo_metrics').update({
@@ -188,6 +198,7 @@ export default async function handler(req: Request): Promise<Response> {
         is_gsc_synced: true,
       });
     }
+    mark('upserted_metric');
 
     if (topKeywords.length > 0) {
       const { data: existingKws } = await supabase
@@ -227,6 +238,9 @@ export default async function handler(req: Request): Promise<Response> {
       }
       await Promise.all(updates);
     }
+    mark('keywords_synced');
+
+    console.log('gsc-sync timings:', timings);
 
     return new Response(JSON.stringify({
       success: true,
@@ -237,10 +251,12 @@ export default async function handler(req: Request): Promise<Response> {
       ctr,
       avg_position,
       keywords_synced: topKeywords.length,
+      _timings: timings,
     }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'Nepoznata greška';
-    return new Response(JSON.stringify({ error: msg }), { status: 500 });
+    console.error('gsc-sync error after phase:', phase, 'timings:', timings, 'msg:', msg);
+    return new Response(JSON.stringify({ error: msg, _failedAt: phase, _timings: timings }), { status: 500 });
   }
 }

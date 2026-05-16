@@ -295,23 +295,29 @@ export function SeoAdminProject() {
     setGscSyncing(true);
     setGscMsg(null);
     try {
+      const startedAt = Date.now();
       const res = await fetch('/api/gsc-sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ seo_project_id: id }),
       });
+      const elapsed = Date.now() - startedAt;
       const text = await res.text();
       let data: any = {};
       try { data = JSON.parse(text); } catch { /* non-JSON */ }
 
+      console.log(`[gsc-sync] HTTP ${res.status} after ${elapsed}ms`, data);
+
       if (!res.ok) {
-        const err = data.error || `HTTP ${res.status} ${text.slice(0, 200)}`;
-        console.error('gsc-sync error:', err);
-        setGscMsg({ type: 'err', text: err });
+        const err = data.error || `HTTP ${res.status} (${elapsed}ms) ${text.slice(0, 200)}`;
+        console.error('gsc-sync error:', err, 'failedAt:', data._failedAt, 'timings:', data._timings);
+        setGscMsg({ type: 'err', text: `${err}${data._failedAt ? ` [pukao na: ${data._failedAt}]` : ''}` });
         toastErr(`GSC: ${err}`);
         setGscSyncing(false);
         return;
       }
+
+      if (data._timings) console.log('[gsc-sync] timings (ms):', data._timings);
 
       setGscMsg({ type: 'ok', text: `Sinhronizovano (${data.date_range || data.month}): ${data.clicks?.toLocaleString()} klikova, CTR ${((data.ctr || 0) * 100).toFixed(1)}%, pozicija ${data.avg_position}, ${data.keywords_synced || 0} keywords` });
       toastOk('GSC podaci sinhronizovani');
