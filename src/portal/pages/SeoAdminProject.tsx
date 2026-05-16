@@ -295,16 +295,20 @@ export function SeoAdminProject() {
     setGscSyncing(true);
     setGscMsg(null);
     try {
-      // 1. Sync monthly metrics (existing)
-      const res = await fetch('/.netlify/functions/gsc-sync', {
+      const res = await fetch('/api/gsc-sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ seo_project_id: id }),
       });
-      const data = await res.json();
+      const text = await res.text();
+      let data: any = {};
+      try { data = JSON.parse(text); } catch { /* non-JSON */ }
+
       if (!res.ok) {
-        setGscMsg({ type: 'err', text: data.error || 'Greška pri sinhronizaciji' });
-        toastErr('Greška pri GSC sinhronizaciji');
+        const err = data.error || `HTTP ${res.status} ${text.slice(0, 200)}`;
+        console.error('gsc-sync error:', err);
+        setGscMsg({ type: 'err', text: err });
+        toastErr(`GSC: ${err}`);
         setGscSyncing(false);
         return;
       }
@@ -312,9 +316,11 @@ export function SeoAdminProject() {
       setGscMsg({ type: 'ok', text: `Sinhronizovano (${data.date_range || data.month}): ${data.clicks?.toLocaleString()} klikova, CTR ${((data.ctr || 0) * 100).toFixed(1)}%, pozicija ${data.avg_position}, ${data.keywords_synced || 0} keywords` });
       toastOk('GSC podaci sinhronizovani');
       await refetch();
-    } catch {
-      setGscMsg({ type: 'err', text: 'Mrežna greška' });
-      toastErr('Mrežna greška');
+    } catch (e) {
+      const msg = (e as Error).message || 'Mrežna greška';
+      console.error('gsc-sync fatal:', e);
+      setGscMsg({ type: 'err', text: msg });
+      toastErr(msg);
     }
     setGscSyncing(false);
   };

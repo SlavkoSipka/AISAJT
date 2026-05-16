@@ -10,6 +10,8 @@
  *   SUPABASE_SERVICE_ROLE_KEY    — Supabase service role key
  */
 
+export const config = { maxDuration: 60 };
+
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
@@ -67,16 +69,24 @@ async function queryGsc(
   endDate: string,
   dimensions: string[] = [],
   rowLimit = 10,
+  timeoutMs = 20000,
 ): Promise<GscRow[]> {
   const url = `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(propertyUrl)}/searchAnalytics/query`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ startDate, endDate, dimensions, rowLimit }),
-  });
-  const data = await res.json() as GscResponse;
-  if (!res.ok) throw new Error(`GSC HTTP ${res.status} for property "${propertyUrl}": ${data.error?.message || JSON.stringify(data)}`);
-  return data.rows || [];
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ startDate, endDate, dimensions, rowLimit }),
+      signal: ctrl.signal,
+    });
+    const data = await res.json() as GscResponse;
+    if (!res.ok) throw new Error(`GSC HTTP ${res.status} for property "${propertyUrl}": ${data.error?.message || JSON.stringify(data)}`);
+    return data.rows || [];
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 async function fetchGscMetrics(
@@ -188,18 +198,21 @@ export default async function handler(req: Request): Promise<Response> {
 
       const existingMap = new Map((existingKws || []).map(k => [k.keyword.toLowerCase(), k]));
 
+      const updates: Promise<unknown>[] = [];
+      const inserts: Array<Record<string, unknown>> = [];
+
       for (const tk of topKeywords) {
         const key = tk.keyword.toLowerCase();
         const existing_kw = existingMap.get(key);
-
         if (existing_kw) {
-          await supabase.from('seo_keywords').update({
-            previous_position: existing_kw.current_position,
-            current_position: Math.round(tk.position),
-          }).eq('id', existing_kw.id);
-          existingMap.delete(key);
+          updates.push(
+            supabase.from('seo_keywords').update({
+              previous_position: existing_kw.current_position,
+              current_position: Math.round(tk.position),
+            }).eq('id', existing_kw.id)
+          );
         } else {
-          await supabase.from('seo_keywords').insert({
+          inserts.push({
             seo_project_id,
             keyword: tk.keyword,
             current_position: Math.round(tk.position),
@@ -208,6 +221,11 @@ export default async function handler(req: Request): Promise<Response> {
           });
         }
       }
+
+      if (inserts.length > 0) {
+        updates.push(supabase.from('seo_keywords').insert(inserts));
+      }
+      await Promise.all(updates);
     }
 
     return new Response(JSON.stringify({
