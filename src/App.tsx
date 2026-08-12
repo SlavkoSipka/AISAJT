@@ -18,6 +18,7 @@ const QuizPage = lazy(() => import('./components/pages/QuizPage').then(m => ({ d
 const AuditFormPage = lazy(() => import('./components/pages/AuditFormPage').then(m => ({ default: m.AuditFormPage })));
 const LeadMagnetDownloadPage = lazy(() => import('./components/pages/LeadMagnetDownloadPage').then(m => ({ default: m.LeadMagnetDownloadPage })));
 const FunnelPage = lazy(() => import('./components/pages/FunnelPage').then(m => ({ default: m.FunnelPage })));
+const PrometSistemPage = lazy(() => import('./components/pages/PrometSistemPage').then(m => ({ default: m.PrometSistemPage })));
 const BlogHubPage = lazy(() => import('./components/pages/BlogHubPage').then(m => ({ default: m.BlogHubPage })));
 const BlogPostPage = lazy(() => import('./components/pages/BlogPostPage').then(m => ({ default: m.BlogPostPage })));
 const BlogCategoryPage = lazy(() => import('./components/pages/BlogCategoryPage').then(m => ({ default: m.BlogCategoryPage })));
@@ -69,6 +70,8 @@ function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const isPortal = location.pathname.startsWith('/portal');
+  // Promet Sistem funnel: ads traffic, jedini cilj je poziv — bez popup-a za izradu sajtova
+  const isPrometSistem = location.pathname.startsWith('/promet-sistem');
 
   useEffect(() => {
     if (isPortal) {
@@ -103,7 +106,7 @@ function AppContent() {
 
   return (
     <>
-      {!isPortal && <ExitIntentPopup />}
+      {!isPortal && !isPrometSistem && <ExitIntentPopup />}
       <Suspense fallback={isPortal ? <PortalFallback /> : <LoadingScreen onLoadComplete={() => {}} />}>
         <Routes>
           {/* Marketing site routes */}
@@ -119,6 +122,7 @@ function AppContent() {
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/contact" element={<FunnelPage />} />
           <Route path="/funnel" element={<FunnelPage />} />
+          <Route path="/promet-sistem" element={<PrometSistemPage />} />
           <Route path="/thank-you" element={<ThankYouPage />} />
           <Route path="/resources" element={<ResourcesPage />} />
           <Route path="/resources/quiz" element={<QuizPage />} />
