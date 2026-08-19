@@ -10,15 +10,20 @@ import { SEOHelmet } from '../seo/SEOHelmet';
 
 type MagnetType = 'guide' | 'checklist';
 
-export function LeadMagnetDownloadPage() {
+interface LeadMagnetDownloadPageProps {
+  magnetType?: MagnetType;
+}
+
+export function LeadMagnetDownloadPage({ magnetType: magnetTypeProp }: LeadMagnetDownloadPageProps = {}) {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
 
-  // Determine which lead magnet based on URL
-  const pathname = window.location.pathname;
-  const magnetType: MagnetType = pathname.includes('guide') ? 'guide' : 'checklist';
+  // Prefer the explicit route-module prop (SSR-safe); fall back to URL
+  // sniffing only if unset (window is unavailable during prerendering).
+  const magnetType: MagnetType = magnetTypeProp
+    ?? (typeof window !== 'undefined' && window.location.pathname.includes('guide') ? 'guide' : 'checklist');
 
   const content = {
     sr: {

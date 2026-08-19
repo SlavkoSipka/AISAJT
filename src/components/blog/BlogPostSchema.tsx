@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async';
 import { BlogPost } from '../../types/blog';
 import { useLanguage } from '../../hooks/useLanguage';
 
@@ -46,12 +45,14 @@ export function BlogPostSchema({ post, category }: BlogPostSchemaProps) {
     inLanguage: language === 'sr' ? 'sr-RS' : 'en-US'
   };
 
+  // Raw JSX <script> (same pattern as FAQ.tsx), not react-helmet-async's
+  // <Helmet> — nothing extracts/injects Helmet's context into the prerendered
+  // response under Framework Mode, so it never shipped in static HTML.
   return (
-    <Helmet>
-      <script type="application/ld+json">
-        {JSON.stringify(schema)}
-      </script>
-    </Helmet>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
   );
 }
 

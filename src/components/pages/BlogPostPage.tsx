@@ -171,6 +171,12 @@ export function BlogPostPage() {
                 <div className="prose prose-lg max-w-none blog-content">
                   <ReactMarkdown
                     components={{
+                      // Every post's markdown content opens with a "# Title"
+                      // line that duplicates post.title (already rendered
+                      // above as the page's real <h1>) — suppress it instead
+                      // of emitting a second <h1>, a genuine duplicate-H1 bug
+                      // independent of the root noscript-fallback duplicate.
+                      h1: () => null,
                       h2: ({ node, ...props }) => {
                         const text = props.children?.toString() || '';
                         const id = text

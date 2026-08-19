@@ -1,6 +1,6 @@
-import { BlogCategory } from '../types/blog';
+import { BlogCategory, BlogCategoryInfo } from '../types/blog';
 
-export const blogCategories: BlogCategory[] = [
+export const blogCategories: BlogCategoryInfo[] = [
   {
     id: 'seo',
     name: 'SEO',
@@ -69,7 +69,7 @@ export const blogCategories: BlogCategory[] = [
 ];
 
 // Helper function to get category by ID
-export const getCategoryById = (id: BlogCategory['id']) => {
+export const getCategoryById = (id: BlogCategory) => {
   return blogCategories.find(cat => cat.id === id);
 };
 

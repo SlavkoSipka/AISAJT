@@ -197,7 +197,7 @@ Hajde da prođemo kroz **6 glavnih tipova** web sajtova i vidimo za koga je koji
 - **Dropshipping** biznisi
 - **B2C kompanije** sa katalogom
 
-[👉 Vidi više o web shop izradi](/izrada-web-shopa)
+[Vidi više o web shop izradi](/izrada-web-shopa)
 
 ---
 

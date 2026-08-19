@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { reactRouter } from '@react-router/dev/vite';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [reactRouter()],
   server: {
     port: 5173,
     strictPort: true,
@@ -23,51 +23,14 @@ export default defineConfig({
         drop_debugger: true
       }
     },
-    rollupOptions: {
-      output: {
-        manualChunks: (id) => {
-          // React core - must be first to avoid circular deps
-          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/scheduler/')) {
-            return 'react-vendor';
-          }
-          // Router
-          if (id.includes('react-router')) {
-            return 'router-vendor';
-          }
-          // UI libraries
-          if (id.includes('lucide-react')) {
-            return 'ui-icons';
-          }
-          if (id.includes('react-hot-toast')) {
-            return 'ui-toast';
-          }
-          // Email
-          if (id.includes('@emailjs')) {
-            return 'email-vendor';
-          }
-          // Markdown
-          if (id.includes('react-markdown') || id.includes('remark') || id.includes('rehype')) {
-            return 'markdown-vendor';
-          }
-          // Helmet
-          if (id.includes('react-helmet')) {
-            return 'helmet-vendor';
-          }
-          // GSAP
-          if (id.includes('gsap')) {
-            return 'gsap-vendor';
-          }
-          // Supabase
-          if (id.includes('@supabase')) {
-            return 'supabase-vendor';
-          }
-          // Portal code
-          if (id.includes('/portal/')) {
-            return 'portal';
-          }
-        }
-      }
-    },
+    // Sub-step 2A: the previous manualChunks function grouped anything
+    // matching `id.includes('react-router')` into a "router-vendor" chunk.
+    // Under Framework Mode, @react-router/dev generates internal virtual
+    // modules whose ids match that same substring — the old rule swept them
+    // into router-vendor too and corrupted the framework's own route-module
+    // wiring (root/catchall route components resolved as undefined at
+    // render time). Removed for now; revisit chunk-splitting once
+    // Framework Mode is fully migrated (Phase 7 performance work).
     chunkSizeWarningLimit: 1000
   },
   optimizeDeps: {

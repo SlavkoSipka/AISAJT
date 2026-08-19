@@ -39,7 +39,7 @@ export interface BlogPost {
   };
 }
 
-export interface BlogCategory {
+export interface BlogCategoryInfo {
   id: BlogCategory;
   name: string;
   nameEn: string;
