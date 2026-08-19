@@ -45,7 +45,7 @@ export function Footer() {
             <h4 className="text-lg font-semibold mb-4">{t.company}</h4>
             <ul className="space-y-2.5">
               <li><button onClick={() => navigateToSection('video-section', navigate, location.pathname)} className="text-gray-600 hover:text-violet-600 transition-colors duration-300 text-left">{t.aboutUs}</button></li>
-              <li><button onClick={() => navigateToSection('portfolio', navigate, location.pathname)} className="text-gray-600 hover:text-indigo-600 transition-colors duration-300 text-left">{t.portfolio}</button></li>
+              <li><Link to="/portfolio" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300">{t.portfolio}</Link></li>
               <li><Link to="/blog" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">Blog</Link></li>
               <li><Link to="/funnel" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{t.contact}</Link></li>
               <li><Link to="/funnel" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{language === 'sr' ? 'Besplatna konsultacija' : 'Free Consultation'}</Link></li>

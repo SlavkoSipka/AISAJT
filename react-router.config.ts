@@ -1,6 +1,7 @@
 import type { Config } from '@react-router/dev/config';
 import { blogPosts } from './src/data/blogPosts';
 import { blogCategories } from './src/data/blogCategories';
+import { portfolioProjects } from './src/data/portfolioProjects';
 
 export default {
   appDirectory: 'src',
@@ -26,6 +27,7 @@ export default {
   prerender: async ({ getStaticPaths }) => {
     const blogPostPaths = blogPosts.map((post) => `/blog/${post.slug}`);
     const blogCategoryPaths = blogCategories.map((category) => `/blog/category/${category.slug}`);
-    return [...getStaticPaths(), ...blogPostPaths, ...blogCategoryPaths];
+    const portfolioPaths = portfolioProjects.map((project) => `/portfolio/${project.slug}`);
+    return [...getStaticPaths(), ...blogPostPaths, ...blogCategoryPaths, ...portfolioPaths];
   },
 } satisfies Config;

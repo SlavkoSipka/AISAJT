@@ -18,6 +18,8 @@ export default [
   route('funnel', 'funnel.tsx'),
   route('contact', 'funnel.tsx', { id: 'contactAlias' }),
   route('promet-sistem', 'prometSistem.tsx'),
+  route('portfolio', 'portfolio.tsx'),
+  route('portfolio/:slug', 'portfolioDetail.tsx'),
   route('thank-you', 'thankYou.tsx'),
   route('resources', 'resources.tsx'),
   route('resources/quiz', 'resourcesQuiz.tsx'),

@@ -4,7 +4,6 @@ import { ArrowUpRight, Filter } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
-import { SEOHelmet } from '../seo/SEOHelmet';
 import { portfolioProjects, PortfolioProject } from '../../data/portfolioProjects';
 
 type FilterCategory = 'all' | 'web-sajt' | 'e-commerce' | 'seo';
@@ -46,22 +45,6 @@ export function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
-      <SEOHelmet
-        title={language === 'sr'
-          ? 'Portfolio | Naši Projekti i Radovi | AiSajt'
-          : 'Portfolio | Our Projects and Work | AiSajt'
-        }
-        description={language === 'sr'
-          ? 'Pogledajte naše projekte izrade web sajtova, web shopova i SEO optimizacije. Portfolio radova za klijente iz Beograda, Novog Sada i cele Srbije.'
-          : 'See our website development, web shop, and SEO optimization projects. Portfolio of work for clients from Belgrade, Novi Sad, and all of Serbia.'
-        }
-        keywords={language === 'sr'
-          ? 'portfolio, izrada sajtova primeri, web dizajn portfolio, web sajt projekti, AiSajt radovi'
-          : 'portfolio, website development examples, web design portfolio, website projects, AiSajt work'
-        }
-        canonicalUrl="https://aisajt.com/portfolio"
-      />
-
       <Navbar />
 
       <main id="main-content">

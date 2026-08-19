@@ -4,7 +4,6 @@ import { ArrowLeft, ExternalLink, CheckCircle, ArrowUpRight, Code, Globe, Calend
 import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
-import { SEOHelmet } from '../seo/SEOHelmet';
 import { getProjectBySlug, portfolioProjects } from '../../data/portfolioProjects';
 import { trackPortfolioClick } from '../../utils/analytics';
 
@@ -48,20 +47,6 @@ export function PortfolioDetailPage() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
-      <SEOHelmet
-        title={language === 'sr'
-          ? `${project.title} | Portfolio | AiSajt`
-          : `${project.title} | Portfolio | AiSajt`
-        }
-        description={project.longDescription[language]}
-        keywords={language === 'sr'
-          ? `${project.title}, portfolio, izrada sajta, ${project.tags.sr.join(', ')}`
-          : `${project.title}, portfolio, website development, ${project.tags.en.join(', ')}`
-        }
-        canonicalUrl={`https://aisajt.com/portfolio/${project.slug}`}
-        ogImage={project.image}
-      />
-
       <Navbar />
 
       <main id="main-content">

@@ -91,7 +91,7 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            <NavLink href="/#portfolio" onClick={() => navigateToSection('portfolio', navigate, location.pathname)}>{t.portfolio}</NavLink>
+            <NavLink href="/portfolio" onClick={() => navigate('/portfolio')}>{t.portfolio}</NavLink>
             <NavLink href="/#video-section" onClick={() => navigateToSection('video-section', navigate, location.pathname)}>{t.aboutUs}</NavLink>
             
             <a
@@ -343,9 +343,9 @@ export function Navbar() {
             BLOG
           </a>
           
-          <MobileNavLink href="/#portfolio" onClick={() => {
+          <MobileNavLink href="/portfolio" onClick={() => {
             setIsMenuOpen(false);
-            navigateToSection('portfolio', navigate, location.pathname);
+            navigate('/portfolio');
           }}>{t.portfolio}</MobileNavLink>
           <MobileNavLink href="/#video-section" onClick={() => {
             setIsMenuOpen(false);
@@ -445,10 +445,10 @@ export function Navbar() {
           {/* Horizontal Navigation Buttons - Minimal Design with Site Colors */}
           <div className="flex flex-col space-y-1 flex-1">
             <a
-              href="/#portfolio"
+              href="/portfolio"
               onClick={(e) => {
                 e.preventDefault();
-                navigateToSection('portfolio', navigate, location.pathname);
+                navigate('/portfolio');
               }}
               className="w-full text-left px-4 py-3.5 text-gray-800 hover:text-violet-600 font-semibold text-[15px] transition-colors duration-300 border-l-2 border-transparent hover:border-violet-600"
             >
