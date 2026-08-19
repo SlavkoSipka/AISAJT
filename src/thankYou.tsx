@@ -18,6 +18,8 @@ export const meta: MetaFunction = () => buildPageMeta({
   canonical: 'https://aisajt.com/thank-you',
 });
 
+export const handle = { breadcrumb: 'Hvala Vam' };
+
 export default function ThankYouRoute() {
   return <ThankYouPage />;
 }

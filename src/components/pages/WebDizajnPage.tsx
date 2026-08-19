@@ -5,6 +5,8 @@ import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
 import { SEOHelmet } from '../seo/SEOHelmet';
+import { FAQSchema } from '../seo/FAQSchema';
+import { ServiceSchema } from '../seo/ServiceSchema';
 import { TeamCTA } from '../sections/TeamCTA';
 import { ConsultationCTA } from '../sections/ConsultationCTA';
 import { trackCTAClick } from '../../utils/analytics';
@@ -54,9 +56,16 @@ export function WebDizajnPage() {
           : 'web design, web design price, web design belgrade, web design serbia, website design'
         }
         canonicalUrl="https://aisajt.com/web-dizajn"
-        includeBusinessSchema={true}
-        includeFAQSchema={true}
-        faqItems={faqItems}
+      />
+      <FAQSchema items={faqItems} />
+      {/* No startingPrice: unlike the other three service pages, this page's
+          body never actually states a price on-page (only the old meta
+          description claimed "350€", which wasn't backed by visible content
+          — see PHASE_4_REPORT.md). Omitting rather than fabricating. */}
+      <ServiceSchema
+        serviceType="Web dizajn"
+        description="Moderan, responzivan web dizajn u Beogradu i Srbiji, prilagođen vašem brendu."
+        path="/web-dizajn"
       />
 
       <Navbar />

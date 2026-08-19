@@ -1,5 +1,7 @@
 import { BlogPost } from '../../types/blog';
 import { useLanguage } from '../../hooks/useLanguage';
+import { SITE_URL } from '../../lib/site-config';
+import { BUSINESS_ID } from '../seo/BusinessSchema';
 
 interface BlogPostSchemaProps {
   post: BlogPost;
@@ -17,7 +19,7 @@ export function BlogPostSchema({ post, category }: BlogPostSchemaProps) {
     '@type': 'BlogPosting',
     headline: language === 'sr' ? post.title : post.titleEn,
     description: language === 'sr' ? post.excerpt : post.excerptEn,
-    image: `https://aisajt.com${post.coverImage}`,
+    image: `${SITE_URL}${post.coverImage}`,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
     author: {
@@ -25,20 +27,15 @@ export function BlogPostSchema({ post, category }: BlogPostSchemaProps) {
       name: post.author.name,
       logo: {
         '@type': 'ImageObject',
-        url: `https://aisajt.com${post.author.image}`
+        url: `${SITE_URL}${post.author.image}`
       }
     },
-    publisher: {
-      '@type': 'Organization',
-      name: 'AiSajt',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://aisajt.com/images/providna2.png'
-      }
-    },
+    // Cross-references the sitewide business node (root.tsx's BusinessSchema)
+    // by @id instead of repeating a disconnected Organization stub.
+    publisher: { '@id': BUSINESS_ID },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://aisajt.com/blog/${post.slug}`
+      '@id': `${SITE_URL}/blog/${post.slug}`
     },
     articleSection: language === 'sr' ? category.name : category.nameEn,
     keywords: post.tags?.join(', ') || '',

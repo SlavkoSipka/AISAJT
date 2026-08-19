@@ -8,6 +8,8 @@ export const meta: MetaFunction = () => buildPageMeta({
   canonical: 'https://aisajt.com/blog',
 });
 
+export const handle = { breadcrumb: 'Blog' };
+
 export default function BlogHubRoute() {
   return <BlogHubPage />;
 }

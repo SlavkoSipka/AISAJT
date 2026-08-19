@@ -129,7 +129,6 @@ export function ONamaPage() {
           : 'about us, AiSajt team, web agency Serbia, digital marketing team, website development team, Belgrade web agency'
         }
         canonicalUrl="https://aisajt.com/o-nama"
-        includeBusinessSchema={true}
       />
 
       <Navbar />

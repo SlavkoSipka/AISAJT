@@ -9,6 +9,8 @@ export const meta: MetaFunction = () => buildPageMeta({
   canonical: 'https://aisajt.com/funnel',
 });
 
+export const handle = { breadcrumb: 'Kontakt' };
+
 export default function FunnelRoute() {
   return <FunnelPage />;
 }

@@ -207,7 +207,6 @@ export function HomePage() {
           : 'website development agency, seo optimization, website development belgrade, digital agency'
         }
         canonicalUrl="https://aisajt.com/"
-        includeBusinessSchema={true}
       />
 
       {/* Skip to content link - accessibility */}

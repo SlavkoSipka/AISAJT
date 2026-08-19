@@ -9,6 +9,8 @@ export const meta: MetaFunction = () => buildPageMeta({
   canonical: 'https://aisajt.com/promet-sistem',
 });
 
+export const handle = { breadcrumb: 'Promet Sistem' };
+
 export default function PrometSistemRoute() {
   return <PrometSistemPage />;
 }

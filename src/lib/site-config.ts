@@ -30,3 +30,14 @@ export const NAP = {
   },
   hours: 'Mo-Fr 09:00-18:00',
 } as const;
+
+// Phase 4 schema audit: verified each URL below by actually fetching it.
+// instagram.com/aisajt is a real, active business profile (309 followers,
+// real posts, founders tagged). facebook.com/aisajt resolves to an
+// unrelated personal profile ("Siti Aisyah") — not the business's page —
+// so it's deliberately omitted rather than shipped as a false sameAs claim.
+// TODO(owner): if a real Facebook business page exists under a different
+// URL, add it here.
+export const SOCIAL_PROFILES: readonly string[] = [
+  'https://www.instagram.com/aisajt',
+];

@@ -9,6 +9,8 @@ export const meta: MetaFunction = () => buildPageMeta({
   canonical: 'https://aisajt.com/resources/quiz',
 });
 
+export const handle = { breadcrumb: 'Kviz' };
+
 export default function ResourcesQuizRoute() {
   return <QuizPage />;
 }

@@ -5,6 +5,8 @@ import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
 import { SEOHelmet } from '../seo/SEOHelmet';
+import { FAQSchema } from '../seo/FAQSchema';
+import { ServiceSchema } from '../seo/ServiceSchema';
 import { TeamCTA } from '../sections/TeamCTA';
 import { ServicesCarousel } from '../sections/ServicesCarousel';
 import { trackCTAClick } from '../../utils/analytics';
@@ -96,9 +98,13 @@ export function SEOPage() {
           : 'seo optimization price, seo optimization, seo cost, website seo optimization, seo optimization belgrade'
         }
         canonicalUrl="https://aisajt.com/seo-optimizacija-cena"
-        includeBusinessSchema={true}
-        includeFAQSchema={true}
-        faqItems={faqItems}
+      />
+      <FAQSchema items={faqItems} />
+      <ServiceSchema
+        serviceType="SEO optimizacija"
+        description="Tehnička SEO optimizacija sajta za bolju poziciju na Google, u Beogradu i širom Srbije."
+        path="/seo-optimizacija-cena"
+        startingPrice={250}
       />
 
       <Navbar />

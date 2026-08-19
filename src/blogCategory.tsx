@@ -1,7 +1,20 @@
-import type { MetaFunction } from 'react-router';
+import type { LoaderFunctionArgs, MetaFunction } from 'react-router';
 import { BlogCategoryPage } from './components/pages/BlogCategoryPage';
 import { getCategoryBySlug } from './data/blogCategories';
 import { buildPageMeta } from './utils/pageMeta';
+
+// See blogPost.tsx's loader comment — same reasoning for the category name.
+export function loader({ params }: LoaderFunctionArgs) {
+  const category = params.categorySlug ? getCategoryBySlug(params.categorySlug) : undefined;
+  return { name: category?.name };
+}
+
+export const handle = {
+  breadcrumb: (data: { name?: string }) => [
+    { label: 'Blog', path: '/blog' },
+    { label: data?.name ?? 'Blog' },
+  ],
+};
 
 export const meta: MetaFunction = ({ params }) => {
   const category = params.categorySlug ? getCategoryBySlug(params.categorySlug) : undefined;

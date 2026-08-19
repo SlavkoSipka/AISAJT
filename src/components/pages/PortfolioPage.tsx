@@ -60,7 +60,6 @@ export function PortfolioPage() {
           : 'portfolio, website development examples, web design portfolio, website projects, AiSajt work'
         }
         canonicalUrl="https://aisajt.com/portfolio"
-        includeBusinessSchema={true}
       />
 
       <Navbar />

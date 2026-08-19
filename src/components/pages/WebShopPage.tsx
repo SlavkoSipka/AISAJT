@@ -5,6 +5,8 @@ import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
 import { SEOHelmet } from '../seo/SEOHelmet';
+import { FAQSchema } from '../seo/FAQSchema';
+import { ServiceSchema } from '../seo/ServiceSchema';
 import { TeamCTA } from '../sections/TeamCTA';
 import { BenefitsCarousel } from '../sections/BenefitsCarousel';
 import { trackCTAClick } from '../../utils/analytics';
@@ -57,9 +59,13 @@ export function WebShopPage() {
           : 'web shop development, ecommerce website, online store creation'
         }
         canonicalUrl="https://aisajt.com/izrada-web-shopa"
-        includeBusinessSchema={true}
-        includeFAQSchema={true}
-        faqItems={faqItems}
+      />
+      <FAQSchema items={faqItems} />
+      <ServiceSchema
+        serviceType="Izrada web shopa"
+        description="Izrada online prodavnice u Beogradu, Novom Sadu i Srbiji — WooCommerce ili Shopify."
+        path="/izrada-web-shopa"
+        startingPrice={499}
       />
 
       <Navbar />

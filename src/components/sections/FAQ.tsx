@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Language } from '../../types/language';
+import { FAQSchema } from '../seo/FAQSchema';
 
 interface FAQItem {
   question: string;
@@ -154,24 +155,7 @@ export function FAQ({ language }: FAQProps) {
         </div>
       </div>
 
-      {/* FAQ Schema JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": items.map(item => ({
-              "@type": "Question",
-              "name": item.question,
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": item.answer
-              }
-            }))
-          })
-        }}
-      />
+      <FAQSchema items={items} />
     </section>
   );
 }

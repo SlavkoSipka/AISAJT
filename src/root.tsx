@@ -3,7 +3,9 @@ import { Meta, Links, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import type { MetaFunction } from 'react-router';
 import { buildPageMeta } from './utils/pageMeta';
 import { LanguageProvider } from './contexts/LanguageContext';
-import { NAP, SITE_URL } from './lib/site-config';
+import { SITE_URL } from './lib/site-config';
+import { BusinessSchema } from './components/seo/BusinessSchema';
+import { BreadcrumbSchema } from './components/seo/BreadcrumbSchema';
 import './index.css';
 
 // react-helmet-async's HelmetProvider was removed from here in Sub-step 2C:
@@ -64,89 +66,6 @@ if (${HOSTNAME_GUARD}) {
 }
 `;
 
-// Default ProfessionalService schema — same on every route until per-page
-// Service/LocalBusiness schema work lands in a later phase (Phase 4).
-const PROFESSIONAL_SERVICE_SCHEMA = {
-  '@context': 'https://schema.org',
-  '@type': 'ProfessionalService',
-  name: NAP.name,
-  alternateName: 'AiSajt.com',
-  url: SITE_URL,
-  logo: `${SITE_URL}/images/providna2.png`,
-  description: 'Profesionalna izrada web sajta za firme u Beogradu i Srbiji. Tražite pouzdanu agenciju za izradu web sajta? Cena od 299€, transparentna ponuda.',
-  image: `${SITE_URL}/images/favicon/android-chrome-512x512.png`,
-  telephone: NAP.phone.tel,
-  email: NAP.email,
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: NAP.address.streetAddress,
-    addressLocality: NAP.address.addressLocality,
-    postalCode: NAP.address.postalCode,
-    addressCountry: NAP.address.addressCountry,
-  },
-  areaServed: {
-    '@type': 'Country',
-    name: 'Serbia',
-  },
-  priceRange: '$$',
-  hasOfferCatalog: {
-    '@type': 'OfferCatalog',
-    name: 'Usluge izrade web sajta',
-    itemListElement: [
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'Izrada web sajta',
-          description: 'Profesionalna izrada web sajta za firme. Tražite pouzdanu agenciju za izradu web sajta? Cena od 299€.',
-          provider: { '@type': 'Organization', name: 'AiSajt' },
-          areaServed: { '@type': 'City', name: 'Beograd' },
-        },
-      },
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'Web dizajn',
-          description: 'Moderan i responzivan web dizajn prilagođen svim uređajima',
-          provider: { '@type': 'Organization', name: 'AiSajt' },
-        },
-      },
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'SEO optimizacija',
-          description: 'Tehnički SEO i optimizacija web sajta za Google pretraživače',
-          provider: { '@type': 'Organization', name: 'AiSajt' },
-        },
-      },
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'Baze podataka',
-          description: 'Upravljanje bazama podataka i backend razvoj',
-          provider: { '@type': 'Organization', name: 'AiSajt' },
-        },
-      },
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'Online marketing',
-          description: 'Digitalni marketing i promocija web sajtova',
-          provider: { '@type': 'Organization', name: 'AiSajt' },
-        },
-      },
-    ],
-  },
-  founder: [
-    { '@type': 'Person', name: 'Strahinja', jobTitle: 'Arhitekta' },
-    { '@type': 'Person', name: 'Bogdan', jobTitle: 'Osnivač & CEO, Programer ETF' },
-  ],
-};
-
 // Site-wide default meta — a fallback for any route without its own meta()
 // export. As of Phase 3, every one of the 27 marketing routes has its own
 // (see src/thankYou.tsx), so this has no live consumer today; kept correct
@@ -192,10 +111,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
         <script dangerouslySetInnerHTML={{ __html: GA4_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: META_PIXEL_SCRIPT }} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(PROFESSIONAL_SERVICE_SCHEMA) }}
-        />
+        <BusinessSchema />
         <script dangerouslySetInnerHTML={{ __html: HUBSPOT_SCRIPT }} />
 
         <Meta />
@@ -217,6 +133,7 @@ export function Layout({ children }: { children: ReactNode }) {
 export default function Root() {
   return (
     <LanguageProvider>
+      <BreadcrumbSchema />
       <Outlet />
     </LanguageProvider>
   );

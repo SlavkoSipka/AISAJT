@@ -9,6 +9,8 @@ export const meta: MetaFunction = () => buildPageMeta({
   canonical: 'https://aisajt.com/resources/checklist',
 });
 
+export const handle = { breadcrumb: 'Checklist' };
+
 export default function ResourcesChecklistRoute() {
   return <LeadMagnetDownloadPage magnetType="checklist" />;
 }

@@ -5,6 +5,8 @@ import { useLanguage } from '../../hooks/useLanguage';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
 import { SEOHelmet } from '../seo/SEOHelmet';
+import { FAQSchema } from '../seo/FAQSchema';
+import { ServiceSchema } from '../seo/ServiceSchema';
 import { TeamCTA } from '../sections/TeamCTA';
 import { FactorsCarousel } from '../sections/FactorsCarousel';
 import { trackCTAClick } from '../../utils/analytics';
@@ -89,9 +91,13 @@ export function IzradaSajtaCenaPage() {
           : 'website development price, website creation, professional web development'
         }
         canonicalUrl="https://aisajt.com/izrada-sajta-cena"
-        includeBusinessSchema={true}
-        includeFAQSchema={true}
-        faqItems={faqItems}
+      />
+      <FAQSchema items={faqItems} />
+      <ServiceSchema
+        serviceType="Izrada web sajta"
+        description="Profesionalna izrada web sajta za firme u Beogradu, Novom Sadu i širom Srbije."
+        path="/izrada-sajta-cena"
+        startingPrice={299}
       />
 
       <Navbar />

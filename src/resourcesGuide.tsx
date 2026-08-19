@@ -9,6 +9,8 @@ export const meta: MetaFunction = () => buildPageMeta({
   canonical: 'https://aisajt.com/resources/guide',
 });
 
+export const handle = { breadcrumb: 'Vodič' };
+
 export default function ResourcesGuideRoute() {
   return <LeadMagnetDownloadPage magnetType="guide" />;
 }

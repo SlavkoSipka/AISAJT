@@ -9,6 +9,8 @@ export const meta: MetaFunction = () => buildPageMeta({
   canonical: 'https://aisajt.com/izrada-web-shopa',
 });
 
+export const handle = { breadcrumb: 'Izrada Web Shopa' };
+
 export default function IzradaWebShopaRoute() {
   return <WebShopPage />;
 }

@@ -9,6 +9,8 @@ export const meta: MetaFunction = () => buildPageMeta({
   canonical: 'https://aisajt.com/privacy',
 });
 
+export const handle = { breadcrumb: 'Politika Privatnosti' };
+
 export default function PrivacyRoute() {
   return <PrivacyPage />;
 }

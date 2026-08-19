@@ -9,6 +9,8 @@ export const meta: MetaFunction = () => buildPageMeta({
   canonical: 'https://aisajt.com/terms',
 });
 
+export const handle = { breadcrumb: 'Uslovi Korišćenja' };
+
 export default function TermsRoute() {
   return <TermsPage />;
 }

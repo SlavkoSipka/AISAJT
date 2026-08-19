@@ -9,6 +9,8 @@ export const meta: MetaFunction = () => buildPageMeta({
   canonical: 'https://aisajt.com/resources/audit',
 });
 
+export const handle = { breadcrumb: 'Audit Sajta' };
+
 export default function ResourcesAuditRoute() {
   return <AuditFormPage />;
 }

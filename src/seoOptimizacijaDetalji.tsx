@@ -9,6 +9,8 @@ export const meta: MetaFunction = () => buildPageMeta({
   canonical: 'https://aisajt.com/seo-optimizacija-detalji',
 });
 
+export const handle = { breadcrumb: 'SEO Optimizacija Detalji' };
+
 export default function SeoOptimizacijaDetaljiRoute() {
   return <SEOOdrzavanjeDetaljiPage />;
 }

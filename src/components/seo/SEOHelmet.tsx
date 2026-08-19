@@ -9,11 +9,14 @@ interface SEOHelmetProps {
   ogImage?: string;
   canonicalUrl?: string;
   noindex?: boolean;
-  includeBusinessSchema?: boolean;
-  includeFAQSchema?: boolean;
-  faqItems?: Array<{ question: string; answer: string }>;
 }
 
+// Phase 4: the includeBusinessSchema/includeFAQSchema/faqItems props and
+// their useEffect-based JSON-LD injection were removed — confirmed in
+// Phase 2 that useEffect-injected schema never reaches prerendered HTML,
+// so it was dead weight from day one. Callers now render <BusinessSchema/>,
+// <FAQSchema/>, <ServiceSchema/> directly (raw <script> tags, which do
+// prerender) instead of passing data through here.
 export function SEOHelmet({
   title,
   description,
@@ -21,9 +24,6 @@ export function SEOHelmet({
   ogImage = `${SITE_URL}/images/favicon/android-chrome-512x512.png`,
   canonicalUrl,
   noindex = false,
-  includeBusinessSchema = false,
-  includeFAQSchema = false,
-  faqItems = []
 }: SEOHelmetProps) {
   const location = useLocation();
   const fullUrl = canonicalUrl || `${SITE_URL}${location.pathname}`;
@@ -109,143 +109,7 @@ export function SEOHelmet({
       meta.setAttribute('content', content);
     });
 
-    // Add LocalBusiness & Organization Schema
-    if (includeBusinessSchema) {
-      let schemaScript = document.querySelector('script[data-schema="business"]');
-      if (!schemaScript) {
-        schemaScript = document.createElement('script');
-        schemaScript.setAttribute('type', 'application/ld+json');
-        schemaScript.setAttribute('data-schema', 'business');
-        document.head.appendChild(schemaScript);
-      }
-
-      const businessSchema = {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "LocalBusiness",
-            "@id": `${SITE_URL}/#localbusiness`,
-            "name": NAP.legalName,
-            "alternateName": "AiSajt",
-            "url": SITE_URL,
-            "telephone": NAP.phone.tel,
-            "email": NAP.email,
-            "address": {
-              "@type": "PostalAddress",
-              "streetAddress": NAP.address.streetAddress,
-              "addressLocality": NAP.address.addressLocality,
-              "postalCode": NAP.address.postalCode,
-              "addressCountry": NAP.address.addressCountry
-            },
-            "geo": {
-              "@type": "GeoCoordinates",
-              "latitude": "44.7866",
-              "longitude": "20.4489"
-            },
-            "taxID": "115455769",
-            "vatID": "RS115455769",
-            "identifier": {
-              "@type": "PropertyValue",
-              "propertyID": "Matični broj",
-              "value": "68380103"
-            },
-            "priceRange": "€€",
-            "openingHours": NAP.hours,
-            "areaServed": {
-              "@type": "Place",
-              "name": "Srbija",
-              "address": {
-                "@type": "PostalAddress",
-                "addressCountry": "RS"
-              }
-            },
-            "sameAs": [
-              "https://www.instagram.com/aisajt",
-              "https://www.facebook.com/aisajt"
-            ],
-            "image": `${SITE_URL}/images/favicon/android-chrome-512x512.png`,
-            "logo": {
-              "@type": "ImageObject",
-              "url": `${SITE_URL}/images/favicon/android-chrome-512x512.png`,
-              "width": "512",
-              "height": "512"
-            },
-            "description": "Profesionalna agencija za izradu sajtova i SEO optimizaciju u Beogradu. Specijalizovani za izradu web sajtova, online prodavnica i SEO usluge."
-          },
-          {
-            "@type": "Organization",
-            "@id": `${SITE_URL}/#organization`,
-            "name": NAP.name,
-            "legalName": NAP.legalName,
-            "url": SITE_URL,
-            "taxID": "115455769",
-            "vatID": "RS115455769",
-            "identifier": [
-              {
-                "@type": "PropertyValue",
-                "propertyID": "PIB",
-                "value": "115455769"
-              },
-              {
-                "@type": "PropertyValue",
-                "propertyID": "Matični broj",
-                "value": "68380103"
-              }
-            ],
-            "logo": {
-              "@type": "ImageObject",
-              "url": `${SITE_URL}/images/favicon/android-chrome-512x512.png`,
-              "width": "512",
-              "height": "512"
-            },
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "telephone": NAP.phone.tel,
-              "contactType": "customer service",
-              "email": NAP.email,
-              "areaServed": "RS",
-              "availableLanguage": ["sr", "en"]
-            },
-            "address": {
-              "@type": "PostalAddress",
-              "streetAddress": NAP.address.streetAddress,
-              "addressLocality": NAP.address.addressLocality,
-              "postalCode": NAP.address.postalCode,
-              "addressCountry": NAP.address.addressCountry
-            }
-          }
-        ]
-      };
-
-      schemaScript.textContent = JSON.stringify(businessSchema);
-    }
-
-    // Add FAQ Schema
-    if (includeFAQSchema && faqItems.length > 0) {
-      let faqSchemaScript = document.querySelector('script[data-schema="faq"]');
-      if (!faqSchemaScript) {
-        faqSchemaScript = document.createElement('script');
-        faqSchemaScript.setAttribute('type', 'application/ld+json');
-        faqSchemaScript.setAttribute('data-schema', 'faq');
-        document.head.appendChild(faqSchemaScript);
-      }
-
-      const faqSchema = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": faqItems.map(item => ({
-          "@type": "Question",
-          "name": item.question,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": item.answer
-          }
-        }))
-      };
-
-      faqSchemaScript.textContent = JSON.stringify(faqSchema);
-    }
-  }, [title, description, keywords, ogImage, fullUrl, noindex, includeBusinessSchema, includeFAQSchema, faqItems]);
+  }, [title, description, keywords, ogImage, fullUrl, noindex]);
 
   return null; // This is a utility component, doesn't render anything
 }
