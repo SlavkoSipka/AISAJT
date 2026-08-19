@@ -10,10 +10,15 @@ import {
 } from 'lucide-react';
 import { SEOHelmet } from '../seo/SEOHelmet';
 import { trackPhoneClick, trackCTAClick } from '../../utils/analytics';
+import { NAP } from '../../lib/site-config';
 
+// This landing page intentionally uses a different phone number from the
+// site-wide NAP — it's a dedicated call-tracking number for Meta ads
+// traffic (see the "Dodaj Promet Sistem landing" commit), not a drift bug.
+// Not centralized into site-config.ts on purpose.
 const PHONE_DISPLAY = '061 203 9768';
 const PHONE_TEL = 'tel:+381612039768';
-const EMAIL = 'office@aisajt.com';
+const EMAIL = NAP.email;
 
 // Kad snimiš video, nalepi ovde link (Vimeo ili YouTube embed URL) — npr.
 // 'https://player.vimeo.com/video/XXXXXXX' ili 'https://www.youtube.com/embed/XXXXXXX'

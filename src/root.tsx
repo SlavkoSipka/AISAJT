@@ -3,6 +3,7 @@ import { Meta, Links, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import type { MetaFunction } from 'react-router';
 import { buildPageMeta } from './utils/pageMeta';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { NAP, SITE_URL } from './lib/site-config';
 import './index.css';
 
 // react-helmet-async's HelmetProvider was removed from here in Sub-step 2C:
@@ -68,18 +69,20 @@ if (${HOSTNAME_GUARD}) {
 const PROFESSIONAL_SERVICE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
-  name: 'AI Sajt',
+  name: NAP.name,
   alternateName: 'AiSajt.com',
-  url: 'https://aisajt.com',
-  logo: 'https://aisajt.com/images/providna2.png',
+  url: SITE_URL,
+  logo: `${SITE_URL}/images/providna2.png`,
   description: 'Profesionalna izrada web sajta za firme u Beogradu i Srbiji. Tražite pouzdanu agenciju za izradu web sajta? Cena od 299€, transparentna ponuda.',
-  image: 'https://aisajt.com/images/favicon/android-chrome-512x512.png',
-  telephone: '+381621552156',
-  email: 'office@aisajt.com',
+  image: `${SITE_URL}/images/favicon/android-chrome-512x512.png`,
+  telephone: NAP.phone.tel,
+  email: NAP.email,
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Beograd',
-    addressCountry: 'RS',
+    streetAddress: NAP.address.streetAddress,
+    addressLocality: NAP.address.addressLocality,
+    postalCode: NAP.address.postalCode,
+    addressCountry: NAP.address.addressCountry,
   },
   areaServed: {
     '@type': 'Country',
@@ -144,14 +147,15 @@ const PROFESSIONAL_SERVICE_SCHEMA = {
   ],
 };
 
-// Site-wide default meta — used as-is on routes without their own meta()
-// export (still-catchall routes); overridden by each migrated route's own
-// meta() below (see per-route meta() exports added in Sub-step 2B).
+// Site-wide default meta — a fallback for any route without its own meta()
+// export. As of Phase 3, every one of the 27 marketing routes has its own
+// (see src/thankYou.tsx), so this has no live consumer today; kept correct
+// and de-stuffed anyway (Phase 3 audit) rather than left as dead-but-wrong.
 export const meta: MetaFunction = () => buildPageMeta({
-  title: 'Izrada Web Sajta | Izrada Sajtova | Izrada Sajta Cena Beograd',
-  description: 'Profesionalna izrada web sajta i izrada sajtova u Beogradu. Izrada sajta cena od 299€. Cena izrade sajta zavisi od projekta. Besplatna konsultacija i transparentna ponuda.',
+  title: 'Izrada Sajta i SEO Optimizacija | AiSajt Beograd',
+  description: 'Profesionalna izrada web sajtova i SEO optimizacija za firme u Beogradu i širom Srbije. Transparentne cene, besplatna konsultacija.',
   keywords: 'izrada web sajta, izrada sajtova, izrada sajta cena, web sajt izrada, cena izrade sajta, izrada web sajta cena, izrada web sajta novi sad',
-  canonical: 'https://aisajt.com',
+  canonical: SITE_URL,
 });
 
 export function Layout({ children }: { children: ReactNode }) {

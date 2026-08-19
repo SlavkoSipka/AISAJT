@@ -6,6 +6,7 @@ import { useLanguage } from '../../hooks/useLanguage';
 import { SEOHelmet } from '../seo/SEOHelmet';
 import { trackCTAClick, trackFormSubmitAttempt, trackFormError, trackPhoneClick } from '../../utils/analytics';
 import { submitFunnelForm } from '../../utils/hubspot';
+import { NAP } from '../../lib/site-config';
 
 /* ─── useCountUp hook ─────────────────────────────────────────────────── */
 function useCountUp(target: number, duration = 1400, started = false) {
@@ -675,8 +676,8 @@ export function FunnelPage() {
 
               {/* Kontakt kartica – direktan poziv */}
               <a
-                href="tel:+381621552156"
-                onClick={() => trackPhoneClick('+381621552156', 'funnel_booking', language)}
+                href={`tel:${NAP.phone.tel}`}
+                onClick={() => trackPhoneClick(NAP.phone.tel, 'funnel_booking', language)}
                 className="mt-4 flex items-center gap-4 px-5 py-4 rounded-xl border border-gray-800 bg-gray-900/60 md:hover:bg-gray-800/80 md:hover:border-violet-500/40 transition-colors duration-300 group touch-manipulation active:bg-gray-800/90"
                 style={{ WebkitTapHighlightColor: 'transparent' }}
               >
@@ -690,7 +691,7 @@ export function FunnelPage() {
                     {language === 'sr' ? 'Kontaktirajte me odmah pozivom' : 'Contact me directly by call'}
                   </p>
                   <p className="text-white font-bold text-base tracking-wide group-hover:text-violet-300 transition-colors duration-200">
-                    Strahinja · 062 155 2156
+                    Strahinja · {NAP.phone.local}
                   </p>
                 </div>
                 <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-violet-600 flex items-center justify-center shadow-[0_2px_12px_rgba(139,92,246,0.4)] group-hover:bg-violet-500 group-hover:shadow-[0_4px_18px_rgba(139,92,246,0.6)] transition-all duration-200 overflow-visible">

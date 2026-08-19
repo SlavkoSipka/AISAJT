@@ -3,8 +3,8 @@ import { IzradaSajtaCenaPage } from './components/pages/IzradaSajtaCenaPage';
 import { buildPageMeta } from './utils/pageMeta';
 
 export const meta: MetaFunction = () => buildPageMeta({
-  title: 'Izrada Sajta Cena | Profesionalna Izrada Sajtova Beograd | Izrada Web Sajta',
-  description: 'Izrada sajta cena od 299€. Profesionalna izrada sajtova u Beogradu, Novom Sadu i Srbiji. Transparentne cene za izradu web sajta. Besplatna konsultacija. Responzivni dizajn i SEO optimizacija.',
+  title: 'Izrada Sajta Cena u Beogradu | Transparentne Cene | AiSajt',
+  description: 'Izrada sajta po ceni od 299€ u Beogradu, Novom Sadu i širom Srbije. Transparentne cene, responzivan dizajn i SEO optimizacija uključeni. Besplatna konsultacija.',
   keywords: 'izrada sajta cena, izrada sajtova, izrada web sajta, profesionalna izrada sajtova, izrada sajta beograd, cena izrade sajta',
   canonical: 'https://aisajt.com/izrada-sajta-cena',
 });

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Language, Translation } from '../../types/language';
 import { trackFormInteraction, trackFormSubmitAttempt, trackFormError } from '../../utils/analytics';
 import { submitContactForm } from '../../utils/hubspot';
+import { NAP } from '../../lib/site-config';
 
 interface FormData {
   name: string;
@@ -147,24 +148,24 @@ export function Contact({ language, t }: ContactProps) {
                     <p className="text-xs font-medium text-violet-400 uppercase tracking-widest mb-2">
                       {language === 'sr' ? 'Lokacija' : 'Location'}
                     </p>
-                    <p className="text-xl text-gray-900 font-medium">Beograd, Srbija</p>
+                    <p className="text-xl text-gray-900 font-medium">{language === 'sr' ? NAP.address.display : NAP.address.displayEn}</p>
                   </div>
-                  
+
                   <div>
                     <p className="text-xs font-medium text-indigo-400 uppercase tracking-widest mb-2">
                       Email
                     </p>
-                    <a href="mailto:office@aisajt.com" className="text-xl text-gray-900 font-medium hover:text-violet-600 transition-colors">
-                      office@aisajt.com
+                    <a href={`mailto:${NAP.email}`} className="text-xl text-gray-900 font-medium hover:text-violet-600 transition-colors">
+                      {NAP.email}
                     </a>
                   </div>
-                  
+
                   <div>
                     <p className="text-xs font-medium text-pink-400 uppercase tracking-widest mb-2">
                       {language === 'sr' ? 'Telefon' : 'Phone'}
                     </p>
-                    <a href="tel:+381621552156" className="text-xl text-gray-900 font-medium hover:text-violet-600 transition-colors">
-                      +381 62 155 2156
+                    <a href={`tel:${NAP.phone.tel}`} className="text-xl text-gray-900 font-medium hover:text-violet-600 transition-colors">
+                      {NAP.phone.display}
                     </a>
                   </div>
                 </div>

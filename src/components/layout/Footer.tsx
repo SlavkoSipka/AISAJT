@@ -3,6 +3,7 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { translations } from '../../types/language';
 import { navigateToSection } from '../../utils/navigation';
+import { NAP } from '../../lib/site-config';
 
 export function Footer() {
   const { language } = useLanguage();
@@ -56,27 +57,27 @@ export function Footer() {
             <ul className="space-y-2.5">
               <li className="flex items-start gap-3">
                 <Mail className="w-4 h-4 text-violet-600 mt-1 flex-shrink-0" aria-hidden="true" />
-                <a 
-                  href="mailto:office@aisajt.com"
+                <a
+                  href={`mailto:${NAP.email}`}
                   className="text-gray-600 hover:text-violet-600 transition-colors duration-300"
-                  aria-label="Pošaljite email na office@aisajt.com"
+                  aria-label={`Pošaljite email na ${NAP.email}`}
                 >
-                  office@aisajt.com
+                  {NAP.email}
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="w-4 h-4 text-indigo-600 mt-1 flex-shrink-0" aria-hidden="true" />
                 <a
-                  href="tel:+381621552156"
+                  href={`tel:${NAP.phone.tel}`}
                   className="text-gray-600 hover:text-indigo-600 transition-colors duration-300"
-                  aria-label="Pozovite na broj +381 62 155 2156"
+                  aria-label={`Pozovite na broj ${NAP.phone.display}`}
                 >
-                  +381 62 155 2156
+                  {NAP.phone.display}
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-pink-600 mt-1 flex-shrink-0" aria-hidden="true" />
-                <span className="text-gray-600">{language === 'sr' ? 'Beograd, Srbija' : 'Belgrade, Serbia'}</span>
+                <span className="text-gray-600">{language === 'sr' ? NAP.address.display : NAP.address.displayEn}</span>
               </li>
             </ul>
           </div>

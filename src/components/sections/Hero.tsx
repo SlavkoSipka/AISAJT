@@ -3,6 +3,7 @@ import { Send, ArrowRight, ExternalLink } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Language } from '../../types/language';
 import { navigateToSection } from '../../utils/navigation';
+import { NAP } from '../../lib/site-config';
 
 interface HeroProps {
   language: Language;
@@ -167,8 +168,8 @@ export function Hero({ language }: HeroProps) {
                 {/* Contact card mockup */}
                 <div className="absolute top-10 -left-16 w-56 h-32 bg-gradient-to-br from-pink-50 to-violet-50 rounded-2xl shadow-xl transform -rotate-6 transition-transform duration-700 hover:rotate-0 p-6">
                   <h3 className="text-lg font-bold text-gray-900 mb-2">Contact</h3>
-                  <p className="text-sm text-gray-600">office@aisajt.com</p>
-                  <p className="text-sm text-gray-600">+381 62 155 2156</p>
+                  <p className="text-sm text-gray-600">{NAP.email}</p>
+                  <p className="text-sm text-gray-600">{NAP.phone.display}</p>
                 </div>
 
                 {/* Feature tag */}

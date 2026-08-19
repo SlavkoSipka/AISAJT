@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
 import { SEOHelmet } from '../seo/SEOHelmet';
+import { NAP } from '../../lib/site-config';
 
 export function PrivacyPage() {
   return (
@@ -76,7 +77,7 @@ export function PrivacyPage() {
             <section>
               <h2 className="text-xl font-semibold mb-4 text-gray-900">7. Kontakt</h2>
               <p>
-                Za sva pitanja u vezi sa zaštitom privatnosti, možete nas kontaktirati na email: office@aisajt.com
+                Za sva pitanja u vezi sa zaštitom privatnosti, možete nas kontaktirati na email: {NAP.email}
               </p>
             </section>
 

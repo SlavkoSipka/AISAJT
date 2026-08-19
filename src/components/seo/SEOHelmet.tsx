@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { NAP, SITE_URL } from '../../lib/site-config';
 
 interface SEOHelmetProps {
   title: string;
@@ -13,11 +14,11 @@ interface SEOHelmetProps {
   faqItems?: Array<{ question: string; answer: string }>;
 }
 
-export function SEOHelmet({ 
-  title, 
-  description, 
-  keywords, 
-  ogImage = 'https://aisajt.com/images/favicon/android-chrome-512x512.png',
+export function SEOHelmet({
+  title,
+  description,
+  keywords,
+  ogImage = `${SITE_URL}/images/favicon/android-chrome-512x512.png`,
   canonicalUrl,
   noindex = false,
   includeBusinessSchema = false,
@@ -25,8 +26,7 @@ export function SEOHelmet({
   faqItems = []
 }: SEOHelmetProps) {
   const location = useLocation();
-  const baseUrl = 'https://aisajt.com';
-  const fullUrl = canonicalUrl || `${baseUrl}${location.pathname}`;
+  const fullUrl = canonicalUrl || `${SITE_URL}${location.pathname}`;
 
   useEffect(() => {
     // Update document title
@@ -77,7 +77,7 @@ export function SEOHelmet({
       { property: 'og:url', content: fullUrl },
       { property: 'og:image', content: ogImage },
       { property: 'og:type', content: 'website' },
-      { property: 'og:site_name', content: 'AI Sajt' },
+      { property: 'og:site_name', content: NAP.name },
       { property: 'og:locale', content: 'sr_RS' }
     ];
 
@@ -124,18 +124,18 @@ export function SEOHelmet({
         "@graph": [
           {
             "@type": "LocalBusiness",
-            "@id": "https://aisajt.com/#localbusiness",
-            "name": "AI Sajt - Agencija za Izradu Sajta",
+            "@id": `${SITE_URL}/#localbusiness`,
+            "name": NAP.legalName,
             "alternateName": "AiSajt",
-            "url": "https://aisajt.com",
-            "telephone": "+381621552156",
-            "email": "office@aisajt.com",
+            "url": SITE_URL,
+            "telephone": NAP.phone.tel,
+            "email": NAP.email,
             "address": {
               "@type": "PostalAddress",
-              "streetAddress": "Maraka Oreskovca 42",
-              "addressLocality": "Beograd",
-              "postalCode": "11000",
-              "addressCountry": "RS"
+              "streetAddress": NAP.address.streetAddress,
+              "addressLocality": NAP.address.addressLocality,
+              "postalCode": NAP.address.postalCode,
+              "addressCountry": NAP.address.addressCountry
             },
             "geo": {
               "@type": "GeoCoordinates",
@@ -150,7 +150,7 @@ export function SEOHelmet({
               "value": "68380103"
             },
             "priceRange": "€€",
-            "openingHours": "Mo-Fr 09:00-18:00",
+            "openingHours": NAP.hours,
             "areaServed": {
               "@type": "Place",
               "name": "Srbija",
@@ -163,10 +163,10 @@ export function SEOHelmet({
               "https://www.instagram.com/aisajt",
               "https://www.facebook.com/aisajt"
             ],
-            "image": "https://aisajt.com/images/favicon/android-chrome-512x512.png",
+            "image": `${SITE_URL}/images/favicon/android-chrome-512x512.png`,
             "logo": {
               "@type": "ImageObject",
-              "url": "https://aisajt.com/images/favicon/android-chrome-512x512.png",
+              "url": `${SITE_URL}/images/favicon/android-chrome-512x512.png`,
               "width": "512",
               "height": "512"
             },
@@ -174,10 +174,10 @@ export function SEOHelmet({
           },
           {
             "@type": "Organization",
-            "@id": "https://aisajt.com/#organization",
-            "name": "AI Sajt",
-            "legalName": "AI Sajt - Agencija za Izradu Sajta",
-            "url": "https://aisajt.com",
+            "@id": `${SITE_URL}/#organization`,
+            "name": NAP.name,
+            "legalName": NAP.legalName,
+            "url": SITE_URL,
             "taxID": "115455769",
             "vatID": "RS115455769",
             "identifier": [
@@ -194,24 +194,24 @@ export function SEOHelmet({
             ],
             "logo": {
               "@type": "ImageObject",
-              "url": "https://aisajt.com/images/favicon/android-chrome-512x512.png",
+              "url": `${SITE_URL}/images/favicon/android-chrome-512x512.png`,
               "width": "512",
               "height": "512"
             },
             "contactPoint": {
               "@type": "ContactPoint",
-              "telephone": "+381621552156",
+              "telephone": NAP.phone.tel,
               "contactType": "customer service",
-              "email": "office@aisajt.com",
+              "email": NAP.email,
               "areaServed": "RS",
               "availableLanguage": ["sr", "en"]
             },
             "address": {
               "@type": "PostalAddress",
-              "streetAddress": "Maraka Oreskovca 42",
-              "addressLocality": "Beograd",
-              "postalCode": "11000",
-              "addressCountry": "RS"
+              "streetAddress": NAP.address.streetAddress,
+              "addressLocality": NAP.address.addressLocality,
+              "postalCode": NAP.address.postalCode,
+              "addressCountry": NAP.address.addressCountry
             }
           }
         ]
