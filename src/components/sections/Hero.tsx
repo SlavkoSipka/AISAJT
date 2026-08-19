@@ -168,7 +168,7 @@ export function Hero({ language }: HeroProps) {
                 <div className="absolute top-10 -left-16 w-56 h-32 bg-gradient-to-br from-pink-50 to-violet-50 rounded-2xl shadow-xl transform -rotate-6 transition-transform duration-700 hover:rotate-0 p-6">
                   <h3 className="text-lg font-bold text-gray-900 mb-2">Contact</h3>
                   <p className="text-sm text-gray-600">office@aisajt.com</p>
-                  <p className="text-sm text-gray-600">+381 61 3091583</p>
+                  <p className="text-sm text-gray-600">+381 62 155 2156</p>
                 </div>
 
                 {/* Feature tag */}

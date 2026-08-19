@@ -66,12 +66,12 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="w-4 h-4 text-indigo-600 mt-1 flex-shrink-0" aria-hidden="true" />
-                <a 
-                  href="tel:+381613091583"
+                <a
+                  href="tel:+381621552156"
                   className="text-gray-600 hover:text-indigo-600 transition-colors duration-300"
-                  aria-label="Pozovite na broj +381 61 3091583"
+                  aria-label="Pozovite na broj +381 62 155 2156"
                 >
-                  +381 61 3091583
+                  +381 62 155 2156
                 </a>
               </li>
               <li className="flex items-start gap-3">

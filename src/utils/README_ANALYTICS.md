@@ -104,10 +104,10 @@ const handleClick = () => {
 
 // Phone link
 <a
-  href="tel:+381613091583"
-  onClick={() => trackContactInfoClick('phone', '+381613091583', language)}
+  href="tel:+381621552156"
+  onClick={() => trackContactInfoClick('phone', '+381621552156', language)}
 >
-  +381 61 3091583
+  +381 62 155 2156
 </a>
 ```
 

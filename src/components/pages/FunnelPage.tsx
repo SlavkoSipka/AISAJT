@@ -164,7 +164,6 @@ export function FunnelPage() {
   const [caseRef, caseVisible] = useReveal();
   const [metricsRef, metricsVisible] = useReveal();
   const [teamRef, teamVisible] = useReveal();
-  const [reviewsRef, reviewsVisible] = useReveal();
   const [ctaRef, ctaVisible] = useReveal();
 
   /* booking widget */
@@ -183,9 +182,6 @@ export function FunnelPage() {
 
   /* booking form u viewportu – za skrivanje floating widgeta na mobilnom */
   const [bookingInView, setBookingInView] = useState(false);
-
-  /* reviews expand */
-  const [expandedReviewIndex, setExpandedReviewIndex] = useState<number | null>(null);
 
   const openWidget = () => {
     setWidgetOpen(true);
@@ -983,110 +979,6 @@ export function FunnelPage() {
                   {language === 'sr' ? 'Zakazi poziv' : 'Book a call'}
                   <ArrowRight className="w-4 h-4" />
                 </button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Reviews / Recenzije */}
-        <section id="reviews" ref={reviewsRef as React.RefObject<HTMLElement>} className="py-10 md:py-24 relative overflow-hidden z-10 bg-black">
-          <div className={`container mx-auto px-4 relative z-10 ${revealClass(reviewsVisible)}`}>
-            <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-6 md:mb-10">
-                <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight mb-2 md:mb-3">
-                  {language === 'sr' ? 'Odlično' : 'Excellent'}
-                </h2>
-                <div className="flex justify-center gap-0.5 mb-1.5 md:mb-2">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <Star key={i} className="w-5 h-5 md:w-8 md:h-8 text-green-500 fill-green-500" />
-                  ))}
-                </div>
-                <p className="text-white/90 text-xs md:text-base">
-                  {language === 'sr' ? (
-                    <>Ocenjeno <strong>4.8 / 5</strong> na osnovu recenzija na{' '}
-                      <span className="inline-flex items-center gap-1">
-                        Trustpilot
-                        <Star className="w-3.5 h-3.5 text-green-500 fill-green-500 inline" />
-                      </span>
-                    </>
-                  ) : (
-                    <>Rated <strong>4.8 / 5</strong> based on reviews on{' '}
-                      <span className="inline-flex items-center gap-1">
-                        Trustpilot
-                        <Star className="w-3.5 h-3.5 text-green-500 fill-green-500 inline" />
-                      </span>
-                    </>
-                  )}
-                </p>
-                <p className="text-gray-400 text-xs md:text-sm mt-2 md:mt-4 text-left max-w-4xl mx-auto">
-                  {language === 'sr' ? 'Prikazujemo naše 4 i 5 zvezdica recenzije.' : 'Showing our 4 & 5 star reviews.'}
-                </p>
-              </div>
-
-              <div
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 auto-rows-fr"
-                style={{ gridAutoRows: 'minmax(160px, auto)' }}
-              >
-                {(language === 'sr' ? [
-                  { name: 'Marko P.', date: 'pre 3 nedelje', title: 'Nisam očekivao ovako brze rezultate', body: 'Kontaktirao sam ih jer Google jednostavno nije prikazivao moj sajt. Bogdan mi je isti dan odgovorio i objasnio tačno šta je problem. Posle mesec dana rada vidim prve rezultate, upiti počinju da stižu organskim putem. Preporučujem svakome ko se muči sa vidljivošću.' },
-                  { name: 'Nebojša M.', date: 'pre 14 meseci', title: 'Objasne sve bez besmislica', body: 'Bavim se nekretninama i dugo sam odlagao SEO jer nisam znao odakle da počnem. Momci su mi sve objasnili bez žargona i bez pritiska. Posle drugog meseca pojavio sam se na prvoj strani za par ključnih reči koje su mi važne. Šalju mesečne izveštaje i uvek su dostupni kada imam pitanje. Definitivno nastavljamo saradnju.' },
-                  { name: 'Nikola K.', date: 'pre 2 meseca', title: 'Novi sajt', body: 'Imao sam zastareo sajt koji je odbijao klijente, spor, ružan na telefonu, ni Google ga nije prikazivao. Bogdan mi je napravio potpuno novu verziju, moderan izgled, brzo učitavanje. Odmah sam primetio razliku, a i klijenti su počeli da komentarišu kako sajt dobro izgleda.' },
-                  { name: 'Jelena M.', date: 'pre 4 meseca', title: 'Ima me na Googleu napokon', body: 'Pre nego što smo počeli saradnju, sajt mi se gotovo nije ni pojavljivao. Posle nekih dva meseca primetila sam prve promene, a sad redovno stižu i upiti od novih klijenata. Hvala Bogdanu i timu na strpljenju i stručnosti.' },
-                  { name: 'Stefan D.', date: 'pre 7 meseci', title: 'Više organskih upita nego ikad', body: 'Angažovao sam ih najpre za izradu sajta, ali kada su mi pokazali plan SEO održavanja, odlučio sam da produžimo saradnju. Uvek brzo odgovore na poruke i pažljivo prođu kroz svaku stavku izveštaja. Za pet meseci organski saobraćaj nam je utrostručen, nisam ni slutio da je to moguće ovako brzo. Svakome ko ozbiljno gleda na rast, ovo je pravo rešenje.' },
-                  { name: 'Ivana S.', date: 'pre 5 meseci', title: 'Sajt gotov na vreme bez stresa', body: 'Tražila sam nekog da napravi sajt za moj salon lepote. Sve je urađeno profesionalno, dogovorili smo rok i rok je ispoštovan. Nema onih klasičnih "još malo, još malo" situacija. Sajt lepo izgleda i na telefonu, što mi je bilo jako važno. Zadovoljna sam.' },
-                  { name: 'Miloš R.', date: 'pre 11 meseci', rating: 4, title: 'Rezultati dobri odgovor ponekad kasni', body: 'Bavim se stolarijom i trebao mi je SEO da me ljudi nađu kad traže nameštaj po meri. Pozicije su se vidno poboljšale već posle prvog meseca, za ključne reči u mojoj branši smo skočili na prvu stranicu. Jedino što bih napomenuo je da sam ponekad malo duže čekao na odgovor, ali kada odgovore, sve je jasno i precizno. Momci su stvarno dobri u poslu, preporučujem.' },
-                ] : [
-                  { name: 'Mark P.', date: '3 weeks ago', title: 'Results faster than I expected', body: 'I reached out because Google simply wasn\'t showing my site. Bogdan replied the same day and explained exactly what the problem was. After a month I started seeing results, inquiries are now coming through organically. Highly recommended.' },
-                  { name: 'Nebojsa M.', date: '14 months ago', title: 'They explain everything no nonsense', body: 'I work in real estate and kept putting off SEO because I didn\'t know where to start. The guys explained everything without jargon or pressure. After the second month I appeared on the first page for a few key terms that matter to me. They send monthly reports and are always available when I have questions. We will definitely continue.' },
-                  { name: 'Nick K.', date: '2 months ago', title: 'New site', body: 'My old site was outdated and was pushing clients away, slow, ugly on mobile, not showing up on Google. Bogdan built me a completely new version, modern design, fast loading. I noticed the difference right away, and clients started commenting on how good the site looks.' },
-                  { name: 'Helen M.', date: '4 months ago', title: 'We\'re on Google now finally', body: 'Before we started working together, my site barely appeared anywhere. After about two months I noticed the first changes, and now new client inquiries come in regularly. Thanks to Bogdan and the team for their patience and expertise.' },
-                  { name: 'Steve D.', date: '7 months ago', title: 'More organic leads than ever', body: 'I originally hired them just to build a website, but when they showed me the SEO maintenance plan, I decided to continue the collaboration. They always reply quickly and go through every item in the report. In five months our organic traffic tripled, I didn\'t think that was possible this fast. For anyone serious about growth, this is the right solution.' },
-                  { name: 'Ivy S.', date: '5 months ago', title: 'Site done on time no stress', body: 'I needed someone to build a website for my beauty salon. Everything was done professionally, we agreed on a deadline and the deadline was met. None of the usual "just a bit more" delays. The site looks great on mobile too, which was really important to me. Very satisfied.' },
-                  { name: 'Milos R.', date: '11 months ago', rating: 4, title: 'Good results replies can be slow', body: 'I run a carpentry workshop and needed SEO so people could find me when searching for custom furniture. Rankings improved noticeably after the first month, for key terms in my niche we jumped to the first page. The only thing I\'d mention is that replies sometimes took a bit longer, but when they did respond everything was clear and precise. The guys are genuinely good at what they do, I recommend them.' },
-                ]).map((review, i) => {
-                  const isExpanded = expandedReviewIndex === i;
-                  const isBigCard = [1, 4].includes(i);
-                  const is4Star = review.rating === 4;
-                  const mobileOrderClass = is4Star ? 'order-4 md:order-none' : ['order-1', 'order-2', 'order-3', 'order-5', 'order-6', 'order-7'][i] + ' md:order-none';
-                  const stars = (rating: number) => [1, 2, 3, 4, 5].map((s) => (
-                    <Star key={s} className={`w-3 h-3 md:w-4 md:h-4 ${s <= rating ? 'text-green-500 fill-green-500' : 'text-gray-300 fill-gray-300'}`} />
-                  ));
-                  return (
-                    <div
-                      key={i}
-                      className={`rounded-lg md:rounded-xl border bg-white shadow-md md:shadow-lg p-3.5 md:p-5 flex flex-col text-left transition-all duration-200 ${
-                        isBigCard ? 'md:row-span-2' : ''
-                      } ${isExpanded ? 'border-violet-300 shadow-violet-100' : 'border-gray-200'} ${mobileOrderClass}`}
-                    >
-                      <div className="flex gap-0.5 mb-1.5 md:mb-3">
-                        {stars(review.rating ?? 5)}
-                      </div>
-                      <p className="text-gray-500 text-[11px] md:text-xs mb-1 md:mb-2">
-                        {review.name}, {review.date}
-                      </p>
-                      <h3 className="font-bold text-gray-900 text-xs md:text-base mb-1 md:mb-2 leading-tight">
-                        {review.title}
-                      </h3>
-                      <p className={`text-gray-600 text-xs md:text-sm leading-relaxed flex-1 ${!isBigCard && !isExpanded ? 'line-clamp-2 md:line-clamp-3' : ''}`}>
-                        {review.body}
-                      </p>
-                      {!isBigCard && (
-                        <button
-                          type="button"
-                          onClick={() => setExpandedReviewIndex(isExpanded ? null : i)}
-                          className="inline-flex items-center gap-1.5 px-4 py-2.5 md:px-0 md:py-0 rounded-lg md:rounded-none bg-violet-50 md:bg-transparent border border-violet-200 md:border-0 text-violet-600 md:text-violet-500 md:hover:text-violet-600 text-sm font-semibold md:font-medium mt-2.5 md:mt-2 self-start cursor-pointer md:hover:underline underline-offset-2 touch-manipulation select-none"
-                          style={{ WebkitTapHighlightColor: 'transparent' }}
-                        >
-                          {isExpanded
-                            ? (language === 'sr' ? 'Pročitaj manje' : 'Read less')
-                            : (language === 'sr' ? 'Pročitaj više' : 'Read more')
-                          }
-                          <svg className={`w-4 h-4 md:hidden transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg>
-                        </button>
-                      )}
-                    </div>
-                  );
-                })}
               </div>
             </div>
           </div>

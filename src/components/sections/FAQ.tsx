@@ -15,7 +15,7 @@ const faqData: Record<Language, FAQItem[]> = {
   sr: [
     {
       question: "Koliko košta izrada sajta? Koja je cena izrade web sajta?",
-      answer: "Cena izrade sajta zavisi od kompleksnosti projekta i vaših potreba. Izrada web sajta počinje od 150€ za osnovne sajtove (landing page, prezentacioni sajt). Web sajt izrada sa naprednim funkcionalnostima (e-commerce, custom aplikacije) može koštati od 500€ do 2000€. Besplatna konsultacija i transparentna ponuda - bez skrivenih troškova."
+      answer: "Cena izrade sajta zavisi od kompleksnosti projekta i vaših potreba. Izrada web sajta počinje od 299€ za osnovne sajtove (landing page, prezentacioni sajt). Web sajt izrada sa naprednim funkcionalnostima (e-commerce, custom aplikacije) može koštati od 500€ do 2000€. Besplatna konsultacija i transparentna ponuda - bez skrivenih troškova."
     },
     {
       question: "Koliko traje izrada web sajta?",
@@ -45,7 +45,7 @@ const faqData: Record<Language, FAQItem[]> = {
   en: [
     {
       question: "How much does a website cost?",
-      answer: "The cost of website development depends on project complexity. Basic websites start from €150, while more complex projects with advanced features may cost more. We evaluate each project individually to provide you with the best solution for your budget."
+      answer: "The cost of website development depends on project complexity. Basic websites start from €299, while more complex projects with advanced features may cost more. We evaluate each project individually to provide you with the best solution for your budget."
     },
     {
       question: "How long does website development take?",

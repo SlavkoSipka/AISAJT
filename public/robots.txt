@@ -9,6 +9,7 @@ Sitemap: https://aisajt.com/sitemap.xml
 
 # Block access to admin/private areas
 Disallow: /admin/
+Disallow: /portal/
 Disallow: /api/
 Disallow: /*.json$
 

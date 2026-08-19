@@ -163,8 +163,8 @@ export function Contact({ language, t }: ContactProps) {
                     <p className="text-xs font-medium text-pink-400 uppercase tracking-widest mb-2">
                       {language === 'sr' ? 'Telefon' : 'Phone'}
                     </p>
-                    <a href="tel:+381613091583" className="text-xl text-gray-900 font-medium hover:text-violet-600 transition-colors">
-                      +381 61 309 1583
+                    <a href="tel:+381621552156" className="text-xl text-gray-900 font-medium hover:text-violet-600 transition-colors">
+                      +381 62 155 2156
                     </a>
                   </div>
                 </div>

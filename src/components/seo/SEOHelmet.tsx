@@ -124,12 +124,12 @@ export function SEOHelmet({
         "@graph": [
           {
             "@type": "LocalBusiness",
-            "@id": "https://aisajt.com/#organization",
+            "@id": "https://aisajt.com/#localbusiness",
             "name": "AI Sajt - Agencija za Izradu Sajta",
             "alternateName": "AiSajt",
             "url": "https://aisajt.com",
             "telephone": "+381621552156",
-            "email": "contact@aisajt.com",
+            "email": "office@aisajt.com",
             "address": {
               "@type": "PostalAddress",
               "streetAddress": "Maraka Oreskovca 42",
@@ -202,7 +202,7 @@ export function SEOHelmet({
               "@type": "ContactPoint",
               "telephone": "+381621552156",
               "contactType": "customer service",
-              "email": "contact@aisajt.com",
+              "email": "office@aisajt.com",
               "areaServed": "RS",
               "availableLanguage": ["sr", "en"]
             },
