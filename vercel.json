@@ -2,6 +2,14 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist/client",
   "framework": "vite",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.aisajt.com" }],
+      "destination": "https://aisajt.com/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/.netlify/functions/:path*", "destination": "/api/:path*" },
     { "source": "/portal", "destination": "/portal.html" },

@@ -6,7 +6,9 @@ Every deferred item from the 9-phase SEO/performance/GEO project, ranked by what
 
 ## 1. Deploy-critical
 
+- [x] **`www.aisajt.com` → `aisajt.com` redirect** — fixed post-Phase-9. A Screaming Frog crawl found `www.aisajt.com` serving full live content (200, `index, follow`) on every page with no server-level redirect to the apex domain — only the `<link rel="canonical">` tag pointed at `aisajt.com`, which search engines can and do ignore, causing exactly the "Non-Indexable Canonicals" unpredictability the report warned about. `netlify.toml` already had a `www`→apex 301 redirect; `vercel.json` (the current, correct config per Phase 2D/9) didn't. Added a matching host-based `redirects` rule to `vercel.json`. **This needs a real deploy to take effect and to verify** — folded into the Vercel preview deploy check below.
 - [ ] **Real Vercel preview deploy**, checking specifically:
+  - Does `www.aisajt.com/*` actually 301-redirect to `https://aisajt.com/*` now (the fix above)? Re-crawl with Screaming Frog (or `curl -I https://www.aisajt.com/`) after deploy to confirm the "Non-Indexable Canonicals" report comes back clean.
   - Does `/portal`, `/portal/dashboard`, `/portal/anything` actually rewrite to `portal.html` in production (per `vercel.json`'s `rewrites`)? Never verified against a live deploy — only reasoned about from config (Phase 2D).
   - Does Vercel serve `outputDirectory: dist/client` correctly alongside the `api/*.ts` serverless functions (`gsc-sync`, `gsc-query`, `gsc-auto-sync-all`)?
   - Do all 33 prerendered marketing routes actually resolve as static files (not 404s) once deployed?
