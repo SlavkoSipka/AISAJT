@@ -126,11 +126,25 @@ export function IzradaSajtaCenaPage() {
                 </h1>
 
                 <p className="text-base md:text-lg lg:text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto mb-6 md:mb-8 px-4">
-                  {language === 'sr' 
+                  {language === 'sr'
                     ? 'Profesionalna izrada web sajta u Beogradu, Novom Sadu i celoj Srbiji. Transparentne cene za izradu sajtova - od jednostavnih prezentacionih do kompleksnih poslovnih rešenja. Bez skrivenih troškova.'
                     : 'Professional website development in Belgrade, Novi Sad and all of Serbia. Transparent pricing - from simple presentation to complex business solutions.'
                   }
                 </p>
+
+                {/* Direct-answer callout — same figures as the pricing cards and
+                    FAQ below, just surfaced in the first screenful so it's not
+                    buried under marketing copy. Deliberately short and factual:
+                    this is the block an AI answer engine is most likely to quote
+                    verbatim for "koliko košta izrada sajta". */}
+                <div className="max-w-2xl mx-auto mb-6 md:mb-8 px-4 py-4 rounded-2xl bg-violet-50 border border-violet-200 text-left">
+                  <p className="text-sm md:text-base text-gray-800 leading-relaxed">
+                    {language === 'sr'
+                      ? <><strong>Izrada sajta u AiSajt počinje od 299€</strong> za jednostavan prezentacioni sajt (do 5 stranica). Web shop i kompleksnija poslovna rešenja idu od 499€, a napredne custom platforme mogu koštati preko 2000€ — tačna cena zavisi od funkcionalnosti i obima projekta, i dobijate je nakon besplatne konsultacije, bez skrivenih troškova.</>
+                      : <><strong>Website development at AiSajt starts from €299</strong> for a simple presentation site (up to 5 pages). Online stores and more complex business solutions start from €499, and advanced custom platforms can cost over €2000 — the exact price depends on scope and functionality, given after a free consultation, with no hidden costs.</>
+                    }
+                  </p>
+                </div>
 
                 <div className="flex justify-center">
                   <button
@@ -195,7 +209,7 @@ export function IzradaSajtaCenaPage() {
                   {/* Deo 2 */}
                   <div>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                      Koliko Košta Izrada Sajta u 2025. Godini?
+                      Koliko Košta Izrada Sajta u 2026. Godini?
                     </h2>
                     <p className="text-base md:text-lg text-gray-700 leading-relaxed">
                       U Beogradu, Novom Sadu i širom Srbije izrada sajta cena varira u zavisnosti od kompleksnosti projekta. Jednostavan prezentacioni sajt sa nekoliko stranica počinje od 299€, dok napredna poslovna rešenja, web aplikacije i custom platforme mogu koštati i preko 2000€. Razlika u ceni odražava razliku u funkcionalnostima, dizajnu, vremenu razvoja i nivou prilagođavanja. Zato je važno razumeti šta vam zaista treba pre nego što dobijete ponudu - svaka cena izrade sajta se bazira na specifičnim potrebama vašeg biznisa.
@@ -227,7 +241,7 @@ export function IzradaSajtaCenaPage() {
                   {/* Part 2 */}
                   <div>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                      How Much Does Website Development Cost in 2025?
+                      How Much Does Website Development Cost in 2026?
                     </h2>
                     <p className="text-base md:text-lg text-gray-700 leading-relaxed">
                       Website development prices vary depending on complexity. A simple presentation website with several pages starts from €299, while advanced business solutions, web applications and custom platforms can cost over €2000. The price difference reflects the difference in functionalities, design, development time and level of customization. That's why it's important to understand what you really need before you get a quote.

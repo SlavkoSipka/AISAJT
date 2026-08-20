@@ -139,11 +139,23 @@ export function SEOPage() {
 
                 {/* Description */}
                 <p className="text-base md:text-lg lg:text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto mb-6 md:mb-8 px-4 animate-fade-in-up animation-delay-400">
-                  {language === 'sr' 
+                  {language === 'sr'
                     ? 'Profesionalna optimizacija za pretraživače u Beogradu. Cena zavisi od konkurencije i ključnih reči. Besplatna analiza i transparentna ponuda.'
                     : 'Professional search engine optimization in Belgrade. Price depends on competition and keywords. Free analysis and transparent offer.'
                   }
                 </p>
+
+                {/* Direct-answer callout — same figures as the FAQ and Deo 2
+                    section below, surfaced in the first screenful instead of
+                    buried further down the page. */}
+                <div className="max-w-2xl mx-auto mb-6 md:mb-8 px-4 py-4 rounded-2xl bg-violet-50 border border-violet-200 text-left animate-fade-in-up animation-delay-400">
+                  <p className="text-sm md:text-base text-gray-800 leading-relaxed">
+                    {language === 'sr'
+                      ? <><strong>SEO optimizacija kod AiSajt počinje od 250€</strong> (jednokratno ili mesečno, za osnovni paket), dok napredni paketi za konkurentnije ključne reči idu od 500€ mesečno. Cena zavisi od broja ključnih reči, konkurencije i trenutnog stanja sajta — tačnu ponudu dobijate nakon besplatne analize.</>
+                      : <><strong>SEO optimization at AiSajt starts from €250</strong> (one-time or monthly, for the basic package), while advanced packages for more competitive keywords start from €500 per month. The price depends on the number of keywords, competition and the site's current state — you get an exact quote after a free analysis.</>
+                    }
+                  </p>
+                </div>
 
                 {/* CTA Button */}
                 <div className="flex justify-center animate-fade-in-up animation-delay-600">

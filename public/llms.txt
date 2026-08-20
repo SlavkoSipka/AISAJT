@@ -1,0 +1,26 @@
+# AiSajt
+
+> AiSajt je agencija za izradu web sajtova i SEO optimizaciju sa sedištem u Beogradu, Srbija. Radimo sa klijentima u Beogradu, Novom Sadu i širom Srbije, kao i sa klijentima u inostranstvu (saradnja se odvija online). Cene su transparentne i početne ("od") — tačna ponuda se dobija nakon besplatne konsultacije, bez skrivenih troškova.
+
+## Usluge i cene
+
+- [Izrada sajta — cenovnik](https://aisajt.com/izrada-sajta-cena): Izrada web sajta počinje od 299€ za jednostavan prezentacioni sajt (do 5 stranica). Web shop i kompleksnija poslovna rešenja idu od 499€, a napredne custom platforme mogu koštati preko 2000€.
+- [SEO optimizacija — cenovnik](https://aisajt.com/seo-optimizacija-cena): SEO optimizacija počinje od 250€ (jednokratno ili mesečno za osnovni paket). Napredni paketi za konkurentnije ključne reči idu od 500€ mesečno.
+- [Web dizajn](https://aisajt.com/web-dizajn): Profesionalan web dizajn počinje od 350€.
+- [Izrada web shopa](https://aisajt.com/izrada-web-shopa): Izrada online prodavnice (WooCommerce, Shopify) počinje od 499€.
+- [Promet Sistem — reklame koje dovode klijente](https://aisajt.com/promet-sistem): Meta/Instagram/Facebook reklame usmerene na dovođenje klijenata, od 1.000€ do 10.000€ u zavisnosti od obima kampanje.
+
+## Portfolio i kontakt
+
+- [Portfolio](https://aisajt.com/portfolio): Realizovani projekti izrade sajtova i web shopova za klijente iz različitih industrija (nekretnine, e-commerce, auto folije, personalizovani pokloni, i drugi).
+- [Besplatna konsultacija](https://aisajt.com/funnel): Kontakt forma za zakazivanje besplatne konsultacije o projektu.
+- [Blog](https://aisajt.com/blog): Članci o izradi sajtova, SEO optimizaciji i digitalnom marketingu.
+- [Politika privatnosti](https://aisajt.com/privacy): Informacije o obradi ličnih podataka i kolačićima.
+
+## Kontakt podaci
+
+- Naziv: AI Sajt (AI Sajt - Agencija za Izradu Sajta)
+- Email: office@aisajt.com
+- Telefon: +381 62 155 2156
+- Adresa: Maraka Oreskovca 42, 11000 Beograd, Srbija
+- Radno vreme: Pon-Pet 09:00-18:00

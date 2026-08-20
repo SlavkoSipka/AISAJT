@@ -23,5 +23,29 @@ Allow: /
 User-agent: Slurp
 Allow: /
 
+# AI crawlers/answer engines — deliberately allowed. Citations in AI answers
+# (ChatGPT, Perplexity, Google AI Overviews) are a real lead source for this
+# business, so these are not blocked the way some sites block them by default.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 # Crawl delay (helps with server load)
 Crawl-delay: 1
