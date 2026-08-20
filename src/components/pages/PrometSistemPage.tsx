@@ -142,10 +142,9 @@ export function PrometSistemPage() {
       <header className="relative z-20">
         <div className="max-w-6xl mx-auto px-5 md:px-8 py-5 flex items-center justify-between">
           <img
-            src="/images/aisajt-logo-white-text.png"
+            src="/images/aisajt-logo-white-text.png" width={644} height={223}
             alt="AiSajt"
-            className="h-8 md:h-9 w-auto object-contain"
-          />
+            className="h-8 md:h-9 w-auto object-contain" loading="lazy" />
           <a
             href={PHONE_TEL}
             onClick={() => onPhoneClick('promet-sistem-header')}

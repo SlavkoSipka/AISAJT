@@ -582,10 +582,9 @@ export function IzradaSajtaCenaPage() {
                     className="block relative rounded-2xl overflow-hidden shadow-xl border-4 border-white hover:border-violet-300 transition-all duration-300 hover:shadow-2xl group"
                   >
                     <img 
-                      src="/images/kompletan poslovni web sajt.png" 
+                      src="/images/kompletan poslovni web sajt.webp" width={1200} height={677} 
                       alt="Prestige Gradnja - Primer izrade kompletnog poslovnog web sajta za građevinsku kompaniju - profesionalna izrada sajta Beograd"
-                      className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                      className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                     {/* Overlay badge */}
                     <div className="absolute top-4 left-4 px-4 py-2 bg-violet-600 text-white rounded-lg font-semibold text-sm shadow-lg">
                       {language === 'sr' ? 'Kompletan Sajt' : 'Complete Website'}
@@ -699,10 +698,9 @@ export function IzradaSajtaCenaPage() {
                     className="block relative rounded-2xl overflow-hidden shadow-xl border-4 border-white hover:border-indigo-300 transition-all duration-300 hover:shadow-2xl group"
                   >
                     <img 
-                      src="/images/online prodavnica sajt.png" 
+                      src="/images/online prodavnica sajt.webp" width={1200} height={678} 
                       alt="Custom RC Parts - Primer izrade online prodavnice za RC delove - profesionalan web shop sa e-commerce funkcijama"
-                      className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                      className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                     {/* Overlay badge */}
                     <div className="absolute top-4 left-4 px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold text-sm shadow-lg">
                       {language === 'sr' ? 'Online Prodavnica' : 'Online Store'}
@@ -970,10 +968,9 @@ export function IzradaSajtaCenaPage() {
                     className="block relative rounded-2xl overflow-hidden shadow-xl border-4 border-white hover:border-pink-300 transition-all duration-300 hover:shadow-2xl group"
                   >
                     <img 
-                      src="/images/Jednostavan web sajt.png" 
+                      src="/images/Jednostavan web sajt.webp" width={1200} height={679} 
                       alt="BN Autofolije - Primer izrade jednostavnog web sajta za zatamnjivanje stakala automobila - profesionalna izrada sajta Novi Sad"
-                      className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                      className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                     {/* Overlay badge */}
                     <div className="absolute top-4 left-4 px-4 py-2 bg-pink-600 text-white rounded-lg font-semibold text-sm shadow-lg">
                       {language === 'sr' ? 'Jednostavan Sajt' : 'Simple Website'}

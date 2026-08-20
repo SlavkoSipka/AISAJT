@@ -225,6 +225,7 @@ export function ONamaPage() {
                             src={member.image}
                             alt={`${member.name} - ${member.role[language]}`}
                             className="w-full h-full object-cover object-top"
+                            loading="lazy"
                             onError={(e) => {
                               // Fallback: show placeholder with initials if image not found
                               const target = e.target as HTMLImageElement;
@@ -320,6 +321,7 @@ export function ONamaPage() {
                       src="/images/team/team-photo.jpg"
                       alt={t.teamPhotoCaption}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.style.display = 'none';

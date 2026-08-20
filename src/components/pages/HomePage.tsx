@@ -320,10 +320,9 @@ export function HomePage() {
                       <div className="absolute inset-0 bg-gradient-to-br from-violet-500 via-indigo-500 to-pink-500 rounded-full animate-spin-slow"></div>
                       <div className="absolute inset-1 bg-white rounded-full"></div>
                       <img 
-                        src="/images/zeka.jpg"
+                        src="/images/zeka.webp" width={400} height={400}
                         alt="Strahinja, arhitekta i osnivač AiSajt tima za izradu web sajtova"
-                        className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] rounded-full object-cover"
-                      />
+                        className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] rounded-full object-cover" loading="lazy" />
                     </div>
 
                     {/* Content */}
@@ -386,10 +385,9 @@ export function HomePage() {
                       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 via-pink-500 to-violet-500 rounded-full animate-spin-slow"></div>
                       <div className="absolute inset-1 bg-white rounded-full"></div>
                       <img 
-                        src="/images/boban.jpg"
+                        src="/images/boban.webp" width={400} height={400}
                         alt="Bogdan, CEO i programer ETF, stručnjak za web razvoj i dizajn"
-                        className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] rounded-full object-cover"
-                      />
+                        className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] rounded-full object-cover" loading="lazy" />
                     </div>
 
                     {/* Content */}
@@ -503,10 +501,9 @@ export function HomePage() {
                 <div className="absolute -inset-4 bg-gradient-to-br from-violet-400 to-indigo-600 opacity-20 blur-3xl group-hover:opacity-30 transition-opacity duration-700" style={{ borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' }}></div>
                 <div className="relative overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-700" style={{ borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%', width: '115%', marginLeft: '-15%' }}>
                   <img 
-                    src="/images/izrada sajta cena.jpg"
+                    src="/images/izrada sajta cena.webp" width={1200} height={900}
                     alt="Izrada sajta cena - profesionalna izrada web sajtova u Beogradu - AI Sajt agencija"
-                    className="w-full h-[380px] md:h-[440px] object-cover"
-                  />
+                    className="w-full h-[380px] md:h-[440px] object-cover" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 via-transparent to-indigo-600/20"></div>
                 </div>
               </div>
@@ -638,10 +635,9 @@ export function HomePage() {
                 <div className="absolute -inset-4 bg-gradient-to-br from-indigo-400 to-pink-600 opacity-20 blur-3xl group-hover:opacity-30 transition-opacity duration-700" style={{ borderRadius: '40% 60% 70% 30% / 40% 70% 30% 60%' }}></div>
                 <div className="relative overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-700" style={{ borderRadius: '40% 60% 70% 30% / 40% 70% 30% 60%', width: '85%', marginLeft: 'auto', marginRight: '0' }}>
                   <img 
-                    src="/images/marketing.png"
+                    src="/images/marketing.webp" width={984} height={634}
                     alt="SEO optimizacija i digitalni marketing - AI Sajt agencija Beograd"
-                    className="w-full h-[340px] md:h-[380px] object-cover"
-                  />
+                    className="w-full h-[340px] md:h-[380px] object-cover" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-transparent to-pink-600/20"></div>
                 </div>
               </div>
@@ -665,10 +661,9 @@ export function HomePage() {
                 <div className="absolute -inset-4 bg-gradient-to-br from-pink-400 to-violet-600 opacity-20 blur-3xl group-hover:opacity-30 transition-opacity duration-700" style={{ borderRadius: '70% 30% 50% 50% / 30% 60% 40% 70%' }}></div>
                 <div className="relative overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-700" style={{ borderRadius: '70% 30% 50% 50% / 30% 60% 40% 70%', width: '95%', marginTop: '20px' }}>
                   <img 
-                    src="/images/dizajn.png"
+                    src="/images/dizajn.webp" width={1400} height={788}
                     alt="Moderan web dizajn i UI/UX dizajn - web dizajn agencija Beograd"
-                    className="w-full h-[380px] md:h-[440px] object-cover"
-                  />
+                    className="w-full h-[380px] md:h-[440px] object-cover" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-br from-pink-600/20 via-transparent to-violet-600/20"></div>
                 </div>
               </div>

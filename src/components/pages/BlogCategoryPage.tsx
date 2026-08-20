@@ -34,7 +34,7 @@ export function BlogCategoryPage() {
         title={language === 'sr' ? category.metaTitle : category.metaTitleEn}
         description={language === 'sr' ? category.metaDescription : category.metaDescriptionEn}
         canonicalUrl={`https://aisajt.com/blog/category/${category.slug}`}
-        image="/images/baza.jpg"
+        image="/images/baza.webp"
       />
 
       <Navbar />

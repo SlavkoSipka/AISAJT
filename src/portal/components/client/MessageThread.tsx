@@ -77,8 +77,7 @@ function AttachmentPreview({ msg }: { msg: Message }) {
             maxWidth: 240, maxHeight: 200, borderRadius: 10,
             display: 'block', objectFit: 'cover',
             border: '1px solid rgba(0,0,0,0.06)',
-          }}
-        />
+          }} loading="lazy" />
       </a>
     );
   }
@@ -134,7 +133,7 @@ function PendingAttachment({ file, onRemove }: { file: File; onRemove: () => voi
       border: '1px solid #b2e8f0', marginBottom: 8, position: 'relative',
     }}>
       {isImage && preview ? (
-        <img src={preview} alt="" style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 6 }} />
+        <img src={preview} alt="" style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 6 }} loading="lazy" />
       ) : (
         <div style={{ width: 44, height: 44, borderRadius: 6, background: '#00bcd4', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <FileText size={20} color="#fff" />

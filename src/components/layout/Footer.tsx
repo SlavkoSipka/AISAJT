@@ -21,10 +21,9 @@ export function Footer() {
               className="flex items-center hover:opacity-80 transition-opacity duration-300 group mb-4"
             >
               <img 
-                src="/images/providna2.png" 
+                src="/images/providna2.png" width={1024} height={336} 
                 alt="AiSajt Logo" 
-                className="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-              />
+                className="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105" loading="lazy" />
             </Link>
             <p className="text-gray-600">
               {t.footerDesc}

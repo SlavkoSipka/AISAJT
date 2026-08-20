@@ -229,7 +229,7 @@ export function WebShopPage() {
                 <div className="relative">
                   <div className="rounded-3xl overflow-hidden shadow-2xl aspect-[4/3]">
                     <img 
-                      src="/images/izrada-web-shopa.webp" 
+                      src="/images/izrada-web-shopa.webp" width={1024} height={768} 
                       alt={language === 'sr' ? 'Primer izrade web shopa Beograd - moderna online prodavnica' : 'Web shop development example'} 
                       className="w-full h-full object-cover"
                       loading="lazy"

@@ -26,8 +26,7 @@ export function AuthorBox({ author, publishedAt, updatedAt }: AuthorBoxProps) {
       <img 
         src={author.image} 
         alt={author.name}
-        className="w-12 h-12 md:w-14 md:h-14 rounded-full object-contain border-2 border-violet-300 bg-white p-1"
-      />
+        className="w-12 h-12 md:w-14 md:h-14 rounded-full object-contain border-2 border-violet-300 bg-white p-1" loading="lazy" />
       <div className="flex-1">
         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
           <span className="text-xs sm:text-sm text-gray-600 font-semibold">

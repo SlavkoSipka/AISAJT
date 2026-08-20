@@ -82,11 +82,10 @@ export function Navbar() {
             className="flex items-center group py-2"
             aria-label="AI Sajt - Početna stranica"
           >
-            <img 
-              src="/images/providna2.png" 
-              alt="AiSajt Logo" 
-              className="h-12 md:h-14 lg:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-            />
+            <img
+              src="/images/providna2.png" width={1024} height={336}
+              alt="AiSajt Logo"
+              className="h-12 md:h-14 lg:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105" loading="eager" {...{ fetchpriority: 'high' } as React.ImgHTMLAttributes<HTMLImageElement>} />
           </Link>
 
           {/* Desktop Navigation */}
@@ -434,10 +433,11 @@ export function Navbar() {
             aria-label="AI Sajt - Početna stranica"
           >
             <div className="w-full max-w-[140px] rounded-lg bg-gray-50 px-3 py-2.5 ring-1 ring-gray-200/80 shadow-sm">
-              <img 
-                src="/images/aisajt nav.png" 
-                alt="AiSajt Logo" 
+              <img
+                src="/images/aisajt nav.png" width={1024} height={336}
+                alt="AiSajt Logo"
                 className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
               />
             </div>
           </Link>

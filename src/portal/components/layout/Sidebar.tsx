@@ -79,10 +79,9 @@ export function Sidebar() {
         <div className="px-5 pt-5 pb-4">
           <div className="flex items-center justify-center">
             <img
-              src="/images/aisajt_providno-removebg-preview.png"
+              src="/images/aisajt_providno-removebg-preview.png" width={500} height={180}
               alt="AiSajt"
-              className="h-8 w-auto object-contain opacity-90"
-            />
+              className="h-8 w-auto object-contain opacity-90" loading="lazy" />
           </div>
           {!isAdmin && projectName && (
             <div className="mt-3 bg-[rgba(255,255,255,0.07)] rounded-lg p-[10px]">

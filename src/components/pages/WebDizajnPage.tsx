@@ -196,7 +196,7 @@ export function WebDizajnPage() {
                   {/* Main image */}
                   <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl aspect-[4/3]">
                     <img 
-                      src="/images/dizajn/free-web-design-inspiration-sites.webp" 
+                      src="/images/dizajn/free-web-design-inspiration-sites.webp" width={1360} height={800} 
                       alt={language === 'sr' ? 'Web dizajn showcase Srbija - primer modernog UI dizajna' : 'Web design showcase Serbia - modern UI design example'} 
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -206,7 +206,7 @@ export function WebDizajnPage() {
                   {/* Floating element - slika detalja izlazi iz okvira */}
                   <div className="absolute -right-8 -bottom-8 md:-right-12 md:-bottom-12 w-48 h-48 md:w-64 md:h-64 rounded-3xl shadow-xl z-20 overflow-hidden">
                     <img 
-                      src="/images/dizajn/free-web-design-inspiration-sites.jpg" 
+                      src="/images/dizajn/free-web-design-inspiration-sites.jpg" width={769} height={452} 
                       alt={language === 'sr' ? 'Web dizajn detalji - kreativni elementi web dizajna' : 'Web design details - creative web design elements'} 
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -554,7 +554,7 @@ export function WebDizajnPage() {
                 <div className="relative group">
                   <div className="rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 aspect-[16/9] relative">
                     <img 
-                      src="/images/dizajn/maxresdefault.jpg" 
+                      src="/images/dizajn/maxresdefault.jpg" width={1280} height={720} 
                       alt={language === 'sr' ? 'Web dizajn inspiracija Srbija Beograd - moderni trendovi u web dizajnu 2025' : 'Web design inspiration Serbia Belgrade - modern web design trends 2025'} 
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       loading="lazy"
@@ -570,7 +570,7 @@ export function WebDizajnPage() {
                 <div className="relative group">
                   <div className="rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 aspect-[16/9] relative">
                     <img 
-                      src="/images/dizajn/minimaliostic web dizajn.jpg" 
+                      src="/images/dizajn/minimaliostic web dizajn.jpg" width={1200} height={800} 
                       alt={language === 'sr' ? 'Minimalistički web dizajn Beograd - landing page web dizajn optimizovan za konverziju' : 'Minimalist web design Belgrade - landing page web design optimized for conversion'} 
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       loading="lazy"
@@ -582,7 +582,7 @@ export function WebDizajnPage() {
                 <div className="relative group">
                   <div className="rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 aspect-[16/9] relative">
                     <img 
-                      src="/images/dizajn/dizajn3.png" 
+                      src="/images/dizajn/dizajn3.png" width={1642} height={960} 
                       alt={language === 'sr' ? 'Moderni web dizajn Srbija - najbolje prakse i primeri web dizajna u Beogradu' : 'Modern web design Serbia - best practices and web design examples in Belgrade'} 
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       loading="lazy"
@@ -651,7 +651,7 @@ export function WebDizajnPage() {
                     {/* Main card */}
                     <div className="rounded-2xl md:rounded-3xl shadow-2xl aspect-square overflow-hidden relative">
                       <img 
-                        src="/images/dizajn/web dizajn.webp" 
+                        src="/images/dizajn/web dizajn.webp" width={1440} height={1080} 
                         alt={language === 'sr' ? 'Web dizajn proces Srbija Beograd - od wireframe-a do finalnog dizajna, profesionalan web dizajn workflow' : 'Web design process Serbia Belgrade - from wireframe to final design, professional web design workflow'} 
                         className="absolute inset-0 w-full h-full object-cover"
                         loading="lazy"

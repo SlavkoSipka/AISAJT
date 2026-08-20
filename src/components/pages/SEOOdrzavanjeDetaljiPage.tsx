@@ -204,16 +204,15 @@ export function SEOOdrzavanjeDetaljiPage() {
               <div className={`mb-2 md:mb-8 transform transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'}`}>
                 <div className="flex justify-center -mt-1 md:mt-0">
                   <img
-                    src="/images/aisajt_providno-removebg-preview.png"
+                    src="/images/aisajt_providno-removebg-preview.png" width={500} height={180}
                     alt="AiSajt Logo"
-                    className="h-8 md:h-10 w-auto opacity-85"
-                  />
+                    className="h-8 md:h-10 w-auto opacity-85" loading="lazy" />
                 </div>
               </div>
 
               <div className={`transform transition-all duration-700 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
                 <div className="flex flex-row items-center justify-center gap-2 md:gap-3 flex-wrap mb-2 md:mb-6">
-                  <img src="/images/ljudi.webp" alt="" className="h-6 w-auto rounded-full object-cover flex-shrink-0 md:h-8" />
+                  <img src="/images/ljudi.webp" width={1200} height={140} alt="" className="h-6 w-auto rounded-full object-cover flex-shrink-0 md:h-8" loading="lazy" />
                   <span className="text-gray-400 text-[11px] md:text-sm font-medium text-left md:text-center leading-tight">
                     {language === 'sr' ? (
                       <>Pridruži se preko 50+<br className="md:hidden" /> zadovoljnih klijenata</>
@@ -311,7 +310,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                   ].map((member) => (
                     <div key={member.name} className="rounded-2xl border border-gray-600/60 bg-gray-900/80 backdrop-blur-sm overflow-hidden shadow-xl flex flex-col">
                       <div className="aspect-square bg-gray-700/80 flex items-center justify-center text-4xl font-bold text-gray-500 overflow-hidden">
-                        <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
+                        <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" loading="lazy" />
                       </div>
                       <div className="p-4 sm:p-5">
                         <p className="font-bold text-sm sm:text-lg">
@@ -327,7 +326,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                 {/* Marko – horizontalna kartica ispod, zadužen za SEO održavanje */}
                 <div className="rounded-2xl border border-gray-600/60 bg-gray-900/80 backdrop-blur-sm overflow-hidden shadow-xl flex flex-col md:flex-row md:items-stretch w-full">
                   <div className="md:w-80 md:min-w-[280px] aspect-square md:aspect-auto md:min-h-[240px] bg-gray-700/80 flex items-center justify-center overflow-hidden flex-shrink-0">
-                    <img src="/images/Dedza SEO OPTIMIZACIJA.webp" alt="Marko Devedzic" className="w-full h-full object-cover object-top" />
+                    <img src="/images/Dedza SEO OPTIMIZACIJA.webp" width={800} height={800} alt="Marko Devedzic" className="w-full h-full object-cover object-top" loading="lazy" />
                   </div>
                   <div className="p-5 md:p-6 md:flex-1 flex flex-col justify-center">
                     <p className="font-bold text-lg md:text-xl">
@@ -354,7 +353,7 @@ export function SEOOdrzavanjeDetaljiPage() {
           <div className={`container mx-auto px-4 relative z-10 ${revealClass(metricsVisible)}`}>
             <div className="max-w-4xl mx-auto text-center">
               <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
-                <img src="/images/ljudi.webp" alt="" className="h-8 w-auto rounded-full object-cover" />
+                <img src="/images/ljudi.webp" width={1200} height={140} alt="" className="h-8 w-auto rounded-full object-cover" loading="lazy" />
                 <p className="text-white text-sm md:text-base">
                   {language === 'sr' ? (
                     <>Pridružite se <strong>50+</strong> zadovoljnih <strong>klijenata</strong> i <strong>preduzeća</strong>.</>
@@ -375,7 +374,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                   : 'From corporate sites to e-commerce and landing pages — we know what it takes to make your business shine online. No guesswork, no plateaus.'}
               </p>
               <div className="rounded-xl overflow-hidden border border-gray-700/60 shadow-2xl max-w-4xl mx-auto">
-                <img src="/images/filmska%207.jpg" alt={language === 'sr' ? 'Rad na projektu — AiSajt tim' : 'Project work — AiSajt team'} className="w-full h-auto object-cover" />
+                <img src="/images/filmska%207.webp" width={1200} height={800} alt={language === 'sr' ? 'Rad na projektu — AiSajt tim' : 'Project work — AiSajt team'} className="w-full h-auto object-cover" loading="lazy" />
               </div>
               <div ref={statsRef} className="relative z-10 -mt-14 md:-mt-16 rounded-2xl bg-gray-900/95 border border-gray-700/60 backdrop-blur-sm px-6 py-6 md:px-8 md:py-7 shadow-xl w-full">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
@@ -419,7 +418,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                       <p className="text-white text-sm md:text-base">
                         {language === 'sr' ? 'Pridružite se 50+ uspešnih preduzeća' : 'Join 50+ successful businesses'}
                       </p>
-                      <img src="/images/ljudi.webp" alt="" className="h-8 w-auto rounded-full object-cover" />
+                      <img src="/images/ljudi.webp" width={1200} height={140} alt="" className="h-8 w-auto rounded-full object-cover" loading="lazy" />
                     </div>
                     <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mb-4">
                       <span className="text-[#05afd1]">
@@ -470,7 +469,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                   </div>
                   <div className="relative flex items-center justify-center w-full max-w-md">
                     <div className="rounded-2xl overflow-hidden border border-gray-700/60 shadow-2xl bg-gray-800/50 w-full max-h-[280px] md:max-h-[340px] flex items-center justify-center">
-                      <img src="/images/filmska.jpg" alt="" className="w-full h-full object-contain" />
+                      <img src="/images/filmska.webp" width={900} height={600} alt="" className="w-full h-full object-contain" loading="lazy" />
                     </div>
                   </div>
                 </div>
@@ -493,7 +492,7 @@ export function SEOOdrzavanjeDetaljiPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <div className="flex justify-center mb-5">
-                <img src="/images/aisajt_providno-removebg-preview.png" alt="AiSajt Logo" className="h-8 md:h-10 w-auto opacity-85" />
+                <img src="/images/aisajt_providno-removebg-preview.png" width={500} height={180} alt="AiSajt Logo" className="h-8 md:h-10 w-auto opacity-85" loading="lazy" />
               </div>
               <p className="text-gray-500 text-xs leading-relaxed mb-6">
                 {language === 'sr'
@@ -550,7 +549,7 @@ export function SEOOdrzavanjeDetaljiPage() {
               <div className="px-4 pt-4 pb-3 flex items-start gap-3">
                 <div className="relative flex-shrink-0">
                   <div className="w-10 h-10 rounded-full overflow-hidden">
-                    <img src="/images/Strahinja izrada sajta.webp" alt="Strahinja Zekanovic" className="w-full h-full object-cover object-top" />
+                    <img src="/images/Strahinja izrada sajta.webp" width={800} height={800} alt="Strahinja Zekanovic" className="w-full h-full object-cover object-top" loading="lazy" />
                   </div>
                   <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-[#1a1a1a]" />
                 </div>
@@ -602,7 +601,7 @@ export function SEOOdrzavanjeDetaljiPage() {
             className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-[#05afd1] hover:border-[#05afd1] transition-all hover:scale-105 active:scale-95 bg-[#05afd1] flex items-center justify-center"
             aria-label="Zakaži poziv"
           >
-            <img src="/images/aisajt_providno-removebg-preview.png" alt="AiSajt" className="w-9 h-9 object-contain" />
+            <img src="/images/aisajt_providno-removebg-preview.png" width={500} height={180} alt="AiSajt" className="w-9 h-9 object-contain" loading="lazy" />
             <span className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-gray-950" />
           </button>
         </div>

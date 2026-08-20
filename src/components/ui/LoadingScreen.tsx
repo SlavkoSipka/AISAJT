@@ -22,10 +22,9 @@ export const LoadingScreen = ({ onLoadComplete }: { onLoadComplete: () => void }
         {/* Logo */}
         <div className={`transition-all duration-400 ${isExiting ? 'scale-95 opacity-0' : 'scale-100 opacity-100'}`}>
           <img
-            src="/images/providna2.png"
+            src="/images/providna2.png" width={1024} height={336}
             alt="AiSajt"
-            className="h-20 w-auto object-contain"
-          />
+            className="h-20 w-auto object-contain" loading="eager" />
         </div>
 
         {/* Minimal Loading Indicator */}

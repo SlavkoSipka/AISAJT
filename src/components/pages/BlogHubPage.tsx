@@ -44,7 +44,7 @@ export function BlogHubPage() {
           ? 'Naučite sve o SEO optimizaciji, izradi web sajtova, web dizajnu i e-commerce strategijama. Praktični saveti, case studies i strategije koje donose rezultate.'
           : 'Learn everything about SEO optimization, website development, web design and e-commerce strategies. Practical tips, case studies and strategies that deliver results.'}
         canonicalUrl="https://aisajt.com/blog"
-        image="/images/baza.jpg"
+        image="/images/baza.webp"
       />
 
       <Navbar />

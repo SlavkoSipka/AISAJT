@@ -143,10 +143,11 @@ export function Hero({ language }: HeroProps) {
               {/* Logo Image with 3D effect */}
               <div className="relative">
                 <div className="w-full max-w-md mx-auto rounded-2xl bg-white/95 p-6 md:p-8 shadow-2xl ring-1 ring-gray-200/80">
-                  <img 
-                    src="/images/aisajt nav.png" 
+                  <img
+                    src="/images/aisajt nav.png" width={1024} height={336}
                     alt="AI izrada sajtova - Profesionalna izrada veb sajta sa veštačkom inteligencijom"
                     loading="eager"
+                    {...{ fetchpriority: 'high' } as React.ImgHTMLAttributes<HTMLImageElement>}
                     decoding="async"
                     className="w-full h-auto drop-shadow-xl animate-float object-contain"
                   />
@@ -156,7 +157,7 @@ export function Hero({ language }: HeroProps) {
                 <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-gradient-to-br from-violet-100 to-indigo-100 rounded-3xl shadow-2xl transform rotate-12 transition-transform duration-700 hover:rotate-6">
                   <div className="absolute inset-4 bg-white rounded-2xl flex items-center justify-center">
                     <img 
-                      src="/images/aisajt close up.png" 
+                      src="/images/aisajt close up.png" width={304} height={304} 
                       alt="AI websajt izrada - Logo"
                       loading="lazy"
                       decoding="async"

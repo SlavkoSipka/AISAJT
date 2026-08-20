@@ -179,7 +179,7 @@ export function SeoPublicReport() {
       {/* Header bar */}
       <div style={{ height: 56, padding: '0 24px', background: C.navy, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <img src="/images/aisajt_providno-removebg-preview.png" alt="AiSajt" style={{ height: 26 }} />
+          <img src="/images/aisajt_providno-removebg-preview.png" width={500} height={180} alt="AiSajt" style={{ height: 26 }} loading="lazy" />
           <div>
             <p style={{ fontSize: 14, fontWeight: 700, color: '#fff' }}>SEO Izveštaj — {project.domain}</p>
             {lastUpdate && <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginTop: 1 }}>Poslednje ažuriranje: {lastUpdate}</p>}

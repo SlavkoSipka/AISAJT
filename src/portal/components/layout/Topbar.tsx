@@ -29,8 +29,7 @@ export function Topbar({ title }: TopbarProps) {
             <img
               src={profile.avatar_url}
               alt=""
-              className="w-[30px] h-[30px] rounded-full object-cover"
-            />
+              className="w-[30px] h-[30px] rounded-full object-cover" loading="lazy" />
           ) : (
             <span className="text-[11px] font-medium text-[#00bcd4]">{initials}</span>
           )}

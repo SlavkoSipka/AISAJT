@@ -428,7 +428,7 @@ Srećno sa tvojim novim sajtom! 🎉
       name: 'AiSajt Tim',
       image: '/images/providna2.png'
     },
-    coverImage: '/images/izrada sajta cena.jpg',
+    coverImage: '/images/izrada sajta cena.webp',
     publishedAt: '2025-01-06',
     updatedAt: '2025-01-06',
     readTime: 15,
@@ -637,7 +637,7 @@ Want your website to be visible on Google? In this guide, discover how SEO optim
       name: 'AiSajt Tim',
       image: '/images/providna2.png'
     },
-    coverImage: '/images/baza.jpg',
+    coverImage: '/images/baza.webp',
     publishedAt: '2025-01-05',
     updatedAt: '2025-01-06',
     readTime: 12,
