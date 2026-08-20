@@ -6,6 +6,8 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import { SITE_URL } from './lib/site-config';
 import { BusinessSchema } from './components/seo/BusinessSchema';
 import { BreadcrumbSchema } from './components/seo/BreadcrumbSchema';
+import { CookieConsentBanner } from './components/ui/CookieConsentBanner';
+import { CONSENT_STORAGE_KEY } from './utils/consent';
 import './index.css';
 
 // react-helmet-async's HelmetProvider was removed from here in Sub-step 2C:
@@ -19,8 +21,20 @@ import './index.css';
 // Same conditional-load pattern as the old index.html scripts: skip on localhost.
 const HOSTNAME_GUARD = `window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && window.location.hostname !== '[::1]'`;
 
+// Non-essential trackers only fire once the visitor has accepted the cookie
+// banner (see CookieConsentBanner.tsx). Each script defines a
+// window.__aisajtLoadX loader (idempotent) instead of firing unconditionally,
+// so the exact same loader can be invoked either here — on page load, if
+// consent was already granted in a previous visit — or from the banner's
+// "Prihvati" button when the visitor consents in the current session.
+// Rejecting (or not yet answering) means neither path ever runs: default is
+// no tracking.
+const HAS_CONSENT = `(function(){ try { return localStorage.getItem('${CONSENT_STORAGE_KEY}') === 'accepted'; } catch (e) { return false; } })()`;
+
 const GA4_SCRIPT = `
-if (${HOSTNAME_GUARD}) {
+window.__aisajtLoadGA4 = function() {
+  if (window.__aisajtGA4Loaded) return;
+  window.__aisajtGA4Loaded = true;
   var script = document.createElement('script');
   script.async = true;
   script.src = 'https://www.googletagmanager.com/gtag/js?id=G-6C046QS9HG';
@@ -31,11 +45,16 @@ if (${HOSTNAME_GUARD}) {
   gtag('js', new Date());
 
   gtag('config', 'G-6C046QS9HG');
+};
+if (${HOSTNAME_GUARD} && ${HAS_CONSENT}) {
+  window.__aisajtLoadGA4();
 }
 `;
 
 const META_PIXEL_SCRIPT = `
-if (${HOSTNAME_GUARD}) {
+window.__aisajtLoadPixel = function() {
+  if (window.__aisajtPixelLoaded) return;
+  window.__aisajtPixelLoaded = true;
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -46,11 +65,16 @@ if (${HOSTNAME_GUARD}) {
   'https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', '1206162938252666');
   fbq('track', 'PageView');
+};
+if (${HOSTNAME_GUARD} && ${HAS_CONSENT}) {
+  window.__aisajtLoadPixel();
 }
 `;
 
 const HUBSPOT_SCRIPT = `
-if (${HOSTNAME_GUARD}) {
+window.__aisajtLoadHubspot = function() {
+  if (window.__aisajtHubspotLoaded) return;
+  window.__aisajtHubspotLoaded = true;
   var hubspotScript = document.createElement('script');
   hubspotScript.type = 'text/javascript';
   hubspotScript.id = 'hs-script-loader';
@@ -63,6 +87,9 @@ if (${HOSTNAME_GUARD}) {
   hubspotFormsScript.src = 'https://js-eu1.hsforms.net/forms/embed/147390341.js';
   hubspotFormsScript.defer = true;
   document.head.appendChild(hubspotFormsScript);
+};
+if (${HOSTNAME_GUARD} && ${HAS_CONSENT}) {
+  window.__aisajtLoadHubspot();
 }
 `;
 
@@ -118,10 +145,10 @@ export function Layout({ children }: { children: ReactNode }) {
         <Links />
       </head>
       <body>
-        <noscript>
-          <img height="1" width="1" style={{ display: 'none' }} src="https://www.facebook.com/tr?id=1206162938252666&ev=PageView&noscript=1" alt="" />
-        </noscript>
-
+        {/* No <noscript> Meta Pixel fallback here on purpose: it can't be
+            consent-gated (no JS = no way to check localStorage or show the
+            banner), and firing it unconditionally would defeat the
+            default-to-no-tracking-before-consent requirement. */}
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -135,6 +162,7 @@ export default function Root() {
     <LanguageProvider>
       <BreadcrumbSchema />
       <Outlet />
+      <CookieConsentBanner />
     </LanguageProvider>
   );
 }
