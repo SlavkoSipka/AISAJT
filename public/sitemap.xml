@@ -16,12 +16,32 @@
     <priority>0.95</priority>
   </url>
 
+  <!-- SEO Optimizacija Detalji - supplementary to the pricing page above; was
+       missing from the sitemap (flagged Phase 5, still missing as of Phase 9,
+       fixed here) -->
+  <url>
+    <loc>https://aisajt.com/seo-optimizacija-detalji</loc>
+    <lastmod>2026-08-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Izrada Sajta Cena Page - THIRD MOST IMPORTANT -->
   <url>
     <loc>https://aisajt.com/izrada-sajta-cena</loc>
     <lastmod>2026-01-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+  </url>
+
+  <!-- Izrada Sajta Detalji - supplementary to the pricing page above; was
+       missing from the sitemap (flagged Phase 5, still missing as of Phase 9,
+       fixed here) -->
+  <url>
+    <loc>https://aisajt.com/izrada-sajta-detalji</loc>
+    <lastmod>2026-08-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
 
   <!-- Web Dizajn Page - FOURTH MOST IMPORTANT -->
