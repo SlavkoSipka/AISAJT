@@ -767,7 +767,7 @@ export function FunnelPage() {
                       <div className="flex items-center justify-between mt-auto flex-shrink-0">
                         <div className="flex items-center gap-3">
                           <div className={`w-24 h-14 md:w-28 md:h-16 rounded-lg border flex-shrink-0 overflow-hidden flex items-center justify-center p-1.5 ${['rc', 'bora', 'lako', 'panic'].includes(card.id) ? 'bg-white border-gray-300' : 'bg-gray-800 border-gray-700'}`}>
-                            <img src={card.logo} alt="" className="max-w-full max-h-full w-auto h-auto object-contain" loading="lazy" />
+                            <img src={card.logo} alt={`${card.title} logo`} className="max-w-full max-h-full w-auto h-auto object-contain" loading="lazy" />
                           </div>
                           <div>
                             <p className="text-white font-medium text-sm">{card.title}</p>
@@ -1055,7 +1055,7 @@ export function FunnelPage() {
                   {/* Desna kolona – samo glavna slika, centrirana */}
                   <div className="relative flex items-center justify-center w-full max-w-md">
                     <div className="rounded-2xl overflow-hidden border border-gray-700/60 shadow-2xl bg-gray-800/50 w-full max-h-[280px] md:max-h-[340px] flex items-center justify-center">
-                      <img src="/images/filmska.webp" width={900} height={600} alt="" className="w-full h-full object-contain" loading="lazy" />
+                      <img src="/images/filmska.webp" width={900} height={600} alt={language === 'sr' ? 'Tim AiSajt radi u kancelariji' : 'The AiSajt team at work in the office'} className="w-full h-full object-contain" loading="lazy" />
                     </div>
                   </div>
                 </div>

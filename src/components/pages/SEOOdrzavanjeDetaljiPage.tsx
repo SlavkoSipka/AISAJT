@@ -469,7 +469,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                   </div>
                   <div className="relative flex items-center justify-center w-full max-w-md">
                     <div className="rounded-2xl overflow-hidden border border-gray-700/60 shadow-2xl bg-gray-800/50 w-full max-h-[280px] md:max-h-[340px] flex items-center justify-center">
-                      <img src="/images/filmska.webp" width={900} height={600} alt="" className="w-full h-full object-contain" loading="lazy" />
+                      <img src="/images/filmska.webp" width={900} height={600} alt={language === 'sr' ? 'Tim AiSajt radi u kancelariji' : 'The AiSajt team at work in the office'} className="w-full h-full object-contain" loading="lazy" />
                     </div>
                   </div>
                 </div>
