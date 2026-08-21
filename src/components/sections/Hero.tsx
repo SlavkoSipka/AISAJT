@@ -1,182 +1,243 @@
-import { useEffect, useState, useRef } from 'react';
-import { Send, ArrowRight, ExternalLink } from 'lucide-react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
+import { Phone, ArrowRight, Sparkles, CheckCircle } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { gsap } from 'gsap';
 import { Language } from '../../types/language';
 import { navigateToSection } from '../../utils/navigation';
 import { NAP } from '../../lib/site-config';
+import { trackPhoneClick, trackCTAClick } from '../../utils/analytics';
+
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 interface HeroProps {
   language: Language;
 }
 
 export function Hero({ language }: HeroProps) {
-  const [isVisible, setIsVisible] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-          } else {
-            setIsVisible(false);
-          }
+  // GSAP intro timeline — sadržaj je vidljiv u HTML-u (SSR/SEO safe),
+  // animacija samo dodaje ulazak pri mount-u.
+  useIsomorphicLayoutEffect(() => {
+    if (!heroRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+        tl.from('[data-hero="badge"]', { y: 24, opacity: 0, duration: 0.6 })
+          .from(
+            '[data-hero="word"]',
+            { yPercent: 110, opacity: 0, duration: 0.9, stagger: 0.09 },
+            '-=0.3'
+          )
+          .from('[data-hero="desc"]', { y: 28, opacity: 0, duration: 0.7 }, '-=0.45')
+          .from('[data-hero="cta"]', { y: 24, opacity: 0, duration: 0.6, stagger: 0.1 }, '-=0.4')
+          .from('[data-hero="trust"]', { y: 16, opacity: 0, duration: 0.5, stagger: 0.08 }, '-=0.3')
+          .from(
+            '[data-hero="visual"]',
+            { x: 60, opacity: 0, scale: 0.94, duration: 1 },
+            '-=0.8'
+          )
+          .from(
+            '[data-hero="float"]',
+            { y: 30, opacity: 0, duration: 0.7, stagger: 0.12 },
+            '-=0.5'
+          )
+          .from('[data-hero="letter"]', { x: -60, opacity: 0, duration: 1.2 }, 0.2);
+
+        // Blago lebdenje mockup kartice — beskonačno
+        gsap.to('[data-hero="visual"]', {
+          y: -12,
+          duration: 3.2,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+          delay: 1.6,
         });
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '0px'
-      }
-    );
+      });
 
-    if (heroRef.current) {
-      observerRef.current.observe(heroRef.current);
-    }
+      return () => mm.revert();
+    }, heroRef);
 
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
+    return () => ctx.revert();
   }, []);
 
+  const h1Words = language === 'sr'
+    ? ['Agencija', 'za', 'Izradu', 'Sajta']
+    : ['Website', 'Development', 'Agency'];
+  // Gradijent akcenat na ključnim rečima (tekst H1 ostaje identičan)
+  const gradientFrom = language === 'sr' ? 2 : 0;
 
   return (
-    <header 
+    <header
       ref={heroRef}
-      className="text-gray-900 relative overflow-hidden pt-32 md:pt-40 pb-20 md:pb-32 min-h-screen flex items-center">
-      {/* Smooth gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-pink-50/40"></div>
-      {/* Animated background circles - PopArt style */}
+      className="text-gray-900 relative overflow-hidden pt-28 md:pt-40 pb-16 md:pb-28 min-h-[92vh] flex items-center"
+    >
+      {/* Background: soft radials + dot grid */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-violet-50/50"></div>
+      <div className="absolute inset-0 lg-dot-grid opacity-60 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_40%,black,transparent)]"></div>
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Large violet circle */}
-        <div className={`absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-br from-violet-400 to-violet-600 rounded-full opacity-20 transition-all duration-[2000ms] ${isVisible ? 'scale-100 translate-x-0 translate-y-0' : 'scale-50 -translate-x-20 -translate-y-20'}`}></div>
-        
-        {/* Indigo circle - right */}
-        <div className={`absolute top-1/4 -right-32 w-96 h-96 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full opacity-15 transition-all duration-[2500ms] delay-300 ${isVisible ? 'scale-100 translate-x-0' : 'scale-50 translate-x-32'}`}></div>
-        
-        {/* Pink circle - bottom left */}
-        <div className={`absolute -bottom-20 left-1/4 w-72 h-72 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full opacity-20 transition-all duration-[2200ms] delay-500 ${isVisible ? 'scale-100 translate-y-0' : 'scale-50 translate-y-20'}`}></div>
-        
-        {/* Small violet accent */}
-        <div className={`absolute top-1/2 left-1/3 w-40 h-40 bg-violet-500 rounded-full opacity-10 transition-all duration-[1800ms] delay-200 ${isVisible ? 'scale-100' : 'scale-0'}`}></div>
-        
-        {/* Small indigo accent */}
-        <div className={`hidden md:block absolute bottom-1/3 right-1/4 w-32 h-32 bg-indigo-500 rounded-full opacity-15 transition-all duration-[2000ms] delay-700 ${isVisible ? 'scale-100' : 'scale-0'}`}></div>
+        <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] bg-gradient-to-br from-violet-400/25 to-indigo-500/15 rounded-full blur-3xl animate-blob"></div>
+        <div className="absolute top-1/3 -right-40 w-[32rem] h-[32rem] bg-gradient-to-br from-indigo-400/20 to-pink-500/15 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-24 left-1/4 w-80 h-80 bg-gradient-to-br from-pink-400/20 to-violet-500/15 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
       </div>
-      
-      {/* Giant Background Letter "A" - Behind Text */}
-      <div className="absolute top-1/2 left-0 md:left-10 -translate-y-1/2 z-[2] pointer-events-none overflow-hidden">
-        <div className={`transform transition-all duration-[2000ms] ${isVisible ? 'translate-x-0 opacity-30 md:opacity-25 scale-100' : '-translate-x-20 opacity-0 scale-90'}`}>
-          <div className="text-[200px] sm:text-[280px] md:text-[350px] lg:text-[420px] xl:text-[500px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-violet-600 via-indigo-500 to-pink-500 select-none" aria-hidden="true">
-            A
-          </div>
+
+      {/* Giant Background Letter "A" */}
+      <div className="absolute top-1/2 left-0 md:left-10 -translate-y-1/2 z-[2] pointer-events-none overflow-hidden" data-hero="letter">
+        <div
+          className="text-[180px] sm:text-[260px] md:text-[340px] lg:text-[420px] xl:text-[500px] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-violet-600 via-indigo-500 to-pink-500 select-none opacity-[0.14] md:opacity-[0.12]"
+          aria-hidden="true"
+        >
+          A
         </div>
       </div>
 
-      <div className="container mx-auto px-4 md:px-8 relative z-20 desktop-vertical-nav-offset">
-        <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-          
-          {/* Left Side - Content */}
-          <div className="space-y-8">
-            {/* Breadcrumb */}
-            <div className={`transform transition-all duration-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-              <p className="text-sm text-gray-500 uppercase tracking-wider font-medium">
-                {language === 'sr' ? 'Početna' : 'Home'} / {language === 'sr' ? 'AI Web Dizajn' : 'AI Web Design'}
-              </p>
+      <div className="container mx-auto px-4 md:px-8 relative z-20 desktop-vertical-nav-offset" data-hero-parallax>
+        <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 items-center max-w-7xl mx-auto">
+
+          {/* Left Side — Content */}
+          <div className="space-y-7 md:space-y-8">
+            {/* Badge */}
+            <div data-hero="badge">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur border border-violet-200/70 shadow-sm text-sm font-semibold text-gray-800">
+                <Sparkles className="w-4 h-4 text-violet-600" />
+                {language === 'sr'
+                  ? 'Agencija iz Beograda · 50+ projekata'
+                  : 'Belgrade agency · 50+ projects'}
+              </span>
             </div>
 
-            {/* Main Heading - Brand Focused H1 */}
-            <div className={`transform transition-all duration-1000 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight mb-6 drop-shadow-sm">
-                {language === 'sr' ? (
-                  <>
-                    Agencija za Izradu Sajta
-                  </>
-                ) : (
-                  <>
-                    Website Development Agency
-                  </>
-                )}
-              </h1>
-            </div>
+            {/* Main Heading — Brand Focused H1 (tekst nepromenjen, SEO) */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black text-gray-900 leading-[1.05] tracking-tight">
+              {h1Words.map((word, i) => (
+                <span key={i} className="inline-block overflow-hidden align-bottom pb-1 mr-[0.28em] last:mr-0">
+                  <span
+                    data-hero="word"
+                    className={`inline-block ${i >= gradientFrom ? 'lg-grad-text' : ''}`}
+                  >
+                    {word}
+                  </span>
+                </span>
+              ))}
+            </h1>
 
-            {/* Description - Brand Enhanced */}
-            <div className={`transform transition-all duration-1000 delay-600 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-              <p className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-2xl font-normal text-left">
-                {language === 'sr' 
+            {/* Description — SEO tekst nepromenjen */}
+            <div data-hero="desc">
+              <p className="text-base md:text-xl text-gray-600 leading-relaxed max-w-2xl">
+                {language === 'sr'
                   ? 'Specijalizovani smo za profesionalnu izradu web sajtova i SEO optimizaciju. Agencija iz Beograda koja kombinuje savremeni dizajn sa tehničkom izuzetnosti. Transparentne cene i garantovani rezultati. Radimo širom Srbije - Beograd, Novi Sad.'
-                  : 'We specialize in professional website development and SEO optimization. Agency from Belgrade that combines modern design with technical excellence. Transparent pricing and guaranteed results. We work across Serbia - Belgrade, Novi Sad.'
-                }
+                  : 'We specialize in professional website development and SEO optimization. Agency from Belgrade that combines modern design with technical excellence. Transparent pricing and guaranteed results. We work across Serbia - Belgrade, Novi Sad.'}
               </p>
             </div>
 
-            {/* Buttons - PopArt Style */}
-            <div className={`flex flex-wrap gap-4 transform transition-all duration-1000 delay-800 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-              <Link
-                to="/funnel"
-                className="group relative px-8 py-4 bg-gray-900 text-white font-semibold rounded-full hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-2xl overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-violet-500/0 via-violet-500/20 to-violet-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-                <Send className="w-5 h-5 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
-                <span className="relative z-10">{language === 'sr' ? 'BESPLATNE KONSULTACIJE' : 'FREE CONSULTATION'}</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
-              </Link>
-              
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3.5 sm:gap-4">
+              <div data-hero="cta">
+                <Link
+                  to="/funnel"
+                  onClick={() => trackCTAClick('Besplatne Konsultacije', 'hero', language)}
+                  className="lg-btn-primary group w-full sm:w-auto px-8 py-4 text-white font-bold rounded-full flex items-center justify-center gap-2.5"
+                >
+                  {language === 'sr' ? 'Besplatne konsultacije' : 'Free consultation'}
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300" />
+                </Link>
+              </div>
+              <div data-hero="cta">
+                <a
+                  href={`tel:${NAP.phone.tel}`}
+                  onClick={() => trackPhoneClick(NAP.phone.tel, 'hero', language)}
+                  className="lg-btn-call group w-full sm:w-auto px-7 py-4 bg-white border-2 border-gray-900 text-gray-900 font-bold rounded-full flex items-center justify-center gap-2.5"
+                >
+                  <span className="lg-phone-ring inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-500">
+                    <Phone className="w-4 h-4 text-white" />
+                  </span>
+                  {NAP.phone.local}
+                </a>
+              </div>
+            </div>
+
+            {/* Trust indicators */}
+            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-600 font-medium">
+              {(language === 'sr'
+                ? ['Odgovor u roku od 24h', 'Sajt gotov za 7–14 dana', 'Bez skrivenih troškova']
+                : ['Reply within 24h', 'Website in 7–14 days', 'No hidden costs']
+              ).map((item) => (
+                <li key={item} data-hero="trust" className="flex items-center gap-1.5">
+                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            {/* Portfolio quick link — mobile visible */}
+            <div data-hero="trust">
               <button
                 onClick={() => navigateToSection('portfolio', navigate, location.pathname)}
-                className="group px-8 py-4 border-2 border-gray-900 text-gray-900 font-semibold rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 flex items-center gap-2"
+                className="group inline-flex items-center gap-2 text-sm font-semibold text-violet-700 hover:text-violet-900 transition-colors"
               >
-                {language === 'sr' ? 'PORTFOLIO' : 'PORTFOLIO'}
-                <ExternalLink className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                {language === 'sr' ? 'Pogledajte naše radove' : 'See our work'}
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
           </div>
 
-          {/* Right Side - 3D Mockups & Logo */}
+          {/* Right Side — Mockup composition (desktop) */}
           <div className="relative hidden lg:block">
-            <div className={`transform transition-all duration-1000 delay-1000 ${isVisible ? 'translate-x-0 opacity-100 scale-100' : 'translate-x-20 opacity-0 scale-90'}`}>
-              {/* Logo Image with 3D effect */}
-              <div className="relative">
-                <div className="w-full max-w-md mx-auto rounded-2xl bg-white/95 p-6 md:p-8 shadow-2xl ring-1 ring-gray-200/80">
+            <div data-hero="visual" className="relative">
+              <div className="relative w-full max-w-md mx-auto rounded-3xl bg-white/95 p-8 shadow-2xl ring-1 ring-gray-200/80 backdrop-blur">
+                <div className="absolute -inset-px rounded-3xl bg-gradient-to-br from-violet-500/20 via-transparent to-pink-500/20 pointer-events-none"></div>
+                <img
+                  src="/images/aisajt nav.png" width={1024} height={336}
+                  alt="AI izrada sajtova - Profesionalna izrada veb sajta sa veštačkom inteligencijom"
+                  loading="eager"
+                  {...{ fetchpriority: 'high' } as React.ImgHTMLAttributes<HTMLImageElement>}
+                  decoding="async"
+                  className="w-full h-auto drop-shadow-xl object-contain relative z-10"
+                />
+              </div>
+
+              {/* Floating logo card */}
+              <div data-hero="float" className="absolute -bottom-12 -right-8 w-44 h-44 bg-gradient-to-br from-violet-100 to-indigo-100 rounded-3xl shadow-2xl rotate-6 hover:rotate-3 transition-transform duration-700">
+                <div className="absolute inset-4 bg-white rounded-2xl flex items-center justify-center">
                   <img
-                    src="/images/aisajt nav.png" width={1024} height={336}
-                    alt="AI izrada sajtova - Profesionalna izrada veb sajta sa veštačkom inteligencijom"
-                    loading="eager"
-                    {...{ fetchpriority: 'high' } as React.ImgHTMLAttributes<HTMLImageElement>}
+                    src="/images/aisajt close up.png" width={304} height={304}
+                    alt="AI websajt izrada - Logo"
+                    loading="lazy"
                     decoding="async"
-                    className="w-full h-auto drop-shadow-xl animate-float object-contain"
+                    className="w-[88px] h-[88px] object-contain"
                   />
                 </div>
-                
-                {/* Floating devices mockup simulation */}
-                <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-gradient-to-br from-violet-100 to-indigo-100 rounded-3xl shadow-2xl transform rotate-12 transition-transform duration-700 hover:rotate-6">
-                  <div className="absolute inset-4 bg-white rounded-2xl flex items-center justify-center">
-                    <img 
-                      src="/images/aisajt close up.png" width={304} height={304} 
-                      alt="AI websajt izrada - Logo"
-                      loading="lazy"
-                      decoding="async"
-                      className="w-24 h-24 object-contain"
-                    />
-                  </div>
-                </div>
+              </div>
 
-                {/* Contact card mockup */}
-                <div className="absolute top-10 -left-16 w-56 h-32 bg-gradient-to-br from-pink-50 to-violet-50 rounded-2xl shadow-xl transform -rotate-6 transition-transform duration-700 hover:rotate-0 p-6">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Contact</h3>
-                  <p className="text-sm text-gray-600">{NAP.email}</p>
-                  <p className="text-sm text-gray-600">{NAP.phone.display}</p>
+              {/* Floating contact card — klikabilan telefon */}
+              <a
+                data-hero="float"
+                href={`tel:${NAP.phone.tel}`}
+                onClick={() => trackPhoneClick(NAP.phone.tel, 'hero_card', language)}
+                className="absolute top-8 -left-14 w-60 bg-white/95 backdrop-blur rounded-2xl shadow-xl -rotate-3 hover:rotate-0 transition-transform duration-500 p-5 ring-1 ring-gray-200/70 block"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="lg-phone-ring inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-500 flex-shrink-0">
+                    <Phone className="w-5 h-5 text-white" />
+                  </span>
+                  <span>
+                    <span className="block text-xs uppercase tracking-wide text-gray-500 font-semibold">
+                      {language === 'sr' ? 'Pozovite nas' : 'Call us'}
+                    </span>
+                    <span className="block font-bold text-gray-900">{NAP.phone.display}</span>
+                  </span>
                 </div>
+              </a>
 
-                {/* Feature tag */}
-                <div className="absolute -top-8 right-20 bg-gradient-to-r from-violet-600 to-pink-500 text-white px-6 py-3 rounded-full shadow-lg font-semibold text-sm animate-bounce-slow">
-                  {language === 'sr' ? 'Nove Funkcije' : 'New Features'}
-                </div>
+              {/* Floating rating tag */}
+              <div data-hero="float" className="absolute -top-8 right-16 bg-gradient-to-r from-violet-600 to-pink-500 text-white px-5 py-2.5 rounded-full shadow-lg font-semibold text-sm">
+                ★ {language === 'sr' ? '50+ zadovoljnih klijenata' : '50+ happy clients'}
               </div>
             </div>
           </div>
@@ -184,8 +245,8 @@ export function Hero({ language }: HeroProps) {
         </div>
       </div>
 
-      {/* Smooth gradient transition to Services section */}
-      <div className="absolute -bottom-20 left-0 right-0 h-32 z-[5] bg-gradient-to-b from-transparent via-pink-50/30 to-violet-50/40 pointer-events-none"></div>
+      {/* Gradient transition to next section */}
+      <div className="absolute -bottom-10 left-0 right-0 h-24 z-[5] bg-gradient-to-b from-transparent to-violet-50/40 pointer-events-none"></div>
     </header>
   );
 }

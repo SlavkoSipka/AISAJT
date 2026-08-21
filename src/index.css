@@ -1290,15 +1290,141 @@ html {
   overflow: hidden;
 }
 
-/* Offset main content on desktop when vertical sidebar navbar is visible */
-@media (min-width: 1024px) {
-  .desktop-vertical-nav-offset {
-    padding-left: 13rem; /* približno širina sidebar-a (w-52) */
-  }
+/* Stari fiksni sidebar je zamenjen mini-rail overlay menijem, pa offset
+   više nije potreban — klasa je ostavljena u markup-u ali bez efekta. */
+.desktop-vertical-nav-offset {
+  padding-left: 0;
+}
+/* ═══════════════════════════════════════════════════════════
+   2026 Lead-Gen Redesign — homepage (lg- prefix)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Gradient text accent */
+.lg-grad-text {
+  background: linear-gradient(100deg, #7c3aed 0%, #4f46e5 45%, #db2777 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-@media (min-width: 1440px) {
-  .desktop-vertical-nav-offset {
-    padding-left: 14rem;
-  }
+/* Primary CTA — living gradient */
+.lg-btn-primary {
+  background: linear-gradient(120deg, #6d28d9, #4f46e5 55%, #be185d);
+  background-size: 200% 200%;
+  animation: lg-grad-shift 7s ease infinite;
+  box-shadow: 0 10px 30px -8px rgba(109, 40, 217, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.lg-btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 18px 44px -10px rgba(109, 40, 217, 0.65);
+}
+.lg-btn-primary:active {
+  transform: translateY(0) scale(0.99);
+}
+@keyframes lg-grad-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Call button */
+.lg-btn-call {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+.lg-btn-call:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px -12px rgba(17, 24, 39, 0.45);
+}
+
+/* Soft premium card shadow */
+.lg-card {
+  box-shadow: 0 1px 2px rgba(17, 12, 34, 0.04), 0 14px 36px -18px rgba(76, 29, 149, 0.2);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+}
+.lg-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 2px 4px rgba(17, 12, 34, 0.05), 0 28px 56px -20px rgba(76, 29, 149, 0.32);
+}
+
+/* Marquee band */
+.lg-marquee {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+}
+.lg-marquee-track {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  min-width: 100%;
+  animation: lg-marquee 30s linear infinite;
+}
+@keyframes lg-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-marquee-track { animation: none; }
+  .lg-btn-primary { animation: none; }
+}
+
+/* Outlined display text (marquee) */
+.lg-outline-text {
+  -webkit-text-stroke: 1.5px rgba(109, 40, 217, 0.4);
+  color: transparent;
+}
+
+/* Subtle dot grid backdrop */
+.lg-dot-grid {
+  background-image: radial-gradient(rgba(76, 29, 149, 0.10) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.lg-dot-grid-dark {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Sticky mobile call bar */
+.lg-sticky-bar {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+}
+.lg-sticky-bar.lg-hidden-bar {
+  transform: translateY(110%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Floating desktop call pill */
+.lg-call-pill {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease, box-shadow 0.3s ease;
+}
+.lg-call-pill.lg-hidden-bar {
+  transform: translateY(140%);
+  opacity: 0;
+  pointer-events: none;
+}
+.lg-call-pill:hover {
+  box-shadow: 0 18px 44px -10px rgba(109, 40, 217, 0.55);
+}
+
+/* Pulsing ring around the phone icon — draws the eye */
+.lg-phone-ring {
+  position: relative;
+}
+.lg-phone-ring::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 2px solid rgba(34, 197, 94, 0.55);
+  animation: lg-ring-pulse 2.2s ease-out infinite;
+}
+@keyframes lg-ring-pulse {
+  0% { transform: scale(0.85); opacity: 1; }
+  70% { transform: scale(1.35); opacity: 0; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-phone-ring::after { animation: none; opacity: 0; }
 }
