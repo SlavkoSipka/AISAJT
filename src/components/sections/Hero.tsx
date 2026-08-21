@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { Fragment, useEffect, useLayoutEffect, useRef } from 'react';
 import { Phone, ArrowRight, Sparkles, CheckCircle } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
@@ -113,17 +113,23 @@ export function Hero({ language }: HeroProps) {
               </span>
             </div>
 
-            {/* Main Heading — Brand Focused H1 (tekst nepromenjen, SEO) */}
+            {/* Main Heading — Brand Focused H1 (tekst nepromenjen, SEO).
+                Reči nose zaseban span zbog animacije, ali razmak između njih
+                mora biti pravi tekstualni čvor — CSS margina se ne čita kao
+                razmak, pa bi H1 za pretraživače bio jedna spojena reč. */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black text-gray-900 leading-[1.05] tracking-tight">
               {h1Words.map((word, i) => (
-                <span key={i} className="inline-block overflow-hidden align-bottom pb-1 mr-[0.28em] last:mr-0">
-                  <span
-                    data-hero="word"
-                    className={`inline-block ${i >= gradientFrom ? 'lg-grad-text' : ''}`}
-                  >
-                    {word}
+                <Fragment key={i}>
+                  {i > 0 && ' '}
+                  <span className="inline-block overflow-hidden align-bottom pb-1">
+                    <span
+                      data-hero="word"
+                      className={`inline-block ${i >= gradientFrom ? 'lg-grad-text' : ''}`}
+                    >
+                      {word}
+                    </span>
                   </span>
-                </span>
+                </Fragment>
               ))}
             </h1>
 
