@@ -14,7 +14,7 @@ type Pages = {
   "/": {
     params: {};
   };
-  "/izrada-sajta-cena": {
+  "/izrada-sajta": {
     params: {};
   };
   "/izrada-sajta-detalji": {
@@ -27,6 +27,9 @@ type Pages = {
     params: {};
   };
   "/seo-optimizacija-detalji": {
+    params: {};
+  };
+  "/lokalni-seo-beograd": {
     params: {};
   };
   "/web-dizajn": {
@@ -94,15 +97,15 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/izrada-sajta-cena" | "/izrada-sajta-detalji" | "/seo-optimizacija-cena" | "/seo" | "/seo-optimizacija-detalji" | "/web-dizajn" | "/izrada-web-shopa" | "/funnel" | "/contact" | "/promet-sistem" | "/portfolio" | "/portfolio/:slug" | "/thank-you" | "/resources" | "/resources/quiz" | "/resources/audit" | "/resources/guide" | "/resources/checklist" | "/blog" | "/blog/category/:categorySlug" | "/blog/:slug" | "/privacy" | "/terms";
+    page: "/" | "/izrada-sajta" | "/izrada-sajta-detalji" | "/seo-optimizacija-cena" | "/seo" | "/seo-optimizacija-detalji" | "/lokalni-seo-beograd" | "/web-dizajn" | "/izrada-web-shopa" | "/funnel" | "/contact" | "/promet-sistem" | "/portfolio" | "/portfolio/:slug" | "/thank-you" | "/resources" | "/resources/quiz" | "/resources/audit" | "/resources/guide" | "/resources/checklist" | "/blog" | "/blog/category/:categorySlug" | "/blog/:slug" | "/privacy" | "/terms";
   };
   "home.tsx": {
     id: "home";
     page: "/";
   };
-  "izradaSajtaCena.tsx": {
-    id: "izradaSajtaCena";
-    page: "/izrada-sajta-cena";
+  "izradaSajta.tsx": {
+    id: "izradaSajta";
+    page: "/izrada-sajta";
   };
   "izradaSajtaDetalji.tsx": {
     id: "izradaSajtaDetalji";
@@ -118,6 +121,10 @@ type RouteFiles = {
   "seoOptimizacijaDetalji.tsx": {
     id: "seoOptimizacijaDetalji";
     page: "/seo-optimizacija-detalji";
+  };
+  "lokalniSeoBeograd.tsx": {
+    id: "lokalniSeoBeograd";
+    page: "/lokalni-seo-beograd";
   };
   "webDizajn.tsx": {
     id: "webDizajn";
@@ -195,11 +202,12 @@ type RouteFiles = {
 type RouteModules = {
   "root": typeof import("./src/root.tsx");
   "home": typeof import("./src/home.tsx");
-  "izradaSajtaCena": typeof import("./src/izradaSajtaCena.tsx");
+  "izradaSajta": typeof import("./src/izradaSajta.tsx");
   "izradaSajtaDetalji": typeof import("./src/izradaSajtaDetalji.tsx");
   "seoOptimizacijaCena": typeof import("./src/seoOptimizacijaCena.tsx");
   "seoAlias": typeof import("./src/seoOptimizacijaCena.tsx");
   "seoOptimizacijaDetalji": typeof import("./src/seoOptimizacijaDetalji.tsx");
+  "lokalniSeoBeograd": typeof import("./src/lokalniSeoBeograd.tsx");
   "webDizajn": typeof import("./src/webDizajn.tsx");
   "izradaWebShopa": typeof import("./src/izradaWebShopa.tsx");
   "funnel": typeof import("./src/funnel.tsx");

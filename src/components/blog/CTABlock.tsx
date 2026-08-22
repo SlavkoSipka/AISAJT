@@ -95,7 +95,7 @@ function getCTAConfig(category: string | undefined, language: 'sr' | 'en') {
           ? 'Od ideje do live sajta za 24-48h. Moderan dizajn, SEO optimizacija i tehnička podrška uključeni u cenu.'
           : 'From idea to live website in 24-48h. Modern design, SEO optimization and technical support included.',
         buttonText: language === 'sr' ? 'Pogledaj Cene Izrade' : 'View Development Pricing',
-        link: '/izrada-sajta-cena',
+        link: '/izrada-sajta',
         gradient: 'from-indigo-50 to-blue-50',
         border: 'border-indigo-300',
         buttonClass: 'bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700'

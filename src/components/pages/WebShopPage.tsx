@@ -161,7 +161,7 @@ export function WebShopPage() {
                 <p className="text-sm md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-2">
                   {language === 'sr' ? (
                     <>
-                      Izrada sajta za online prodaju je proces kreiranja digitalne prodavnice koja radi 24/7 i donosi profit dok vi spavate. Sa profesionalnom <Link to="/izrada-sajta-cena" className="text-indigo-600 hover:text-indigo-700 font-semibold underline">izradom sajta</Link>, vaša internet prodavnica može dosegnuti klijente širom Srbije i regiona. Cena izrade web prodavnice zavisi od kompleksnosti, ali investicija se vraća kroz povećanu prodaju i smanjenje troškova.
+                      Izrada sajta za online prodaju je proces kreiranja digitalne prodavnice koja radi 24/7 i donosi profit dok vi spavate. Sa profesionalnom <Link to="/izrada-sajta" className="text-indigo-600 hover:text-indigo-700 font-semibold underline">izradom sajta</Link>, vaša internet prodavnica može dosegnuti klijente širom Srbije i regiona. Cena izrade web prodavnice zavisi od kompleksnosti, ali investicija se vraća kroz povećanu prodaju i smanjenje troškova.
                     </>
                   ) : (
                     'Web shop development is the process of creating a digital store that works 24/7 and generates profit while you sleep.'
@@ -443,7 +443,7 @@ export function WebShopPage() {
                       Izrada web shopa je investicija u budućnost biznisa. Dok fizička prodavnica radi 8-10 sati, online prodavnica radi 24/7. Kupci pregledaju, kupuju i plaćaju dok vi spavite. Cena izrade se vraća kroz povećanu prodaju već u prvim mesecima, a doseg ide širom Srbije, regiona i sveta.
                     </p>
                     <p className="md:hidden text-base text-gray-700 leading-relaxed">
-                      Profesionalna <Link to="/izrada-sajta-cena" className="text-indigo-600 hover:text-indigo-700 font-semibold underline">izrada sajta</Link> sa e-commerce funkcionalnostima automatizuje prodaju i smanjuje troškove. Web shop ne zahteva kiriju ili radno vreme - konstantno generiše prihod bez dodatnih troškova.
+                      Profesionalna <Link to="/izrada-sajta" className="text-indigo-600 hover:text-indigo-700 font-semibold underline">izrada sajta</Link> sa e-commerce funkcionalnostima automatizuje prodaju i smanjuje troškove. Web shop ne zahteva kiriju ili radno vreme - konstantno generiše prihod bez dodatnih troškova.
                     </p>
                     
                     {/* Desktop - Full */}
@@ -451,7 +451,7 @@ export function WebShopPage() {
                       Izrada web shopa nije samo tehnički projekat - to je investicija u budućnost vašeg biznisa. Dok tradicionalna prodavnica u Beogradu ili Novom Sadu radi 8-10 sati dnevno, online prodavnica radi 24/7 bez pauze. Vaši kupci mogu da pregledaju proizvode, dodaju ih u korpu i plate dok vi spavite. To znači da svaki dan gubite profit ako nemate web shop. Cena izrade web prodavnice se vraća kroz povećanu prodaju već u prvim mesecima. Biznis sa internet prodavnicom dostiže klijente ne samo u svom gradu, već širom Srbije, regiona, pa i sveta.
                     </p>
                     <p className="hidden md:block text-base md:text-lg text-gray-700 leading-relaxed">
-                      Profesionalna <Link to="/izrada-sajta-cena" className="text-indigo-600 hover:text-indigo-700 font-semibold underline">izrada sajta</Link> sa e-commerce funkcionalnostima omogućava vam da automatizujete proces prodaje, smanjite troškove zaposlenih i fokusirate se na širenje asortimana. Za razliku od fizičke prodavnice, web shop ne zahteva kiriju, velike troškove režija ili radno vreme. To je kanal koji konstantno generiše prihod bez dodatnih troškova po transakciji.
+                      Profesionalna <Link to="/izrada-sajta" className="text-indigo-600 hover:text-indigo-700 font-semibold underline">izrada sajta</Link> sa e-commerce funkcionalnostima omogućava vam da automatizujete proces prodaje, smanjite troškove zaposlenih i fokusirate se na širenje asortimana. Za razliku od fizičke prodavnice, web shop ne zahteva kiriju, velike troškove režija ili radno vreme. To je kanal koji konstantno generiše prihod bez dodatnih troškova po transakciji.
                     </p>
                   </div>
 
@@ -643,7 +643,7 @@ export function WebShopPage() {
                   </p>
 
                   <Link
-                    to="/izrada-sajta-cena"
+                    to="/izrada-sajta"
                     className="inline-flex items-center gap-2 text-gray-900 font-semibold hover:gap-3 transition-all duration-300"
                   >
                     {language === 'sr' ? 'Saznajte Više' : 'Learn More'}

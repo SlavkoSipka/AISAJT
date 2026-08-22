@@ -278,7 +278,7 @@ export const translations: Record<Language, Translation> = {
     pricingHeading: 'Cene Izrade Web Sajtova',
     pricingSubheading: 'Transparentni cenovnik za izradu sajtova - od osnovnih landing stranica do kompleksnih e-commerce rešenja',
     whyAiSajt: 'Zašto Odabrati AiSajt za Izradu Web Sajta?',
-    whyAiSajtDesc: 'Stručan tim iz Beograda sa iskustvom u izradi web sajta i izrada sajtova za klijente širom Srbije. Naša izrada web sajta kombinuje moderne tehnologije i proverene prakse za rezultate koji donose klijente.',
+    whyAiSajtDesc: 'AiSajt je stručan tim iz Beograda sa iskustvom rada za klijente širom Srbije. Kombinujemo moderne tehnologije i proverene prakse za rezultate koji donose klijente.',
     locationServed: 'Izrada web sajtova Beograd i cela Srbija',
     processHeading: 'Proces Izrade Web Sajta',
     processSubheading: 'Od ideje do live sajta u nekoliko jednostavnih koraka',

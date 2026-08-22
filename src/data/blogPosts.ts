@@ -128,7 +128,7 @@ Hajde da prođemo kroz **6 glavnih tipova** web sajtova i vidimo za koga je koji
 
 **Cena:** 199-399€
 
-**Primer:** [Pogledaj primer landing page-a](/izrada-sajta-cena)
+**Primer:** [Pogledaj primer landing page-a](/izrada-sajta)
 
 **Za koga je idealan:**
 - **Freelanceri** (fotografi, dizajneri, programeri)
@@ -325,7 +325,7 @@ Hajde da **pojednostavimo** odluku:
 - **Landing Page / Korporativni**: 0-50€/mesečno (hosting + domen)
 - **Web Shop**: 50-200€/mesečno (hosting + payment processing + inventory tools)
 
-[Vidi detaljne cene izrade sajta](/izrada-sajta-cena)
+[Vidi detaljne cene izrade sajta](/izrada-sajta)
 
 ---
 
@@ -410,7 +410,7 @@ Na konsultacijama ćemo:
 
 Ako želiš da naučiš više:
 
-- [Koliko Košta Izrada Sajta u 2025?](/izrada-sajta-cena)
+- [Koliko Košta Izrada Sajta u 2025?](/izrada-sajta)
 - [SEO Osnove za Početnike](/blog/seo-osnove-za-pocetnike)
 - [Web Dizajn Trendovi 2025](/web-dizajn)
 - [Portfolio Naših Radova](/#portfolio)
@@ -439,7 +439,7 @@ Srećno sa tvojim novim sajtom! 🎉
     metaDescriptionEn: 'Not sure what type of website your business needs? Landing page, corporate site or web shop? Discover which website you need based on business, budget and goals. Free quiz + expert advice.',
     relatedPosts: ['seo-osnove-za-pocetnike'],
     pillarPageLink: {
-      url: '/izrada-sajta-cena',
+      url: '/izrada-sajta',
       anchor: 'cene izrade web sajtova',
       anchorEn: 'website development pricing'
     }
@@ -551,7 +551,7 @@ Google evaluira sadržaj kroz:
 - Koristi descriptive anchor text
 - **Primer**: Umesto "kliknite ovde", koristite "SEO optimizacija cena"
 
-[SEO usluge](/#seo-optimizacija-cena) mogu značajno da poboljšaju vašu online vidljivost i dovedu do većeg broja kvalifikovanih posetilaca.
+[SEO usluge](/seo-optimizacija-cena) mogu značajno da poboljšaju vašu online vidljivost i dovedu do većeg broja kvalifikovanih posetilaca.
 
 ### Eksterno Linkovanje (Backlinks)
 - Linkovi sa drugih sajtova ka vašem
@@ -646,11 +646,98 @@ Want your website to be visible on Google? In this guide, discover how SEO optim
     metaTitleEn: 'SEO Basics for Beginners 2025: Complete Guide | AiSajt',
     metaDescription: 'Naučite SEO od nule. Kompletna objašnjenje keyword research, on-page optimizacije, link building i merenje rezultata. Praktični saveti za 2025.',
     metaDescriptionEn: 'Learn SEO from scratch. Complete guide on keyword research, on-page optimization, link building and measuring results. Practical tips for 2025.',
-    relatedPosts: [], // Will be filled when we add more posts
+    relatedPosts: ['google-ads-ili-seo'],
     pillarPageLink: {
       url: '/seo-optimizacija-cena',
       anchor: 'profesionalna SEO usluga',
       anchorEn: 'professional SEO service'
+    }
+  },
+
+  // POST 3 - SEO Category
+  {
+    id: 'google-ads-ili-seo',
+    slug: 'google-ads-ili-seo',
+    title: 'Google Ads ili SEO: Šta je Bolji Izbor za Vaš Biznis?',
+    titleEn: 'Google Ads or SEO: Which Is the Better Choice for Your Business?',
+    excerpt: 'Google Ads donosi trenutan saobraćaj, SEO donosi dugoročan i besplatan. Evo poređenja koje vam pomaže da odlučite šta vam treba, i kada je pametno kombinovati oba.',
+    excerptEn: 'Google Ads brings instant traffic, SEO brings long-term, free traffic. Here is a comparison to help you decide what you need, and when it makes sense to combine both.',
+    content: `
+# Google Ads ili SEO: Šta je Bolji Izbor za Vaš Biznis?
+
+Google Ads donosi posetioce od prvog dana, ali nestaju čim prestanete da plaćate. SEO optimizacija sajta traje duže da pokaže rezultate (obično 2 do 4 meseca), ali jednom postignuta pozicija nastavlja da donosi posetioce bez dodatnog plaćanja po kliku. Koji je bolji izbor zavisi od toga da li vam trenutno treba brz rezultat ili dugoročan rast.
+
+## Poređenje: Google Ads naspram SEO
+
+| | Google Ads | SEO optimizacija |
+|---|---|---|
+| Kada donosi rezultate | Odmah, čim kampanja krene | 2 do 4 meseca za značajan pomak |
+| Trošak po kliku | Plaćate za svaki klik | Nema troška po kliku, samo za rad na optimizaciji |
+| Šta se dešava kad prestanete da plaćate | Saobraćaj nestaje odmah | Pozicije ostaju, saobraćaj se nastavlja |
+| Poverenje korisnika | Označeno kao oglas | Organski rezultat, korisnici mu više veruju |
+| Vreme do prve investicije koja se isplati | Odmah vidljivo u konverzijama | Sporije, ali se isplati na duži rok |
+
+## Kada je Google Ads bolji izbor
+
+Google Ads ima smisla kada vam treba saobraćaj odmah: lansiranje novog proizvoda, sezonska ponuda, ili testiranje da li tržište uopšte reaguje na vašu ponudu pre nego što uložite u dugoročnu SEO strategiju. Takođe je koristan dok SEO optimizacija tek počinje da deluje, kao most do trenutka kada organski saobraćaj preuzme deo posla.
+
+## Kada je SEO optimizacija bolji izbor
+
+SEO optimizacija ima smisla kada gradite biznis za duži rok i želite izvor posetilaca koji ne zavisi od budžeta za oglase svakog meseca. Jednom kada sajt rangira za relevantne ključne reči, taj saobraćaj nastavlja da dolazi i kada ništa dodatno ne platite za taj klik. To je posebno vredno za lokalne usluge gde ljudi traže "usluga + grad" i očekuju da nađu ozbiljne, etablirane firme među prvim rezultatima.
+
+### Primer iz prakse: Komotraks
+
+[Komotraks](/portfolio/komotraks), firma za ugradnju komarnika, harmonika vrata i zavesa u Beogradu, dobio je sajt sa lokalnom SEO optimizacijom targetiranom po beogradskim opštinama (Novi Beograd, Vračar, Zvezdara, Voždovac, Palilula) i blog sekcijom za organski saobraćaj. Bez plaćenih oglasa, sajt je počeo da privlači posetioce direktno iz pretrage za lokalne upite specifične za njihovu delatnost.
+
+## Najbolji pristup: kombinacija
+
+U praksi, najbolji rezultati često dolaze iz kombinacije oba pristupa: Google Ads za trenutan saobraćaj i testiranje ponude, dok SEO optimizacija gradi poziciju koja će nositi rezultate dugoročno, bez stalnog plaćanja po kliku. Kada SEO počne da donosi organski saobraćaj, budžet za Ads se može smanjiti i preusmeriti na konkretne kampanje umesto na osnovni protok posetilaca.
+
+## Česta pitanja
+
+**Da li mogu da radim oboje istovremeno?**
+
+Da, i to je čest pristup. Google Ads pokriva period dok SEO optimizacija tek počinje da deluje.
+
+**Da li SEO ikad prestaje da bude potreban?**
+
+Ne u potpunosti. Konkurencija se menja, Google algoritam se ažurira, i pozicije bez održavanja vremenom mogu da opadnu. Zato SEO optimizacija ide i kao kontinuirani mesečni rad, ne samo jednokratna intervencija.
+
+**Koliko brzo Google Ads donosi rezultate u poređenju sa SEO-om?**
+
+Google Ads može da donese posetioce istog dana kada se kampanja pokrene. SEO optimizacija obično pokazuje značajan pomak tek posle 2 do 4 meseca, pošto Google mora prvo da ponovo indeksira i proceni promene na sajtu.
+
+---
+
+Ako razmišljate koji pristup ima više smisla za vaš biznis, pogledajte našu [SEO optimizaciju cena](/seo-optimizacija-cena) stranicu za konkretne pakete i cene, ili [zakažite besplatnu konsultaciju](/funnel).
+`,
+    contentEn: `
+# Google Ads or SEO: Which Is the Better Choice for Your Business?
+
+Google Ads brings visitors from day one, but they disappear the moment you stop paying. SEO optimization takes longer to show results (typically 2 to 4 months), but once a ranking is achieved it keeps bringing visitors with no extra cost per click. Which is the better choice depends on whether you need a fast result or long-term growth.
+
+[English content follows the same structure as the Serbian version above.]
+`,
+    category: 'seo',
+    tags: ['google ads', 'seo optimizacija', 'digitalni marketing', 'poređenje'],
+    author: {
+      name: 'AiSajt Tim',
+      image: '/images/providna2.png'
+    },
+    coverImage: '/images/baza.webp',
+    publishedAt: '2026-08-22',
+    updatedAt: '2026-08-22',
+    readTime: 7,
+    featured: false,
+    metaTitle: 'Google Ads ili SEO: Šta je Bolji Izbor? | AiSajt',
+    metaTitleEn: 'Google Ads or SEO: Which Is Better? | AiSajt',
+    metaDescription: 'Google Ads donosi trenutan saobraćaj, SEO donosi dugoročan i besplatan. Poređenje, primer iz prakse i odgovor na pitanje kada kombinovati oba pristupa.',
+    metaDescriptionEn: 'Google Ads brings instant traffic, SEO brings long-term, free traffic. Comparison, a real example, and when it makes sense to combine both.',
+    relatedPosts: ['seo-osnove-za-pocetnike'],
+    pillarPageLink: {
+      url: '/seo-optimizacija-cena',
+      anchor: 'SEO optimizacija cena',
+      anchorEn: 'SEO optimization pricing'
     }
   }
 ];

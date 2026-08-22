@@ -15,6 +15,7 @@ import { getCategoryById } from '../../data/blogCategories';
 import { TableOfContentsItem } from '../../types/blog';
 import { trackEvent } from '../../utils/analytics';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -170,7 +171,28 @@ export function BlogPostPage() {
                 {/* Blog Content */}
                 <div className="prose prose-lg max-w-none blog-content">
                   <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
                     components={{
+                      table: ({ node, ...props }) => (
+                        <div className="overflow-x-auto mb-6 rounded-xl border border-gray-200 shadow-sm">
+                          <table className="w-full text-left border-collapse" {...props} />
+                        </div>
+                      ),
+                      thead: ({ node, ...props }) => (
+                        <thead className="bg-gradient-to-r from-violet-600 via-indigo-600 to-pink-600 text-white" {...props} />
+                      ),
+                      th: ({ node, ...props }) => (
+                        <th className="px-4 py-3 text-sm font-semibold" {...props} />
+                      ),
+                      tbody: ({ node, ...props }) => (
+                        <tbody className="divide-y divide-gray-100" {...props} />
+                      ),
+                      tr: ({ node, ...props }) => (
+                        <tr className="hover:bg-violet-50/40 transition-colors" {...props} />
+                      ),
+                      td: ({ node, ...props }) => (
+                        <td className="px-4 py-3 text-sm text-gray-700" {...props} />
+                      ),
                       // Every post's markdown content opens with a "# Title"
                       // line that duplicates post.title (already rendered
                       // above as the page's real <h1>) — suppress it instead
@@ -281,7 +303,7 @@ function getPillarPageForCategory(category: string, language: 'sr' | 'en') {
       };
     case 'izrada-sajtova':
       return {
-        url: '/izrada-sajta-cena',
+        url: '/izrada-sajta',
         title: 'Izrada Sajta - Cene i Procesi',
         titleEn: 'Website Development - Pricing & Process'
       };

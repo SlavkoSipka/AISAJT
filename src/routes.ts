@@ -8,11 +8,12 @@ import { type RouteConfig, index, route } from '@react-router/dev/routes';
 // SSR/hydration pipeline entirely. See PHASE_2D_REPORT.md for why.
 export default [
   index('home.tsx'),
-  route('izrada-sajta-cena', 'izradaSajtaCena.tsx'),
+  route('izrada-sajta', 'izradaSajta.tsx'),
   route('izrada-sajta-detalji', 'izradaSajtaDetalji.tsx'),
   route('seo-optimizacija-cena', 'seoOptimizacijaCena.tsx'),
   route('seo', 'seoOptimizacijaCena.tsx', { id: 'seoAlias' }),
   route('seo-optimizacija-detalji', 'seoOptimizacijaDetalji.tsx'),
+  route('lokalni-seo-beograd', 'lokalniSeoBeograd.tsx'),
   route('web-dizajn', 'webDizajn.tsx'),
   route('izrada-web-shopa', 'izradaWebShopa.tsx'),
   route('funnel', 'funnel.tsx'),

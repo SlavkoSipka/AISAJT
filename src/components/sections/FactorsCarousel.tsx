@@ -34,7 +34,7 @@ export function FactorsCarousel({ language }: FactorsCarouselProps) {
             Jednostavan prezentacioni sajt sa 5 stranica (Početna, O nama, Usluge, Portfolio, Kontakt) je jedan nivo složenosti. Međutim, ako vam je potreban sajt sa 20+ stranica, custom funkcionalnostima, članovima, rezervacijama ili drugim interaktivnim elementima - to je znatno kompleksniji posao koji zahteva više vremena i stručnosti.
           </p>
           <p className="text-gray-700 leading-relaxed">
-            Profesionalna izrada sajtova podrazumeva ne samo vizuelni dizajn, već i pažljivo planiranje arhitekture, navigacije, user experience-a. Što je projekat složeniji, to je i cena izrade web sajta veća, ali i vrednost koju dobijate proporcionalno raste.
+            Ovaj posao podrazumeva ne samo vizuelni dizajn, već i pažljivo planiranje arhitekture, navigacije, user experience-a. Što je projekat složeniji, to je i cena veća, ali i vrednost koju dobijate proporcionalno raste.
           </p>
         </>
       ),
@@ -85,10 +85,10 @@ export function FactorsCarousel({ language }: FactorsCarouselProps) {
       fullText: (
         <>
           <p className="text-gray-700 leading-relaxed mb-4">
-            Osnovna kontakt forma je standardna funkcionalnost. Ali šta ako vam trebaju: online plaćanje, rezervacioni sistem, članstvo sa prijavljanjem, korisnički paneli, live chat, newsletter integracije, CRM sistemi, analitika, automatizovani email-ovi? Svaka dodatna funkcionalnost dodaje vrednost sajtu, ali utiče i na cenu izrade.
+            Osnovna kontakt forma je standardna funkcionalnost. Ali šta ako vam trebaju: online plaćanje, rezervacioni sistem, članstvo sa prijavljanjem, korisnički paneli, live chat, newsletter integracije, CRM sistemi, analitika, automatizovani email-ovi? Svaka dodatna funkcionalnost dodaje vrednost sajtu, ali utiče i na ukupnu cenu.
           </p>
           <p className="text-gray-700 leading-relaxed">
-            Naša izrada sajtova u Beogradu i Novom Sadu uključuje planiranje potrebnih integracija i funkcionalnosti od samog početka projekta. Tako izbegavamo naknadne dodatne troškove i osiguravamo da sajt radi tačno kako ste zamislili.
+            Naš rad u Beogradu i Novom Sadu uključuje planiranje potrebnih integracija i funkcionalnosti od samog početka projekta. Tako izbegavamo naknadne dodatne troškove i osiguravamo da sajt radi tačno kako ste zamislili.
           </p>
         </>
       ),
@@ -110,13 +110,13 @@ export function FactorsCarousel({ language }: FactorsCarouselProps) {
       fullText: (
         <>
           <p className="text-gray-700 leading-relaxed mb-4">
-            Svaka profesionalna izrada web sajta uključuje osnovnu tehničku SEO pripremu - pravilnu strukturu, meta tagove, brzinu učitavanja, responzivnost. Ovo su osnove bez kojih sajt ne može funkcionisati. Međutim, ako želite da vaš sajt stvarno rangira na prvoj strani Google-a za konkurentne ključne reči - to zahteva ozbiljniju{' '}
+            Svaki sajt koji pravimo uključuje osnovnu tehničku SEO pripremu - pravilnu strukturu, meta tagove, brzinu učitavanja, responzivnost. Ovo su osnove bez kojih sajt ne može funkcionisati. Međutim, ako želite da vaš sajt stvarno rangira na prvoj strani Google-a za konkurentne ključne reči - to zahteva ozbiljniju{' '}
             <Link to="/seo-optimizacija-cena" className="text-pink-600 hover:text-pink-700 font-medium underline">
               SEO optimizaciju
             </Link>.
           </p>
           <p className="text-gray-700 leading-relaxed">
-            Izrada sajta sa naprednom SEO strategijom košta više, ali donosi merljive rezultate. Većina naših klijenata u Srbiji bira kombinaciju - izrada web sajta sa osnovnom optimizacijom, pa kasnije nadogradnja sa SEO kampanjom kada su spremni za investiciju u organski saobraćaj.
+            Projekat sa naprednom SEO strategijom košta više, ali donosi merljive rezultate. Većina naših klijenata u Srbiji bira kombinaciju - sajt sa osnovnom optimizacijom, pa kasnije nadogradnja sa SEO kampanjom kada su spremni za investiciju u organski saobraćaj.
           </p>
         </>
       ),
@@ -138,10 +138,10 @@ export function FactorsCarousel({ language }: FactorsCarouselProps) {
       fullText: (
         <>
           <p className="text-gray-700 leading-relaxed mb-4">
-            Standardna profesionalna izrada web sajta u Beogradu i Novom Sadu traje 2-4 sedmice, zavisno od složenosti. Ovaj rok omogućava kvalitetan dizajn, razvoj, testiranje i prilagođavanje prema vašim komentarima. Ali šta ako vam projekat treba hitno - za nedelju dana ili dve?
+            Standardna izrada sajta u Beogradu i Novom Sadu traje 2-4 sedmice, zavisno od složenosti. Ovaj rok omogućava kvalitetan dizajn, razvoj, testiranje i prilagođavanje prema vašim komentarima. Ali šta ako vam projekat treba hitno - za nedelju dana ili dve?
           </p>
           <p className="text-gray-700 leading-relaxed">
-            Hitni projekti zahtevaju realokaciju resursa, rad van radnog vremena, ponekad i angažovanje dodatnih ljudi. Ovo sve utiče na ukupnu cenu izrade sajta. Ako imate fleksibilnost sa rokom, dobijate bolju cenu i sigurnost da je svaki detalj pažljivo isplaniran i urađen.
+            Hitni projekti zahtevaju realokaciju resursa, rad van radnog vremena, ponekad i angažovanje dodatnih ljudi. Ovo sve utiče na ukupnu cenu projekta. Ako imate fleksibilnost sa rokom, dobijate bolju cenu i sigurnost da je svaki detalj pažljivo isplaniran i urađen.
           </p>
         </>
       ),
@@ -264,11 +264,19 @@ export function FactorsCarousel({ language }: FactorsCarouselProps) {
                 // Fade effect using opacity only (no overlay rectangles)
                 const opacity = isMobile ? 1 : Math.max(0.3, 1 - distance * 0.25);
                 const scale = isMobile ? 1 : Math.max(0.92, 1 - distance * 0.04);
+                // Items are tripled for the seamless infinite-scroll illusion
+                // (see currentIndex reset logic above). Only the middle copy
+                // is the "real" one; the other two exist purely so the loop
+                // has buffer to scroll into. Hiding them from the a11y tree
+                // keeps assistive tech and crawlers from reading the same
+                // factor description three times.
+                const isDuplicate = index < factorItems.length || index >= factorItems.length * 2;
 
                 return (
                   <div
                     key={index}
                     className="flex-shrink-0 w-[300px] md:w-96 px-2"
+                    aria-hidden={isDuplicate}
                     style={{
                       opacity,
                       transform: `scale(${scale})`,

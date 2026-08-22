@@ -219,16 +219,16 @@ export function HomePage() {
       {/* SEO Meta Tags - Optimized for Pillar Pages Authority */}
       <SEOHelmet
         title={language === 'sr'
-          ? 'AI Sajt - Agencija za Izradu Sajta | SEO Optimizacija | Beograd'
-          : 'AI Sajt - Website Development Agency | SEO Optimization | Belgrade'
+          ? 'AiSajt - Agencija za Izradu Sajta | Beograd'
+          : 'AiSajt - Website Development Agency | Belgrade'
         }
         description={language === 'sr'
-          ? 'AI Sajt - agencija iz Beograda. Profesionalna izrada sajtova i SEO optimizacija. Radimo širom Srbije - Beograd, Novi Sad.'
-          : 'AI Sajt - agency from Belgrade. Professional website development and SEO optimization. We work across Serbia - Belgrade, Novi Sad.'
+          ? 'AiSajt je agencija iz Beograda za izradu web sajtova i SEO optimizaciju. Preko 50 realizovanih projekata za klijente širom Srbije.'
+          : 'AiSajt is a Belgrade agency for website development and SEO optimization. Over 50 completed projects for clients across Serbia.'
         }
         keywords={language === 'sr'
-          ? 'agencija za izradu sajta, seo optimizacija, izrada sajta cena, seo optimizacija cena, web agencija beograd, aisajt'
-          : 'website development agency, seo optimization, website development belgrade, digital agency'
+          ? 'aisajt, ai sajt, agencija za izradu sajta beograd, web agencija beograd, aisajt tim'
+          : 'aisajt, website development agency belgrade, digital agency serbia'
         }
         canonicalUrl="https://aisajt.com/"
       />
@@ -310,7 +310,7 @@ export function HomePage() {
                       className="w-full h-[300px] md:h-[440px] object-cover scale-110" loading="lazy" data-parallax />
                     <div className="absolute inset-0 bg-gradient-to-t from-violet-950/40 via-transparent to-transparent"></div>
                     <span data-chip className="absolute bottom-4 left-4 px-4 py-2 rounded-full bg-white/90 backdrop-blur text-sm font-bold text-gray-900 shadow-lg">
-                      {language === 'sr' ? '⚡ Gotov za 7–14 dana' : '⚡ Ready in 7–14 days'}
+                      {language === 'sr' ? '⚡ Gotov za 7-14 dana' : '⚡ Ready in 7-14 days'}
                     </span>
                   </div>
                 </div>
@@ -322,7 +322,7 @@ export function HomePage() {
                     {language === 'sr' ? (
                       <>
                         AiSajt agencija iz Beograda specijalizovana je za profesionalnu izradu web sajtova. Od prezentacionih stranica do kompleksnih online prodavnica - pravimo moderne, brze i responzivne web platforme za klijente širom Srbije. Pogledajte našu stranicu{' '}
-                        <Link to="/izrada-sajta-cena" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                        <Link to="/izrada-sajta" className="text-violet-600 hover:text-violet-700 font-semibold underline">
                           izrada sajta cena
                         </Link>
                         {' '}za transparentne cenovnike.
@@ -330,7 +330,7 @@ export function HomePage() {
                     ) : (
                       <>
                         AiSajt agency from Belgrade specializes in professional website development. From presentation pages to complex online stores - we create modern, fast and responsive platforms for clients across Serbia. Check our{' '}
-                        <Link to="/izrada-sajta-cena" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                        <Link to="/izrada-sajta" className="text-violet-600 hover:text-violet-700 font-semibold underline">
                           website pricing
                         </Link>
                         {' '}page for transparent rates.
@@ -351,7 +351,7 @@ export function HomePage() {
                   <button
                     onClick={() => {
                       trackCTAClick('Saznaj Više - Izrada Sajta', 'services_section', language);
-                      navigate('/izrada-sajta-cena');
+                      navigate('/izrada-sajta');
                     }}
                     className="group mt-4 px-7 py-3.5 border-2 border-gray-900 text-gray-900 font-bold rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 inline-flex items-center gap-2"
                   >
@@ -550,8 +550,8 @@ export function HomePage() {
                 </p>
                 <p className="text-base md:text-xl text-gray-400 max-w-2xl mx-auto mb-9">
                   {language === 'sr'
-                    ? 'Javite nam se — besplatna procena i konkretan predlog u roku od 24 sata.'
-                    : 'Get in touch — free assessment and a concrete proposal within 24 hours.'}
+                    ? 'Javite nam se: besplatna procena i konkretan predlog u roku od 24 sata.'
+                    : 'Get in touch: free assessment and a concrete proposal within 24 hours.'}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                   <a
@@ -585,12 +585,12 @@ export function HomePage() {
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-12" data-reveal>
                 <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4 tracking-tight">
-                  {language === 'sr' ? 'Izrada Sajta i SEO Optimizacija - Naše Prioritetne Usluge' : 'Website Development & SEO Optimization - Our Priority Services'}
+                  {language === 'sr' ? 'Upoznajte AiSajt Tim i Način Rada' : 'Meet the AiSajt Team and How We Work'}
                 </h2>
                 <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                   {language === 'sr'
-                    ? 'Specijalizovani smo za profesionalnu izradu web sajtova i SEO optimizaciju sa transparentnim cenovnicima. AiSajt agencija iz Beograda za najbolje rezultate.'
-                    : 'We specialize in professional website development and SEO optimization with transparent pricing. AiSajt agency from Belgrade for the best results.'
+                    ? 'AiSajt je agencija iz Beograda sa transparentnim cenovnicima za svaku uslugu. Pogledajte video i detalje iza naša dva glavna pravca rada.'
+                    : 'AiSajt is a Belgrade agency with transparent pricing for every service. Watch the video and details behind our two main lines of work.'
                   }
                 </p>
               </div>
@@ -606,14 +606,14 @@ export function HomePage() {
                   <div className="relative z-10">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-2xl font-bold text-gray-900 group-hover:text-violet-600 transition-colors duration-300">
-                        {language === 'sr' ? 'Izrada Sajta Beograd' : 'Website Development Belgrade'}
+                        {language === 'sr' ? 'AiSajt Tim i Proces Rada' : 'AiSajt Team and How We Work'}
                       </h3>
                       <ArrowRight className="w-6 h-6 text-violet-600 group-hover:translate-x-2 transition-transform duration-300" />
                     </div>
                     <p className="text-gray-600 mb-4 leading-relaxed">
                       {language === 'sr'
-                        ? 'Pogledaj šta ti donosi dobar sajt — više klijenata, jača online prisutnost i dokazani sistem privlačenja posla. Video i detalji od AiSajt tima. Preko 50+ uspešnih projekata.'
-                        : 'See what a good website brings you — more clients, stronger online presence and a proven system for attracting business. Video and details from AiSajt team. Over 50+ successful projects.'
+                        ? 'Pogledaj šta ti donosi dobar sajt: više klijenata, jača online prisutnost i dokazani sistem privlačenja posla. Video i detalji od AiSajt tima. Preko 50+ uspešnih projekata.'
+                        : 'See what a good website brings you: more clients, stronger online presence and a proven system for attracting business. Video and details from AiSajt team. Over 50+ successful projects.'
                       }
                     </p>
                     <div className="flex items-center gap-2 text-violet-600 font-semibold">
@@ -638,8 +638,8 @@ export function HomePage() {
                     </div>
                     <p className="text-gray-600 mb-4 leading-relaxed">
                       {language === 'sr'
-                        ? 'Pogledaj šta ti donosi redovno SEO održavanje — više posetilaca, bolje pozicije na Google-u i kontinuirani rast organskog saobraćaja. Video i detalji od AiSajt tima.'
-                        : 'See what regular SEO maintenance brings you — more visitors, better Google rankings and continuous growth of organic traffic. Video and details from AiSajt team.'
+                        ? 'Pogledaj šta ti donosi redovno SEO održavanje: više posetilaca, bolje pozicije na Google-u i kontinuirani rast organskog saobraćaja. Video i detalji od AiSajt tima.'
+                        : 'See what regular SEO maintenance brings you: more visitors, better Google rankings and continuous growth of organic traffic. Video and details from AiSajt team.'
                       }
                     </p>
                     <div className="flex items-center gap-2 text-indigo-600 font-semibold">

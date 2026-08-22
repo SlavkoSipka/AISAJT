@@ -141,10 +141,10 @@ export function Navbar() {
                   {language === 'sr' ? 'SEO Optimizacija' : 'SEO Optimization'}
                 </a>
                 <a
-                  href="/izrada-sajta-cena"
+                  href="/izrada-sajta"
                   onClick={(e) => {
                     e.preventDefault();
-                    navigate('/izrada-sajta-cena');
+                    navigate('/izrada-sajta');
                     setIsServicesOpen(false);
                   }}
                   className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-indigo-600 hover:via-blue-500 hover:to-cyan-500 hover:bg-indigo-50 font-bold text-sm transition-all duration-300"
@@ -308,8 +308,8 @@ export function Navbar() {
                 {language === 'sr' ? 'SEO OPTIMIZACIJA' : 'SEO OPTIMIZATION'}
               </a>
               <a
-                href="/izrada-sajta-cena"
-                onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); navigate('/izrada-sajta-cena'); }}
+                href="/izrada-sajta"
+                onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); navigate('/izrada-sajta'); }}
                 className="block w-full text-left text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-indigo-600 hover:via-blue-500 hover:to-cyan-500 py-3 pl-6 pr-4 rounded-lg hover:bg-indigo-50 transition-all duration-300 text-base font-bold"
               >
                 {language === 'sr' ? 'IZRADA SAJTA' : 'WEBSITE DEV'}
@@ -522,7 +522,7 @@ export function Navbar() {
               {language === 'sr' ? 'Usluge' : 'Services'}
             </p>
             {[
-              { label: language === 'sr' ? 'Izrada Sajta' : 'Website Dev', to: '/izrada-sajta-cena', dot: 'bg-violet-500' },
+              { label: language === 'sr' ? 'Izrada Sajta' : 'Website Dev', to: '/izrada-sajta', dot: 'bg-violet-500' },
               { label: language === 'sr' ? 'SEO Optimizacija' : 'SEO Optimization', to: '/seo-optimizacija-cena', dot: 'bg-indigo-500' },
               { label: language === 'sr' ? 'Web Dizajn' : 'Web Design', to: '/web-dizajn', dot: 'bg-pink-500' },
               { label: language === 'sr' ? 'Web Prodavnica' : 'Web Shop', to: '/izrada-web-shopa', dot: 'bg-emerald-500' },

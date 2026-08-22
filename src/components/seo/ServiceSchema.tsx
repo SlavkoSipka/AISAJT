@@ -7,12 +7,14 @@ interface ServiceSchemaProps {
   path: string;
   /** Starting price in EUR — omit entirely if it isn't genuinely stated as visible on-page content. */
   startingPrice?: number;
+  /** Override the default Beograd/Srbija pair — e.g. for a page scoped to specific opštine. */
+  areaServed?: { '@type': string; name: string }[];
 }
 
-// Reusable Service schema for the four service pages. `provider` references
+// Reusable Service schema for the service pages. `provider` references
 // the sitewide business node by @id rather than repeating a disconnected
 // stub, so the graph is properly linked instead of just adjacent.
-export function ServiceSchema({ serviceType, description, path, startingPrice }: ServiceSchemaProps) {
+export function ServiceSchema({ serviceType, description, path, startingPrice, areaServed }: ServiceSchemaProps) {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -20,7 +22,7 @@ export function ServiceSchema({ serviceType, description, path, startingPrice }:
     description,
     url: `${SITE_URL}${path}`,
     provider: { '@id': BUSINESS_ID },
-    areaServed: [
+    areaServed: areaServed ?? [
       { '@type': 'City', name: 'Beograd' },
       { '@type': 'Country', name: 'Srbija' },
     ],

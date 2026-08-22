@@ -68,11 +68,15 @@ export function Hero({ language }: HeroProps) {
     return () => ctx.revert();
   }, []);
 
+  // Brend ide prvo u H1 — homepage je "brand powerhouse", cilja ime firme,
+  // ne golu komercijalnu frazu koju sada vlasuju /izrada-sajta i
+  // /seo-optimizacija-cena pillar stranice. "AiSajt," ostaje van gradijenta
+  // (jasno, ozbiljno ime brenda), gradijent akcenat i dalje pada na isti
+  // deo teksta kao pre ("Izradu Sajta" / "Development Agency").
   const h1Words = language === 'sr'
-    ? ['Agencija', 'za', 'Izradu', 'Sajta']
-    : ['Website', 'Development', 'Agency'];
-  // Gradijent akcenat na ključnim rečima (tekst H1 ostaje identičan)
-  const gradientFrom = language === 'sr' ? 2 : 0;
+    ? ['AiSajt,', 'Agencija', 'za', 'Izradu', 'Sajta']
+    : ['AiSajt,', 'Website', 'Development', 'Agency'];
+  const gradientFrom = language === 'sr' ? 3 : 1;
 
   return (
     <header
@@ -137,8 +141,8 @@ export function Hero({ language }: HeroProps) {
             <div data-hero="desc">
               <p className="text-base md:text-xl text-gray-600 leading-relaxed max-w-2xl">
                 {language === 'sr'
-                  ? 'Specijalizovani smo za profesionalnu izradu web sajtova i SEO optimizaciju. Agencija iz Beograda koja kombinuje savremeni dizajn sa tehničkom izuzetnosti. Transparentne cene i garantovani rezultati. Radimo širom Srbije - Beograd, Novi Sad.'
-                  : 'We specialize in professional website development and SEO optimization. Agency from Belgrade that combines modern design with technical excellence. Transparent pricing and guaranteed results. We work across Serbia - Belgrade, Novi Sad.'}
+                  ? 'AiSajt je agencija iz Beograda koja pravi web sajtove i vodi SEO optimizaciju za firme širom Srbije. Preko 50 realizovanih projekata, transparentne cene i tim dostupan za razgovor u roku od 24h.'
+                  : 'AiSajt is an agency from Belgrade that builds websites and runs SEO optimization for businesses across Serbia. Over 50 completed projects, transparent pricing and a team available within 24h.'}
               </p>
             </div>
 
@@ -171,8 +175,8 @@ export function Hero({ language }: HeroProps) {
             {/* Trust indicators */}
             <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-600 font-medium">
               {(language === 'sr'
-                ? ['Odgovor u roku od 24h', 'Sajt gotov za 7–14 dana', 'Bez skrivenih troškova']
-                : ['Reply within 24h', 'Website in 7–14 days', 'No hidden costs']
+                ? ['Odgovor u roku od 24h', 'Sajt gotov za 7-14 dana', 'Bez skrivenih troškova']
+                : ['Reply within 24h', 'Website in 7-14 days', 'No hidden costs']
               ).map((item) => (
                 <li key={item} data-hero="trust" className="flex items-center gap-1.5">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />

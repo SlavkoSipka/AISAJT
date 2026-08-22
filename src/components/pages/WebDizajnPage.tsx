@@ -800,7 +800,7 @@ export function WebDizajnPage() {
                     {language === 'sr' ? (
                       <>
                         Profesionalan web dizajn u Srbiji i Beogradu nije luksuz - to je konkurentska prednost. U digitalnom svetu gde prvi utisak traje 50 milisekundi, kvalitetan dizajn razlikuje lidere od pratilaca. Kada kombinujete odličan dizajn sa profesionalnom{' '}
-                        <Link to="/izrada-sajta-cena" className="text-pink-600 hover:text-pink-700 font-semibold underline">
+                        <Link to="/izrada-sajta" className="text-pink-600 hover:text-pink-700 font-semibold underline">
                           izradom web sajta
                         </Link>{' '}
                         i{' '}
@@ -811,7 +811,7 @@ export function WebDizajnPage() {
                     ) : (
                       <>
                         Professional web design is not a luxury - it's a competitive advantage. When you combine excellent design with professional{' '}
-                        <Link to="/izrada-sajta-cena" className="text-pink-600 hover:text-pink-700 font-semibold underline">
+                        <Link to="/izrada-sajta" className="text-pink-600 hover:text-pink-700 font-semibold underline">
                           website development
                         </Link>{' '}
                         and{' '}
@@ -881,7 +881,7 @@ export function WebDizajnPage() {
                   </ul>
 
                   <Link
-                    to="/izrada-sajta-cena"
+                    to="/izrada-sajta"
                     className="inline-flex items-center gap-2 text-gray-900 font-semibold hover:gap-3 transition-all duration-300"
                   >
                     {language === 'sr' ? 'Saznajte Više' : 'Learn More'}

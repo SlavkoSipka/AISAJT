@@ -11,7 +11,7 @@
   <!-- SEO Page - SECOND MOST IMPORTANT -->
   <url>
     <loc>https://aisajt.com/seo-optimizacija-cena</loc>
-    <lastmod>2026-01-30</lastmod>
+    <lastmod>2026-08-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
@@ -26,10 +26,18 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Izrada Sajta Cena Page - THIRD MOST IMPORTANT -->
+  <!-- Lokalni SEO Beograd - cluster page under the SEO pillar above -->
   <url>
-    <loc>https://aisajt.com/izrada-sajta-cena</loc>
-    <lastmod>2026-01-30</lastmod>
+    <loc>https://aisajt.com/lokalni-seo-beograd</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+
+  <!-- Izrada Sajta Page - THIRD MOST IMPORTANT -->
+  <url>
+    <loc>https://aisajt.com/izrada-sajta</loc>
+    <lastmod>2026-08-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
   </url>
@@ -217,7 +225,14 @@
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
-  
+
+  <url>
+    <loc>https://aisajt.com/blog/google-ads-ili-seo</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
   <!-- Funnel - MONEY PAGE / primary conversion (high authority from all pages) -->
   <url>
     <loc>https://aisajt.com/funnel</loc>

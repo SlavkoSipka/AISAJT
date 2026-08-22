@@ -189,9 +189,9 @@ export function ServicesCarousel({ language }: ServicesCarouselProps) {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 md:mb-4 px-4">
-              {language === 'sr' 
-                ? 'Naše Usluge'
-                : 'Our Services'
+              {language === 'sr'
+                ? 'Koje SEO Usluge Nudimo?'
+                : 'What SEO Services Do We Offer?'
               }
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -217,11 +217,17 @@ export function ServicesCarousel({ language }: ServicesCarouselProps) {
                 // Fade effect using opacity only (no overlay rectangles)
                 const opacity = isMobile ? 1 : Math.max(0.3, 1 - distance * 0.25);
                 const scale = isMobile ? 1 : Math.max(0.92, 1 - distance * 0.04);
+                // Items are tripled for the seamless infinite-scroll illusion.
+                // Only the middle copy is "real"; hide the buffer copies from
+                // the a11y tree so crawlers/screen readers don't see each
+                // service description three times.
+                const isDuplicate = index < serviceItems.length || index >= serviceItems.length * 2;
 
                 return (
                   <div
                     key={index}
                     className="flex-shrink-0 w-[300px] md:w-96 px-2"
+                    aria-hidden={isDuplicate}
                     style={{
                       opacity,
                       transform: `scale(${scale})`,

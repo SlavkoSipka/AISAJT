@@ -166,16 +166,16 @@ export function IzradaSajtaDetaljiPage() {
 
       <SEOHelmet
         title={language === 'sr'
-          ? 'Izrada Sajta Beograd, Srbija | Šta ti donosi dobar sajt? | AiSajt'
-          : 'Website Development Belgrade, Serbia | What a Good Site Brings You | AiSajt'
+          ? 'AiSajt Tim i Proces Rada | Šta ti donosi dobar sajt? | AiSajt'
+          : 'AiSajt Team and How We Work | What a Good Site Brings You | AiSajt'
         }
         description={language === 'sr'
-          ? 'Izrada sajta Beograd i Srbija. Pogledaj kako dobar sajt donosi nove klijente i jaču online prisutnost. Video i detalji od AiSajt tima.'
-          : 'Website development Belgrade and Serbia. See how a good site brings new clients and stronger online presence. Video and details from AiSajt.'
+          ? 'Upoznaj AiSajt tim i naš proces rada. Pogledaj kako dobar sajt donosi nove klijente i jaču online prisutnost. Video i detalji od AiSajt tima.'
+          : 'Meet the AiSajt team and how we work. See how a good site brings new clients and stronger online presence. Video and details from AiSajt.'
         }
         keywords={language === 'sr'
-          ? 'izrada sajta beograd, izrada sajta srbija, dobar sajt, web sajt'
-          : 'website development belgrade, website serbia, good website'
+          ? 'aisajt tim, proces izrade sajta, dobar sajt, web sajt'
+          : 'aisajt team, website development process, good website'
         }
         canonicalUrl="https://aisajt.com/izrada-sajta-detalji"
       />
@@ -228,12 +228,12 @@ export function IzradaSajtaDetaljiPage() {
                 <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-2 md:mb-5">
                   {language === 'sr' ? (
                     <>
-                      Izrada Sajta Beograd, Srbija
+                      AiSajt Tim i Proces Rada
                       <span className="block mt-1 md:mt-2 text-pink-300">Sta Ti Donosi Dobar Websajt?</span>
                     </>
                   ) : (
                     <>
-                      Website Development Belgrade, Serbia
+                      AiSajt Team and How We Work
                       <span className="block mt-1 md:mt-2 text-pink-300">What Does A Good Website Bring You?</span>
                     </>
                   )}

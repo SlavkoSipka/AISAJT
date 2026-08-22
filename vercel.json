@@ -7,6 +7,11 @@
       "source": "/portfolio/pokloni-portret",
       "destination": "/portfolio",
       "permanent": true
+    },
+    {
+      "source": "/izrada-sajta-cena",
+      "destination": "/izrada-sajta",
+      "permanent": true
     }
   ],
   "rewrites": [
