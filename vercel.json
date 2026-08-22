@@ -4,12 +4,6 @@
   "framework": "vite",
   "redirects": [
     {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.aisajt.com" }],
-      "destination": "https://aisajt.com/:path*",
-      "permanent": true
-    },
-    {
       "source": "/portfolio/pokloni-portret",
       "destination": "/portfolio",
       "permanent": true
