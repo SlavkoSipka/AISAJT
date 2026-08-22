@@ -8,6 +8,11 @@
       "has": [{ "type": "host", "value": "www.aisajt.com" }],
       "destination": "https://aisajt.com/:path*",
       "permanent": true
+    },
+    {
+      "source": "/portfolio/pokloni-portret",
+      "destination": "/portfolio",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -82,13 +87,6 @@
           "value": "strict-origin-when-cross-origin"
         }
       ]
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/portfolio/pokloni-portret",
-      "destination": "/portfolio",
-      "permanent": true
     }
   ]
 }
