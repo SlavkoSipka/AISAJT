@@ -17,5 +17,8 @@ http://aisajt.netlify.app/* https://aisajt.com/:splat 301!
 # Serve SEO panel mockup directly
 /seo-panel.html /seo-panel.html 200
 
+# Removed case study -> portfolio index (avoids a 404 on an indexed URL)
+/portfolio/pokloni-portret /portfolio 301!
+
 # Handle client-side routing (SPA fallback) - MUST BE LAST
 /* /index.html 200

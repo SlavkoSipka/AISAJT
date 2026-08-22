@@ -45,6 +45,9 @@ export function PortfolioDetailPage() {
     .filter((p) => p.id !== project.id)
     .slice(0, 3);
 
+  // Projects flagged `nofollow` don't pass page authority to the client's site.
+  const linkRel = project.nofollow ? 'noopener noreferrer nofollow' : 'noopener noreferrer';
+
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       <Navbar />
@@ -114,7 +117,7 @@ export function PortfolioDetailPage() {
                   <a
                     href={project.link}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel={linkRel}
                     onClick={() => trackPortfolioClick(project.title, project.link, language)}
                     className="group inline-flex items-center gap-2 px-7 py-3.5 bg-gray-900 text-white text-base font-semibold rounded-full hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
@@ -129,7 +132,7 @@ export function PortfolioDetailPage() {
                   <a
                     href={project.link}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel={linkRel}
                     onClick={() => trackPortfolioClick(project.title, project.link, language)}
                     className="group block relative rounded-2xl overflow-hidden shadow-2xl shadow-violet-500/20 border-2 border-gray-100 hover:border-violet-400 transition-all duration-500 hover:shadow-violet-500/30"
                   >
@@ -217,7 +220,7 @@ export function PortfolioDetailPage() {
                     <a
                       href={project.link}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel={linkRel}
                       onClick={() => trackPortfolioClick(project.title, project.link, language)}
                       className="inline-flex items-center gap-2 text-violet-400 hover:text-violet-300 font-semibold transition-colors group"
                     >

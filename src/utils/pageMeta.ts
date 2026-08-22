@@ -22,6 +22,9 @@ const DEFAULT_OG_IMAGE = `${SITE_URL}/images/favicon/android-chrome-512x512.png`
  * which this doesn't touch.
  */
 export function buildPageMeta({ title, description, canonical, keywords, ogImage = DEFAULT_OG_IMAGE }: PageMetaInput): MetaDescriptor[] {
+  // Social crawlers reject relative og:image/twitter:image paths, so a
+  // site-root path gets promoted to an absolute URL here.
+  const absoluteOgImage = ogImage.startsWith('/') ? `${SITE_URL}${ogImage}` : ogImage;
   const meta: MetaDescriptor[] = [
     { title },
     { name: 'description', content: description },
@@ -29,13 +32,13 @@ export function buildPageMeta({ title, description, canonical, keywords, ogImage
     { property: 'og:description', content: description },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: canonical },
-    { property: 'og:image', content: ogImage },
+    { property: 'og:image', content: absoluteOgImage },
     { property: 'og:site_name', content: NAP.name },
     { property: 'og:locale', content: 'sr_RS' },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: title },
     { name: 'twitter:description', content: description },
-    { name: 'twitter:image', content: ogImage },
+    { name: 'twitter:image', content: absoluteOgImage },
     { tagName: 'link', rel: 'canonical', href: canonical },
   ];
   if (keywords) {
