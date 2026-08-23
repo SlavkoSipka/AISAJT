@@ -29,7 +29,7 @@ export function PortfolioDetailPage() {
             {language === 'sr' ? 'Ovaj projekat ne postoji ili je uklonjen.' : 'This project does not exist or has been removed.'}
           </p>
           <button
-            onClick={() => navigate('/portfolio')}
+            onClick={() => navigate('/izrada-sajta-detalji#case-study')}
             className="px-6 py-3 bg-gray-900 text-white font-semibold rounded-full hover:bg-violet-600 transition-all duration-300"
           >
             {language === 'sr' ? 'Nazad na Portfolio' : 'Back to Portfolio'}
@@ -68,7 +68,7 @@ export function PortfolioDetailPage() {
             {/* Back Button */}
             <div className="max-w-6xl mx-auto mb-8">
               <Link
-                to="/portfolio"
+                to="/izrada-sajta-detalji#case-study"
                 className="inline-flex items-center gap-2 text-gray-600 hover:text-violet-600 transition-colors duration-300 font-medium group"
               >
                 <ArrowLeft className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform duration-300" />
@@ -303,7 +303,7 @@ export function PortfolioDetailPage() {
                 {/* View All Button */}
                 <div className="text-center mt-12">
                   <Link
-                    to="/portfolio"
+                    to="/izrada-sajta-detalji#case-study"
                     className="inline-flex items-center gap-2 px-7 py-3.5 bg-white text-gray-900 text-base font-semibold rounded-full hover:bg-gray-900 hover:text-white border-2 border-gray-900 transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
                     {language === 'sr' ? 'Svi Projekti' : 'All Projects'}
@@ -330,10 +330,10 @@ export function PortfolioDetailPage() {
                   : 'Contact us for a free consultation. We\'ll discuss your needs and suggest the best solution for your business.'}
               </p>
               <button
-                onClick={() => navigate('/contact')}
+                onClick={() => navigate('/izrada-sajta-detalji')}
                 className="group px-8 py-4 bg-gray-900 text-white text-lg font-semibold rounded-full hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 flex items-center gap-2 mx-auto shadow-lg hover:shadow-xl"
               >
-                {language === 'sr' ? 'Besplatna Konsultacija' : 'Free Consultation'}
+                {language === 'sr' ? 'Pogledaj Ponudu' : 'See Our Offer'}
                 <ArrowUpRight className="w-5 h-5 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
               </button>
             </div>

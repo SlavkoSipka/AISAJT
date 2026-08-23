@@ -185,9 +185,58 @@ export interface SeoProjectWithClient extends SeoProject {
 
 // ── Database ────────────────────────────────────────────────────────────────
 
+export interface Booking {
+  id: string;
+  slot_at: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
+  email: string | null;
+  note: string | null;
+  status: 'confirmed' | 'cancelled' | 'done';
+  source: string | null;
+  created_at: string;
+}
+
+export interface BookingBlock {
+  id: string;
+  starts_at: string;
+  ends_at: string;
+  reason: string | null;
+  created_at: string;
+}
+
+export interface BookingSettings {
+  id: number;
+  weekday_start: number;
+  weekday_end: number;
+  start_hour: number;
+  end_hour: number;
+  slot_minutes: number;
+  lead_time_hours: number;
+  days_ahead: number;
+  timezone: string;
+  updated_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
+      bookings: {
+        Row: Booking;
+        Insert: Omit<Booking, 'id' | 'created_at'> & { id?: string };
+        Update: Partial<Booking>;
+      };
+      booking_blocks: {
+        Row: BookingBlock;
+        Insert: Omit<BookingBlock, 'id' | 'created_at'> & { id?: string };
+        Update: Partial<BookingBlock>;
+      };
+      booking_settings: {
+        Row: BookingSettings;
+        Insert: Partial<BookingSettings> & { id: number };
+        Update: Partial<BookingSettings>;
+      };
       profiles: {
         Row: Profile;
         Insert: Partial<Profile> & { id: string };

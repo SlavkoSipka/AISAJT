@@ -111,12 +111,12 @@ export function WebDizajnPage() {
                   <button
                     onClick={() => {
                       trackCTAClick('Besplatna Web Dizajn Konsultacija', 'web_dizajn_hero', language);
-                      navigate('/funnel');
+                      navigate('/izrada-sajta-detalji');
                     }}
                     className="group px-6 py-3.5 sm:px-7 sm:py-4 md:px-8 md:py-4 bg-gray-900 text-white text-base sm:text-lg font-semibold rounded-full hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
                   >
                     <Palette className="w-5 h-5 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
-                    <span className="whitespace-nowrap">{language === 'sr' ? 'Zakažite Besplatnu Konsultaciju' : 'Schedule Free Consultation'}</span>
+                    <span className="whitespace-nowrap">{language === 'sr' ? 'Pogledaj Ponudu' : 'See Our Offer'}</span>
                     <ArrowRight className="w-5 h-5 sm:w-5 sm:h-5 group-hover:translate-x-2 transition-transform" />
                   </button>
                 </div>
@@ -1343,11 +1343,11 @@ export function WebDizajnPage() {
                 <button
                   onClick={() => {
                     trackCTAClick('Besplatna Web Dizajn Konsultacija - Footer', 'web_dizajn_cta', language);
-                    navigate('/funnel');
+                    navigate('/izrada-sajta-detalji');
                   }}
                   className="group px-8 py-4 bg-gray-900 text-white rounded-full font-semibold hover:scale-105 transition-all duration-300 inline-flex items-center gap-2 shadow-xl"
                 >
-                  {language === 'sr' ? 'Zakažite Besplatnu Konsultaciju' : 'Schedule Free Consultation'}
+                  {language === 'sr' ? 'Pogledaj Ponudu' : 'See Our Offer'}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
 
@@ -1393,7 +1393,7 @@ export function WebDizajnPage() {
                   {language === 'sr' ? 'SEO Optimizacija Cena' : 'SEO Optimization Price'}
                 </Link>
                 <Link 
-                  to="/funnel"
+                  to="/izrada-sajta-detalji"
                   className="px-4 py-2 bg-white border border-gray-300 rounded-full text-gray-700 hover:border-pink-500 hover:text-pink-600 transition-colors text-sm font-medium"
                 >
                   {language === 'sr' ? 'Kontakt - Besplatna Konsultacija' : 'Contact - Free Consultation'}

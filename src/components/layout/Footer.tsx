@@ -1,15 +1,12 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { translations } from '../../types/language';
-import { navigateToSection } from '../../utils/navigation';
 import { NAP } from '../../lib/site-config';
 
 export function Footer() {
   const { language } = useLanguage();
   const t = translations[language];
-  const navigate = useNavigate();
-  const location = useLocation();
 
   return (
     <footer className="relative bg-white text-gray-900 py-12 md:py-16 border-t border-gray-200">
@@ -43,22 +40,10 @@ export function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">{t.company}</h4>
             <ul className="space-y-2.5">
-              <li>
-                <Link
-                  to={location.pathname === '/' ? '#video-section' : '/#video-section'}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigateToSection('video-section', navigate, location.pathname);
-                  }}
-                  className="text-gray-600 hover:text-violet-600 transition-colors duration-300"
-                >
-                  {t.aboutUs}
-                </Link>
-              </li>
-              <li><Link to="/portfolio" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300">{t.portfolio}</Link></li>
-              <li><Link to="/blog" className="text-gray-600 hover:text-violet-600 transition-colors duration-300">Blog</Link></li>
-              <li><Link to="/funnel" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{t.contact}</Link></li>
-              <li><Link to="/funnel" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{language === 'sr' ? 'Besplatna konsultacija' : 'Free Consultation'}</Link></li>
+              <li><Link to="/izrada-sajta-detalji" className="text-gray-600 hover:text-violet-600 transition-colors duration-300 text-left">{t.aboutUs}</Link></li>
+              <li><Link to="/izrada-sajta-detalji#case-study" className="text-gray-600 hover:text-indigo-600 transition-colors duration-300">{t.portfolio}</Link></li>
+              <li><Link to="/izrada-sajta-detalji#booking-form" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{t.contact}</Link></li>
+              <li><Link to="/izrada-sajta-detalji" className="text-gray-600 hover:text-pink-600 transition-colors duration-300">{language === 'sr' ? 'Pogledaj Ponudu' : 'See Our Offer'}</Link></li>
             </ul>
           </div>
           
@@ -113,6 +98,13 @@ export function Footer() {
               >
                 {language === 'sr' ? 'Uslovi korišćenja' : 'Terms of Service'}
               </Link>
+              <a
+                href="/portal/login"
+                className="text-sm text-gray-500 hover:text-violet-600 transition-colors duration-300"
+                aria-label={language === 'sr' ? 'Prijava na portal' : 'Portal login'}
+              >
+                {language === 'sr' ? 'Prijava' : 'Login'}
+              </a>
             </div>
           </div>
         </div>

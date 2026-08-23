@@ -1,6 +1,4 @@
 import type { Config } from '@react-router/dev/config';
-import { blogPosts } from './src/data/blogPosts';
-import { blogCategories } from './src/data/blogCategories';
 import { portfolioProjects } from './src/data/portfolioProjects';
 
 export default {
@@ -18,16 +16,14 @@ export default {
   // which doesn't exist for a static prerendered site.
   routeDiscovery: { mode: 'initial' },
   // Sub-step 2C: every marketing route is covered. `getStaticPaths()` covers
-  // every non-dynamic route() entry in routes.ts automatically; blog post and
-  // category paths are computed from the same data arrays the pages
-  // themselves read, so a new blog post/category prerenders automatically
-  // with no config edit. /portal/* is never added here (client-only, per
-  // Phase 1's robots.txt Disallow) — it has no route() entry in routes.ts at
-  // all, so getStaticPaths() can't and won't include it.
+  // every non-dynamic route() entry in routes.ts automatically; portfolio
+  // detail paths come from the same data array the page itself reads.
+  // (Blog je ugašen — /blog/* sada 301 redirectuje na početnu.)
+  // /portal/* is never added here (client-only, per Phase 1's robots.txt
+  // Disallow) — it has no route() entry in routes.ts at all, so
+  // getStaticPaths() can't and won't include it.
   prerender: async ({ getStaticPaths }) => {
-    const blogPostPaths = blogPosts.map((post) => `/blog/${post.slug}`);
-    const blogCategoryPaths = blogCategories.map((category) => `/blog/category/${category.slug}`);
     const portfolioPaths = portfolioProjects.map((project) => `/portfolio/${project.slug}`);
-    return [...getStaticPaths(), ...blogPostPaths, ...blogCategoryPaths, ...portfolioPaths];
+    return [...getStaticPaths(), ...portfolioPaths];
   },
 } satisfies Config;

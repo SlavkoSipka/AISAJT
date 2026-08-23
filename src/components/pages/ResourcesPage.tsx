@@ -248,7 +248,7 @@ export function ResourcesPage() {
                 }
               </p>
               <button
-                onClick={() => navigate('/funnel')}
+                onClick={() => navigate('/izrada-sajta-detalji')}
                 className="group px-8 py-4 bg-gray-900 text-white rounded-full font-semibold hover:scale-105 transition-all duration-300 inline-flex items-center gap-2"
               >
                 {language === 'sr' ? 'Kontaktirajte Nas' : 'Contact Us'}

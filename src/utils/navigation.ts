@@ -48,3 +48,29 @@ export const scrollToSection = (sectionId: string) => {
   }
 };
 
+/** Ruta koja nosi formu za zakazivanje (nekadašnji /funnel). */
+export const BOOKING_PATH = '/izrada-sajta-detalji';
+export const BOOKING_SECTION_ID = 'booking-form';
+
+/**
+ * Vodi korisnika na formu za zakazivanje i skroluje do nje.
+ * Ako smo već na toj stranici, samo skroluje; inače navigira pa skroluje
+ * kada se sekcija pojavi u DOM-u.
+ */
+export const navigateToBooking = (
+  navigate: (path: string) => void,
+  currentPath: string
+) => navigateToDetaljiSection(BOOKING_SECTION_ID, navigate, currentPath);
+
+/** Skrol do bilo koje sekcije na /izrada-sajta-detalji (booking, portfolio...). */
+export const navigateToDetaljiSection = (
+  sectionId: string,
+  navigate: (path: string) => void,
+  currentPath: string
+) => {
+  if (currentPath === BOOKING_PATH) {
+    scrollToSection(sectionId);
+  } else {
+    navigate(`${BOOKING_PATH}#${sectionId}`);
+  }
+};

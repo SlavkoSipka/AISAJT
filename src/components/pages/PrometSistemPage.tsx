@@ -11,6 +11,8 @@ import {
 import { SEOHelmet } from '../seo/SEOHelmet';
 import { trackPhoneClick, trackCTAClick } from '../../utils/analytics';
 import { NAP } from '../../lib/site-config';
+import { BookingCalendar } from '../booking/BookingCalendar';
+import { submitFunnelForm } from '../../utils/hubspot';
 
 // This landing page intentionally uses a different phone number from the
 // site-wide NAP — it's a dedicated call-tracking number for Meta ads
@@ -92,6 +94,19 @@ const revealCls = (visible: boolean) =>
   `transition-all duration-700 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`;
 
 export function PrometSistemPage() {
+  /* Rezervacija je već upisana u Supabase; ovde samo lead u HubSpot. */
+  const handleBooked = async ({ firstName, lastName, phone, email }: {
+    firstName: string; lastName: string; phone: string; email: string; slotAt: string;
+  }) => {
+    const fullName = `${firstName} ${lastName}`.trim();
+    try {
+      await submitFunnelForm({ name: fullName, email, phone });
+      trackCTAClick('Booking Form Submit', 'promet-sistem', 'sr');
+    } catch {
+      /* Termin je sačuvan i bez HubSpot-a — ne prekidamo korisnika. */
+    }
+  };
+
   const [heroVisible, setHeroVisible] = useState(false);
   const [stickyVisible, setStickyVisible] = useState(false);
 
@@ -336,6 +351,32 @@ export function PrometSistemPage() {
       </section>
 
       {/* ── FINALNI CTA ──────────────────────────────────────────────── */}
+      {/* Zakazivanje — isti kalendar kao na /izrada-sajta-detalji */}
+      <section id="booking-form" className="relative z-10 py-16 md:py-24 border-t border-white/[0.06] scroll-mt-20">
+        <div className="max-w-xl mx-auto px-5 md:px-8">
+          <div className="text-center mb-5 md:mb-7">
+            <span className="inline-block bg-cyan-400/15 border border-cyan-400/40 text-cyan-300 text-[10px] md:text-xs font-black tracking-[0.2em] uppercase px-3 py-1 md:px-4 md:py-1.5 rounded-full mb-3">
+              Besplatna konsultacija
+            </span>
+            <h2 className="text-3xl md:text-4xl font-black tracking-tight text-white">
+              Zakaži poziv <span className="text-cyan-400">odmah</span>
+            </h2>
+            <p className="mt-3 text-white/60 text-sm md:text-base">
+              Izaberi termin koji ti odgovara. Poziv je besplatan i bez obaveze.
+            </p>
+          </div>
+
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-400 via-cyan-500 to-sky-600 p-[2px]">
+              <div className="absolute inset-0 rounded-2xl bg-[#0D1926]" />
+            </div>
+            <div className="relative z-10 bg-[#0D1926] p-4 sm:p-6 md:p-8">
+              <BookingCalendar language="sr" onBooked={handleBooked} accent="cyan" />
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="kontakt" ref={finalRef} className={`relative z-10 py-20 md:py-28 border-t border-white/[0.06] ${revealCls(finalVisible)}`}>
         <div className="max-w-3xl mx-auto px-5 md:px-8 text-center">
           <SectionLabel>Sledeći korak</SectionLabel>

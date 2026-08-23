@@ -13,8 +13,7 @@
 ## Portfolio i kontakt
 
 - [Portfolio](https://aisajt.com/portfolio): Realizovani projekti izrade sajtova i web shopova za klijente iz različitih industrija (nekretnine, e-commerce, auto folije, personalizovani pokloni, i drugi).
-- [Besplatna konsultacija](https://aisajt.com/funnel): Kontakt forma za zakazivanje besplatne konsultacije o projektu.
-- [Blog](https://aisajt.com/blog): Članci o izradi sajtova, SEO optimizaciji i digitalnom marketingu.
+- [Besplatna konsultacija](https://aisajt.com/izrada-sajta-detalji): AiSajt tim, proces rada, video i forma za zakazivanje besplatne konsultacije o projektu.
 - [Politika privatnosti](https://aisajt.com/privacy): Informacije o obradi ličnih podataka i kolačićima.
 
 ## Kontakt podaci

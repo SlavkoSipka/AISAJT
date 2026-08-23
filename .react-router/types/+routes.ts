@@ -38,16 +38,7 @@ type Pages = {
   "/izrada-web-shopa": {
     params: {};
   };
-  "/funnel": {
-    params: {};
-  };
-  "/contact": {
-    params: {};
-  };
   "/promet-sistem": {
-    params: {};
-  };
-  "/portfolio": {
     params: {};
   };
   "/portfolio/:slug": {
@@ -73,19 +64,6 @@ type Pages = {
   "/resources/checklist": {
     params: {};
   };
-  "/blog": {
-    params: {};
-  };
-  "/blog/category/:categorySlug": {
-    params: {
-      "categorySlug": string;
-    };
-  };
-  "/blog/:slug": {
-    params: {
-      "slug": string;
-    };
-  };
   "/privacy": {
     params: {};
   };
@@ -97,7 +75,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/izrada-sajta" | "/izrada-sajta-detalji" | "/seo-optimizacija-cena" | "/seo" | "/seo-optimizacija-detalji" | "/lokalni-seo-beograd" | "/web-dizajn" | "/izrada-web-shopa" | "/funnel" | "/contact" | "/promet-sistem" | "/portfolio" | "/portfolio/:slug" | "/thank-you" | "/resources" | "/resources/quiz" | "/resources/audit" | "/resources/guide" | "/resources/checklist" | "/blog" | "/blog/category/:categorySlug" | "/blog/:slug" | "/privacy" | "/terms";
+    page: "/" | "/izrada-sajta" | "/izrada-sajta-detalji" | "/seo-optimizacija-cena" | "/seo" | "/seo-optimizacija-detalji" | "/lokalni-seo-beograd" | "/web-dizajn" | "/izrada-web-shopa" | "/promet-sistem" | "/portfolio/:slug" | "/thank-you" | "/resources" | "/resources/quiz" | "/resources/audit" | "/resources/guide" | "/resources/checklist" | "/privacy" | "/terms";
   };
   "home.tsx": {
     id: "home";
@@ -134,20 +112,9 @@ type RouteFiles = {
     id: "izradaWebShopa";
     page: "/izrada-web-shopa";
   };
-  "funnel.tsx": {
-    id: "funnel";
-    page: "/funnel";
-  } | {
-    id: "contactAlias";
-    page: "/contact";
-  };
   "prometSistem.tsx": {
     id: "prometSistem";
     page: "/promet-sistem";
-  };
-  "portfolio.tsx": {
-    id: "portfolio";
-    page: "/portfolio";
   };
   "portfolioDetail.tsx": {
     id: "portfolioDetail";
@@ -177,18 +144,6 @@ type RouteFiles = {
     id: "resourcesChecklist";
     page: "/resources/checklist";
   };
-  "blogHub.tsx": {
-    id: "blogHub";
-    page: "/blog";
-  };
-  "blogCategory.tsx": {
-    id: "blogCategory";
-    page: "/blog/category/:categorySlug";
-  };
-  "blogPost.tsx": {
-    id: "blogPost";
-    page: "/blog/:slug";
-  };
   "privacy.tsx": {
     id: "privacy";
     page: "/privacy";
@@ -210,10 +165,7 @@ type RouteModules = {
   "lokalniSeoBeograd": typeof import("./src/lokalniSeoBeograd.tsx");
   "webDizajn": typeof import("./src/webDizajn.tsx");
   "izradaWebShopa": typeof import("./src/izradaWebShopa.tsx");
-  "funnel": typeof import("./src/funnel.tsx");
-  "contactAlias": typeof import("./src/funnel.tsx");
   "prometSistem": typeof import("./src/prometSistem.tsx");
-  "portfolio": typeof import("./src/portfolio.tsx");
   "portfolioDetail": typeof import("./src/portfolioDetail.tsx");
   "thankYou": typeof import("./src/thankYou.tsx");
   "resources": typeof import("./src/resources.tsx");
@@ -221,9 +173,6 @@ type RouteModules = {
   "resourcesAudit": typeof import("./src/resourcesAudit.tsx");
   "resourcesGuide": typeof import("./src/resourcesGuide.tsx");
   "resourcesChecklist": typeof import("./src/resourcesChecklist.tsx");
-  "blogHub": typeof import("./src/blogHub.tsx");
-  "blogCategory": typeof import("./src/blogCategory.tsx");
-  "blogPost": typeof import("./src/blogPost.tsx");
   "privacy": typeof import("./src/privacy.tsx");
   "terms": typeof import("./src/terms.tsx");
 };

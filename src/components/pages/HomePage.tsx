@@ -7,7 +7,6 @@ import { translations } from '../../types/language';
 import { Navbar } from '../layout/Navbar';
 import { Footer } from '../layout/Footer';
 import { Hero } from '../sections/Hero';
-import { YouTubeVideo } from '../video/YouTubeVideo';
 import { FAQ } from '../sections/FAQ';
 import { PortfolioCarousel } from '../sections/PortfolioCarousel';
 import { SEOHelmet } from '../seo/SEOHelmet';
@@ -237,14 +236,14 @@ export function HomePage() {
       <div className="fixed top-0 left-0 right-0 h-[3px] z-[70] pointer-events-none" aria-hidden="true">
         <div
           data-scroll-progress
-          className="h-full w-full origin-left scale-x-0 bg-gradient-to-r from-violet-600 via-indigo-500 to-pink-500"
+          className="h-full w-full origin-left scale-x-0 bg-gradient-to-r from-indigo-600 via-indigo-500 to-sky-500"
         ></div>
       </div>
 
       {/* Skip to content link - accessibility */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-6 focus:py-3 focus:bg-violet-600 focus:text-white focus:rounded-lg focus:shadow-lg"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-6 focus:py-3 focus:bg-indigo-600 focus:text-white focus:rounded-lg focus:shadow-lg"
       >
         Pređi na glavni sadržaj
       </a>
@@ -255,7 +254,7 @@ export function HomePage() {
         <Hero language={language} />
 
         {/* Marquee band — dekorativna traka */}
-        <div className="relative py-6 md:py-8 bg-white border-y border-violet-100/70 overflow-hidden" aria-hidden="true">
+        <div className="relative py-6 md:py-8 bg-white border-y border-slate-100/70 overflow-hidden" aria-hidden="true">
           <div className="lg-marquee" data-marquee-drift>
             {[0, 1].map((track) => (
               <div key={track} className="lg-marquee-track">
@@ -270,7 +269,7 @@ export function HomePage() {
                     <span className="text-2xl md:text-4xl font-black uppercase tracking-tight px-4 md:px-6 lg-outline-text whitespace-nowrap">
                       {item}
                     </span>
-                    <span className="text-xl md:text-3xl text-violet-500/70">✦</span>
+                    <span className="text-xl md:text-3xl text-indigo-500/70">✦</span>
                   </span>
                 ))}
               </div>
@@ -280,10 +279,10 @@ export function HomePage() {
 
         {/* ═══ Services Section — prva stvar koju posetilac vidi posle heroa ═══ */}
         <section className="py-12 md:py-24 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-violet-50/40 via-white to-pink-50/30"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-50/40 via-white to-sky-50/30"></div>
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-40 -left-32 w-96 h-96 bg-gradient-to-br from-violet-300/25 to-indigo-400/15 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-40 -right-32 w-96 h-96 bg-gradient-to-br from-pink-300/25 to-violet-400/15 rounded-full blur-3xl"></div>
+            <div className="absolute top-40 -left-32 w-96 h-96 bg-gradient-to-br from-indigo-300/25 to-indigo-400/15 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-40 -right-32 w-96 h-96 bg-gradient-to-br from-sky-300/25 to-indigo-400/15 rounded-full blur-3xl"></div>
           </div>
 
           <div className="container mx-auto px-4 relative z-10">
@@ -302,13 +301,13 @@ export function HomePage() {
               {/* Service 1 - Izrada Web Sajta */}
               <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center mb-16 md:mb-28">
                 <div className="relative">
-                  <div className="absolute -inset-6 bg-gradient-to-br from-violet-400/20 to-indigo-500/10 rounded-[2.5rem] blur-2xl pointer-events-none"></div>
+                  <div className="absolute -inset-6 bg-gradient-to-br from-indigo-400/20 to-indigo-500/10 rounded-[2.5rem] blur-2xl pointer-events-none"></div>
                   <div className="relative overflow-hidden rounded-[2rem] shadow-2xl" data-clip-reveal>
                     <img
                       src="/images/izrada sajta cena.webp" width={1200} height={900}
                       alt="Digitalna rešenja i cenovnik usluga AiSajt agencije u Beogradu"
                       className="w-full h-[300px] md:h-[440px] object-cover scale-110" loading="lazy" data-parallax />
-                    <div className="absolute inset-0 bg-gradient-to-t from-violet-950/40 via-transparent to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/40 via-transparent to-transparent"></div>
                     <span data-chip className="absolute bottom-4 left-4 px-4 py-2 rounded-full bg-white/90 backdrop-blur text-sm font-bold text-gray-900 shadow-lg">
                       {language === 'sr' ? '⚡ Gotov za 7-14 dana' : '⚡ Ready in 7-14 days'}
                     </span>
@@ -322,7 +321,7 @@ export function HomePage() {
                     {language === 'sr' ? (
                       <>
                         AiSajt agencija iz Beograda pravi moderne, brze i responzivne web platforme za klijente širom Srbije, od prezentacionih stranica do kompleksnih online prodavnica. Pogledajte našu stranicu{' '}
-                        <Link to="/izrada-sajta" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                        <Link to="/izrada-sajta" className="text-indigo-600 hover:text-indigo-700 font-semibold underline">
                           izrada sajta cena
                         </Link>
                         {' '}za transparentne cenovnike.
@@ -330,7 +329,7 @@ export function HomePage() {
                     ) : (
                       <>
                         AiSajt agency from Belgrade builds modern, fast and responsive web platforms for clients across Serbia, from presentation pages to complex online stores. Check our{' '}
-                        <Link to="/izrada-sajta" className="text-violet-600 hover:text-violet-700 font-semibold underline">
+                        <Link to="/izrada-sajta" className="text-indigo-600 hover:text-indigo-700 font-semibold underline">
                           website pricing
                         </Link>
                         {' '}page for transparent rates.
@@ -343,7 +342,7 @@ export function HomePage() {
                       : ['Presentation sites and online stores', 'Responsive design and fast performance', 'Local support: Belgrade, Novi Sad, Serbia']
                     ).map((item) => (
                       <li key={item} className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-violet-600 flex-shrink-0 mt-1" />
+                        <CheckCircle className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-1" />
                         <span className="text-gray-700 text-base md:text-lg">{item}</span>
                       </li>
                     ))}
@@ -355,7 +354,7 @@ export function HomePage() {
                     }}
                     className="group mt-4 px-7 py-3.5 border-2 border-gray-900 text-gray-900 font-bold rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 inline-flex items-center gap-2"
                   >
-                    {language === 'sr' ? 'Pogledaj Cenovnik' : 'View Pricing'}
+                    {language === 'sr' ? 'Saznaj više' : 'Learn more'}
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
                   </button>
                 </div>
@@ -404,12 +403,12 @@ export function HomePage() {
                     }}
                     className="group mt-4 px-7 py-3.5 border-2 border-gray-900 text-gray-900 font-bold rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 inline-flex items-center gap-2"
                   >
-                    {language === 'sr' ? 'Pogledaj Cenovnik' : 'View Pricing'}
+                    {language === 'sr' ? 'Saznaj više' : 'Learn more'}
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
                   </button>
                 </div>
                 <div className="relative order-1 md:order-2">
-                  <div className="absolute -inset-6 bg-gradient-to-br from-indigo-400/20 to-pink-500/10 rounded-[2.5rem] blur-2xl pointer-events-none"></div>
+                  <div className="absolute -inset-6 bg-gradient-to-br from-indigo-400/20 to-sky-500/10 rounded-[2.5rem] blur-2xl pointer-events-none"></div>
                   <div className="relative overflow-hidden rounded-[2rem] shadow-2xl" data-clip-reveal>
                     <img
                       src="/images/marketing.webp" width={984} height={634}
@@ -426,13 +425,13 @@ export function HomePage() {
               {/* Service 3 - Web Dizajn */}
               <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
                 <div className="relative">
-                  <div className="absolute -inset-6 bg-gradient-to-br from-pink-400/20 to-violet-500/10 rounded-[2.5rem] blur-2xl pointer-events-none"></div>
+                  <div className="absolute -inset-6 bg-gradient-to-br from-sky-400/20 to-indigo-500/10 rounded-[2.5rem] blur-2xl pointer-events-none"></div>
                   <div className="relative overflow-hidden rounded-[2rem] shadow-2xl" data-clip-reveal>
                     <img
                       src="/images/dizajn.webp" width={1400} height={788}
                       alt="Moderan web dizajn i UI/UX dizajn - web dizajn agencija Beograd"
                       className="w-full h-[300px] md:h-[440px] object-cover scale-110" loading="lazy" data-parallax />
-                    <div className="absolute inset-0 bg-gradient-to-t from-pink-950/40 via-transparent to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-sky-950/40 via-transparent to-transparent"></div>
                     <span data-chip className="absolute bottom-4 left-4 px-4 py-2 rounded-full bg-white/90 backdrop-blur text-sm font-bold text-gray-900 shadow-lg">
                       {language === 'sr' ? '🎨 Dizajn koji prodaje' : '🎨 Design that sells'}
                     </span>
@@ -446,7 +445,7 @@ export function HomePage() {
                     {language === 'sr' ? (
                       <>
                         Kao web dizajn agencija iz Srbije, kreiramo moderne, estetske i funkcionalne dizajne koji privlače i konvertuju posetioce. Od UX/UI dizajna do kompletnog vizuelnog identiteta vašeg brenda. Detaljnije o{' '}
-                        <Link to="/web-dizajn" className="text-pink-600 hover:text-pink-700 font-semibold underline">
+                        <Link to="/web-dizajn" className="text-sky-600 hover:text-sky-700 font-semibold underline">
                           web dizajn uslugama
                         </Link>
                         .
@@ -454,7 +453,7 @@ export function HomePage() {
                     ) : (
                       <>
                         As a web design agency from Serbia, we create modern, aesthetic and functional designs that attract and convert visitors. Learn more about{' '}
-                        <Link to="/web-dizajn" className="text-pink-600 hover:text-pink-700 font-semibold underline">
+                        <Link to="/web-dizajn" className="text-sky-600 hover:text-sky-700 font-semibold underline">
                           web design services
                         </Link>
                         .
@@ -467,7 +466,7 @@ export function HomePage() {
                       : ['UI/UX design and modern aesthetics', 'Responsive design for all devices', 'Branding and visual identity']
                     ).map((item) => (
                       <li key={item} className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-pink-600 flex-shrink-0 mt-1" />
+                        <CheckCircle className="w-5 h-5 text-sky-600 flex-shrink-0 mt-1" />
                         <span className="text-gray-700 text-base md:text-lg">{item}</span>
                       </li>
                     ))}
@@ -496,8 +495,8 @@ export function HomePage() {
         <section className="relative py-16 md:py-28 overflow-hidden bg-[#0d0a1a] text-white">
           <div className="absolute inset-0 lg-dot-grid-dark opacity-60"></div>
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div data-dark-orb className="absolute -top-32 -left-24 w-[30rem] h-[30rem] bg-gradient-to-br from-violet-600/30 to-indigo-600/20 rounded-full blur-3xl"></div>
-            <div data-dark-orb className="absolute -bottom-40 -right-24 w-[34rem] h-[34rem] bg-gradient-to-br from-pink-600/25 to-violet-600/20 rounded-full blur-3xl"></div>
+            <div data-dark-orb className="absolute -top-32 -left-24 w-[30rem] h-[30rem] bg-gradient-to-br from-indigo-600/30 to-indigo-600/20 rounded-full blur-3xl"></div>
+            <div data-dark-orb className="absolute -bottom-40 -right-24 w-[34rem] h-[34rem] bg-gradient-to-br from-sky-600/25 to-indigo-600/20 rounded-full blur-3xl"></div>
           </div>
 
           <div className="container mx-auto px-4 relative z-10">
@@ -565,11 +564,11 @@ export function HomePage() {
                     {NAP.phone.display}
                   </a>
                   <Link
-                    to="/funnel"
+                    to="/izrada-sajta-detalji"
                     onClick={() => trackCTAClick('Besplatne Konsultacije', 'dark_cta_band', language)}
                     className="lg-btn-primary group w-full sm:w-auto px-8 py-4 text-white font-bold rounded-full flex items-center justify-center gap-2.5"
                   >
-                    {language === 'sr' ? 'Zakaži besplatne konsultacije' : 'Book a free consultation'}
+                    {language === 'sr' ? 'Pogledaj Ponudu' : 'See Our Offer'}
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300" />
                   </Link>
                 </div>
@@ -580,7 +579,7 @@ export function HomePage() {
         </section>
 
         {/* ═══ Pillar Pages CTA Section - Brand Focused ═══ */}
-        <section className="py-16 md:py-24 bg-gradient-to-b from-white to-violet-50/40 relative overflow-hidden">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-white to-slate-50/40 relative overflow-hidden">
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-12" data-reveal>
@@ -600,15 +599,15 @@ export function HomePage() {
                 <Link
                   to="/izrada-sajta-detalji"
                   onClick={() => trackCTAClick('Izrada Sajta Detalji', 'pillar_section', language)}
-                  className="lg-card group relative bg-white rounded-2xl p-8 border border-gray-100 hover:border-violet-300"
+                  className="lg-card group relative bg-white rounded-2xl p-8 border border-gray-100 hover:border-indigo-300"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-violet-50/60 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-slate-50/60 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="relative z-10">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-2xl font-bold text-gray-900 group-hover:text-violet-600 transition-colors duration-300">
+                      <h3 className="text-2xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">
                         {language === 'sr' ? 'AiSajt Tim i Proces Rada' : 'AiSajt Team and How We Work'}
                       </h3>
-                      <ArrowRight className="w-6 h-6 text-violet-600 group-hover:translate-x-2 transition-transform duration-300" />
+                      <ArrowRight className="w-6 h-6 text-indigo-600 group-hover:translate-x-2 transition-transform duration-300" />
                     </div>
                     <p className="text-gray-600 mb-4 leading-relaxed">
                       {language === 'sr'
@@ -616,7 +615,7 @@ export function HomePage() {
                         : 'See what a good website brings you: more clients, stronger online presence and a proven system for attracting business. Video and details from AiSajt team. Over 50+ successful projects.'
                       }
                     </p>
-                    <div className="flex items-center gap-2 text-violet-600 font-semibold">
+                    <div className="flex items-center gap-2 text-indigo-600 font-semibold">
                       {language === 'sr' ? 'Saznaj Šta Ti Donosi Dobar Sajt →' : 'See What a Good Website Brings You →'}
                     </div>
                   </div>
@@ -652,54 +651,15 @@ export function HomePage() {
           </div>
         </section>
 
-        {/* ═══ Team Section — video + osnivači (kondenzovano) ═══ */}
+        {/* ═══ Osnivači ═══ */}
         <section className="py-12 md:py-24 relative overflow-hidden" id="team-section">
-          <div className="absolute inset-0 bg-gradient-to-b from-violet-50/40 via-pink-50/30 to-white"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-50/40 via-sky-50/30 to-white"></div>
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-pink-300/20 to-violet-400/15 rounded-full blur-3xl animate-blob"></div>
-            <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-br from-violet-300/20 to-indigo-400/15 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-sky-300/20 to-indigo-400/15 rounded-full blur-3xl animate-blob"></div>
+            <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-br from-indigo-300/20 to-indigo-400/15 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
           </div>
 
           <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center max-w-3xl mx-auto mb-12" data-reveal>
-              <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-5 leading-tight tracking-tight">
-                {language === 'sr' ? 'Upoznajte Naš Tim' : 'Meet Our Team'}
-              </h2>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                {language === 'sr'
-                  ? 'Pogledajte video i saznajte ko stoji iza naših projekata. Strastveni smo u onome što radimo i posvećeni vašem uspehu.'
-                  : 'Watch the video and discover who stands behind our projects. We are passionate about what we do and dedicated to your success.'
-                }
-              </p>
-            </div>
-
-            {/* Video */}
-            <div className="max-w-4xl mx-auto mb-16 md:mb-24" id="video-section" data-reveal>
-              <div className="bg-white/85 backdrop-blur-sm p-4 md:p-6 rounded-3xl border border-gray-200/60 lg-card">
-                <YouTubeVideo
-                  videoId="Adq2OJ_F24I"
-                  title="Upoznajte naš tim i način rada"
-                  className="rounded-2xl mb-6"
-                  requireGate={false}
-                />
-                <div className="text-center space-y-4 pb-2">
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900">
-                    {language === 'sr' ? 'Upoznajte Nas i Naš Pristup' : 'Meet Us and Our Approach'}
-                  </h3>
-                  <button
-                    onClick={() => {
-                      trackCTAClick('Zakažite Besplatnu Konsultaciju', 'video_section', language);
-                      navigate('/funnel');
-                    }}
-                    className="lg-btn-primary group px-8 py-3.5 text-white font-bold rounded-full inline-flex items-center gap-2"
-                  >
-                    {language === 'sr' ? 'Zakažite Besplatnu Konsultaciju' : 'Schedule Free Consultation'}
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
             {/* Founders */}
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-10 md:mb-14" data-reveal>
@@ -717,10 +677,10 @@ export function HomePage() {
               <div className="grid md:grid-cols-2 gap-6 md:gap-8" data-reveal-group>
                 {/* Founder 1 - Strahinja */}
                 <div className="lg-card group bg-white/85 backdrop-blur-sm p-7 md:p-8 rounded-3xl border border-gray-200/60 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-violet-500/8 via-transparent to-pink-500/8 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/8 via-transparent to-sky-500/8 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   <div className="relative z-10 flex flex-col items-center text-center gap-5">
                     <div className="relative w-28 h-28 md:w-32 md:h-32 flex-shrink-0">
-                      <div className="absolute inset-0 bg-gradient-to-br from-violet-500 via-indigo-500 to-pink-500 rounded-full animate-spin-slow"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 via-indigo-500 to-sky-500 rounded-full animate-spin-slow"></div>
                       <div className="absolute inset-1 bg-white rounded-full"></div>
                       <img
                         src="/images/zeka.webp" width={400} height={400}
@@ -729,7 +689,7 @@ export function HomePage() {
                     </div>
                     <div>
                       <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1.5">Strahinja</h3>
-                      <p className="text-violet-600 font-semibold uppercase tracking-wide text-xs mb-4">
+                      <p className="text-indigo-600 font-semibold uppercase tracking-wide text-xs mb-4">
                         {language === 'sr' ? 'Osnivač & CEO' : 'Founder & CEO'}
                       </p>
                       <p className="text-gray-600 italic leading-relaxed text-sm md:text-base mb-5">
@@ -739,9 +699,9 @@ export function HomePage() {
                         }
                       </p>
                       <div className="flex flex-wrap gap-2 justify-center">
-                        <span className="px-3 py-1 bg-gradient-to-r from-violet-100 to-indigo-100 text-violet-700 text-xs font-semibold rounded-full">Full Stack Dev</span>
-                        <span className="px-3 py-1 bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-700 text-xs font-semibold rounded-full">AI Integration</span>
-                        <span className="px-3 py-1 bg-gradient-to-r from-pink-100 to-violet-100 text-pink-700 text-xs font-semibold rounded-full">
+                        <span className="px-3 py-1 bg-gradient-to-r from-slate-100 to-indigo-100 text-indigo-700 text-xs font-semibold rounded-full">Full Stack Dev</span>
+                        <span className="px-3 py-1 bg-gradient-to-r from-indigo-100 to-sky-100 text-indigo-700 text-xs font-semibold rounded-full">AI Integration</span>
+                        <span className="px-3 py-1 bg-gradient-to-r from-sky-100 to-slate-100 text-sky-700 text-xs font-semibold rounded-full">
                           {language === 'sr' ? 'Arhitektura' : 'Architecture'}
                         </span>
                       </div>
@@ -751,10 +711,10 @@ export function HomePage() {
 
                 {/* Founder 2 - Bogdan */}
                 <div className="lg-card group bg-white/85 backdrop-blur-sm p-7 md:p-8 rounded-3xl border border-gray-200/60 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/8 via-transparent to-violet-500/8 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/8 via-transparent to-indigo-500/8 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   <div className="relative z-10 flex flex-col items-center text-center gap-5">
                     <div className="relative w-28 h-28 md:w-32 md:h-32 flex-shrink-0">
-                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 via-pink-500 to-violet-500 rounded-full animate-spin-slow"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 via-sky-500 to-indigo-500 rounded-full animate-spin-slow"></div>
                       <div className="absolute inset-1 bg-white rounded-full"></div>
                       <img
                         src="/images/boban.webp" width={400} height={400}
@@ -773,11 +733,11 @@ export function HomePage() {
                         }
                       </p>
                       <div className="flex flex-wrap gap-2 justify-center">
-                        <span className="px-3 py-1 bg-gradient-to-r from-indigo-100 to-violet-100 text-indigo-700 text-xs font-semibold rounded-full">
+                        <span className="px-3 py-1 bg-gradient-to-r from-indigo-100 to-slate-100 text-indigo-700 text-xs font-semibold rounded-full">
                           {language === 'sr' ? 'Programer (ETF)' : 'Programmer (ETF)'}
                         </span>
-                        <span className="px-3 py-1 bg-gradient-to-r from-pink-100 to-indigo-100 text-pink-700 text-xs font-semibold rounded-full">Full Stack Dev</span>
-                        <span className="px-3 py-1 bg-gradient-to-r from-violet-100 to-pink-100 text-violet-700 text-xs font-semibold rounded-full">
+                        <span className="px-3 py-1 bg-gradient-to-r from-sky-100 to-indigo-100 text-sky-700 text-xs font-semibold rounded-full">Full Stack Dev</span>
+                        <span className="px-3 py-1 bg-gradient-to-r from-slate-100 to-sky-100 text-indigo-700 text-xs font-semibold rounded-full">
                           {language === 'sr' ? 'Softversko Inženjerstvo' : 'Software Engineering'}
                         </span>
                       </div>
@@ -812,9 +772,9 @@ export function HomePage() {
                 {/* Resource 1: Quiz */}
                 <div
                   onClick={() => navigate('/resources/quiz')}
-                  className="lg-card group bg-white rounded-2xl p-6 md:p-8 border-2 border-gray-200 hover:border-pink-400 cursor-pointer"
+                  className="lg-card group bg-white rounded-2xl p-6 md:p-8 border-2 border-gray-200 hover:border-sky-400 cursor-pointer"
                 >
-                  <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-pink-500 to-violet-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+                  <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
                     <svg className="w-6 h-6 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -828,7 +788,7 @@ export function HomePage() {
                       : 'Answer 5 quick questions and find out which type of site best suits your business. Get a personalized recommendation and quote.'
                     }
                   </p>
-                  <span className="text-pink-600 font-bold text-base md:text-lg inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+                  <span className="text-sky-600 font-bold text-base md:text-lg inline-flex items-center gap-2 group-hover:gap-3 transition-all">
                     {language === 'sr' ? 'Započni Kviz →' : 'Start Quiz →'}
                   </span>
                 </div>
@@ -836,9 +796,9 @@ export function HomePage() {
                 {/* Resource 2: Audit Form */}
                 <div
                   onClick={() => navigate('/resources/audit')}
-                  className="lg-card group bg-white rounded-2xl p-6 md:p-8 border-2 border-gray-200 hover:border-violet-400 cursor-pointer"
+                  className="lg-card group bg-white rounded-2xl p-6 md:p-8 border-2 border-gray-200 hover:border-indigo-400 cursor-pointer"
                 >
-                  <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-violet-500 to-indigo-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+                  <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
                     <svg className="w-6 h-6 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
@@ -852,7 +812,7 @@ export function HomePage() {
                       : 'Already have a site? Find out what it costs you in lost clients. Get detailed analysis in 24h.'
                     }
                   </p>
-                  <span className="text-violet-600 font-bold text-base md:text-lg inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+                  <span className="text-indigo-600 font-bold text-base md:text-lg inline-flex items-center gap-2 group-hover:gap-3 transition-all">
                     {language === 'sr' ? 'Analiziraj Sajt →' : 'Analyze Site →'}
                   </span>
                 </div>
@@ -872,7 +832,7 @@ export function HomePage() {
         </section>
 
         {/* ═══ Why AiSajt Section ═══ */}
-        <section className="py-12 md:py-24 relative overflow-hidden bg-gradient-to-b from-white via-violet-50/30 to-white" id="why-us">
+        <section className="py-12 md:py-24 relative overflow-hidden bg-gradient-to-b from-white via-slate-50/30 to-white" id="why-us">
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16" data-reveal>
               <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6 leading-tight tracking-tight">
@@ -897,8 +857,8 @@ export function HomePage() {
                   icon: Clock,
                   title: language === 'sr' ? 'Brza Izrada' : 'Fast Development',
                   text: language === 'sr'
-                    ? <>Standardna <Link to="/izrada-sajta" className="text-violet-700 font-semibold underline hover:text-violet-900">izrada sajta</Link> traje 7-14 dana. Za hitne projekte nudimo ekspresnu opciju za 24-48h.</>
-                    : <>Standard <Link to="/izrada-sajta" className="text-violet-700 font-semibold underline hover:text-violet-900">website development</Link> takes 7-14 days. For urgent projects we offer an express option in 24-48h.</>
+                    ? <>Standardna <Link to="/izrada-sajta" className="text-indigo-700 font-semibold underline hover:text-indigo-900">izrada sajta</Link> traje 7-14 dana. Za hitne projekte nudimo ekspresnu opciju za 24-48h.</>
+                    : <>Standard <Link to="/izrada-sajta" className="text-indigo-700 font-semibold underline hover:text-indigo-900">website development</Link> takes 7-14 days. For urgent projects we offer an express option in 24-48h.</>
                 },
                 {
                   icon: Brain,
@@ -936,10 +896,10 @@ export function HomePage() {
                     : 'Continuous support after launch. Regular backups, updates, and technical help when you need it.'
                 },
               ].map(({ icon: Icon, title, text }) => (
-                <div key={title} className="lg-card bg-white rounded-2xl p-6 md:p-7 border border-gray-200 hover:border-violet-300">
+                <div key={title} className="lg-card bg-white rounded-2xl p-6 md:p-7 border border-gray-200 hover:border-indigo-300">
                   <div className="flex items-start gap-4 mb-3">
-                    <div className="w-11 h-11 bg-gradient-to-br from-violet-100 to-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-6 h-6 text-violet-700" />
+                    <div className="w-11 h-11 bg-gradient-to-br from-slate-100 to-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-6 h-6 text-indigo-700" />
                     </div>
                     <h3 className="text-lg md:text-xl font-bold text-gray-900 pt-1.5">
                       {title}
@@ -985,11 +945,11 @@ export function HomePage() {
           <div className="container mx-auto px-4">
             <div
               data-reveal
-              className="relative max-w-5xl mx-auto rounded-[2rem] overflow-hidden bg-gradient-to-br from-violet-700 via-indigo-600 to-pink-600 text-white p-8 md:p-14 shadow-2xl"
+              className="relative max-w-5xl mx-auto rounded-[2rem] overflow-hidden bg-gradient-to-br from-indigo-700 via-indigo-600 to-sky-600 text-white p-8 md:p-14 shadow-2xl"
             >
               <div className="absolute inset-0 lg-dot-grid-dark opacity-50 pointer-events-none"></div>
               <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
-              <div className="absolute -bottom-28 -left-20 w-80 h-80 bg-pink-400/20 rounded-full blur-3xl pointer-events-none"></div>
+              <div className="absolute -bottom-28 -left-20 w-80 h-80 bg-sky-400/20 rounded-full blur-3xl pointer-events-none"></div>
 
               <div className="relative z-10 grid md:grid-cols-[1.3fr_1fr] gap-8 items-center">
                 <div>
@@ -1006,11 +966,11 @@ export function HomePage() {
                 </div>
                 <div className="flex flex-col gap-3.5">
                   <Link
-                    to="/funnel"
+                    to="/izrada-sajta-detalji"
                     onClick={() => trackCTAClick('Besplatne Konsultacije', 'closing_cta', language)}
                     className="lg-btn-call group w-full px-7 py-4 bg-white text-gray-900 font-bold rounded-full flex items-center justify-center gap-2.5"
                   >
-                    {language === 'sr' ? 'Zakaži konsultacije' : 'Book a consultation'}
+                    {language === 'sr' ? 'Pogledaj Ponudu' : 'See Our Offer'}
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300" />
                   </Link>
                   <a

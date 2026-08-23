@@ -147,7 +147,7 @@ export function SEOPage() {
                   <button
                     onClick={() => {
                       trackCTAClick('Besplatna SEO Analiza', 'seo_hero', language);
-                      navigate('/funnel');
+                      navigate('/izrada-sajta-detalji');
                     }}
                     className="group px-6 py-3.5 sm:px-7 sm:py-4 md:px-8 md:py-4 bg-gray-900 text-white text-base sm:text-lg font-semibold rounded-full hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
                   >
@@ -573,7 +573,7 @@ export function SEOPage() {
               <p className="text-gray-600 text-sm md:text-base mt-6 max-w-3xl mx-auto text-center leading-relaxed">
                 {language === 'sr'
                   ? <>Najbolji pristup je često kombinacija: Google Ads za trenutne rezultate dok SEO optimizacija gradi dugoročnu, besplatnu vidljivost. Detaljno poređenje pročitajte u tekstu{' '}
-                      <Link to="/blog/google-ads-ili-seo" className="text-violet-600 hover:text-violet-700 font-medium underline">Google Ads ili SEO: šta je bolji izbor</Link>.</>
+                      Google Ads ili SEO — javite se pa da procenimo šta se vama više isplati.</>
                   : <>The best approach is often a combination: Google Ads for immediate results while SEO builds long-term, free visibility.</>
                 }
               </p>
@@ -810,7 +810,7 @@ export function SEOPage() {
                 <button
                   onClick={() => {
                     trackCTAClick('Kompletna SEO Strategija - CTA', 'seo_complete_strategy', language);
-                    navigate('/funnel');
+                    navigate('/izrada-sajta-detalji');
                   }}
                   className="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 text-white rounded-full font-semibold hover:scale-105 transition-all duration-300 shadow-lg"
                 >
@@ -909,7 +909,7 @@ export function SEOPage() {
                 <button
                   onClick={() => {
                     trackCTAClick('Besplatna SEO Analiza - Footer', 'seo_cta', language);
-                    navigate('/funnel');
+                    navigate('/izrada-sajta-detalji');
                   }}
                   className="group px-8 py-4 bg-gray-900 text-white rounded-full font-semibold hover:scale-105 transition-all duration-300 inline-flex items-center gap-2 shadow-xl"
                 >

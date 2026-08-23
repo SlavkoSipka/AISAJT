@@ -20,5 +20,16 @@ http://aisajt.netlify.app/* https://aisajt.com/:splat 301!
 # Removed case study -> portfolio index (avoids a 404 on an indexed URL)
 /portfolio/pokloni-portret /portfolio 301!
 
+# Funnel merged into /izrada-sajta-detalji (video + booking forma + portfolio)
+/funnel /izrada-sajta-detalji 301!
+/contact /izrada-sajta-detalji 301!
+
+# Blog ugašen — indeksirani URL-ovi idu na početnu umesto u 404
+/blog /  301!
+/blog/* /  301!
+
+# Portfolio index ugašen — portfolio sada živi na /izrada-sajta-detalji
+/portfolio /izrada-sajta-detalji 301!
+
 # Handle client-side routing (SPA fallback) - MUST BE LAST
 /* /index.html 200

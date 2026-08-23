@@ -14,6 +14,7 @@ import {
   UserCircle2,
   PlusCircle,
   TrendingUp,
+  CalendarDays,
 } from 'lucide-react';
 
 const statusLabels: Record<string, string> = {
@@ -123,6 +124,10 @@ export function Sidebar() {
               <NavLink to="/portal/admin/klijenti" className={navLinkClass}>
                 <UserCircle2 size={16} />
                 Klijenti
+              </NavLink>
+              <NavLink to="/portal/admin/termini" className={navLinkClass}>
+                <CalendarDays size={16} />
+                Termini
               </NavLink>
               <NavLink to="/portal/admin/poruke" className={navLinkClass}>
                 <div className="relative">

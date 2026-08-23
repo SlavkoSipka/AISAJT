@@ -10,6 +10,7 @@ const PortalAdminOverview = lazy(() => import('./pages/AdminOverview').then(m =>
 const PortalAdminProject = lazy(() => import('./pages/AdminProject').then(m => ({ default: m.AdminProject })));
 const PortalAdminNewProject = lazy(() => import('./pages/AdminNewProject').then(m => ({ default: m.AdminNewProject })));
 const PortalAdminClients = lazy(() => import('./pages/AdminClients').then(m => ({ default: m.AdminClients })));
+const PortalAdminBookings = lazy(() => import('./pages/AdminBookings').then(m => ({ default: m.AdminBookings })));
 const PortalAdminNewClient = lazy(() => import('./pages/AdminNewClient').then(m => ({ default: m.AdminNewClient })));
 const PortalAdminMessages = lazy(() => import('./pages/AdminMessages').then(m => ({ default: m.AdminMessages })));
 
@@ -83,6 +84,9 @@ export function PortalApp() {
               } />
               <Route path="admin/poruke" element={
                 <PortalRoleGuard requiredRole="admin"><PortalAdminMessages /></PortalRoleGuard>
+              } />
+              <Route path="admin/termini" element={
+                <PortalRoleGuard requiredRole="admin"><PortalAdminBookings /></PortalRoleGuard>
               } />
               <Route path="admin/klijenti" element={
                 <PortalRoleGuard requiredRole="admin"><PortalAdminClients /></PortalRoleGuard>

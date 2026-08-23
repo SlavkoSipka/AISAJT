@@ -12,7 +12,7 @@ export function loader({ params }: LoaderFunctionArgs) {
 
 export const handle = {
   breadcrumb: (data: { title?: string }) => [
-    { label: 'Portfolio', path: '/portfolio' },
+    { label: 'Portfolio', path: '/izrada-sajta-detalji#case-study' },
     { label: data?.title ?? 'Portfolio' },
   ],
 };

@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, Phone, ArrowRight } from 'lucide-react';
+import { Menu, X, Phone, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { NavLink, MobileNavLink } from '../navigation/NavLink';
 import { translations } from '../../types/language';
-import { navigateToSection } from '../../utils/navigation';
+import { navigateToBooking, navigateToDetaljiSection } from '../../utils/navigation';
 import { NAP } from '../../lib/site-config';
 import { trackPhoneClick } from '../../utils/analytics';
 
@@ -15,15 +15,10 @@ export function Navbar() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
-  const [isGuideOpen, setIsGuideOpen] = useState(false);
-  const [isServicesOpenMobile, setIsServicesOpenMobile] = useState(false);
   const [isSideOpen, setIsSideOpen] = useState(false);
-  const servicesRef = useRef<HTMLDivElement>(null);
-  const guideRef = useRef<HTMLDivElement>(null);
 
-  // Hide navbar on funnel page
-  if (location.pathname === '/funnel') {
+  // Navbar se ne prikazuje na glavnoj prodajnoj stranici
+  if (location.pathname === '/izrada-sajta-detalji') {
     return null;
   }
 
@@ -43,21 +38,6 @@ export function Navbar() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (servicesRef.current && !servicesRef.current.contains(event.target as Node)) {
-        setIsServicesOpen(false);
-      }
-      if (guideRef.current && !guideRef.current.contains(event.target as Node)) {
-        setIsGuideOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // Escape zatvara bočni meni
@@ -92,150 +72,41 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            <NavLink href="/portfolio" onClick={() => navigate('/portfolio')}>{t.portfolio}</NavLink>
-            <NavLink href="/#video-section" onClick={() => navigateToSection('video-section', navigate, location.pathname)}>{t.aboutUs}</NavLink>
+            <NavLink href="/izrada-sajta-detalji#case-study" onClick={() => navigateToDetaljiSection('case-study', navigate, location.pathname)}>{t.portfolio}</NavLink>
+            <NavLink href="/izrada-sajta-detalji" onClick={() => navigate('/izrada-sajta-detalji')}>{t.aboutUs}</NavLink>
             
-            <a
-              href="/blog"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate('/blog');
-              }}
-              className="font-medium text-sm uppercase tracking-wider text-gray-900 hover:text-violet-600 transition-colors duration-300"
-              aria-label="Blog"
-            >
-              BLOG
-            </a>
-            
-            {/* Services Dropdown */}
-            <div 
-              ref={servicesRef}
-              className="relative"
-              onMouseEnter={() => setIsServicesOpen(true)}
-              onMouseLeave={() => setIsServicesOpen(false)}
-            >
-              <button
-                onClick={() => setIsServicesOpen(!isServicesOpen)}
-                className="flex items-center gap-1 font-medium text-sm uppercase tracking-wider text-gray-900 hover:text-violet-600 transition-colors duration-300"
-                aria-label="Usluge"
-              >
-                {language === 'sr' ? 'USLUGE' : 'SERVICES'}
-                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isServicesOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {/* Dropdown Menu */}
-              <div 
-                className={`absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300 ${
-                  isServicesOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
-                }`}
-              >
-                <a
-                  href="/seo-optimizacija-cena"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/seo-optimizacija-cena');
-                    setIsServicesOpen(false);
-                  }}
-                  className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 hover:bg-violet-50 font-bold text-sm transition-all duration-300"
-                >
-                  {language === 'sr' ? 'SEO Optimizacija' : 'SEO Optimization'}
-                </a>
-                <a
-                  href="/izrada-sajta"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/izrada-sajta');
-                    setIsServicesOpen(false);
-                  }}
-                  className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-indigo-600 hover:via-blue-500 hover:to-cyan-500 hover:bg-indigo-50 font-bold text-sm transition-all duration-300"
-                >
-                  {language === 'sr' ? 'Izrada Sajta' : 'Website Development'}
-                </a>
-                <a
-                  href="/web-dizajn"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/web-dizajn');
-                    setIsServicesOpen(false);
-                  }}
-                  className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-600 hover:via-rose-500 hover:to-violet-500 hover:bg-pink-50 font-bold text-sm transition-all duration-300"
-                >
-                  {language === 'sr' ? 'Web Dizajn' : 'Web Design'}
-                </a>
-                <a
-                  href="/izrada-web-shopa"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/izrada-web-shopa');
-                    setIsServicesOpen(false);
-                  }}
-                  className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500 hover:bg-emerald-50 font-bold text-sm transition-all duration-300"
-                >
-                  {language === 'sr' ? 'Web Prodavnica' : 'Web Shop'}
-                </a>
-              </div>
+            {/* Usluge — vizuelno skriveno na zahtev, ali ostaje u DOM-u da
+                Google i dalje prati ove SEO stranice (sr-only, ne display:none). */}
+            <div className="sr-only">
+              <span>{language === 'sr' ? 'Usluge' : 'Services'}</span>
+              <Link to="/seo-optimizacija-cena">{language === 'sr' ? 'SEO Optimizacija' : 'SEO Optimization'}</Link>
+              <Link to="/izrada-sajta">{language === 'sr' ? 'Izrada Sajta' : 'Website Development'}</Link>
+              <Link to="/web-dizajn">{language === 'sr' ? 'Web Dizajn' : 'Web Design'}</Link>
+              <Link to="/izrada-web-shopa">{language === 'sr' ? 'Web Prodavnica' : 'Web Shop'}</Link>
             </div>
 
             <div className="flex items-center gap-2">
-              {/* Guide / Počni ovde – dropdown za klijente (resursi, vodič, kviz, audit, blog) */}
-              <div
-                ref={guideRef}
-                className="relative"
-                onMouseEnter={() => setIsGuideOpen(true)}
-                onMouseLeave={() => setIsGuideOpen(false)}
-              >
-                <button
-                  onClick={() => setIsGuideOpen(!isGuideOpen)}
-                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-full font-semibold text-sm uppercase tracking-wide border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-all duration-300"
-                  aria-label={language === 'sr' ? 'Vodič i resursi za klijente' : 'Guide and resources for clients'}
-                >
-                  {language === 'sr' ? 'POČNI OVDE' : 'START HERE'}
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isGuideOpen ? 'rotate-180' : ''}`} />
-                </button>
-                <div
-                  className={`absolute top-full left-0 mt-2 w-72 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300 ${
-                    isGuideOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
-                  }`}
-                >
-                  <div className="px-4 py-2.5 border-b-2 border-gray-200 bg-gray-50/80 cursor-default">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                      {language === 'sr' ? 'Sve što vam treba za početak' : 'Everything you need to get started'}
-                    </p>
-                  </div>
-                  <a
-                    href="/izrada-sajta-detalji"
-                    onClick={(e) => { e.preventDefault(); navigate('/izrada-sajta-detalji'); setIsGuideOpen(false); }}
-                    className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-indigo-600 hover:via-blue-500 hover:to-cyan-500 hover:bg-indigo-50 font-bold text-sm transition-all duration-300"
-                  >
-                    {language === 'sr' ? 'Tim i Proces Rada' : 'Team & Process'}
-                  </a>
-                  <a
-                    href="/seo-optimizacija-detalji"
-                    onClick={(e) => { e.preventDefault(); navigate('/seo-optimizacija-detalji'); setIsGuideOpen(false); }}
-                    className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 hover:bg-violet-50 font-bold text-sm transition-all duration-300"
-                  >
-                    {language === 'sr' ? 'SEO Optimizacija Detalji' : 'SEO Optimization Details'}
-                  </a>
-                </div>
-              </div>
-
+              {/* Nekadašnji "Počni ovde" dropdown — razbijen na dva vidljiva dugmeta */}
               <a
-                href="/portal/login"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/portal/login');
-                }}
-                className="px-5 py-2.5 rounded-full font-semibold text-sm uppercase tracking-wide text-violet-600 border-2 border-violet-600 hover:bg-violet-600 hover:text-white transition-all duration-300"
-                aria-label={language === 'sr' ? 'Prijava na portal' : 'Portal login'}
+                href="/izrada-sajta-detalji"
+                onClick={(e) => { e.preventDefault(); navigate('/izrada-sajta-detalji'); }}
+                className="px-5 py-2.5 rounded-full font-semibold text-sm uppercase tracking-wide border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-all duration-300"
               >
-                {language === 'sr' ? 'PRIJAVA' : 'LOGIN'}
+                {language === 'sr' ? 'IZRADA SAJTA' : 'WEB DEVELOPMENT'}
+              </a>
+              <a
+                href="/seo-optimizacija-detalji"
+                onClick={(e) => { e.preventDefault(); navigate('/seo-optimizacija-detalji'); }}
+                className="px-5 py-2.5 rounded-full font-semibold text-sm uppercase tracking-wide border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-all duration-300"
+              >
+                SEO
               </a>
 
               <a
-                href="/funnel"
+                href="/izrada-sajta-detalji#booking-form"
                 onClick={(e) => {
                   e.preventDefault();
-                  navigate('/funnel');
+                  navigateToBooking(navigate, location.pathname);
                 }}
                 className="bg-gray-900 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 text-sm uppercase tracking-wide"
                 aria-label="Kontaktirajte nas"
@@ -289,83 +160,24 @@ export function Navbar() {
         }`}
       >
         <div className="container mx-auto px-4 py-4 space-y-4">
-          {/* Usluge – dropdown na mobilnom */}
-          <div>
-            <button
-              type="button"
-              onClick={() => setIsServicesOpenMobile(!isServicesOpenMobile)}
-              className="flex items-center justify-between w-full text-left text-gray-900 py-4 px-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-all duration-300 touch-feedback text-lg font-medium border border-gray-200"
-            >
-              {language === 'sr' ? 'Usluge' : 'Services'}
-              <ChevronDown className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${isServicesOpenMobile ? 'rotate-180' : ''}`} />
-            </button>
-            <div className={`overflow-hidden transition-all duration-200 ${isServicesOpenMobile ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'}`}>
-              <a
-                href="/seo-optimizacija-cena"
-                onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); navigate('/seo-optimizacija-cena'); }}
-                className="block w-full text-left text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-violet-600 hover:via-indigo-500 hover:to-pink-500 py-3 pl-6 pr-4 rounded-lg hover:bg-violet-50 transition-all duration-300 text-base font-bold"
-              >
-                {language === 'sr' ? 'SEO OPTIMIZACIJA' : 'SEO OPTIMIZATION'}
-              </a>
-              <a
-                href="/izrada-sajta"
-                onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); navigate('/izrada-sajta'); }}
-                className="block w-full text-left text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-indigo-600 hover:via-blue-500 hover:to-cyan-500 py-3 pl-6 pr-4 rounded-lg hover:bg-indigo-50 transition-all duration-300 text-base font-bold"
-              >
-                {language === 'sr' ? 'IZRADA SAJTA' : 'WEBSITE DEV'}
-              </a>
-              <a
-                href="/web-dizajn"
-                onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); navigate('/web-dizajn'); }}
-                className="block w-full text-left text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-600 hover:via-rose-500 hover:to-violet-500 py-3 pl-6 pr-4 rounded-lg hover:bg-pink-50 transition-all duration-300 text-base font-bold"
-              >
-                {language === 'sr' ? 'WEB DIZAJN' : 'WEB DESIGN'}
-              </a>
-              <a
-                href="/izrada-web-shopa"
-                onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); navigate('/izrada-web-shopa'); }}
-                className="block w-full text-left text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500 py-3 pl-6 pr-4 rounded-lg hover:bg-emerald-50 transition-all duration-300 text-base font-bold"
-              >
-                {language === 'sr' ? 'WEB PRODAVNICA' : 'WEB SHOP'}
-              </a>
-            </div>
-          </div>
+          <MobileNavLink href="/izrada-sajta-detalji" onClick={() => {
+            setIsMenuOpen(false);
+            navigate('/izrada-sajta-detalji');
+          }}>{language === 'sr' ? 'IZRADA SAJTA' : 'WEB DEVELOPMENT'}</MobileNavLink>
+          <MobileNavLink href="/seo-optimizacija-detalji" onClick={() => {
+            setIsMenuOpen(false);
+            navigate('/seo-optimizacija-detalji');
+          }}>SEO</MobileNavLink>
 
-          {/* Blog */}
-          <a
-            href="/blog"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsMenuOpen(false);
-              navigate('/blog');
-            }}
-            className="block w-full text-left text-gray-900 hover:text-violet-600 py-4 px-4 rounded-lg hover:bg-gray-50 transition-all duration-300 touch-feedback text-lg font-medium"
-          >
-            BLOG
-          </a>
-          
-          <MobileNavLink href="/portfolio" onClick={() => {
+          <MobileNavLink href="/izrada-sajta-detalji#case-study" onClick={() => {
             setIsMenuOpen(false);
-            navigate('/portfolio');
+            navigateToDetaljiSection('case-study', navigate, location.pathname);
           }}>{t.portfolio}</MobileNavLink>
-          <MobileNavLink href="/#video-section" onClick={() => {
+          <MobileNavLink href="/izrada-sajta-detalji" onClick={() => {
             setIsMenuOpen(false);
-            navigateToSection('video-section', navigate, location.pathname);
+            navigate('/izrada-sajta-detalji');
           }}>{t.aboutUs}</MobileNavLink>
 
-          {/* Počni ovde – vodič za klijente (mobile) */}
-          <div className="border-t border-gray-200 pt-5 mt-4">
-            <p className="px-4 pb-3 text-sm font-bold uppercase tracking-wider text-violet-600">
-              {language === 'sr' ? 'Počni ovde' : 'Start here'}
-            </p>
-            <a href="/izrada-sajta-detalji" onClick={(e) => { e.preventDefault(); navigate('/izrada-sajta-detalji'); setIsMenuOpen(false); }} className="block w-full text-left text-gray-900 hover:text-violet-600 hover:bg-violet-50 py-4 px-4 rounded-lg font-bold text-base uppercase tracking-wide transition-colors">
-              {language === 'sr' ? 'Tim i Proces Rada' : 'Team & Process'}
-            </a>
-            <a href="/seo-optimizacija-detalji" onClick={(e) => { e.preventDefault(); navigate('/seo-optimizacija-detalji'); setIsMenuOpen(false); }} className="block w-full text-left text-gray-900 hover:text-violet-600 hover:bg-violet-50 py-4 px-4 rounded-lg font-bold text-base uppercase tracking-wide transition-colors">
-              {language === 'sr' ? 'SEO Optimizacija Detalji' : 'SEO Optimization Details'}
-            </a>
-          </div>
-          
           {/* Language Switcher Toggle - Mobile */}
           <div className="px-4 py-2 flex justify-center">
             <div className="flex gap-1 bg-gray-700 rounded-full p-1">
@@ -393,24 +205,11 @@ export function Navbar() {
           </div>
           
           <a
-            href="/portal/login"
+            href="/izrada-sajta-detalji#booking-form"
             onClick={(e) => {
               e.preventDefault();
-              navigate('/portal/login');
               setIsMenuOpen(false);
-            }}
-            className="w-full text-center px-6 py-3 rounded-lg font-semibold text-violet-600 border-2 border-violet-600 hover:bg-violet-600 hover:text-white transition-all duration-300 block"
-            aria-label={language === 'sr' ? 'Prijava na portal' : 'Portal login'}
-          >
-            {language === 'sr' ? 'PRIJAVA' : 'LOGIN'}
-          </a>
-
-          <a
-            href="/funnel"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate('/funnel');
-              setIsMenuOpen(false);
+              navigateToBooking(navigate, location.pathname);
             }}
             className="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 block"
             aria-label="Kontaktirajte nas - Mobilni meni"
@@ -501,9 +300,10 @@ export function Navbar() {
           {/* Navigacija */}
           <div className="flex-1 overflow-y-auto px-3 pb-2">
             {[
-              { label: t.portfolio, href: '/portfolio', action: () => navigate('/portfolio') },
-              { label: t.aboutUs, href: location.pathname === '/' ? '#video-section' : '/#video-section', action: () => navigateToSection('video-section', navigate, location.pathname) },
-              { label: 'Blog', href: '/blog', action: () => navigate('/blog') },
+              { label: language === 'sr' ? 'Izrada Sajta' : 'Web Development', href: '/izrada-sajta-detalji', action: () => navigate('/izrada-sajta-detalji') },
+              { label: 'SEO', href: '/seo-optimizacija-detalji', action: () => navigate('/seo-optimizacija-detalji') },
+              { label: t.portfolio, href: '/izrada-sajta-detalji#case-study', action: () => navigateToDetaljiSection('case-study', navigate, location.pathname) },
+              { label: t.aboutUs, href: '/izrada-sajta-detalji', action: () => navigate('/izrada-sajta-detalji') },
             ].map((item, i) => (
               <a
                 key={item.label}
@@ -519,9 +319,10 @@ export function Navbar() {
               </a>
             ))}
 
-            <p className="px-4 pt-4 pb-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
-              {language === 'sr' ? 'Usluge' : 'Services'}
-            </p>
+            {/* Usluge — vizuelno skrivene na zahtev, ali ostaju u DOM-u da
+                Google i dalje prati ove SEO stranice (sr-only, ne display:none). */}
+            <div className="sr-only">
+            <p>{language === 'sr' ? 'Usluge' : 'Services'}</p>
             {[
               { label: language === 'sr' ? 'Izrada Sajta' : 'Website Dev', to: '/izrada-sajta', dot: 'bg-violet-500' },
               { label: language === 'sr' ? 'SEO Optimizacija' : 'SEO Optimization', to: '/seo-optimizacija-cena', dot: 'bg-indigo-500' },
@@ -541,26 +342,8 @@ export function Navbar() {
                 {item.label}
               </a>
             ))}
+            </div>
 
-            <p className="px-4 pt-4 pb-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
-              {language === 'sr' ? 'Počni ovde' : 'Start here'}
-            </p>
-            {[
-              { label: language === 'sr' ? 'Tim i Proces Rada' : 'Team & Process', to: '/izrada-sajta-detalji' },
-              { label: language === 'sr' ? 'SEO Optimizacija Detalji' : 'SEO Optimization Details', to: '/seo-optimizacija-detalji' },
-            ].map((item, i) => (
-              <a
-                key={item.to}
-                href={item.to}
-                onClick={(e) => { e.preventDefault(); setIsSideOpen(false); navigate(item.to); }}
-                className={`block w-full px-4 py-2.5 rounded-xl text-gray-700 hover:text-violet-700 hover:bg-violet-50 font-semibold text-[15px] transition-all duration-500 ${
-                  isSideOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
-                }`}
-                style={{ transitionDelay: isSideOpen ? `${420 + i * 45}ms` : '0ms' }}
-              >
-                {item.label}
-              </a>
-            ))}
           </div>
 
           {/* Footer: telefon + CTA + jezik */}
@@ -591,8 +374,8 @@ export function Navbar() {
                 {language === 'sr' ? 'Prijava' : 'Login'}
               </a>
               <a
-                href="/funnel"
-                onClick={(e) => { e.preventDefault(); setIsSideOpen(false); navigate('/funnel'); }}
+                href="/izrada-sajta-detalji#booking-form"
+                onClick={(e) => { e.preventDefault(); setIsSideOpen(false); navigateToBooking(navigate, location.pathname); }}
                 className="lg-btn-primary text-center px-4 py-2.5 rounded-full font-bold text-xs uppercase tracking-wide text-white"
                 aria-label="Kontaktirajte nas"
               >

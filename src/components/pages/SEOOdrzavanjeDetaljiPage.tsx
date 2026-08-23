@@ -3,6 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Play, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { SEOHelmet } from '../seo/SEOHelmet';
+import { BookingCalendar } from '../booking/BookingCalendar';
+/** Marko vodi SEO, pa kartica za direktan poziv ide na njegov broj,
+ *  a ne na opšti broj agencije iz NAP-a. */
+const MARKO_TEL = '+381621058144';
+const MARKO_DISPLAY = '062 105 8144';
+import { trackPhoneClick, trackCTAClick, trackFormSubmitAttempt, trackFormError } from '../../utils/analytics';
+import { submitFunnelForm } from '../../utils/hubspot';
 
 function useCountUp(target: number, duration = 1400, started = false) {
   const [count, setCount] = useState(0);
@@ -132,10 +139,38 @@ export function SEOOdrzavanjeDetaljiPage() {
   const revealClass = (v: boolean) =>
     `transition-all duration-700 ease-out ${v ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`;
 
-  const goToFunnel = () => navigate('/funnel');
+  const goToBooking = () => {
+    document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleBooked = async ({ firstName, lastName, phone, email }: {
+    firstName: string; lastName: string; phone: string; email: string; slotAt: string;
+  }) => {
+    const fullName = `${firstName} ${lastName}`.trim();
+    trackFormSubmitAttempt('funnel_booking', language);
+    try {
+      await submitFunnelForm({ name: fullName, email, phone });
+      trackCTAClick('Booking Form Submit', 'seo_detalji_form', language);
+    } catch (error) {
+      trackFormError('funnel_booking', language, String(error));
+    }
+    setTimeout(() => {
+      navigate(`/thank-you?name=${encodeURIComponent(fullName)}&source=funnel_booking&lang=${language}`);
+    }, 2500);
+  };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (window.location.hash === '#booking-form') {
+      let attempt = 0;
+      const tryScroll = () => {
+        const el = document.getElementById('booking-form');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        else if (attempt++ < 10) setTimeout(tryScroll, 100);
+      };
+      tryScroll();
+    } else {
+      window.scrollTo(0, 0);
+    }
     setTimeout(() => setIsVisible(true), 100);
   }, []);
 
@@ -189,8 +224,8 @@ export function SEOOdrzavanjeDetaljiPage() {
             <ExternalLink className="w-3.5 h-3.5" />
           </button>
           <button
-            onClick={goToFunnel}
-            className="px-4 py-2 md:px-5 md:py-2.5 border border-[#05afd1]/30 bg-gray-950/80 backdrop-blur-md text-[#05afd1] text-xs md:text-sm font-semibold tracking-wide rounded-full hover:bg-[#05afd1]/20 hover:text-white hover:border-[#05afd1] transition-all duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(5,175,209,0.15)]"
+            onClick={goToBooking}
+            className="hidden md:flex px-4 py-2 md:px-5 md:py-2.5 border border-[#05afd1]/30 bg-gray-950/80 backdrop-blur-md text-[#05afd1] text-xs md:text-sm font-semibold tracking-wide rounded-full hover:bg-[#05afd1]/20 hover:text-white hover:border-[#05afd1] transition-all duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(5,175,209,0.15)]"
           >
             {language === 'sr' ? 'Zakaži poziv' : 'Book a call'}
             <ArrowRight className="w-3.5 h-3.5" />
@@ -276,13 +311,72 @@ export function SEOOdrzavanjeDetaljiPage() {
               <div className={`mt-6 flex justify-center transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
                 <button
                   type="button"
-                  onClick={goToFunnel}
+                  onClick={goToBooking}
                   className="inline-flex items-center gap-2 px-8 py-4 bg-[#05afd1] hover:bg-[#05afd1] text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(5,175,209,0.65)]"
                 >
                   {language === 'sr' ? 'Zakaži poziv' : 'Book a call'}
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Zakazivanje — isti kalendar kao na /izrada-sajta-detalji */}
+        <section id="booking-form" className="pt-8 md:pt-16 pb-10 md:pb-24 relative overflow-hidden z-20 scroll-mt-20">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#05afd1]/20 rounded-full blur-[100px]" />
+          </div>
+
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-xl mx-auto">
+              <div className="text-center mb-4 md:mb-6">
+                <span className="inline-block bg-[#05afd1]/20 border border-[#05afd1]/40 text-[#05afd1] text-[10px] md:text-xs font-semibold tracking-widest uppercase px-3 py-1 md:px-4 md:py-1.5 rounded-full mb-3 md:mb-4">
+                  {language === 'sr' ? '🎯 Besplatna konsultacija' : '🎯 Free consultation'}
+                </span>
+                <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight mb-2 md:mb-3">
+                  {language === 'sr' ? (
+                    <>Zakaži Poziv <span className="text-[#05afd1]">Odmah</span></>
+                  ) : (
+                    <>Book a Call <span className="text-[#05afd1]">Now</span></>
+                  )}
+                </h2>
+                <p className="text-gray-400 text-xs md:text-base max-w-md mx-auto">
+                  {language === 'sr'
+                    ? 'Izaberi termin koji ti odgovara. Poziv je besplatan i bez obaveze.'
+                    : 'Pick a time that suits you. The call is free, with no obligation.'
+                  }
+                </p>
+              </div>
+
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#05afd1] via-cyan-600 to-sky-600 p-[2px]">
+                  <div className="absolute inset-0 rounded-2xl bg-gray-900" />
+                </div>
+                <div className="relative z-10 bg-gray-900 p-4 sm:p-6 md:p-8">
+                  <BookingCalendar language={language} onBooked={handleBooked} accent="cyan" />
+                </div>
+              </div>
+
+              <a
+                href={`tel:${MARKO_TEL}`}
+                onClick={() => trackPhoneClick(MARKO_TEL, 'seo_detalji_booking', language)}
+                className="mt-3 md:mt-4 flex items-center gap-3 md:gap-4 px-4 py-3 md:px-5 md:py-4 rounded-xl border border-gray-800 bg-gray-900/60 md:hover:bg-gray-800/80 md:hover:border-[#05afd1]/40 transition-colors duration-300 group touch-manipulation active:bg-gray-800/90"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
+              >
+                <img
+                  src="/images/Dedza SEO OPTIMIZACIJA.webp" width={800} height={800}
+                  alt="Marko Devedzic"
+                  className="w-11 h-11 rounded-full object-cover object-top flex-shrink-0 ring-2 ring-[#05afd1]/30" loading="lazy" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-gray-500 text-[11px] mb-1 uppercase tracking-wider">
+                    {language === 'sr' ? 'Kontaktirajte me odmah pozivom' : 'Contact me directly by call'}
+                  </p>
+                  <p className="text-white font-bold text-base tracking-wide group-hover:text-[#05afd1] transition-colors duration-200">
+                    Marko · {MARKO_DISPLAY}
+                  </p>
+                </div>
+              </a>
             </div>
           </div>
         </section>
@@ -431,13 +525,13 @@ export function SEOOdrzavanjeDetaljiPage() {
                     <p className="text-gray-400 text-sm leading-snug mb-3 md:leading-relaxed md:text-base md:mb-6 max-w-xl">
                       {language === 'sr' ? (
                         <>Potrebno je 30 sekundi da se{' '}
-                          <button type="button" onClick={goToFunnel} className="text-[#05afd1] font-bold hover:text-[#05afd1] underline underline-offset-2 cursor-pointer">
+                          <button type="button" onClick={goToBooking} className="text-[#05afd1] font-bold hover:text-[#05afd1] underline underline-offset-2 cursor-pointer">
                             prijavite
                           </button>
                           {' '}i proverimo da li AiSajt može da vam pomogne da brže rastete — sa jasnoćom i rezultatima.</>
                       ) : (
                         <>Take 30 seconds to{' '}
-                          <button type="button" onClick={goToFunnel} className="text-[#05afd1] font-bold hover:text-[#05afd1] underline underline-offset-2 cursor-pointer">
+                          <button type="button" onClick={goToBooking} className="text-[#05afd1] font-bold hover:text-[#05afd1] underline underline-offset-2 cursor-pointer">
                             apply now
                           </button>
                           {' '}and let's see if AiSajt is the right fit to help you scale faster—with clarity and results.</>
@@ -476,7 +570,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                 <div className="relative flex justify-center pb-8 md:pb-10">
                   <button
                     type="button"
-                    onClick={goToFunnel}
+                    onClick={goToBooking}
                     className="inline-flex items-center gap-2 px-10 py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)]"
                   >
                     {language === 'sr' ? 'Zakaži poziv' : 'Book a call'}
@@ -527,7 +621,7 @@ export function SEOOdrzavanjeDetaljiPage() {
               )}
             </p>
             <button
-              onClick={goToFunnel}
+              onClick={goToBooking}
               className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 bg-[#05afd1] hover:bg-[#05afd1] text-white font-bold text-xs md:text-sm rounded-xl transition-all shadow-[0_0_16px_rgba(5,175,209,0.45)] hover:shadow-[0_0_24px_rgba(5,175,209,0.65)] whitespace-nowrap"
             >
               {language === 'sr' ? 'Zakaži Poziv' : 'Book a Call'}
@@ -588,7 +682,7 @@ export function SEOOdrzavanjeDetaljiPage() {
               </div>
               <div className="px-4 py-4">
                 <button
-                  onClick={goToFunnel}
+                  onClick={goToBooking}
                   className="w-full py-3 rounded-xl bg-gradient-to-r from-[#05afd1] to-[#05afd1] hover:from-[#05afd1] hover:to-[#05afd1] text-white font-bold text-sm transition-all shadow-lg hover:shadow-[#05afd1]/30"
                 >
                   {language === 'sr' ? 'Zakaži Poziv' : 'Book a Call'}

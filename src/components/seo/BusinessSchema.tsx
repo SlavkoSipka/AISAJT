@@ -59,7 +59,7 @@ const BUSINESS_SCHEMA = {
   // Only a verified real profile — see site-config.ts's comment on why
   // Facebook is deliberately excluded.
   sameAs: SOCIAL_PROFILES,
-  // Matches the "Meet the Team" section on /funnel exactly (name + role) —
+  // Matches the "Meet the Team" section on /izrada-sajta-detalji exactly (name + role) —
   // Marko is listed there as an employee, not a co-owner, so he's typed
   // accordingly rather than lumped into founder.
   founder: [

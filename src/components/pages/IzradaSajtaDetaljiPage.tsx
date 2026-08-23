@@ -1,8 +1,14 @@
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight, CheckCircle, Play, ExternalLink } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowRight, CheckCircle, Play, ExternalLink, Star, ChevronDown } from 'lucide-react';
+import { Toaster } from 'react-hot-toast';
 import { useLanguage } from '../../hooks/useLanguage';
 import { SEOHelmet } from '../seo/SEOHelmet';
+import { portfolioProjects } from '../../data/portfolioProjects';
+import { BookingCalendar } from '../booking/BookingCalendar';
+import { trackCTAClick, trackFormSubmitAttempt, trackFormError, trackPhoneClick } from '../../utils/analytics';
+import { submitFunnelForm } from '../../utils/hubspot';
+import { NAP } from '../../lib/site-config';
 
 /* ─── useCountUp hook ─────────────────────────────────────────────────── */
 function useCountUp(target: number, duration = 1400, started = false) {
@@ -59,12 +65,59 @@ export function IzradaSajtaDetaljiPage() {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
 
+  const [videoUnmuted, setVideoUnmuted] = useState(false);
+  /* Portfolio na desktopu: prvo 6 kartica, pa po 3 na klik. */
+  const [visibleCards, setVisibleCards] = useState(6);
+
+  /* Vimeo VSL — isti klip koji je ranije stajao na /funnel */
+  const VIMEO_MUTED = 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&controls=0';
+  const VIMEO_SOUND = 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1';
+
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const handleUnmute = () => {
+    if (iframeRef.current) {
+      iframeRef.current.src = VIMEO_SOUND;
+    }
+    setVideoUnmuted(true);
+  };
+
+  /* Case-study carousel — beskonačan scroll (3 kopije seta) */
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const setWidth = el.scrollWidth / 3;
+    el.scrollLeft = setWidth;
+  }, []);
+
+  const handleCarouselScroll = () => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const setWidth = el.scrollWidth / 3;
+    if (el.scrollLeft < setWidth * 0.15) {
+      el.scrollLeft += setWidth;
+    } else if (el.scrollLeft > setWidth * 2 - setWidth * 0.15) {
+      el.scrollLeft -= setWidth;
+    }
+  };
+
+  /* ── Vimeo player.js ─────────────────────────────────────────── */
+  useEffect(() => {
+    if (document.querySelector('script[src="https://player.vimeo.com/api/player.js"]')) return;
+    const script = document.createElement('script');
+    script.src = 'https://player.vimeo.com/api/player.js';
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
   const [statsRef, statsInView] = useInView(0.3);
   const c1 = useCountUp(50, 1200, statsInView);
   const c2 = useCountUp(50, 1200, statsInView);
   const c3 = useCountUp(100, 1400, statsInView);
   const c4 = useCountUp(1, 800, statsInView);
 
+  const [caseRef, caseVisible] = useReveal();
   const [metricsRef, metricsVisible] = useReveal();
   const [teamRef, teamVisible] = useReveal();
   const [ctaRef, ctaVisible] = useReveal();
@@ -105,26 +158,45 @@ export function IzradaSajtaDetaljiPage() {
 
   const [widgetOpen, setWidgetOpen] = useState(false);
   const [widgetAutoOpened, setWidgetAutoOpened] = useState(false);
+  const [bubbleVisible, setBubbleVisible] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0);
+  /* Dan izabran u plutajućem widgetu — prosleđuje se kalendaru. */
+  const [preselectWeekday, setPreselectWeekday] = useState<{ isoDow: number; nonce: number } | null>(null);
   const [stickyBarVisible, setStickyBarVisible] = useState(false);
+  /* booking forma u viewportu — da plutajući widget ne prekriva formu na mobilnom */
+  const [bookingInView, setBookingInView] = useState(false);
 
   useEffect(() => {
+    const isElementInViewport = (el: HTMLElement) => {
+      const rect = el.getBoundingClientRect();
+      return rect.bottom > 0 && rect.top < window.innerHeight;
+    };
+
     const onScroll = () => {
-      if (!widgetAutoOpened) {
-        const scrolled = window.scrollY + window.innerHeight;
-        const total = document.documentElement.scrollHeight;
-        if (scrolled >= total * 0.72) {
-          setWidgetOpen(true);
-          setWidgetAutoOpened(true);
-        }
+      const scrolled = window.scrollY + window.innerHeight;
+      const total = document.documentElement.scrollHeight;
+
+      /* bubble se pojavljuje na 40% skrola */
+      if (!bubbleVisible && scrolled >= total * 0.4) {
+        setBubbleVisible(true);
       }
+
+      if (!widgetAutoOpened && scrolled >= total * 0.72) {
+        setWidgetOpen(true);
+        setWidgetAutoOpened(true);
+      }
+
       const heroEl = document.querySelector('section.pt-14') as HTMLElement | null;
-      const inHero = heroEl ? heroEl.getBoundingClientRect().bottom > 0 && heroEl.getBoundingClientRect().top < window.innerHeight : false;
-      setStickyBarVisible(!inHero && window.scrollY > 60);
+      const bookingEl = document.getElementById('booking-form');
+      const inHero = heroEl ? isElementInViewport(heroEl) : false;
+      const inBooking = bookingEl ? isElementInViewport(bookingEl) : false;
+      /* sticky bar: samo kada su i hero i booking forma van ekrana */
+      setStickyBarVisible(!inHero && !inBooking && window.scrollY > 60);
+      setBookingInView(inBooking);
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, [widgetAutoOpened]);
+  }, [widgetAutoOpened, bubbleVisible]);
 
   const dayLabels = language === 'sr'
     ? ['PON', 'UTO', 'SRE', 'ČET', 'PET', 'SUB']
@@ -133,12 +205,54 @@ export function IzradaSajtaDetaljiPage() {
   const revealClass = (v: boolean) =>
     `transition-all duration-700 ease-out ${v ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`;
 
-  const goToFunnel = () => navigate('/funnel');
+  /* Nekada je vodilo na /funnel; sada je forma na ovoj istoj stranici. */
+  const goToBooking = () => {
+    document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    /* Dolazak sa hash-om (#booking-form iz kontakt dugmadi, #case-study iz
+       Portfolio dugmeta) mora da sleti na tu sekciju, a ne na vrh. */
+    const targetId = window.location.hash.replace('#', '');
+    if (targetId) {
+      let attempt = 0;
+      const tryScroll = () => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else if (attempt++ < 10) {
+          setTimeout(tryScroll, 100);
+        }
+      };
+      tryScroll();
+    } else {
+      window.scrollTo(0, 0);
+    }
     setTimeout(() => setIsVisible(true), 100);
   }, []);
+
+  /* Termin je već upisan u Supabase; ovde samo šaljemo lead u HubSpot i
+     vodimo korisnika na thank-you stranicu. */
+  const handleBooked = async ({ firstName, lastName, phone, email }: {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email: string;
+    slotAt: string;
+  }) => {
+    const fullName = `${firstName} ${lastName}`.trim();
+    trackFormSubmitAttempt('funnel_booking', language);
+    try {
+      await submitFunnelForm({ name: fullName, email, phone });
+      trackCTAClick('Booking Form Submit', 'izrada_sajta_detalji_form', language);
+    } catch (error) {
+      /* Rezervacija je sačuvana i bez HubSpot-a — ne prekidamo korisnika. */
+      trackFormError('funnel_booking', language, String(error));
+    }
+    setTimeout(() => {
+      navigate(`/thank-you?name=${encodeURIComponent(fullName)}&source=funnel_booking&lang=${language}`);
+    }, 2500);
+  };
 
   return (
     <div className="min-h-screen bg-gray-950 overflow-x-hidden relative">
@@ -180,6 +294,8 @@ export function IzradaSajtaDetaljiPage() {
         canonicalUrl="https://aisajt.com/izrada-sajta-detalji"
       />
 
+      <Toaster position="top-center" />
+
       <main id="main-content" className="relative z-10">
         <div className="fixed top-5 left-4 right-4 md:left-auto md:right-6 z-50 flex items-center justify-between md:justify-end gap-2">
           <button
@@ -190,8 +306,8 @@ export function IzradaSajtaDetaljiPage() {
             <ExternalLink className="w-3.5 h-3.5" />
           </button>
           <button
-            onClick={goToFunnel}
-            className="px-4 py-2 md:px-5 md:py-2.5 border border-pink-500/30 bg-gray-950/80 backdrop-blur-md text-pink-300 text-xs md:text-sm font-semibold tracking-wide rounded-full hover:bg-pink-600/20 hover:text-white hover:border-pink-400 transition-all duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(236,72,153,0.15)]"
+            onClick={goToBooking}
+            className="hidden md:flex px-4 py-2 md:px-5 md:py-2.5 border border-pink-500/30 bg-gray-950/80 backdrop-blur-md text-pink-300 text-xs md:text-sm font-semibold tracking-wide rounded-full hover:bg-pink-600/20 hover:text-white hover:border-pink-400 transition-all duration-300 flex items-center gap-1.5 md:gap-2 shadow-[0_0_16px_rgba(236,72,153,0.15)]"
           >
             {language === 'sr' ? 'Zakaži poziv' : 'Book a call'}
             <ArrowRight className="w-3.5 h-3.5" />
@@ -257,34 +373,304 @@ export function IzradaSajtaDetaljiPage() {
                       {language === 'sr' ? 'Klikni Play Da Naučiš Više' : 'Click Play to Learn More'}
                     </p>
                   </div>
-                  <div className="aspect-video bg-gradient-to-br from-gray-800 via-gray-900 to-black flex items-center justify-center relative group cursor-pointer">
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-pink-950/20 to-black/40" />
-                    <div className="relative z-10 text-center">
-                      <div className="w-12 h-12 md:w-20 md:h-20 rounded-full bg-gradient-to-r from-pink-600 to-pink-600 flex items-center justify-center mb-2 md:mb-3 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                        <Play className="w-6 h-6 md:w-10 md:h-10 text-white ml-0.5 md:ml-1" />
+                  {/* Vimeo video — autoplay muted u pozadini, klik/tap uključuje zvuk */}
+                  <div className="aspect-video relative bg-black">
+                    <iframe
+                      ref={iframeRef}
+                      src={videoUnmuted ? VIMEO_SOUND : VIMEO_MUTED}
+                      frameBorder="0"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      className="absolute inset-0 w-full h-full"
+                      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                      allowFullScreen
+                      title="Zeka-VSL"
+                    />
+
+                    {!videoUnmuted && (
+                      <div
+                        className="absolute inset-0 flex items-center justify-center cursor-pointer group z-10"
+                        style={{ touchAction: 'manipulation' }}
+                        onClick={handleUnmute}
+                      >
+                        <div className="text-center">
+                          <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-pink-600/80 backdrop-blur-sm flex items-center justify-center mb-2 md:mb-3 mx-auto group-hover:scale-110 group-hover:bg-pink-500/90 active:scale-90 transition-all duration-300 shadow-lg">
+                            <Play className="w-6 h-6 md:w-7 md:h-7 text-white ml-0.5" />
+                          </div>
+                          <div className="bg-black/60 backdrop-blur-sm rounded-lg px-3 py-2 md:px-4 md:py-2.5 border border-white/10">
+                            <p className="text-white font-bold text-xs md:text-sm mb-0.5">
+                              {language === 'sr' ? '▶ Video se pušta' : '▶ Video is Playing'}
+                            </p>
+                            <p className="text-white/70 text-[10px] md:text-xs">
+                              {language === 'sr' ? 'Klikni da uključiš zvuk' : 'Click to unmute'}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="bg-pink-600/90 backdrop-blur-sm rounded-lg md:rounded-xl px-3 py-2 md:px-5 md:py-3 max-w-xs mx-auto border border-pink-500/50">
-                        <p className="text-white font-bold text-sm md:text-base mb-0.5">
-                          {language === 'sr' ? 'Tvoj Video Se Pušta' : 'Your Video is Playing'}
-                        </p>
-                        <p className="text-white/80 text-[10px] md:text-xs">
-                          {language === 'sr' ? 'Klikni Da Isključiš Zvuk' : 'Click To Unmute'}
-                        </p>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
               <div className={`mt-6 flex justify-center transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
                 <button
                   type="button"
-                  onClick={goToFunnel}
+                  onClick={goToBooking}
                   className="inline-flex items-center gap-2 px-8 py-4 bg-pink-500 hover:bg-pink-600 text-white font-bold uppercase text-sm tracking-wide rounded-lg transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.1),0_0_48px_rgba(236,72,153,0.65)]"
                 >
                   {language === 'sr' ? 'Zakaži poziv' : 'Book a call'}
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Booking Section — forma preneta sa /funnel, u pink temi */}
+        <section id="booking-form" className="pt-8 md:pt-16 pb-10 md:pb-24 relative overflow-hidden z-20 scroll-mt-20">
+          {/* Ambient glow */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-pink-600/20 rounded-full blur-[100px]" />
+          </div>
+
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-xl mx-auto">
+
+              {/* Header */}
+              <div className="text-center mb-4 md:mb-6">
+                <span className="inline-block bg-pink-500/20 border border-pink-500/40 text-pink-300 text-[10px] md:text-xs font-semibold tracking-widest uppercase px-3 py-1 md:px-4 md:py-1.5 rounded-full mb-3 md:mb-4">
+                  {language === 'sr' ? '🎯 Besplatna konsultacija' : '🎯 Free consultation'}
+                </span>
+                <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight mb-2 md:mb-3">
+                  {language === 'sr' ? (
+                    <>Zakaži Poziv <span className="text-pink-400">Odmah</span></>
+                  ) : (
+                    <>Book a Call <span className="text-pink-400">Now</span></>
+                  )}
+                </h2>
+                <p className="text-gray-400 text-xs md:text-base max-w-md mx-auto">
+                  {language === 'sr'
+                    ? 'Izaberi termin koji ti odgovara. Poziv je besplatan i bez obaveze.'
+                    : 'Book a 1-on-1 call and see how we can help. Completely free.'
+                  }
+                </p>
+              </div>
+
+              {/* Card */}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                {/* Gradient border effect */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-pink-500 via-pink-600 to-rose-600 p-[2px]">
+                  <div className="absolute inset-0 rounded-2xl bg-gray-900" />
+                </div>
+
+                <div className="relative z-10 bg-gray-900 p-4 sm:p-6 md:p-8">
+                  <BookingCalendar language={language} onBooked={handleBooked} preselectWeekday={preselectWeekday} />
+                </div>
+              </div>
+
+              {/* Kontakt kartica – direktan poziv */}
+              <a
+                href={`tel:${NAP.phone.tel}`}
+                onClick={() => trackPhoneClick(NAP.phone.tel, 'izrada_sajta_detalji_booking', language)}
+                className="mt-3 md:mt-4 flex items-center gap-3 md:gap-4 px-4 py-3 md:px-5 md:py-4 rounded-xl border border-gray-800 bg-gray-900/60 md:hover:bg-gray-800/80 md:hover:border-pink-500/40 transition-colors duration-300 group touch-manipulation active:bg-gray-800/90"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
+              >
+                <img
+                  src="/images/Strahinja izrada sajta.webp" width={800} height={800}
+                  alt="Strahinja Zekanovic"
+                  className="w-11 h-11 rounded-full object-cover object-top flex-shrink-0 ring-2 ring-pink-500/30" loading="lazy" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-gray-500 text-[11px] mb-1 uppercase tracking-wider">
+                    {language === 'sr' ? 'Kontaktirajte me odmah pozivom' : 'Contact me directly by call'}
+                  </p>
+                  <p className="text-white font-bold text-base tracking-wide group-hover:text-pink-300 transition-colors duration-200">
+                    Strahinja · {NAP.phone.local}
+                  </p>
+                </div>
+                <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-pink-600 flex items-center justify-center shadow-[0_2px_12px_rgba(236,72,153,0.4)] group-hover:bg-pink-500 group-hover:shadow-[0_4px_18px_rgba(236,72,153,0.6)] transition-all duration-200 overflow-visible">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink: 0}}>
+                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.12 1.2a2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 6.91a16 16 0 006.59 6.59l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+                  </svg>
+                </div>
+              </a>
+
+            </div>
+          </div>
+        </section>
+
+        {/* Portfolio — jedino mesto na sajtu; kartice otvaraju /portfolio/:slug case study */}
+        <section id="case-study" ref={caseRef as React.RefObject<HTMLElement>} className="py-16 md:py-24 relative overflow-hidden z-10 bg-black">
+          <div className={`container mx-auto px-4 relative z-10 ${revealClass(caseVisible)}`}>
+            <div className="max-w-6xl mx-auto">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-2 h-8 rounded-full bg-pink-500 flex-shrink-0 mt-1" />
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+                    {language === 'sr' ? (
+                      <>Stvarni rezultati <span className="text-pink-300">od stvarnih klijenata.</span></>
+                    ) : (
+                      <>Real results <span className="text-pink-300">from real clients.</span></>
+                    )}
+                  </h2>
+                  <p className="text-gray-400 mt-3 text-base md:text-lg max-w-2xl">
+                    {language === 'sr'
+                      ? 'Pogledaj kako su naši klijenti dobili moderan sajt, više poseta i jasnu online prisutnost.'
+                      : 'See how our clients got a modern site, more traffic, and a clear online presence.'
+                    }
+                  </p>
+                </div>
+              </div>
+
+              {/* Kartice – na mobilnom horizontalni scroll carousel, na desktopu grid */}
+              {(() => {
+                /* Logotipi postoje samo za deo klijenata — kartica se lepo
+                   prikazuje i bez njega. */
+                const logos: Record<string, string> = {
+                  'prestige-gradnja': '/images/logop.png',
+                  'custom-rc-parts': '/images/logo.png',
+                  'kralj-residence': '/images/Beli logo2.webp',
+                  'bn-autofolije': '/images/logobn.webp',
+                  'komotraks': '/images/komotraks-logotip.png',
+                  'bora-company': '/images/boralogo.webp',
+                  'in-stan': '/images/logoin.png',
+                };
+                const lightLogo = new Set(['custom-rc-parts', 'bora-company', 'in-stan']);
+
+                type Card = {
+                  key: string;
+                  to?: string;
+                  href?: string;
+                  logo?: string;
+                  lightLogo?: boolean;
+                  siteImg: string;
+                  title: string;
+                  tag: string;
+                  headline: string;
+                  text: string;
+                };
+
+                /* Case studies — svaki otvara svoju /portfolio/:slug stranicu */
+                const cards: Card[] = portfolioProjects.map((p) => ({
+                  key: p.slug,
+                  to: `/portfolio/${p.slug}`,
+                  logo: logos[p.slug],
+                  lightLogo: lightLogo.has(p.slug),
+                  siteImg: p.image,
+                  title: p.title,
+                  tag: p.clientIndustry[language],
+                  headline: p.description[language],
+                  text: p.tags[language].join(' · '),
+                }));
+
+                /* Klijenti bez zasebne case-study stranice — vode na živi sajt */
+                const externalOnly: Card[] = [
+                  { key: 'poklon', href: 'https://pokloniportret.rs/', logo: '/images/poklonilogo.webp', siteImg: '/images/poklon.webp', title: 'Pokloni Portret', tag: language === 'sr' ? 'Personalizovani pokloni' : 'Personalized gifts', headline: language === 'sr' ? 'Portreti po narudžbini — galerija i porudžbine' : 'Custom portraits — gallery and orders', text: language === 'sr' ? 'Umetnički brend na webu. Lako naručivanje i pregled radova.' : 'Art brand online. Easy ordering and portfolio view.' },
+                  { key: 'loki', href: 'https://lokin4.rs/', logo: '/images/lokilo.png', siteImg: '/images/loki.webp', title: 'Loki N-4', tag: language === 'sr' ? 'Betonski elementi' : 'Concrete elements', headline: language === 'sr' ? 'Prepoznatljiv brend na webu — identitet i poruka' : 'Recognizable brand online — identity and message', text: language === 'sr' ? 'Jedinstven vizuelni identitet i jasna komunikacija.' : 'Unique visual identity and clear communication.' },
+                  { key: 'lako', href: 'https://lakosistem.rs/', logo: '/images/logolak.webp', lightLogo: true, siteImg: '/images/lako.webp', title: 'Lako Sistem', tag: language === 'sr' ? 'Papirna galanterija' : 'Paper goods', headline: language === 'sr' ? 'Moderan prezentacioni web sajt — preglednost i autoritet' : 'Modern presentation website — clarity and authority', text: language === 'sr' ? 'Sajt prilagođen potrebama klijenta. Zadovoljstvo i rezultati.' : 'Site tailored to client needs. Satisfaction and results.' },
+                  { key: 'jastuci', href: 'https://vazdusnijastuci.rs/', logo: '/images/logo2.png', siteImg: '/images/jastuci.webp', title: 'Vazdušni jastuci', tag: language === 'sr' ? 'Auto delovi' : 'Auto parts', headline: language === 'sr' ? 'Sajt za auto delove — katalog i upiti' : 'Site for auto parts — catalog and inquiries', text: language === 'sr' ? 'Pregledan katalog i kontakt forma. Više upita sa sajta.' : 'Clear catalog and contact form. More inquiries from site.' },
+                ];
+
+                const allCards = [...cards, ...externalOnly];
+
+                const cardInner = (card: Card) => (
+                  <div className="p-5 md:p-6 flex flex-col flex-1 min-h-0">
+                    <div className="flex-1 flex flex-col min-h-0">
+                      <div className="flex gap-0.5 mb-3">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <Star key={i} className="w-4 h-4 text-pink-400 fill-pink-400" />
+                        ))}
+                      </div>
+                      <h3 className="text-pink-300 font-bold text-sm md:text-base mb-3 leading-snug">
+                        {card.headline}
+                      </h3>
+                      {card.logo ? (
+                        <div className={`aspect-video rounded-lg border mb-4 overflow-hidden relative flex items-center justify-center p-6 md:p-8 ${card.lightLogo ? 'bg-white border-gray-300' : 'bg-gray-800 border-gray-700'}`}>
+                          <img src={card.logo} alt={`${card.title} logo`} className="max-w-full max-h-full w-auto h-auto object-contain transition-transform duration-500 ease-out group-hover:scale-105" loading="lazy" />
+                        </div>
+                      ) : (
+                        <div className="aspect-video rounded-lg bg-gray-800 border border-gray-700 mb-4 overflow-hidden relative">
+                          <img src={card.siteImg} alt={card.title} className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" loading="lazy" />
+                        </div>
+                      )}
+                      <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                        {card.text}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between gap-3 mt-auto flex-shrink-0">
+                      <div className="min-w-0">
+                        <p className="text-white font-medium text-sm truncate">{card.title}</p>
+                        <p className="text-gray-500 text-xs truncate">{card.tag}</p>
+                      </div>
+                      <span className="flex items-center gap-1.5 px-3 py-2.5 rounded-lg bg-pink-600/20 border border-pink-500/30 text-pink-300 text-xs font-semibold whitespace-nowrap transition-colors duration-200 md:group-hover:bg-pink-600 md:group-hover:text-white md:group-hover:border-pink-500 flex-shrink-0">
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>
+                          {card.to
+                            ? (language === 'sr' ? 'Pogledaj projekat' : 'View project')
+                            : (language === 'sr' ? 'Poseti sajt' : 'Visit site')}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                );
+
+                const cardClass = "group rounded-2xl border border-gray-700/60 bg-gray-900/60 backdrop-blur-sm overflow-hidden shadow-xl flex flex-col h-full transition-colors duration-300 ease-out md:hover:border-pink-500/50 md:hover:shadow-pink-500/10 md:hover:shadow-2xl";
+
+                const cardEl = (card: Card, keySuffix = '') =>
+                  card.to ? (
+                    <Link key={card.key + keySuffix} to={card.to} className={cardClass}>
+                      {cardInner(card)}
+                    </Link>
+                  ) : (
+                    <a key={card.key + keySuffix} href={card.href} target="_blank" rel="noopener noreferrer" className={cardClass}>
+                      {cardInner(card)}
+                    </a>
+                  );
+
+                return (
+                  <>
+                    {/* Mobile: swipe carousel */}
+                    <div className="md:hidden mt-8 -mx-4">
+                      <div
+                        ref={carouselRef}
+                        onScroll={handleCarouselScroll}
+                        className="flex gap-4 overflow-x-auto px-4 pb-4 snap-x snap-mandatory"
+                        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none' } as React.CSSProperties}
+                      >
+                        {[...allCards, ...allCards, ...allCards].map((card, idx) => (
+                          <div key={`${card.key}-${idx}`} className="snap-start flex-shrink-0 w-[82vw]">
+                            {cardEl(card, `-${idx}`)}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex justify-center mt-3">
+                        <span className="text-gray-600 text-[11px] tracking-wider uppercase">
+                          {language === 'sr' ? '← Prevuci za još →' : '← Swipe for more →'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Desktop: grid sa "Učitaj još" — prvo 6, pa po 3 */}
+                    <div className="hidden md:block">
+                      <div className="grid grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 mt-10">
+                        {allCards.slice(0, visibleCards).map((card) => cardEl(card))}
+                      </div>
+                      {visibleCards < allCards.length && (
+                        <div className="flex flex-col items-center gap-2 mt-8">
+                          <button
+                            type="button"
+                            onClick={() => setVisibleCards((n) => n + 3)}
+                            className="inline-flex items-center gap-2 px-7 py-3 rounded-full border-2 border-pink-500 text-pink-300 font-bold text-sm uppercase tracking-wide hover:bg-pink-600 hover:text-white transition-colors"
+                          >
+                            {language === 'sr' ? 'Učitaj još' : 'Load more'}
+                            <ChevronDown className="w-4 h-4" />
+                          </button>
+                          <span className="text-gray-500 text-xs">
+                            {visibleCards} / {allCards.length}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </section>
@@ -425,13 +811,13 @@ export function IzradaSajtaDetaljiPage() {
                     <p className="text-gray-400 text-sm leading-snug mb-3 md:leading-relaxed md:text-base md:mb-6 max-w-xl">
                       {language === 'sr' ? (
                         <>Potrebno je 30 sekundi da se{' '}
-                          <button type="button" onClick={goToFunnel} className="text-pink-300 font-bold hover:text-pink-200 underline underline-offset-2 cursor-pointer">
+                          <button type="button" onClick={goToBooking} className="text-pink-300 font-bold hover:text-pink-200 underline underline-offset-2 cursor-pointer">
                             prijavite
                           </button>
                           {' '}i proverimo da li AiSajt može da vam pomogne da brže rastete — sa jasnoćom i rezultatima.</>
                       ) : (
                         <>Take 30 seconds to{' '}
-                          <button type="button" onClick={goToFunnel} className="text-pink-300 font-bold hover:text-pink-200 underline underline-offset-2 cursor-pointer">
+                          <button type="button" onClick={goToBooking} className="text-pink-300 font-bold hover:text-pink-200 underline underline-offset-2 cursor-pointer">
                             apply now
                           </button>
                           {' '}and let's see if AiSajt is the right fit to help you scale faster—with clarity and results.</>
@@ -470,7 +856,7 @@ export function IzradaSajtaDetaljiPage() {
                 <div className="relative flex justify-center pb-8 md:pb-10">
                   <button
                     type="button"
-                    onClick={goToFunnel}
+                    onClick={goToBooking}
                     className="inline-flex items-center gap-2 px-10 py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold uppercase text-sm tracking-wide rounded-xl transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.08),0_0_48px_rgba(255,255,255,0.55)]"
                   >
                     {language === 'sr' ? 'Zakaži poziv' : 'Book a call'}
@@ -506,7 +892,7 @@ export function IzradaSajtaDetaljiPage() {
           </div>
         </footer>
 
-        {/* Sticky bottom bar → funnel */}
+        {/* Sticky bottom bar → booking forma */}
         <div
           className={`fixed bottom-5 left-0 right-0 z-40 hidden md:flex justify-center px-4 transition-all duration-500 ease-out ${
             stickyBarVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0 pointer-events-none'
@@ -521,7 +907,7 @@ export function IzradaSajtaDetaljiPage() {
               )}
             </p>
             <button
-              onClick={goToFunnel}
+              onClick={goToBooking}
               className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs md:text-sm rounded-xl transition-all shadow-[0_0_16px_rgba(236,72,153,0.45)] hover:shadow-[0_0_24px_rgba(236,72,153,0.65)] whitespace-nowrap"
             >
               {language === 'sr' ? 'Zakaži Poziv' : 'Book a Call'}
@@ -532,8 +918,8 @@ export function IzradaSajtaDetaljiPage() {
           </div>
         </div>
 
-        {/* Floating widget → funnel */}
-        <div className="fixed bottom-6 right-5 z-50 flex flex-col items-end gap-3">
+        {/* Floating widget → booking forma (sakriven na mobilnom dok je forma u kadru) */}
+        <div className={`fixed bottom-6 right-5 z-50 flex-col items-end gap-3 ${bookingInView ? 'hidden md:flex' : 'flex'}`}>
           <div
             className={`transition-all duration-300 ease-out origin-bottom-right ${
               widgetOpen ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-90 translate-y-4 pointer-events-none'
@@ -570,7 +956,13 @@ export function IzradaSajtaDetaljiPage() {
                   {dayLabels.map((label, i) => (
                     <button
                       key={i}
-                      onClick={() => setSelectedDay(i)}
+                      onClick={() => {
+                        setSelectedDay(i);
+                        /* dayLabels ide PON…SUB, pa je ISO dan i + 1 */
+                        setPreselectWeekday({ isoDow: i + 1, nonce: Date.now() });
+                        setWidgetOpen(false);
+                        setTimeout(goToBooking, 150);
+                      }}
                       className={`flex-1 flex flex-col items-center py-2.5 rounded-lg border text-xs font-medium transition-all ${
                         selectedDay === i ? 'bg-pink-600 border-pink-500 text-white' : 'bg-white/5 border-white/10 text-gray-400 hover:border-pink-500/50 hover:text-white'
                       }`}
@@ -582,7 +974,7 @@ export function IzradaSajtaDetaljiPage() {
               </div>
               <div className="px-4 py-4">
                 <button
-                  onClick={goToFunnel}
+                  onClick={goToBooking}
                   className="w-full py-3 rounded-xl bg-gradient-to-r from-pink-600 to-pink-700 hover:from-pink-500 hover:to-pink-600 text-white font-bold text-sm transition-all shadow-lg hover:shadow-pink-500/30"
                 >
                   {language === 'sr' ? 'Zakaži Poziv' : 'Book a Call'}
@@ -592,7 +984,11 @@ export function IzradaSajtaDetaljiPage() {
           </div>
           <button
             onClick={() => setWidgetOpen(v => !v)}
-            className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-pink-500 hover:border-pink-400 transition-all hover:scale-105 active:scale-95 bg-pink-700 flex items-center justify-center"
+            className={`relative w-14 h-14 rounded-full shadow-2xl border-2 border-pink-500 hover:border-pink-400 active:scale-95 bg-pink-700 flex items-center justify-center transition-all duration-500 ease-out ${
+              bubbleVisible
+                ? 'opacity-100 scale-100 translate-y-0 hover:scale-105'
+                : 'opacity-0 scale-50 translate-y-4 pointer-events-none'
+            }`}
             aria-label="Zakaži poziv"
           >
             <img src="/images/aisajt_providno-removebg-preview.png" width={500} height={180} alt="AiSajt" className="w-9 h-9 object-contain" loading="lazy" />

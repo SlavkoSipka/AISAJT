@@ -114,7 +114,7 @@ export function LokalniSeoBeogradPage() {
                 <button
                   onClick={() => {
                     trackCTAClick('Besplatna Konsultacija - Lokalni SEO Hero', 'lokalni_seo_hero', language);
-                    navigate('/funnel');
+                    navigate('/izrada-sajta-detalji');
                   }}
                   className="group px-6 py-3.5 sm:px-7 sm:py-4 bg-gray-900 text-white text-base sm:text-lg font-semibold rounded-full hover:bg-white hover:text-gray-900 border-2 border-gray-900 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
                 >
@@ -287,7 +287,7 @@ export function LokalniSeoBeogradPage() {
               <button
                 onClick={() => {
                   trackCTAClick('Lokalni SEO - CTA', 'lokalni_seo_cta', language);
-                  navigate('/funnel');
+                  navigate('/izrada-sajta-detalji');
                 }}
                 className="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 text-white rounded-full font-semibold hover:scale-105 transition-all duration-300 shadow-lg"
               >
@@ -348,7 +348,7 @@ export function LokalniSeoBeogradPage() {
                 <button
                   onClick={() => {
                     trackCTAClick('Final CTA', 'lokalni_seo_final', language);
-                    navigate('/funnel');
+                    navigate('/izrada-sajta-detalji');
                   }}
                   className="group px-8 py-4 bg-gray-900 text-white rounded-full font-semibold hover:scale-105 transition-all duration-300 inline-flex items-center gap-2 shadow-xl"
                 >

@@ -50,7 +50,7 @@ export function StickyCallBar({ language }: StickyCallBarProps) {
           <button
             onClick={() => {
               trackCTAClick('Besplatna Ponuda', 'sticky_bar_mobile', language);
-              navigate('/funnel');
+              navigate('/izrada-sajta-detalji');
             }}
             className="lg-btn-primary flex items-center justify-center gap-2 py-3.5 rounded-full text-white font-semibold text-sm"
           >

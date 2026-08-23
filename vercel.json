@@ -12,6 +12,31 @@
       "source": "/izrada-sajta-cena",
       "destination": "/izrada-sajta",
       "permanent": true
+    },
+    {
+      "source": "/funnel",
+      "destination": "/izrada-sajta-detalji",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/izrada-sajta-detalji",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio",
+      "destination": "/izrada-sajta-detalji",
+      "permanent": true
     }
   ],
   "rewrites": [

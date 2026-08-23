@@ -11,14 +11,14 @@ export function ConsultationCTA({ topic = "tvom projektu" }: ConsultationCTAProp
   const { language } = useLanguage();
 
   const handleClick = () => {
-    trackCTAClick('Besplatna Konsultacija', '/funnel', language);
+    trackCTAClick('Besplatna Konsultacija', '/izrada-sajta-detalji', language);
   };
 
   return (
     <div className="mt-8 md:mt-12">
       <div className="max-w-3xl mx-auto">
           <Link
-            to="/funnel"
+            to="/izrada-sajta-detalji"
             onClick={handleClick}
             className="group relative w-full block bg-gradient-to-br from-violet-600 to-indigo-700 hover:from-violet-700 hover:to-indigo-800 rounded-xl p-6 md:p-7 border border-violet-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 text-left overflow-hidden"
           >
@@ -36,7 +36,7 @@ export function ConsultationCTA({ topic = "tvom projektu" }: ConsultationCTAProp
               </div>
               
               <h3 className="text-base md:text-lg font-bold text-white mb-2">
-                {language === 'sr' ? '🚀 Zakaži Besplatnu Konsultaciju' : '🚀 Schedule Free Consultation'}
+                {language === 'sr' ? '🚀 Pogledaj Ponudu' : '🚀 See Our Offer'}
               </h3>
               
               <p className="text-sm md:text-base text-white/90 mb-3 leading-relaxed">

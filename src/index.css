@@ -1291,42 +1291,48 @@ html {
 }
 
 /* Stari fiksni sidebar je zamenjen mini-rail overlay menijem, pa offset
-   više nije potreban — klasa je ostavljena u markup-u ali bez efekta. */
-.desktop-vertical-nav-offset {
-  padding-left: 0;
+   više nije potreban — klasa je ostavljena u markup-u ali bez efekta.
+   Na telefonu je ipak imala efekat: gasila je Tailwind px-4 i lepila
+   sadržaj uz levu ivicu. Zato važi tek od md naviše. */
+@media (min-width: 768px) {
+  .desktop-vertical-nav-offset {
+    padding-left: 0;
+  }
 }
 /* ═══════════════════════════════════════════════════════════
    2026 Lead-Gen Redesign — homepage (lg- prefix)
    ═══════════════════════════════════════════════════════════ */
 
-/* Gradient text accent */
+/* Gradient text accent — kratak put kroz nijanse (azurna → indigo).
+   Raniji violet→indigo→roze je prelazio pola kruga boja, što uvek deluje
+   jeftino; dva bliska tona izgledaju kao odluka, a ne kao dugа. */
 .lg-grad-text {
-  background: linear-gradient(100deg, #7c3aed 0%, #4f46e5 45%, #db2777 100%);
+  background: linear-gradient(100deg, #0284c7 0%, #4338ca 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* Primary CTA — living gradient */
+/* Primary CTA — miran gradijent, bez animacije.
+   Gradijent koji se stalno pomera je ono što je najviše vuklo na jeftino;
+   ozbiljan CTA stoji mirno, a "skupo" mu daje senka u boji same površine. */
 .lg-btn-primary {
-  background: linear-gradient(120deg, #6d28d9, #4f46e5 55%, #be185d);
-  background-size: 200% 200%;
-  animation: lg-grad-shift 7s ease infinite;
-  box-shadow: 0 10px 30px -8px rgba(109, 40, 217, 0.5);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: linear-gradient(120deg, #0369a1 0%, #1d4ed8 55%, #4338ca 100%);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.14) inset,
+    0 10px 28px -10px rgba(3, 105, 161, 0.55);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
 }
 .lg-btn-primary:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 18px 44px -10px rgba(109, 40, 217, 0.65);
+  transform: translateY(-2px);
+  filter: saturate(1.08);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.18) inset,
+    0 18px 40px -12px rgba(29, 78, 216, 0.6);
 }
 .lg-btn-primary:active {
   transform: translateY(0) scale(0.99);
 }
-@keyframes lg-grad-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
 /* Call button */
 .lg-btn-call {
   transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
@@ -1338,12 +1344,12 @@ html {
 
 /* Soft premium card shadow */
 .lg-card {
-  box-shadow: 0 1px 2px rgba(17, 12, 34, 0.04), 0 14px 36px -18px rgba(76, 29, 149, 0.2);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 14px 36px -18px rgba(15, 23, 42, 0.18);
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease, border-color 0.3s ease;
 }
 .lg-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 2px 4px rgba(17, 12, 34, 0.05), 0 28px 56px -20px rgba(76, 29, 149, 0.32);
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06), 0 28px 56px -20px rgba(3, 105, 161, 0.26);
 }
 
 /* Marquee band */
@@ -1365,18 +1371,17 @@ html {
 }
 @media (prefers-reduced-motion: reduce) {
   .lg-marquee-track { animation: none; }
-  .lg-btn-primary { animation: none; }
 }
 
 /* Outlined display text (marquee) */
 .lg-outline-text {
-  -webkit-text-stroke: 1.5px rgba(109, 40, 217, 0.4);
+  -webkit-text-stroke: 1.5px rgba(3, 105, 161, 0.35);
   color: transparent;
 }
 
 /* Subtle dot grid backdrop */
 .lg-dot-grid {
-  background-image: radial-gradient(rgba(76, 29, 149, 0.10) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(15, 23, 42, 0.09) 1px, transparent 1px);
   background-size: 28px 28px;
 }
 .lg-dot-grid-dark {

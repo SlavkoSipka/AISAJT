@@ -42,14 +42,14 @@
     <priority>0.92</priority>
   </url>
 
-  <!-- Izrada Sajta Detalji - supplementary to the pricing page above; was
-       missing from the sitemap (flagged Phase 5, still missing as of Phase 9,
-       fixed here) -->
+  <!-- Izrada Sajta Detalji - MONEY PAGE / primary conversion. Preuzela ulogu
+       ugašenog /funnel-a (video + booking forma + portfolio), koji sada 301
+       redirectuje ovde. Visok autoritet iz internih linkova sa svih stranica. -->
   <url>
     <loc>https://aisajt.com/izrada-sajta-detalji</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-08-22</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.95</priority>
   </url>
 
   <!-- Web Dizajn Page - FOURTH MOST IMPORTANT -->
@@ -69,12 +69,6 @@
   </url>
 
   <!-- Portfolio - case studies, proof of work -->
-  <url>
-    <loc>https://aisajt.com/portfolio</loc>
-    <lastmod>2026-08-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
 
   <url>
     <loc>https://aisajt.com/portfolio/kralj-residence</loc>
@@ -165,80 +159,6 @@
     <lastmod>2026-08-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-  </url>
-
-  <!-- Blog Hub - HIGH PRIORITY for SEO -->
-  <url>
-    <loc>https://aisajt.com/blog</loc>
-    <lastmod>2026-01-30</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <!-- Blog Categories -->
-  <url>
-    <loc>https://aisajt.com/blog/category/seo</loc>
-    <lastmod>2026-01-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://aisajt.com/blog/category/izrada-sajtova</loc>
-    <lastmod>2026-01-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://aisajt.com/blog/category/web-dizajn</loc>
-    <lastmod>2026-01-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://aisajt.com/blog/category/e-commerce</loc>
-    <lastmod>2026-01-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://aisajt.com/blog/category/case-studies</loc>
-    <lastmod>2026-01-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-
-  <!-- Blog Posts -->
-  <url>
-    <loc>https://aisajt.com/blog/koji-sajt-mi-treba-za-firmu</loc>
-    <lastmod>2026-01-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisajt.com/blog/seo-osnove-za-pocetnike</loc>
-    <lastmod>2026-01-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-
-  <url>
-    <loc>https://aisajt.com/blog/google-ads-ili-seo</loc>
-    <lastmod>2026-08-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-
-  <!-- Funnel - MONEY PAGE / primary conversion (high authority from all pages) -->
-  <url>
-    <loc>https://aisajt.com/funnel</loc>
-    <lastmod>2026-02-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
   </url>
 
   <!-- Promet Sistem - funnel za auto servise (Meta ads landing) -->

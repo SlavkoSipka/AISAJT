@@ -7,14 +7,14 @@ export function TeamCTA() {
   const { language } = useLanguage();
 
   const handleClick = () => {
-    trackCTAClick('Upoznaj AiSajt Tim', '/funnel', language);
+    trackCTAClick('Upoznaj AiSajt Tim', '/izrada-sajta-detalji', language);
   };
 
   return (
     <div className="mt-8 md:mt-12">
       <div className="max-w-3xl mx-auto">
           <Link
-            to="/funnel"
+            to="/izrada-sajta-detalji"
             onClick={handleClick}
             className="group relative w-full block bg-gradient-to-br from-white to-violet-50/30 hover:to-violet-50/50 rounded-xl p-6 md:p-7 border border-violet-200/60 hover:border-violet-300 transition-all duration-300 hover:shadow-lg text-left overflow-hidden"
           >
