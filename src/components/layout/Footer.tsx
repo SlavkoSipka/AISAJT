@@ -81,7 +81,7 @@ export function Footer() {
         <div className="border-t border-violet-200 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-600">
-              &copy; {new Date().getFullYear()} AiSajt.com | {language === 'sr' ? 'Digitalna agencija iz Beograda' : 'Digital agency from Belgrade'}
+              &copy; {new Date().getFullYear()} AiSajt.com | {language === 'sr' ? 'Profesionalna izrada web sajtova' : 'Professional web development'}
             </p>
             <div className="flex gap-6">
               <Link 

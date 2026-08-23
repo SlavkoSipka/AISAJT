@@ -218,16 +218,16 @@ export function HomePage() {
       {/* SEO Meta Tags - Optimized for Pillar Pages Authority */}
       <SEOHelmet
         title={language === 'sr'
-          ? 'AiSajt | Web Agencija u Beogradu: Sajtovi, SEO i Reklame'
-          : 'AiSajt | Web Agency in Belgrade: Sites, SEO and Ads'
+          ? 'AiSajt - Agencija za Izradu Sajta | Beograd'
+          : 'AiSajt - Website Development Agency | Belgrade'
         }
         description={language === 'sr'
-          ? 'AiSajt je digitalna agencija iz Beograda. Web razvoj, SEO optimizacija, Meta reklame i održavanje za firme širom Srbije. Preko 50 realizovanih projekata.'
-          : 'AiSajt is a digital agency from Belgrade. Web development, SEO optimization, Meta ads and maintenance for businesses across Serbia. Over 50 completed projects.'
+          ? 'AiSajt je agencija iz Beograda za izradu web sajtova i SEO optimizaciju. Preko 50 realizovanih projekata za klijente širom Srbije.'
+          : 'AiSajt is a Belgrade agency for website development and SEO optimization. Over 50 completed projects for clients across Serbia.'
         }
         keywords={language === 'sr'
-          ? 'aisajt, ai sajt, digitalna agencija beograd, web agencija beograd, aisajt tim'
-          : 'aisajt, digital agency belgrade, web agency serbia'
+          ? 'aisajt, ai sajt, agencija za izradu sajta beograd, web agencija beograd, aisajt tim'
+          : 'aisajt, website development agency belgrade, digital agency serbia'
         }
         canonicalUrl="https://aisajt.com/"
       />
@@ -259,7 +259,7 @@ export function HomePage() {
             {[0, 1].map((track) => (
               <div key={track} className="lg-marquee-track">
                 {[
-                  language === 'sr' ? 'Web Razvoj' : 'Web Development',
+                  language === 'sr' ? 'Izrada Sajtova' : 'Web Development',
                   language === 'sr' ? 'SEO Optimizacija' : 'SEO Optimization',
                   language === 'sr' ? 'Web Dizajn' : 'Web Design',
                   language === 'sr' ? 'Online Prodavnice' : 'Online Stores',
@@ -305,7 +305,7 @@ export function HomePage() {
                   <div className="relative overflow-hidden rounded-[2rem] shadow-2xl" data-clip-reveal>
                     <img
                       src="/images/izrada sajta cena.webp" width={1200} height={900}
-                      alt="Digitalna rešenja i cenovnik usluga AiSajt agencije u Beogradu"
+                      alt="Izrada sajta cena - profesionalna izrada web sajtova u Beogradu - AI Sajt agencija"
                       className="w-full h-[300px] md:h-[440px] object-cover scale-110" loading="lazy" data-parallax />
                     <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/40 via-transparent to-transparent"></div>
                     <span data-chip className="absolute bottom-4 left-4 px-4 py-2 rounded-full bg-white/90 backdrop-blur text-sm font-bold text-gray-900 shadow-lg">
@@ -315,12 +315,12 @@ export function HomePage() {
                 </div>
                 <div className="space-y-5 md:space-y-6" data-reveal-group>
                   <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 leading-tight tracking-tight">
-                    {language === 'sr' ? 'Web Razvoj' : 'Web Development'}
+                    {language === 'sr' ? 'Izrada Web Sajta' : 'Website Development'}
                   </h2>
                   <p className="text-base md:text-lg text-gray-600 leading-relaxed">
                     {language === 'sr' ? (
                       <>
-                        AiSajt agencija iz Beograda pravi moderne, brze i responzivne web platforme za klijente širom Srbije, od prezentacionih stranica do kompleksnih online prodavnica. Pogledajte našu stranicu{' '}
+                        AiSajt agencija iz Beograda specijalizovana je za profesionalnu izradu web sajtova. Od prezentacionih stranica do kompleksnih online prodavnica - pravimo moderne, brze i responzivne web platforme za klijente širom Srbije. Pogledajte našu stranicu{' '}
                         <Link to="/izrada-sajta" className="text-indigo-600 hover:text-indigo-700 font-semibold underline">
                           izrada sajta cena
                         </Link>
@@ -328,7 +328,7 @@ export function HomePage() {
                       </>
                     ) : (
                       <>
-                        AiSajt agency from Belgrade builds modern, fast and responsive web platforms for clients across Serbia, from presentation pages to complex online stores. Check our{' '}
+                        AiSajt agency from Belgrade specializes in professional website development. From presentation pages to complex online stores - we create modern, fast and responsive platforms for clients across Serbia. Check our{' '}
                         <Link to="/izrada-sajta" className="text-indigo-600 hover:text-indigo-700 font-semibold underline">
                           website pricing
                         </Link>
@@ -684,7 +684,7 @@ export function HomePage() {
                       <div className="absolute inset-1 bg-white rounded-full"></div>
                       <img
                         src="/images/zeka.webp" width={400} height={400}
-                        alt="Strahinja, arhitekta i osnivač AiSajt tima"
+                        alt="Strahinja, arhitekta i osnivač AiSajt tima za izradu web sajtova"
                         className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] rounded-full object-cover" loading="lazy" />
                     </div>
                     <div>
@@ -857,8 +857,8 @@ export function HomePage() {
                   icon: Clock,
                   title: language === 'sr' ? 'Brza Izrada' : 'Fast Development',
                   text: language === 'sr'
-                    ? <>Standardna <Link to="/izrada-sajta" className="text-indigo-700 font-semibold underline hover:text-indigo-900">izrada sajta</Link> traje 7-14 dana. Za hitne projekte nudimo ekspresnu opciju za 24-48h.</>
-                    : <>Standard <Link to="/izrada-sajta" className="text-indigo-700 font-semibold underline hover:text-indigo-900">website development</Link> takes 7-14 days. For urgent projects we offer an express option in 24-48h.</>
+                    ? 'Standardni web sajt spreman za 7-14 dana. Za hitne projekte nudimo ekspresnu izradu za 24-48h.'
+                    : 'Standard websites ready in 7-14 days. For urgent projects we offer express development in 24-48h.'
                 },
                 {
                   icon: Brain,

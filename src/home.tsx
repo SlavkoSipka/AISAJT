@@ -3,9 +3,9 @@ import { HomePage } from './components/pages/HomePage';
 import { buildPageMeta } from './utils/pageMeta';
 
 export const meta: MetaFunction = () => buildPageMeta({
-  title: 'AiSajt | Web Agencija u Beogradu: Sajtovi, SEO i Reklame',
-  description: 'AiSajt je digitalna agencija iz Beograda. Web razvoj, SEO optimizacija, Meta reklame i održavanje za firme širom Srbije. Preko 50 realizovanih projekata.',
-  keywords: 'aisajt, ai sajt, digitalna agencija beograd, web agencija beograd, aisajt tim',
+  title: 'AiSajt - Agencija za Izradu Sajta | Beograd',
+  description: 'AiSajt je agencija iz Beograda za izradu web sajtova i SEO optimizaciju. Preko 50 realizovanih projekata za klijente širom Srbije.',
+  keywords: 'aisajt, ai sajt, agencija za izradu sajta beograd, web agencija beograd, aisajt tim',
   canonical: 'https://aisajt.com/',
 });
 

@@ -305,10 +305,9 @@ export function Navbar() {
               { label: t.portfolio, href: '/izrada-sajta-detalji#case-study', action: () => navigateToDetaljiSection('case-study', navigate, location.pathname) },
               { label: t.aboutUs, href: '/izrada-sajta-detalji', action: () => navigate('/izrada-sajta-detalji') },
             ].map((item, i) => (
-              <a
+              <button
                 key={item.label}
-                href={item.href}
-                onClick={(e) => { e.preventDefault(); setIsSideOpen(false); item.action(); }}
+                onClick={() => { setIsSideOpen(false); item.action(); }}
                 className={`group flex items-center justify-between w-full text-left px-4 py-3 rounded-xl text-gray-900 hover:bg-violet-50 font-bold text-base transition-all duration-500 ${
                   isSideOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
                 }`}
@@ -316,7 +315,7 @@ export function Navbar() {
               >
                 {item.label}
                 <ArrowRight className="w-4 h-4 text-violet-500 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-              </a>
+              </button>
             ))}
 
             {/* Usluge — vizuelno skrivene na zahtev, ali ostaju u DOM-u da

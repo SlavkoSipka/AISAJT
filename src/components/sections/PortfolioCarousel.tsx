@@ -93,15 +93,15 @@ export function PortfolioCarousel({ language }: PortfolioCarouselProps) {
   }, [currentIndex, isTransitioning, portfolioItems.length]);
 
   return (
-    <section id="portfolio" className="py-16 md:py-24 relative overflow-visible bg-gradient-to-b from-violet-50/50 via-indigo-50/30 to-pink-50/25">
+    <section id="portfolio" className="py-16 md:py-24 relative overflow-visible bg-gradient-to-b from-slate-50/50 via-indigo-50/30 to-sky-50/25">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-violet-50/15 to-indigo-50/20"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-slate-50/15 to-indigo-50/20"></div>
       
       {/* Animated Background Circles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 -left-32 w-96 h-96 bg-gradient-to-br from-violet-400 to-violet-600 rounded-full opacity-10 animate-blob"></div>
+        <div className="absolute top-20 -left-32 w-96 h-96 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full opacity-10 animate-blob"></div>
         <div className="absolute -bottom-20 right-1/4 w-80 h-80 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full opacity-10 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 -right-20 w-72 h-72 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full opacity-10 animate-blob animation-delay-4000"></div>
+        <div className="absolute top-1/2 -right-20 w-72 h-72 bg-gradient-to-br from-sky-400 to-sky-600 rounded-full opacity-10 animate-blob animation-delay-4000"></div>
       </div>
 
       {/* Header */}
@@ -189,7 +189,7 @@ export function PortfolioCarousel({ language }: PortfolioCarouselProps) {
         <div className="flex items-center justify-center gap-4 mt-8">
           <button
             onClick={goToPrevious}
-            className="w-12 h-12 md:w-14 md:h-14 bg-white hover:bg-violet-500 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 border-2 border-gray-200 hover:border-violet-500 group"
+            className="w-12 h-12 md:w-14 md:h-14 bg-white hover:bg-indigo-500 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 border-2 border-gray-200 hover:border-indigo-500 group"
             aria-label="Previous project"
           >
             <ChevronLeft className="w-6 h-6 md:w-7 md:h-7 text-gray-900 group-hover:text-white transition-colors" />
@@ -197,7 +197,7 @@ export function PortfolioCarousel({ language }: PortfolioCarouselProps) {
           
           <button
             onClick={goToNext}
-            className="w-12 h-12 md:w-14 md:h-14 bg-white hover:bg-violet-500 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 border-2 border-gray-200 hover:border-violet-500 group"
+            className="w-12 h-12 md:w-14 md:h-14 bg-white hover:bg-indigo-500 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 border-2 border-gray-200 hover:border-indigo-500 group"
             aria-label="Next project"
           >
             <ChevronRight className="w-6 h-6 md:w-7 md:h-7 text-gray-900 group-hover:text-white transition-colors" />

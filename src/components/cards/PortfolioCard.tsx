@@ -25,7 +25,7 @@ export const PortfolioCard = React.memo(function PortfolioCard({ title, descript
     return null;
   }
 
-  const cardClassName = "group relative block bg-white rounded-2xl overflow-hidden border-2 border-gray-100 hover:border-violet-400 transition-all duration-500 hover:shadow-2xl hover:shadow-violet-500/30 hover:-translate-y-2 cursor-pointer";
+  const cardClassName = "group relative block bg-white rounded-2xl overflow-hidden border-2 border-gray-100 hover:border-indigo-400 transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/30 hover:-translate-y-2 cursor-pointer";
 
   const cardContent = (
     <>
@@ -53,16 +53,16 @@ export const PortfolioCard = React.memo(function PortfolioCard({ title, descript
         {/* Corner Badge */}
         <div className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 group-hover:rotate-45 transition-all duration-500">
           {to ? (
-            <ArrowUpRight className="w-5 h-5 text-violet-600" />
+            <ArrowUpRight className="w-5 h-5 text-indigo-600" />
           ) : (
-            <ExternalLink className="w-5 h-5 text-violet-600" />
+            <ExternalLink className="w-5 h-5 text-indigo-600" />
           )}
         </div>
       </div>
 
       {/* Content */}
       <div className="p-6 bg-gradient-to-b from-white to-gray-50/50">
-        <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-violet-600 transition-colors duration-300 flex items-center justify-between">
+        <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors duration-300 flex items-center justify-between">
           {title}
         </h3>
         
@@ -71,7 +71,7 @@ export const PortfolioCard = React.memo(function PortfolioCard({ title, descript
           {tags.map((tag, index) => (
             <span 
               key={index}
-              className="text-xs font-semibold px-3 py-1.5 rounded-full bg-gradient-to-r from-violet-50 to-indigo-50 text-violet-700 border border-violet-200 group-hover:from-violet-100 group-hover:to-indigo-100 group-hover:border-violet-300 group-hover:scale-105 transition-all duration-300"
+              className="text-xs font-semibold px-3 py-1.5 rounded-full bg-gradient-to-r from-slate-50 to-indigo-50 text-indigo-700 border border-indigo-200 group-hover:from-slate-100 group-hover:to-indigo-100 group-hover:border-indigo-300 group-hover:scale-105 transition-all duration-300"
             >
               {tag}
             </span>
@@ -81,7 +81,7 @@ export const PortfolioCard = React.memo(function PortfolioCard({ title, descript
 
       {/* Animated Border Glow */}
       <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500 via-indigo-500 to-pink-500 blur-xl opacity-20"></div>
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-500 via-indigo-500 to-sky-500 blur-xl opacity-20"></div>
       </div>
     </>
   );

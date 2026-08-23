@@ -15,12 +15,12 @@ interface FAQProps {
 const faqData: Record<Language, FAQItem[]> = {
   sr: [
     {
-      question: "Koliko koštaju vaše usluge?",
-      answer: "Zavisi od usluge i obima projekta. Cene su transparentne i objavljene na stranicama za svaku uslugu ponaosob - pogledajte cenovnik za web sajt ili SEO optimizaciju. Nakon besplatne konsultacije dobijate tačnu ponudu, bez skrivenih troškova."
+      question: "Koliko košta izrada sajta? Koja je cena izrade web sajta?",
+      answer: "Cena izrade sajta zavisi od kompleksnosti projekta i vaših potreba. Izrada web sajta počinje od 299€ za osnovne sajtove (landing page, prezentacioni sajt). Web sajt izrada sa naprednim funkcionalnostima (e-commerce, custom aplikacije) može koštati od 500€ do 2000€. Besplatna konsultacija i transparentna ponuda - bez skrivenih troškova."
     },
     {
-      question: "Koliko brzo mogu da počnemo saradnju?",
-      answer: "Standardan rok za manji projekat je 7-14 dana od potvrde, a za hitne slučajeve nudimo ekspresnu opciju za 24-48h. Kompleksniji projekti traju duže, zavisno od obima. Tačan rok dobijate posle besplatne konsultacije."
+      question: "Koliko traje izrada web sajta?",
+      answer: "Izrada web sajta standardno traje 7-14 dana od početka do lansiranja. Za hitne projekte nudimo ekspresnu web sajt izradu gde sajt može biti spreman za 24-48 sati. Kompleksniji projekti sa e-commerce funkcionalnošću ili custom razvojem mogu trajati 3-4 nedelje. Rok zavisi od obima projekta i dostupnosti vašeg sadržaja (tekstovi, slike)."
     },
     {
       question: "Da li nudite održavanje sajta nakon izrade?",
@@ -39,18 +39,18 @@ const faqData: Record<Language, FAQItem[]> = {
       answer: "Možemo integrisati bilo koju funkcionalnost - od booking sistema, online plaćanja, integracije sa CRM-om, do custom funkcionalnosti po vašoj želji. Razgovaramo o vašim potrebama i nudimo najbolje tehničko rešenje."
     },
     {
-      question: "Radite li sa klijentima van Beograda?",
-      answer: "Da! Radimo za klijente širom Srbije i regiona: Novi Sad, Niš, Kragujevac i sve ostale gradove. Iako smo bazirani u Beogradu, kompletan proces od konsultacija do predaje projekta može se odvijati online. Komuniciramo putem email-a, telefona, Zoom-a ili vašeg željenog kanala."
+      question: "Radite li izradu web sajtova za klijente van Beograda?",
+      answer: "Da! Izrada web sajta je moguća za klijente širom Srbije i regiona. Iako smo bazirani u Beogradu, naša web sajt izrada pokriva Novi Sad, Niš, Kragujevac i sve gradove. Kompletan proces od konsultacija do predaje projekta može se odvijati online. Komuniciramo putem email-a, telefona, Zoom-a ili vašeg željenog kanala."
     }
   ],
   en: [
     {
-      question: "How much do your services cost?",
-      answer: "It depends on the service and project scope. Pricing is transparent and published on each service's own page. After a free consultation you get an exact quote, with no hidden costs."
+      question: "How much does a website cost?",
+      answer: "The cost of website development depends on project complexity. Basic websites start from €299, while more complex projects with advanced features may cost more. We evaluate each project individually to provide you with the best solution for your budget."
     },
     {
-      question: "How quickly can we get started?",
-      answer: "A standard smaller project takes 7-14 days from confirmation, with an express option in 24-48h for urgent cases. Larger projects take longer depending on scope. You get an exact timeline after a free consultation."
+      question: "How long does website development take?",
+      answer: "We develop standard websites in 7-14 days. For urgent projects, we offer express service where the site can be ready in 24-48 hours. More complex projects with e-commerce functionality or custom development may take 3-4 weeks."
     },
     {
       question: "Do you offer website maintenance after development?",
@@ -73,8 +73,8 @@ const faqData: Record<Language, FAQItem[]> = {
       answer: "We can integrate any functionality - from booking systems, online payments, CRM integration, to custom features as you wish. We discuss your needs and offer the best technical solution."
     },
     {
-      question: "Do you work with clients outside Belgrade?",
-      answer: "Yes! We work with clients throughout Serbia and the region: Novi Sad, Niš, Kragujevac and every other city. Although we're based in Belgrade, the entire process from consultation to delivery can be done online. We communicate via email, phone, Zoom, or your preferred channel."
+      question: "Do you develop websites for clients outside Belgrade and Serbia?",
+      answer: "Yes! Although we're based in Belgrade, we work on projects for clients throughout Serbia and the region. The entire process from consultation to project delivery can be done online. We communicate via email, phone, Zoom, or your preferred channel."
     }
   ]
 };
@@ -91,21 +91,21 @@ export function FAQ({ language }: FAQProps) {
     <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-white via-gray-50/50 to-white" id="faq">
       {/* Background Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 -left-20 w-80 h-80 bg-gradient-to-br from-violet-400 to-indigo-500 rounded-full opacity-5 blur-3xl animate-blob"></div>
-        <div className="absolute bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-pink-400 to-violet-500 rounded-full opacity-5 blur-3xl animate-blob animation-delay-2000"></div>
+        <div className="absolute top-20 -left-20 w-80 h-80 bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-full opacity-5 blur-3xl animate-blob"></div>
+        <div className="absolute bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-sky-400 to-indigo-500 rounded-full opacity-5 blur-3xl animate-blob animation-delay-2000"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
         <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            {language === 'sr' ? 'Najčešća Pitanja' : 'Frequently Asked Questions'}
+            {language === 'sr' ? 'Pitanja o Izradi Web Sajtova' : 'Questions About Website Development'}
           </h2>
-
+          
           <p className="text-lg text-gray-600">
-            {language === 'sr'
-              ? 'Odgovori na najčešća pitanja o procesu, cenama i uslugama'
-              : 'Answers to the most common questions about our process, pricing, and services'
+            {language === 'sr' 
+              ? 'Odgovori na najčešća pitanja o procesu, cenama i uslugama izrade web sajtova'
+              : 'Answers to the most common questions about the process, pricing, and website development services'
             }
           </p>
         </div>
@@ -125,7 +125,7 @@ export function FAQ({ language }: FAQProps) {
                   {item.question}
                 </span>
                 <ChevronDown
-                  className={`w-6 h-6 text-violet-600 flex-shrink-0 transition-transform duration-300 ${
+                  className={`w-6 h-6 text-indigo-600 flex-shrink-0 transition-transform duration-300 ${
                     openIndex === index ? 'rotate-180' : ''
                   }`}
                 />
