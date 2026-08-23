@@ -258,7 +258,7 @@ export const translations: Record<Language, Translation> = {
     whyChooseUs: 'Zašto izabrati nas?',
     
     // Footer
-    footerDesc: 'Profesionalna izrada web sajtova uz pomoć najsavremenije AI tehnologije. Brza i kvalitetna izrada modernih sajtova.',
+    footerDesc: 'Digitalna agencija koja pomaže firmama da rastu online, uz pomoć najsavremenije AI tehnologije.',
     company: 'Kompanija',
     aboutUs: 'O nama',
     
@@ -274,12 +274,12 @@ export const translations: Record<Language, Translation> = {
     
     // SEO-optimized sections
     servicesHeading: 'Usluge AiSajt tima',
-    servicesSubheading: 'Profesionalna izrada web sajta, web dizajn i SEO optimizacija. Kompletne usluge za moderne, brze sajtove koji donose rezultate vašem biznisu.',
+    servicesSubheading: 'Web razvoj, dizajn i SEO optimizacija. Kompletne usluge za moderne, brze sajtove koji donose rezultate vašem biznisu.',
     pricingHeading: 'Cene Izrade Web Sajtova',
     pricingSubheading: 'Transparentni cenovnik za izradu sajtova - od osnovnih landing stranica do kompleksnih e-commerce rešenja',
     whyAiSajt: 'Zašto Odabrati AiSajt za Izradu Web Sajta?',
     whyAiSajtDesc: 'AiSajt je stručan tim iz Beograda sa iskustvom rada za klijente širom Srbije. Kombinujemo moderne tehnologije i proverene prakse za rezultate koji donose klijente.',
-    locationServed: 'Izrada web sajtova Beograd i cela Srbija',
+    locationServed: 'Digitalne usluge za Beograd i celu Srbiju',
     processHeading: 'Proces Izrade Web Sajta',
     processSubheading: 'Od ideje do live sajta u nekoliko jednostavnih koraka',
 

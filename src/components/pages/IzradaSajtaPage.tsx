@@ -79,11 +79,11 @@ export function IzradaSajtaPage() {
       {/* SEO Meta Tags */}
       <SEOHelmet
         title={language === 'sr'
-          ? 'Izrada Sajta u Beogradu i Srbiji | od 299€ | AiSajt'
-          : 'Website Development in Belgrade and Serbia | from €299 | AiSajt'
+          ? 'Izrada Sajta: Cene, Paketi i Proces | od 299€ | AiSajt'
+          : 'Website Development: Pricing, Packages and Process | from €299 | AiSajt'
         }
         description={language === 'sr'
-          ? 'Izrada sajta od 299€, sa transparentnim cenama i rokom 2 do 4 nedelje. Radimo za firme u Beogradu, Novom Sadu i širom Srbije. Besplatna konsultacija.'
+          ? 'Izrada sajta od 299€, sa transparentnim cenama i rokom 2 do 4 nedelje. Radimo za firme u Beogradu. Besplatna konsultacija.'
           : 'Website development from €299, transparent pricing and a 2 to 4 week timeline. We work with businesses in Belgrade, Novi Sad and across Serbia. Free consultation.'
         }
         keywords={language === 'sr'
@@ -95,7 +95,7 @@ export function IzradaSajtaPage() {
       <FAQSchema items={faqItems} />
       <ServiceSchema
         serviceType="Izrada web sajta"
-        description="Profesionalna izrada web sajta za firme u Beogradu, Novom Sadu i širom Srbije."
+        description="Profesionalna izrada web sajta za firme u Beogradu."
         path="/izrada-sajta"
         startingPrice={299}
       />
@@ -122,7 +122,7 @@ export function IzradaSajtaPage() {
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-8 md:mb-12">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-4 md:mb-6 px-2">
-                  {language === 'sr' ? 'Izrada Sajta' : 'Website Development'}
+                  {language === 'sr' ? 'Izrada sajta po meri vašeg biznisa' : 'Website Development Tailored to Your Business'}
                 </h1>
 
                 {/* Answer-first blok — direktan odgovor u prvih 40 do 60 reči,

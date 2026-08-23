@@ -207,7 +207,7 @@ export function Navbar() {
                     onClick={(e) => { e.preventDefault(); navigate('/izrada-sajta-detalji'); setIsGuideOpen(false); }}
                     className="block w-full text-left px-6 py-4 text-gray-900 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-indigo-600 hover:via-blue-500 hover:to-cyan-500 hover:bg-indigo-50 font-bold text-sm transition-all duration-300"
                   >
-                    {language === 'sr' ? 'Izrada Sajta Detalji' : 'Website Development Details'}
+                    {language === 'sr' ? 'Tim i Proces Rada' : 'Team & Process'}
                   </a>
                   <a
                     href="/seo-optimizacija-detalji"
@@ -359,7 +359,7 @@ export function Navbar() {
               {language === 'sr' ? 'Počni ovde' : 'Start here'}
             </p>
             <a href="/izrada-sajta-detalji" onClick={(e) => { e.preventDefault(); navigate('/izrada-sajta-detalji'); setIsMenuOpen(false); }} className="block w-full text-left text-gray-900 hover:text-violet-600 hover:bg-violet-50 py-4 px-4 rounded-lg font-bold text-base uppercase tracking-wide transition-colors">
-              {language === 'sr' ? 'Izrada Sajta Detalji' : 'Website Development Details'}
+              {language === 'sr' ? 'Tim i Proces Rada' : 'Team & Process'}
             </a>
             <a href="/seo-optimizacija-detalji" onClick={(e) => { e.preventDefault(); navigate('/seo-optimizacija-detalji'); setIsMenuOpen(false); }} className="block w-full text-left text-gray-900 hover:text-violet-600 hover:bg-violet-50 py-4 px-4 rounded-lg font-bold text-base uppercase tracking-wide transition-colors">
               {language === 'sr' ? 'SEO Optimizacija Detalji' : 'SEO Optimization Details'}
@@ -501,13 +501,14 @@ export function Navbar() {
           {/* Navigacija */}
           <div className="flex-1 overflow-y-auto px-3 pb-2">
             {[
-              { label: t.portfolio, action: () => navigate('/portfolio') },
-              { label: t.aboutUs, action: () => navigateToSection('video-section', navigate, location.pathname) },
-              { label: 'Blog', action: () => navigate('/blog') },
+              { label: t.portfolio, href: '/portfolio', action: () => navigate('/portfolio') },
+              { label: t.aboutUs, href: location.pathname === '/' ? '#video-section' : '/#video-section', action: () => navigateToSection('video-section', navigate, location.pathname) },
+              { label: 'Blog', href: '/blog', action: () => navigate('/blog') },
             ].map((item, i) => (
-              <button
+              <a
                 key={item.label}
-                onClick={() => { setIsSideOpen(false); item.action(); }}
+                href={item.href}
+                onClick={(e) => { e.preventDefault(); setIsSideOpen(false); item.action(); }}
                 className={`group flex items-center justify-between w-full text-left px-4 py-3 rounded-xl text-gray-900 hover:bg-violet-50 font-bold text-base transition-all duration-500 ${
                   isSideOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
                 }`}
@@ -515,7 +516,7 @@ export function Navbar() {
               >
                 {item.label}
                 <ArrowRight className="w-4 h-4 text-violet-500 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-              </button>
+              </a>
             ))}
 
             <p className="px-4 pt-4 pb-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
@@ -545,7 +546,7 @@ export function Navbar() {
               {language === 'sr' ? 'Počni ovde' : 'Start here'}
             </p>
             {[
-              { label: language === 'sr' ? 'Izrada Sajta Detalji' : 'Website Development Details', to: '/izrada-sajta-detalji' },
+              { label: language === 'sr' ? 'Tim i Proces Rada' : 'Team & Process', to: '/izrada-sajta-detalji' },
               { label: language === 'sr' ? 'SEO Optimizacija Detalji' : 'SEO Optimization Details', to: '/seo-optimizacija-detalji' },
             ].map((item, i) => (
               <a

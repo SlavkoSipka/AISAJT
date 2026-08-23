@@ -68,15 +68,14 @@ export function Hero({ language }: HeroProps) {
     return () => ctx.revert();
   }, []);
 
-  // Brend ide prvo u H1 — homepage je "brand powerhouse", cilja ime firme,
-  // ne golu komercijalnu frazu koju sada vlasuju /izrada-sajta i
-  // /seo-optimizacija-cena pillar stranice. "AiSajt," ostaje van gradijenta
-  // (jasno, ozbiljno ime brenda), gradijent akcenat i dalje pada na isti
-  // deo teksta kao pre ("Izradu Sajta" / "Development Agency").
+  // Homepage prestaje da cilja frazu "izrada sajta" u H1: tu frazu sada
+  // isključivo nosi /izrada-sajta pillar stranica. H1 ovde signalizira širi
+  // opseg (sajtovi, SEO, reklame, održavanje) da ne bi dupli target delio
+  // relevantnost sa landing stranicom za tu konkretnu komercijalnu frazu.
   const h1Words = language === 'sr'
-    ? ['AiSajt,', 'Agencija', 'za', 'Izradu', 'Sajta']
-    : ['AiSajt,', 'Website', 'Development', 'Agency'];
-  const gradientFrom = language === 'sr' ? 3 : 1;
+    ? ['Kompletna', 'digitalna', 'prisutnost', 'za', 'vaš', 'biznis']
+    : ['Complete', 'digital', 'presence', 'for', 'your', 'business'];
+  const gradientFrom = 4;
 
   return (
     <header
@@ -137,12 +136,20 @@ export function Hero({ language }: HeroProps) {
               ))}
             </h1>
 
-            {/* Description — SEO tekst nepromenjen */}
+            {/* Description */}
             <div data-hero="desc">
               <p className="text-base md:text-xl text-gray-600 leading-relaxed max-w-2xl">
                 {language === 'sr'
-                  ? 'AiSajt je agencija iz Beograda koja pravi web sajtove i vodi SEO optimizaciju za firme širom Srbije. Preko 50 realizovanih projekata, transparentne cene i tim dostupan za razgovor u roku od 24h.'
-                  : 'AiSajt is an agency from Belgrade that builds websites and runs SEO optimization for businesses across Serbia. Over 50 completed projects, transparent pricing and a team available within 24h.'}
+                  ? <>AiSajt je agencija iz Beograda koja se bavi{' '}
+                      <Link to="/izrada-sajta" className="text-violet-700 font-semibold underline decoration-2 underline-offset-2 hover:text-violet-900">
+                        izradom sajtova
+                      </Link>
+                      , SEO optimizacijom i Meta reklamama za firme širom Srbije. Preko 50 realizovanih projekata, transparentne cene i tim dostupan za razgovor u roku od 24h.</>
+                  : <>AiSajt is an agency from Belgrade specializing in{' '}
+                      <Link to="/izrada-sajta" className="text-violet-700 font-semibold underline decoration-2 underline-offset-2 hover:text-violet-900">
+                        website development
+                      </Link>
+                      , SEO optimization and Meta ads for businesses across Serbia. Over 50 completed projects, transparent pricing and a team available within 24h.</>}
               </p>
             </div>
 
@@ -204,7 +211,7 @@ export function Hero({ language }: HeroProps) {
                 <div className="absolute -inset-px rounded-3xl bg-gradient-to-br from-violet-500/20 via-transparent to-pink-500/20 pointer-events-none"></div>
                 <img
                   src="/images/aisajt nav.png" width={1024} height={336}
-                  alt="AI izrada sajtova - Profesionalna izrada veb sajta sa veštačkom inteligencijom"
+                  alt="AiSajt platforma za digitalne usluge sa veštačkom inteligencijom"
                   loading="eager"
                   {...{ fetchpriority: 'high' } as React.ImgHTMLAttributes<HTMLImageElement>}
                   decoding="async"
@@ -217,7 +224,7 @@ export function Hero({ language }: HeroProps) {
                 <div className="absolute inset-4 bg-white rounded-2xl flex items-center justify-center">
                   <img
                     src="/images/aisajt close up.png" width={304} height={304}
-                    alt="AI websajt izrada - Logo"
+                    alt="AiSajt logo"
                     loading="lazy"
                     decoding="async"
                     className="w-[88px] h-[88px] object-contain"
