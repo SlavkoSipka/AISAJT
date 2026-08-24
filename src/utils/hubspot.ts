@@ -35,6 +35,76 @@ interface HubSpotSubmissionData {
   };
 }
 
+/** Čitljivi nazivi polja u mejlu — HubSpot interna imena ne znače ništa čoveku. */
+const FIELD_LABELS: Record<string, string> = {
+  firstname: 'Ime',
+  lastname: 'Prezime',
+  email: 'Email',
+  phone: 'Telefon',
+  company: 'Firma',
+  message: 'Poruka',
+  budget: 'Budžet',
+  website: 'Sajt',
+  termin: 'Izabrani termin',
+};
+
+/**
+ * Šalje kopiju prijave na naš mejl preko /api/send-notification (Resend).
+ *
+ * Ide kroz `submitToHubSpot`, koji je jedina tačka kroz koju prolaze sve
+ * forme na sajtu — zakačeno ovde, pokriveno je i zakazivanje i kviz i audit
+ * i PDF preuzimanja, bez diranja svake stranice posebno.
+ *
+ * Namerno ne baca grešku: ako mejl ne prođe, prijava je već u HubSpot-u
+ * (a termin u bazi), pa korisnik ne sme da vidi grešku zbog toga.
+ */
+async function notifyByEmail(fields: Record<string, string>, pageName?: string) {
+  try {
+    /* Prezime nosi zalepljen termin (zbog HubSpot notifikacije) — za naslov
+       mejla ga skidamo, jer termin ionako ide zasebno. */
+    const prezime = (fields.lastname || '').replace(/\s*—\s*termin:.*$/, '').trim();
+    const ime = [fields.firstname, prezime].filter(Boolean).join(' ').trim();
+    const naslov = ime
+      ? `Nova prijava: ${ime}${fields.termin ? ` — ${fields.termin}` : ''}`
+      : `Nova prijava sa sajta${fields.termin ? ` — ${fields.termin}` : ''}`;
+
+    const redovi = Object.entries(fields)
+      .filter(([, v]) => v !== undefined && String(v).trim() !== '')
+      .map(([k, v]) => {
+        const label = FIELD_LABELS[k] || k;
+        const bold = k === 'termin' ? ' style="background:#ecfeff"' : '';
+        return `<tr${bold}><td style="padding:6px 12px;color:#64748b">${label}</td>` +
+               `<td style="padding:6px 12px;color:#0f172a"><strong>${escapeHtml(String(v))}</strong></td></tr>`;
+      })
+      .join('');
+
+    const html = `
+      <div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;max-width:520px">
+        <h2 style="color:#0f172a;margin:0 0 4px">${escapeHtml(naslov)}</h2>
+        <p style="color:#64748b;margin:0 0 16px;font-size:13px">
+          ${escapeHtml(pageName || '')}<br>${escapeHtml(typeof window !== 'undefined' ? window.location.href : '')}
+        </p>
+        <table style="border-collapse:collapse;width:100%;font-size:14px">${redovi}</table>
+      </div>`;
+
+    await fetch('/api/send-notification', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ to: '', subject: naslov, html, type: 'to_admin' }),
+    });
+  } catch {
+    /* Mejl je dopuna, ne uslov — tiho preskačemo. */
+  }
+}
+
+function escapeHtml(v: string): string {
+  return v
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 /**
  * Submit form data to HubSpot
  */
@@ -77,6 +147,9 @@ export async function submitToHubSpot(
     }
 
     await response.json();
+
+    /* Kopija na mejl — ne čekamo je, i ne rušimo prijavu ako padne. */
+    void notifyByEmail(fields, pageName);
 
     return {
       success: true,
@@ -130,6 +203,7 @@ export async function submitFunnelForm(data: {
   email: string;
   phone: string;
   message?: string; // budžet (opciono)
+  termin?: string;  // izabrani termin iz kalendara, npr. "pon 25. avg u 14:00"
 }): Promise<{ success: boolean; message?: string }> {
   const nameParts = data.name.trim().split(' ');
   const firstname = nameParts[0] || '';
@@ -144,6 +218,12 @@ export async function submitFunnelForm(data: {
   if (data.message) {
     fields.message = data.message;
     fields.budget = data.message; // i kao "budget" da se prosledi u HubSpot i u email
+  }
+  if (data.termin) {
+    fields.termin = data.termin;
+    /* HubSpot nema custom polje za termin, pa ga lepimo i u prezime — tako
+       se vidi i u njihovoj notifikaciji, koja prikazuje samo ime i prezime. */
+    fields.lastname = `${lastname} — termin: ${data.termin}`.trim();
   }
 
   return submitToHubSpot(

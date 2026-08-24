@@ -11,7 +11,7 @@ import {
 import { SEOHelmet } from '../seo/SEOHelmet';
 import { trackPhoneClick, trackCTAClick } from '../../utils/analytics';
 import { NAP } from '../../lib/site-config';
-import { BookingCalendar } from '../booking/BookingCalendar';
+import { BookingCalendar, formatBookingSlot } from '../booking/BookingCalendar';
 import { submitFunnelForm } from '../../utils/hubspot';
 
 // This landing page intentionally uses a different phone number from the
@@ -95,12 +95,12 @@ const revealCls = (visible: boolean) =>
 
 export function PrometSistemPage() {
   /* Rezervacija je već upisana u Supabase; ovde samo lead u HubSpot. */
-  const handleBooked = async ({ firstName, lastName, phone, email }: {
+  const handleBooked = async ({ firstName, lastName, phone, email, slotAt }: {
     firstName: string; lastName: string; phone: string; email: string; slotAt: string;
   }) => {
     const fullName = `${firstName} ${lastName}`.trim();
     try {
-      await submitFunnelForm({ name: fullName, email, phone });
+      await submitFunnelForm({ name: fullName, email, phone, termin: formatBookingSlot(slotAt) });
       trackCTAClick('Booking Form Submit', 'promet-sistem', 'sr');
     } catch {
       /* Termin je sačuvan i bez HubSpot-a — ne prekidamo korisnika. */

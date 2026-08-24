@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Play, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { SEOHelmet } from '../seo/SEOHelmet';
-import { BookingCalendar } from '../booking/BookingCalendar';
+import { BookingCalendar, formatBookingSlot } from '../booking/BookingCalendar';
 /** Marko vodi SEO, pa kartica za direktan poziv ide na njegov broj,
  *  a ne na opšti broj agencije iz NAP-a. */
 const MARKO_TEL = '+381621058144';
@@ -143,13 +143,13 @@ export function SEOOdrzavanjeDetaljiPage() {
     document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const handleBooked = async ({ firstName, lastName, phone, email }: {
+  const handleBooked = async ({ firstName, lastName, phone, email, slotAt }: {
     firstName: string; lastName: string; phone: string; email: string; slotAt: string;
   }) => {
     const fullName = `${firstName} ${lastName}`.trim();
     trackFormSubmitAttempt('funnel_booking', language);
     try {
-      await submitFunnelForm({ name: fullName, email, phone });
+      await submitFunnelForm({ name: fullName, email, phone, termin: formatBookingSlot(slotAt) });
       trackCTAClick('Booking Form Submit', 'seo_detalji_form', language);
     } catch (error) {
       trackFormError('funnel_booking', language, String(error));

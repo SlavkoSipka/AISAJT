@@ -70,6 +70,19 @@ function belgradeDayKey(iso: string): string {
   return `${get('year')}-${get('month')}-${get('day')}`;
 }
 
+/** Termin ispisan za čoveka, u beogradskoj zoni — ide u mejl i u HubSpot. */
+export function formatBookingSlot(iso: string): string {
+  return new Intl.DateTimeFormat('sr-Latn', {
+    timeZone: TZ,
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(iso));
+}
+
 function belgradeTime(iso: string): string {
   return new Intl.DateTimeFormat('sr-RS', {
     timeZone: TZ,

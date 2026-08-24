@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { useLanguage } from '../../hooks/useLanguage';
 import { SEOHelmet } from '../seo/SEOHelmet';
 import { portfolioProjects } from '../../data/portfolioProjects';
-import { BookingCalendar } from '../booking/BookingCalendar';
+import { BookingCalendar, formatBookingSlot } from '../booking/BookingCalendar';
 import { trackCTAClick, trackFormSubmitAttempt, trackFormError, trackPhoneClick } from '../../utils/analytics';
 import { submitFunnelForm } from '../../utils/hubspot';
 import { NAP } from '../../lib/site-config';
@@ -233,7 +233,7 @@ export function IzradaSajtaDetaljiPage() {
 
   /* Termin je već upisan u Supabase; ovde samo šaljemo lead u HubSpot i
      vodimo korisnika na thank-you stranicu. */
-  const handleBooked = async ({ firstName, lastName, phone, email }: {
+  const handleBooked = async ({ firstName, lastName, phone, email, slotAt }: {
     firstName: string;
     lastName: string;
     phone: string;
@@ -243,7 +243,7 @@ export function IzradaSajtaDetaljiPage() {
     const fullName = `${firstName} ${lastName}`.trim();
     trackFormSubmitAttempt('funnel_booking', language);
     try {
-      await submitFunnelForm({ name: fullName, email, phone });
+      await submitFunnelForm({ name: fullName, email, phone, termin: formatBookingSlot(slotAt) });
       trackCTAClick('Booking Form Submit', 'izrada_sajta_detalji_form', language);
     } catch (error) {
       /* Rezervacija je sačuvana i bez HubSpot-a — ne prekidamo korisnika. */
