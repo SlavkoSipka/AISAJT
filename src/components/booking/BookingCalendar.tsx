@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, ArrowLeft, CheckCircle, Calendar, Clock } from 'lucide-react';
 import { bookingSupabase } from '../../lib/supabaseClient';
+import type { BookingSource } from '../../lib/bookingSources';
 import type { Language } from '../../types/language';
 
 interface Slot {
@@ -23,6 +24,9 @@ interface BookingCalendarProps {
   preselectWeekday?: { isoDow: number; nonce: number } | null;
   /** Boja se poklapa sa stranicom na kojoj kalendar stoji. */
   accent?: 'pink' | 'cyan';
+  /** Sa koje stranice je zakazano — upisuje se u `bookings.source`.
+      Ne utiče na dostupnost: termin zauzet ovde je zauzet na svim stranicama. */
+  source: BookingSource;
 }
 
 /* Tailwind ne ume da izvede klase u runtime-u, pa idu kao pune vrednosti. */
@@ -92,7 +96,7 @@ function belgradeTime(iso: string): string {
   }).format(new Date(iso));
 }
 
-export function BookingCalendar({ language, onBooked, preselectWeekday, accent = 'pink' }: BookingCalendarProps) {
+export function BookingCalendar({ language, onBooked, preselectWeekday, accent = 'pink', source }: BookingCalendarProps) {
   const c = ACCENTS[accent];
   const sr = language === 'sr';
 
@@ -202,6 +206,7 @@ export function BookingCalendar({ language, onBooked, preselectWeekday, accent =
       p_last_name: form.lastName,
       p_phone: form.phone,
       p_email: form.email || null,
+      p_source: source,
     });
 
     if (error) {

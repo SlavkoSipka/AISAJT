@@ -31,3 +31,10 @@ dist-ssr
 # Local Netlify folder
 .netlify
 .claude/
+
+# Video masteri i web verzije za Vimeo upload - nikad u git (GB-i).
+# Drze se u video-src/ VAN public/ jer Vite kopira ceo public/ u dist/,
+# pa bi odatle zavrsile i u deployu bez obzira na .gitignore.
+video-src/
+*.mov
+# NAPOMENA: public/videos/*-loop.mp4 i *-poster.webp SE commituju (ispod 1MB).

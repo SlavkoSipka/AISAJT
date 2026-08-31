@@ -5,6 +5,8 @@
  * Region: EU (eu1)
  */
 
+import { bookingSourceLabel, type BookingSource } from '../lib/bookingSources';
+
 const HUBSPOT_PORTAL_ID = '147390341';
 const HUBSPOT_REGION = 'eu1';
 const HUBSPOT_API_BASE = `https://api.hsforms.com/submissions/v3/integration/submit/${HUBSPOT_PORTAL_ID}`;
@@ -58,17 +60,28 @@ const FIELD_LABELS: Record<string, string> = {
  * Namerno ne baca grešku: ako mejl ne prođe, prijava je već u HubSpot-u
  * (a termin u bazi), pa korisnik ne sme da vidi grešku zbog toga.
  */
-async function notifyByEmail(fields: Record<string, string>, pageName?: string) {
+async function notifyByEmail(
+  fields: Record<string, string>,
+  pageName?: string,
+  sourceLabel?: string
+) {
   try {
-    /* Prezime nosi zalepljen termin (zbog HubSpot notifikacije) — za naslov
-       mejla ga skidamo, jer termin ionako ide zasebno. */
-    const prezime = (fields.lastname || '').replace(/\s*—\s*termin:.*$/, '').trim();
+    /* Prezime nosi zalepljen termin i izvor (zbog HubSpot notifikacije) — za
+       naslov mejla ih skidamo, jer oba ionako idu kao zaseban podatak. */
+    const prezime = (fields.lastname || '').replace(/\s*—\s*(termin|sa):.*$/, '').trim();
     const ime = [fields.firstname, prezime].filter(Boolean).join(' ').trim();
+    /* Izvor ide na sam početak naslova — vidi se u listi sandučeta, bez otvaranja. */
+    const prefiks = sourceLabel ? `[${sourceLabel}] ` : '';
     const naslov = ime
-      ? `Nova prijava: ${ime}${fields.termin ? ` — ${fields.termin}` : ''}`
-      : `Nova prijava sa sajta${fields.termin ? ` — ${fields.termin}` : ''}`;
+      ? `${prefiks}Nova prijava: ${ime}${fields.termin ? ` — ${fields.termin}` : ''}`
+      : `${prefiks}Nova prijava sa sajta${fields.termin ? ` — ${fields.termin}` : ''}`;
 
-    const redovi = Object.entries(fields)
+    const redIzvora = sourceLabel
+      ? `<tr style="background:#fef3c7"><td style="padding:6px 12px;color:#64748b">Stranica</td>` +
+        `<td style="padding:6px 12px;color:#0f172a"><strong>${escapeHtml(sourceLabel)}</strong></td></tr>`
+      : '';
+
+    const redovi = redIzvora + Object.entries(fields)
       .filter(([, v]) => v !== undefined && String(v).trim() !== '')
       .map(([k, v]) => {
         const label = FIELD_LABELS[k] || k;
@@ -111,7 +124,8 @@ function escapeHtml(v: string): string {
 export async function submitToHubSpot(
   formGuid: string,
   fields: Record<string, string>,
-  pageName?: string
+  pageName?: string,
+  sourceLabel?: string
 ): Promise<{ success: boolean; message?: string }> {
   try {
     // Prepare fields in HubSpot format
@@ -149,7 +163,7 @@ export async function submitToHubSpot(
     await response.json();
 
     /* Kopija na mejl — ne čekamo je, i ne rušimo prijavu ako padne. */
-    void notifyByEmail(fields, pageName);
+    void notifyByEmail(fields, pageName, sourceLabel);
 
     return {
       success: true,
@@ -204,10 +218,12 @@ export async function submitFunnelForm(data: {
   phone: string;
   message?: string; // budžet (opciono)
   termin?: string;  // izabrani termin iz kalendara, npr. "pon 25. avg u 14:00"
+  source?: BookingSource; // sa koje stranice je lead došao
 }): Promise<{ success: boolean; message?: string }> {
   const nameParts = data.name.trim().split(' ');
   const firstname = nameParts[0] || '';
   const lastname = nameParts.slice(1).join(' ') || '';
+  const sourceLabel = data.source ? bookingSourceLabel(data.source) : undefined;
 
   const fields: Record<string, string> = {
     firstname,
@@ -221,15 +237,24 @@ export async function submitFunnelForm(data: {
   }
   if (data.termin) {
     fields.termin = data.termin;
-    /* HubSpot nema custom polje za termin, pa ga lepimo i u prezime — tako
-       se vidi i u njihovoj notifikaciji, koja prikazuje samo ime i prezime. */
-    fields.lastname = `${lastname} — termin: ${data.termin}`.trim();
+  }
+
+  /* HubSpot nema custom polja ni za termin ni za izvor, a njihova notifikacija
+     prikazuje samo standardna polja. Zato oba lepimo u prezime — to je jedini
+     način da se vide u mejlu koji HubSpot šalje.
+     Kad u HubSpot-u napravite custom property, ovo može da se izbaci. */
+  const oznake: string[] = [];
+  if (data.termin) oznake.push(`termin: ${data.termin}`);
+  if (sourceLabel) oznake.push(`sa: ${sourceLabel}`);
+  if (oznake.length) {
+    fields.lastname = `${lastname} — ${oznake.join(' — ')}`.trim();
   }
 
   return submitToHubSpot(
     HUBSPOT_FORMS.CONTACT,
     fields,
-    'Funnel – Besplatna konsultacija'
+    sourceLabel ? `Funnel – ${sourceLabel}` : 'Funnel – Besplatna konsultacija',
+    sourceLabel
   );
 }
 

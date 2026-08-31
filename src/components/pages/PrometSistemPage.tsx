@@ -4,11 +4,12 @@ import {
   ArrowRight,
   ArrowDown,
   Check,
-  Play,
+  CheckCircle,
   ShieldCheck,
   Mail,
 } from 'lucide-react';
 import { SEOHelmet } from '../seo/SEOHelmet';
+import { ClipPlayer } from '../video/ClipPlayer';
 import { trackPhoneClick, trackCTAClick } from '../../utils/analytics';
 import { NAP } from '../../lib/site-config';
 import { BookingCalendar, formatBookingSlot } from '../booking/BookingCalendar';
@@ -21,10 +22,6 @@ import { submitFunnelForm } from '../../utils/hubspot';
 const PHONE_DISPLAY = '061 203 9768';
 const PHONE_TEL = 'tel:+381612039768';
 const EMAIL = NAP.email;
-
-// Kad snimiš video, nalepi ovde link (Vimeo ili YouTube embed URL) — npr.
-// 'https://player.vimeo.com/video/XXXXXXX' ili 'https://www.youtube.com/embed/XXXXXXX'
-const PROMET_VIDEO_URL = '';
 
 /* ─── useCountUp hook ─────────────────────────────────────────────────── */
 function useCountUp(target: number, duration = 1400, started = false) {
@@ -100,7 +97,7 @@ export function PrometSistemPage() {
   }) => {
     const fullName = `${firstName} ${lastName}`.trim();
     try {
-      await submitFunnelForm({ name: fullName, email, phone, termin: formatBookingSlot(slotAt) });
+      await submitFunnelForm({ name: fullName, email, phone, termin: formatBookingSlot(slotAt), source: 'promet-sistem' });
       trackCTAClick('Booking Form Submit', 'promet-sistem', 'sr');
     } catch {
       /* Termin je sačuvan i bez HubSpot-a — ne prekidamo korisnika. */
@@ -111,10 +108,22 @@ export function PrometSistemPage() {
   const [stickyVisible, setStickyVisible] = useState(false);
 
   const [statsRef, statsInView] = useInView(0.4);
-  const countUpiti = useCountUp(17, 1400, statsInView);
+  const countUpiti = useCountUp(30, 1400, statsInView);
 
   const [priceRef, priceVisible] = useReveal();
   const [finalRef, finalVisible] = useReveal();
+
+  /* Sekcije preuzete sa /izrada-sajta-detalji (bez portfolija). */
+  const [metricsRef, metricsVisible] = useReveal();
+  const [teamRef, teamVisible] = useReveal();
+  const [ctaRef, ctaVisible] = useReveal();
+
+  /* Zaseban brojac od onog u hero traci, da se ne dele isti ref. */
+  const [metricsStatsRef, metricsStatsInView] = useInView(0.3);
+  const c1 = useCountUp(50, 1200, metricsStatsInView);
+  const c2 = useCountUp(50, 1200, metricsStatsInView);
+  const c3 = useCountUp(100, 1400, metricsStatsInView);
+  const c4 = useCountUp(1, 800, metricsStatsInView);
 
   useEffect(() => {
     const t = setTimeout(() => setHeroVisible(true), 80);
@@ -173,7 +182,7 @@ export function PrometSistemPage() {
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section className="relative z-10 pt-8 md:pt-16 pb-16 md:pb-24">
-        <div className="max-w-4xl mx-auto px-5 md:px-8">
+        <div className="max-w-4xl lg:max-w-[61.6rem] mx-auto px-5 md:px-8">
           <div className={`text-center transition-all duration-1000 ease-out ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <h1 className="font-black tracking-tighter leading-[0.95] text-[44px] sm:text-6xl lg:text-7xl">
               PROMET <span className="text-cyan-400">SISTEM</span>
@@ -186,29 +195,18 @@ export function PrometSistemPage() {
 
           {/* video */}
           <div className={`mt-10 transition-all duration-1000 delay-200 ease-out ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-cyan-400/20 bg-black max-w-3xl mx-auto">
-              <div className="aspect-video relative bg-gradient-to-br from-[#0D1926] to-black">
-                {PROMET_VIDEO_URL ? (
-                  <iframe
-                    src={PROMET_VIDEO_URL}
-                    frameBorder="0"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    className="absolute inset-0 w-full h-full"
-                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                    allowFullScreen
-                    title="Promet Sistem — kako radi"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="w-16 h-16 rounded-full bg-cyan-400/90 flex items-center justify-center mx-auto shadow-[0_0_40px_rgba(34,211,238,0.4)]">
-                        <Play className="w-7 h-7 text-[#06121C] ml-1" />
-                      </div>
-                      <p className="mt-4 text-white/50 text-sm">Video dolazi uskoro</p>
-                    </div>
-                  </div>
-                )}
-              </div>
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-cyan-400/20 bg-black max-w-3xl lg:max-w-[57.6rem] mx-auto">
+              {/* Loop se vrti sa našeg domena, pun klip stiže sa Vimea na klik. */}
+              <ClipPlayer
+                vimeoId="1222709691"
+                loopSrc="/videos/promet-sistem-loop.mp4"
+                poster="/videos/promet-sistem-poster.webp"
+                title="Promet Sistem — kako radi"
+                headline="Pusti ceo video"
+                subline="Sa zvukom, od početka"
+                accentButton="bg-cyan-400/95 text-[#06121C] shadow-[0_0_40px_rgba(34,211,238,0.4)] group-hover:bg-cyan-300"
+                accentBadge="bg-black/60 border-cyan-400/20"
+              />
             </div>
           </div>
 
@@ -219,10 +217,10 @@ export function PrometSistemPage() {
             </span>
             <div>
               <p className="font-bold text-base leading-snug">
-                garantovanih poziva od zainteresovanih kupaca. Svakog meseca.
+                garantovanih leadova — ljudi koji ostave svoje podatke. Svakog meseca.
               </p>
               <p className="text-sm text-white/55 mt-1">
-                To ti je bar jedan upit dnevno, pravo na telefon.
+                To ti je bar jedan novi kontakt dnevno, pravo na telefon.
               </p>
             </div>
           </div>
@@ -248,6 +246,33 @@ export function PrometSistemPage() {
         </div>
       </section>
 
+      {/* ── ZAKAZIVANJE ────────────────────────────────── */}
+      {/* Stoji odmah ispod videa — isti kalendar kao na /izrada-sajta-detalji. */}
+      <section id="booking-form" className="relative z-10 py-16 md:py-24 border-t border-white/[0.06] scroll-mt-20">
+        <div className="max-w-xl mx-auto px-5 md:px-8">
+          <div className="text-center mb-5 md:mb-7">
+            <span className="inline-block bg-cyan-400/15 border border-cyan-400/40 text-cyan-300 text-[10px] md:text-xs font-black tracking-[0.2em] uppercase px-3 py-1 md:px-4 md:py-1.5 rounded-full mb-3">
+              Besplatna konsultacija
+            </span>
+            <h2 className="text-3xl md:text-4xl font-black tracking-tight text-white">
+              Zakaži poziv <span className="text-cyan-400">odmah</span>
+            </h2>
+            <p className="mt-3 text-white/60 text-sm md:text-base">
+              Izaberi termin koji ti odgovara. Poziv je besplatan i bez obaveze.
+            </p>
+          </div>
+
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-400 via-cyan-500 to-sky-600 p-[2px]">
+              <div className="absolute inset-0 rounded-2xl bg-[#0D1926]" />
+            </div>
+            <div className="relative z-10 bg-[#0D1926] p-4 sm:p-6 md:p-8">
+              <BookingCalendar language="sr" onBooked={handleBooked} accent="cyan" source="promet-sistem" />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── CENE ─────────────────────────────────────────────────────── */}
       <section id="cene" ref={priceRef} className={`relative z-10 py-16 md:py-24 border-t border-white/[0.06] ${revealCls(priceVisible)}`}>
         <div className="max-w-5xl mx-auto px-5 md:px-8">
@@ -268,7 +293,7 @@ export function PrometSistemPage() {
               <div className="mt-7 space-y-4">
                 <div className="flex items-baseline justify-between gap-4 pb-4 border-b border-white/10">
                   <span className="text-white/70">Reklame na startu (Meta budžet)</span>
-                  <span className="text-xl font-black text-cyan-400 whitespace-nowrap">200 €</span>
+                  <span className="text-xl font-black text-cyan-400 whitespace-nowrap">100 – 200 €</span>
                 </div>
                 <div className="flex items-baseline justify-between gap-4 pb-4 border-b border-white/10">
                   <span className="text-white/70">Naš rad — plaćaš na kraju meseca</span>
@@ -276,13 +301,13 @@ export function PrometSistemPage() {
                 </div>
                 <div className="flex items-baseline justify-between gap-4 pt-1">
                   <span className="text-lg font-bold">Ukupno mesečno</span>
-                  <span className="text-4xl font-black text-cyan-400 whitespace-nowrap">450 €</span>
+                  <span className="text-4xl font-black text-cyan-400 whitespace-nowrap">350 – 450 €</span>
                 </div>
               </div>
 
               <p className="mt-6 text-sm text-white/50 leading-relaxed">
-                Prvo ideš samo sa 200 € za reklame. Nas plaćaš tek na kraju meseca, kad vidiš
-                koliko ti je ljudi došlo.
+                Kreneš sa 100 do 200 € za reklame — koliko ti odgovara na startu. Nas plaćaš
+                tek na kraju meseca, kad vidiš koliko ti je ljudi došlo.
               </p>
 
               <a
@@ -342,36 +367,178 @@ export function PrometSistemPage() {
           <div className="mt-6 rounded-2xl border border-cyan-400/25 bg-cyan-400/[0.07] p-7 flex flex-col md:flex-row md:items-center gap-4">
             <ShieldCheck className="w-8 h-8 text-cyan-400 flex-shrink-0" />
             <p className="text-white/85 text-lg leading-relaxed">
-              <strong className="text-white">Ne rizikuješ ništa.</strong> Kreneš sa 200 € za
-              reklame, dobiješ minimum 17 garantovanih poziva, a nas plaćaš tek na kraju meseca —
-              kad vidiš rezultat.
+              <strong className="text-white">Ne rizikuješ ništa.</strong> Kreneš sa 100 do 200 €
+              za reklame, dobiješ <strong className="text-white">minimum 30 leadova</strong> — 30
+              ljudi koji ostave svoje podatke — a nas plaćaš tek na kraju meseca, kad vidiš rezultat.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── FINALNI CTA ──────────────────────────────────────────────── */}
-      {/* Zakazivanje — isti kalendar kao na /izrada-sajta-detalji */}
-      <section id="booking-form" className="relative z-10 py-16 md:py-24 border-t border-white/[0.06] scroll-mt-20">
-        <div className="max-w-xl mx-auto px-5 md:px-8">
-          <div className="text-center mb-5 md:mb-7">
-            <span className="inline-block bg-cyan-400/15 border border-cyan-400/40 text-cyan-300 text-[10px] md:text-xs font-black tracking-[0.2em] uppercase px-3 py-1 md:px-4 md:py-1.5 rounded-full mb-3">
-              Besplatna konsultacija
-            </span>
-            <h2 className="text-3xl md:text-4xl font-black tracking-tight text-white">
-              Zakaži poziv <span className="text-cyan-400">odmah</span>
-            </h2>
-            <p className="mt-3 text-white/60 text-sm md:text-base">
-              Izaberi termin koji ti odgovara. Poziv je besplatan i bez obaveze.
+      {/* ── REZULTATI ────────────────────────────────────────────────── */}
+      {/* Preuzeto sa /izrada-sajta-detalji, u cyan paleti i obraćanju na "ti". */}
+      <section id="rezultati" ref={metricsRef} className={`relative z-10 py-16 md:py-24 border-t border-white/[0.06] ${revealCls(metricsVisible)}`}>
+        <div className="max-w-4xl mx-auto px-5 md:px-8 text-center">
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+            <img src="/images/ljudi.webp" width={1200} height={140} alt="" className="h-8 w-auto rounded-full object-cover" loading="lazy" />
+            <p className="text-white text-sm md:text-base">
+              Pridruži se <strong>50+</strong> zadovoljnih <strong>klijenata</strong> i <strong>preduzeća</strong>.
             </p>
           </div>
 
-          <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-400 via-cyan-500 to-sky-600 p-[2px]">
-              <div className="absolute inset-0 rounded-2xl bg-[#0D1926]" />
+          <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight mb-2">
+            50+ uspešnih projekata, priče uspeha.
+          </h2>
+          <h3 className="text-xl md:text-2xl font-bold text-cyan-400 mb-6">
+            Jedan dokazan pristup.
+          </h3>
+          <p className="text-white/55 text-base md:text-lg max-w-3xl mx-auto mb-10">
+            Od sajtova i SEO-a do Meta reklama — znamo šta je potrebno da tvoj biznis dobije prave
+            upite. Bez nagađanja, bez zastoja.
+          </p>
+
+          <div className="rounded-xl overflow-hidden border border-white/10 shadow-2xl max-w-4xl mx-auto">
+            <img src="/images/filmska%207.webp" width={1200} height={800} alt="Rad na projektu — AiSajt tim" className="w-full h-auto object-cover" loading="lazy" />
+          </div>
+
+          <div ref={metricsStatsRef} className="relative z-10 -mt-14 md:-mt-16 rounded-2xl bg-[#0D1926]/95 border border-white/10 backdrop-blur-sm px-6 py-6 md:px-8 md:py-7 shadow-xl w-full">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+              <div className="text-center md:text-left">
+                <p className="text-2xl md:text-3xl font-bold text-white tabular-nums">{c1}+</p>
+                <p className="text-white/50 text-sm mt-0.5">realizovanih projekata</p>
+              </div>
+              <div className="text-center md:text-left">
+                <p className="text-2xl md:text-3xl font-bold text-white tabular-nums">{c2}+</p>
+                <p className="text-white/50 text-sm mt-0.5">zadovoljnih klijenata</p>
+              </div>
+              <div className="text-center md:text-left">
+                <p className="text-2xl md:text-3xl font-bold text-white tabular-nums">{c3}%</p>
+                <p className="text-white/50 text-sm mt-0.5">posvećenost rezultatu</p>
+              </div>
+              <div className="text-center md:text-left">
+                <p className="text-2xl md:text-3xl font-bold text-white tabular-nums">{c4}</p>
+                <p className="text-white/50 text-sm mt-0.5">dokazan sistem</p>
+              </div>
             </div>
-            <div className="relative z-10 bg-[#0D1926] p-4 sm:p-6 md:p-8">
-              <BookingCalendar language="sr" onBooked={handleBooked} accent="cyan" />
+          </div>
+        </div>
+      </section>
+
+      {/* ── TIM ──────────────────────────────────────────────────────── */}
+      <section id="tim" ref={teamRef} className={`relative z-10 py-16 md:py-24 border-t border-white/[0.06] ${revealCls(teamVisible)}`}>
+        <div className="max-w-5xl mx-auto px-5 md:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-3">
+            Upoznaj tim <span className="text-cyan-400">iza AiSajt-a.</span>
+          </h2>
+          <p className="text-white/55 text-base md:text-lg max-w-2xl mx-auto mb-4">
+            Ljudi koji su pomogli brojnim firmama da dobiju moderan sajt, bolje pozicije na Google-u
+            i više upita sa reklama.
+          </p>
+          <div className="w-3 h-3 bg-cyan-400 rounded-sm mx-auto mb-12" />
+
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-8 mb-4 md:mb-0">
+              {[
+                { name: 'Bogdan Gradjanin', role: 'Suvlasnik, specijalizovani programer', image: '/images/boban Izrada sajta .webp' },
+                { name: 'Strahinja Zekanovic', role: 'Suvlasnik, dizajner i poslovanje', image: '/images/Strahinja izrada sajta.webp' },
+              ].map((member) => (
+                <div key={member.name} className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm overflow-hidden shadow-xl flex flex-col">
+                  <div className="aspect-square bg-white/[0.04] overflow-hidden">
+                    <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" loading="lazy" />
+                  </div>
+                  <div className="p-4 sm:p-5 text-left">
+                    <p className="font-bold text-sm sm:text-lg">
+                      <span className="text-cyan-400">{member.name.split(' ')[0]}</span>
+                      <span className="text-white"> {member.name.split(' ').slice(1).join(' ')}</span>
+                    </p>
+                    <p className="text-white/50 text-xs sm:text-sm mt-0.5">{member.role}</p>
+                  </div>
+                </div>
+              ))}
+              <div className="col-span-2 sm:col-span-1 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm overflow-hidden shadow-xl flex flex-col max-w-[50%] sm:max-w-none mx-auto w-full">
+                <div className="aspect-square bg-white/[0.04] overflow-hidden">
+                  <img src="/images/Dedza SEO OPTIMIZACIJA.webp" width={800} height={800} alt="Marko Devedzic" className="w-full h-full object-cover object-top" loading="lazy" />
+                </div>
+                <div className="p-4 sm:p-5 text-left">
+                  <p className="font-bold text-sm sm:text-lg">
+                    <span className="text-cyan-400">Marko</span>
+                    <span className="text-white"> Devedzic</span>
+                  </p>
+                  <p className="text-white/50 text-xs sm:text-sm mt-0.5">SEO i održavanje sajtova</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── VELIKI CTA ───────────────────────────────────────────────── */}
+      <section id="cta-final" ref={ctaRef} className={`relative z-10 py-16 md:py-24 border-t border-white/[0.06] ${revealCls(ctaVisible)}`}>
+        <div className="max-w-6xl mx-auto px-5 md:px-8">
+          <div className="relative rounded-3xl bg-white/[0.03] border border-white/10 overflow-hidden">
+            <div className="absolute -top-40 -left-40 w-[500px] h-[400px] bg-cyan-500/20 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute -top-32 -right-32 w-[400px] h-[350px] bg-blue-500/15 rounded-full blur-[100px] pointer-events-none" />
+
+            <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 p-8 md:p-10 lg:p-12">
+              <div className="flex flex-col justify-center">
+                <div className="flex flex-col items-start gap-3 mb-6">
+                  <p className="text-white text-sm md:text-base">Pridruži se 50+ uspešnih preduzeća</p>
+                  <img src="/images/ljudi.webp" width={1200} height={140} alt="" className="h-8 w-auto rounded-full object-cover" loading="lazy" />
+                </div>
+
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mb-4">
+                  <span className="text-cyan-400">Stigao si do ovde — sada </span>
+                  <span className="text-white">da ti dovedemo klijente.</span>
+                </h2>
+
+                <p className="text-white/55 text-sm leading-snug mb-3 md:leading-relaxed md:text-base md:mb-6 max-w-xl">
+                  Treba ti 30 sekundi da se{' '}
+                  <button
+                    type="button"
+                    onClick={() => scrollTo('booking-form', 'CTA final - prijavi se')}
+                    className="text-cyan-300 font-bold hover:text-cyan-200 underline underline-offset-2 cursor-pointer"
+                  >
+                    prijaviš
+                  </button>
+                  {' '}i da proverimo da li Promet Sistem ima smisla za tvoj posao.
+                </p>
+
+                <p className="text-white font-medium text-sm mb-3">Šta ćemo obraditi na besplatnom pozivu:</p>
+                <ul className="space-y-2 mb-6">
+                  {[
+                    'Pregled tvoje trenutne situacije i ciljeva',
+                    'Koliko upita realno možeš da očekuješ',
+                    'Iskren savet o sledećim koracima',
+                    'Bez pritiska, bez nametljive prodaje',
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-3 text-white/75 text-sm">
+                      <CheckCircle className="w-5 h-5 text-cyan-400 flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="text-white/55 text-sm">
+                  Kontaktiraćemo te i na pozivu dobijaš <strong className="text-white">konkretan savet i jasne sledeće korake</strong> za tvoj biznis. Bez obaveze — fokus je na tvom rezultatu.
+                </p>
+              </div>
+
+              <div className="relative flex items-center justify-center w-full max-w-md">
+                <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-white/[0.03] w-full max-h-[280px] md:max-h-[340px] flex items-center justify-center">
+                  <img src="/images/filmska.webp" width={900} height={600} alt="Tim AiSajt radi u kancelariji" className="w-full h-full object-contain" loading="lazy" />
+                </div>
+              </div>
+            </div>
+
+            <div className="relative flex justify-center pb-8 md:pb-10">
+              <button
+                type="button"
+                onClick={() => scrollTo('booking-form', 'CTA final - zakazi poziv')}
+                className="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-cyan-400 text-[#06121C] font-black uppercase text-sm tracking-wide hover:bg-cyan-300 transition-colors shadow-[0_0_48px_rgba(34,211,238,0.45)]"
+              >
+                Zakaži poziv
+                <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>
@@ -419,6 +586,29 @@ export function PrometSistemPage() {
         </div>
       </section>
 
+      {/* ── FOOTER ───────────────────────────────────────────────────── */}
+      <footer className="relative z-10 border-t border-white/[0.06] py-8 md:py-10">
+        <div className="max-w-3xl mx-auto px-5 md:px-8 text-center">
+          <div className="flex justify-center mb-5">
+            <img src="/images/aisajt_providno-removebg-preview.png" width={500} height={180} alt="AiSajt Logo" className="h-8 md:h-10 w-auto opacity-85" loading="lazy" />
+          </div>
+          <p className="text-white/35 text-xs leading-relaxed mb-6">
+            Rezultati zavise od delatnosti, budžeta i tržišta. Garancija od 30 leadova mesečno važi
+            uz redovno održavanje kampanje i dogovoreni budžet za reklame. Svaki biznis je drugačiji.
+            Nismo povezani ni sa jednom trećom stranom navedenom na sajtu.
+          </p>
+          <p className="text-white/35 text-xs">
+            © {new Date().getFullYear()} AiSajt
+            <span className="mx-1.5">•</span>
+            <a href="/privacy" className="hover:text-cyan-300 transition-colors">Privacy</a>
+            <span className="mx-1.5">•</span>
+            <a href="/terms" className="hover:text-cyan-300 transition-colors">Uslovi</a>
+            <span className="mx-1.5">•</span>
+            <a href="/terms#disclaimer" className="hover:text-cyan-300 transition-colors">Izjava</a>
+          </p>
+        </div>
+      </footer>
+
       {/* sticky mobile call bar */}
       <div
         className={`fixed bottom-0 inset-x-0 z-40 md:hidden transition-transform duration-500 ease-out ${stickyVisible ? 'translate-y-0' : 'translate-y-full'}`}
@@ -426,7 +616,7 @@ export function PrometSistemPage() {
         <div className="mx-3 mb-3 rounded-2xl bg-[#0D1926]/95 backdrop-blur-md border border-cyan-400/25 shadow-[0_-8px_40px_rgba(0,0,0,0.5)] p-3 flex items-center gap-3">
           <div className="flex-1 min-w-0 pl-2">
             <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-white/45">Promet Sistem</p>
-            <p className="text-sm font-bold text-white truncate">17+ poziva · 450 €</p>
+            <p className="text-sm font-bold text-white truncate">30+ leadova · od 350 €</p>
           </div>
           <a
             href={PHONE_TEL}

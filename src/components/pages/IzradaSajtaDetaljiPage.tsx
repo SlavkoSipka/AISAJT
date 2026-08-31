@@ -6,6 +6,7 @@ import { useLanguage } from '../../hooks/useLanguage';
 import { SEOHelmet } from '../seo/SEOHelmet';
 import { portfolioProjects } from '../../data/portfolioProjects';
 import { BookingCalendar, formatBookingSlot } from '../booking/BookingCalendar';
+import { ClipPlayer } from '../video/ClipPlayer';
 import { trackCTAClick, trackFormSubmitAttempt, trackFormError, trackPhoneClick } from '../../utils/analytics';
 import { submitFunnelForm } from '../../utils/hubspot';
 import { NAP } from '../../lib/site-config';
@@ -65,23 +66,10 @@ export function IzradaSajtaDetaljiPage() {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
 
-  const [videoUnmuted, setVideoUnmuted] = useState(false);
   /* Portfolio na desktopu: prvo 6 kartica, pa po 3 na klik. */
   const [visibleCards, setVisibleCards] = useState(6);
 
-  /* Vimeo VSL — isti klip koji je ranije stajao na /funnel */
-  const VIMEO_MUTED = 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&controls=0';
-  const VIMEO_SOUND = 'https://player.vimeo.com/video/1171575982?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=0&controls=1';
-
-  const iframeRef = useRef<HTMLIFrameElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
-
-  const handleUnmute = () => {
-    if (iframeRef.current) {
-      iframeRef.current.src = VIMEO_SOUND;
-    }
-    setVideoUnmuted(true);
-  };
 
   /* Case-study carousel — beskonačan scroll (3 kopije seta) */
   useEffect(() => {
@@ -102,14 +90,8 @@ export function IzradaSajtaDetaljiPage() {
     }
   };
 
-  /* ── Vimeo player.js ─────────────────────────────────────────── */
-  useEffect(() => {
-    if (document.querySelector('script[src="https://player.vimeo.com/api/player.js"]')) return;
-    const script = document.createElement('script');
-    script.src = 'https://player.vimeo.com/api/player.js';
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
+  /* Vimeo SDK više ne učitavamo ovde — ClipPlayer ga povlači sam, tek kad
+     player uđe u vidno polje. */
 
   const [statsRef, statsInView] = useInView(0.3);
   const c1 = useCountUp(50, 1200, statsInView);
@@ -243,7 +225,7 @@ export function IzradaSajtaDetaljiPage() {
     const fullName = `${firstName} ${lastName}`.trim();
     trackFormSubmitAttempt('funnel_booking', language);
     try {
-      await submitFunnelForm({ name: fullName, email, phone, termin: formatBookingSlot(slotAt) });
+      await submitFunnelForm({ name: fullName, email, phone, termin: formatBookingSlot(slotAt), source: 'izrada-sajta-detalji' });
       trackCTAClick('Booking Form Submit', 'izrada_sajta_detalji_form', language);
     } catch (error) {
       /* Rezervacija je sačuvana i bez HubSpot-a — ne prekidamo korisnika. */
@@ -317,7 +299,7 @@ export function IzradaSajtaDetaljiPage() {
         {/* Hero – naslov: Izrada Sajta Beograd, Srbija – Šta ti donosi dobar sajt? */}
         <section className="pt-14 pb-6 md:pt-16 md:pb-14 relative overflow-hidden">
           <div className="container mx-auto px-4 relative z-10 w-full">
-            <div className="max-w-4xl mx-auto text-center">
+            <div className="max-w-4xl lg:max-w-[57.6rem] mx-auto text-center">
               <div className={`mb-3 md:mb-8 transform transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'}`}>
                 <div className="flex justify-center">
                   <img
@@ -366,48 +348,26 @@ export function IzradaSajtaDetaljiPage() {
               </div>
 
               <div className={`transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-                <div className="relative rounded-lg md:rounded-xl overflow-hidden shadow-2xl border border-pink-500/20 bg-gradient-to-br from-gray-900 to-gray-800 max-w-3xl mx-auto">
+                <div className="relative rounded-lg md:rounded-xl overflow-hidden shadow-2xl border border-pink-500/20 bg-gradient-to-br from-gray-900 to-gray-800 max-w-3xl lg:max-w-[57.6rem] mx-auto">
                   <div className="bg-gradient-to-r from-pink-600 to-pink-700 text-white py-1.5 md:py-2 px-4 md:px-6 text-center">
                     <p className="font-semibold text-xs md:text-sm flex items-center justify-center gap-2">
                       <Play className="w-3 h-3 md:w-3.5 md:h-3.5" />
                       {language === 'sr' ? 'Klikni Play Da Naučiš Više' : 'Click Play to Learn More'}
                     </p>
                   </div>
-                  {/* Vimeo video — autoplay muted u pozadini, klik/tap uključuje zvuk */}
-                  <div className="aspect-video relative bg-black">
-                    <iframe
-                      ref={iframeRef}
-                      src={videoUnmuted ? VIMEO_SOUND : VIMEO_MUTED}
-                      frameBorder="0"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      className="absolute inset-0 w-full h-full"
-                      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                      allowFullScreen
-                      title="Zeka-VSL"
-                    />
-
-                    {!videoUnmuted && (
-                      <div
-                        className="absolute inset-0 flex items-center justify-center cursor-pointer group z-10"
-                        style={{ touchAction: 'manipulation' }}
-                        onClick={handleUnmute}
-                      >
-                        <div className="text-center">
-                          <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-pink-600/80 backdrop-blur-sm flex items-center justify-center mb-2 md:mb-3 mx-auto group-hover:scale-110 group-hover:bg-pink-500/90 active:scale-90 transition-all duration-300 shadow-lg">
-                            <Play className="w-6 h-6 md:w-7 md:h-7 text-white ml-0.5" />
-                          </div>
-                          <div className="bg-black/60 backdrop-blur-sm rounded-lg px-3 py-2 md:px-4 md:py-2.5 border border-white/10">
-                            <p className="text-white font-bold text-xs md:text-sm mb-0.5">
-                              {language === 'sr' ? '▶ Video se pušta' : '▶ Video is Playing'}
-                            </p>
-                            <p className="text-white/70 text-[10px] md:text-xs">
-                              {language === 'sr' ? 'Klikni da uključiš zvuk' : 'Click to unmute'}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  {/* Loop se vrti sa našeg domena, pun klip stiže sa Vimea na klik. */}
+                  <ClipPlayer
+                    vimeoId="1222709692"
+                    loopSrc="/videos/izrada-sajta-loop.mp4"
+                    poster="/videos/izrada-sajta-poster.webp"
+                    title="AiSajt — izrada sajta, ceo razgovor"
+                    headline={language === 'sr' ? 'Pusti ceo video' : 'Play full video'}
+                    subline={
+                      language === 'sr' ? 'Sa zvukom, od početka' : 'With sound, from the start'
+                    }
+                    accentButton="bg-pink-600/90 text-white group-hover:bg-pink-500"
+                    accentBadge="bg-black/60 border-white/10"
+                  />
                 </div>
               </div>
               <div className={`mt-6 flex justify-center transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
@@ -462,7 +422,7 @@ export function IzradaSajtaDetaljiPage() {
                 </div>
 
                 <div className="relative z-10 bg-gray-900 p-4 sm:p-6 md:p-8">
-                  <BookingCalendar language={language} onBooked={handleBooked} preselectWeekday={preselectWeekday} />
+                  <BookingCalendar language={language} onBooked={handleBooked} preselectWeekday={preselectWeekday} source="izrada-sajta-detalji" />
                 </div>
               </div>
 

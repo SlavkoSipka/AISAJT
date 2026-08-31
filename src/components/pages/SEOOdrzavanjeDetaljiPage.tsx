@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle, Play, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { SEOHelmet } from '../seo/SEOHelmet';
 import { BookingCalendar, formatBookingSlot } from '../booking/BookingCalendar';
+import { ClipPlayer } from '../video/ClipPlayer';
 /** Marko vodi SEO, pa kartica za direktan poziv ide na njegov broj,
  *  a ne na opšti broj agencije iz NAP-a. */
 const MARKO_TEL = '+381621058144';
@@ -149,7 +150,7 @@ export function SEOOdrzavanjeDetaljiPage() {
     const fullName = `${firstName} ${lastName}`.trim();
     trackFormSubmitAttempt('funnel_booking', language);
     try {
-      await submitFunnelForm({ name: fullName, email, phone, termin: formatBookingSlot(slotAt) });
+      await submitFunnelForm({ name: fullName, email, phone, termin: formatBookingSlot(slotAt), source: 'seo-optimizacija-detalji' });
       trackCTAClick('Booking Form Submit', 'seo_detalji_form', language);
     } catch (error) {
       trackFormError('funnel_booking', language, String(error));
@@ -235,7 +236,7 @@ export function SEOOdrzavanjeDetaljiPage() {
         {/* Hero – SEO Održavanje */}
         <section className="pt-10 pb-4 md:pt-16 md:pb-14 relative overflow-hidden">
           <div className="container mx-auto px-4 relative z-10 w-full">
-            <div className="max-w-4xl mx-auto text-center">
+            <div className="max-w-4xl lg:max-w-[57.6rem] mx-auto text-center">
               <div className={`mb-2 md:mb-8 transform transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'}`}>
                 <div className="flex justify-center -mt-1 md:mt-0">
                   <img
@@ -283,29 +284,26 @@ export function SEOOdrzavanjeDetaljiPage() {
               </div>
 
               <div className={`transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-                <div className="relative rounded-lg md:rounded-xl overflow-hidden shadow-2xl border border-[#05afd1]/20 bg-gradient-to-br from-gray-900 to-gray-800 max-w-3xl mx-auto">
+                <div className="relative rounded-lg md:rounded-xl overflow-hidden shadow-2xl border border-[#05afd1]/20 bg-gradient-to-br from-gray-900 to-gray-800 max-w-3xl lg:max-w-[57.6rem] mx-auto">
                   <div className="bg-gradient-to-r from-[#05afd1] to-[#05afd1] text-white py-1.5 md:py-2 px-4 md:px-6 text-center">
                     <p className="font-semibold text-xs md:text-sm flex items-center justify-center gap-2">
                       <Play className="w-3 h-3 md:w-3.5 md:h-3.5" />
                       {language === 'sr' ? 'Klikni Play Da Naučiš Više' : 'Click Play to Learn More'}
                     </p>
                   </div>
-                  <div className="aspect-video bg-gradient-to-br from-gray-800 via-gray-900 to-black flex items-center justify-center relative group cursor-pointer">
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#05afd1]/20 to-black/40" />
-                    <div className="relative z-10 text-center">
-                      <div className="w-12 h-12 md:w-20 md:h-20 rounded-full bg-gradient-to-r from-[#05afd1] to-[#05afd1] flex items-center justify-center mb-2 md:mb-3 mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                        <Play className="w-6 h-6 md:w-10 md:h-10 text-white ml-0.5 md:ml-1" />
-                      </div>
-                      <div className="bg-[#05afd1]/90 backdrop-blur-sm rounded-lg md:rounded-xl px-3 py-2 md:px-5 md:py-3 max-w-xs mx-auto border border-[#05afd1]/50">
-                        <p className="text-white font-bold text-sm md:text-base mb-0.5">
-                          {language === 'sr' ? 'Tvoj Video Se Pušta' : 'Your Video is Playing'}
-                        </p>
-                        <p className="text-white/80 text-[10px] md:text-xs">
-                          {language === 'sr' ? 'Klikni Da Isključiš Zvuk' : 'Click To Unmute'}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  {/* Loop se vrti sa našeg domena, pun klip stiže sa Vimea na klik. */}
+                  <ClipPlayer
+                    vimeoId="1222709693"
+                    loopSrc="/videos/seo-detalji-loop.mp4"
+                    poster="/videos/seo-detalji-poster.webp"
+                    title="AiSajt — SEO održavanje, ceo video"
+                    headline={language === 'sr' ? 'Pusti ceo video' : 'Play full video'}
+                    subline={
+                      language === 'sr' ? 'Sa zvukom, od početka' : 'With sound, from the start'
+                    }
+                    accentButton="bg-[#05afd1] text-white group-hover:bg-[#05afd1]/90"
+                    accentBadge="bg-black/60 border-[#05afd1]/40"
+                  />
                 </div>
               </div>
               <div className={`mt-6 flex justify-center transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
@@ -354,7 +352,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                   <div className="absolute inset-0 rounded-2xl bg-gray-900" />
                 </div>
                 <div className="relative z-10 bg-gray-900 p-4 sm:p-6 md:p-8">
-                  <BookingCalendar language={language} onBooked={handleBooked} accent="cyan" />
+                  <BookingCalendar language={language} onBooked={handleBooked} accent="cyan" source="seo-optimizacija-detalji" />
                 </div>
               </div>
 

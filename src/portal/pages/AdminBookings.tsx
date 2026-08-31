@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { bookingSupabase } from '../../lib/supabaseClient';
+import { bookingSourceLabel } from '../../lib/bookingSources';
 import { Topbar } from '../components/layout/Topbar';
 import { Loader2, Calendar, Phone, Mail, Ban, Trash2, Save, RefreshCw } from 'lucide-react';
 import '../portal.css';
@@ -187,7 +188,14 @@ export function AdminBookings() {
                     </p>
                   </div>
                   <div className="flex-1 min-w-[180px]">
-                    <p className="font-medium text-gray-900 text-sm">{b.first_name} {b.last_name}</p>
+                    <p className="font-medium text-gray-900 text-sm flex flex-wrap items-center gap-2">
+                      {b.first_name} {b.last_name}
+                      {b.source && (
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide bg-violet-100 text-violet-700">
+                          {bookingSourceLabel(b.source)}
+                        </span>
+                      )}
+                    </p>
                     <p className="text-xs text-gray-500 flex flex-wrap items-center gap-x-3 gap-y-0.5">
                       <a href={`tel:${b.phone}`} className="inline-flex items-center gap-1 hover:text-violet-600">
                         <Phone className="w-3 h-3" />{b.phone}
