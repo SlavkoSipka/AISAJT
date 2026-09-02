@@ -383,6 +383,7 @@ export function IzradaSajtaDetaljiPage() {
                   {/* Loop se vrti sa našeg domena, pun klip stiže sa Vimea na klik. */}
                   <ClipPlayer
                     vimeoId="1222709692"
+                    fullSrcMobile="/videos/izrada-sajta-full.mp4"
                     loopSrc="/videos/izrada-sajta-loop.mp4"
                     poster="/videos/izrada-sajta-poster.webp"
                     title="AiSajt — izrada sajta, ceo razgovor"
@@ -903,8 +904,14 @@ export function IzradaSajtaDetaljiPage() {
           </div>
         </div>
 
-        {/* Floating widget → booking forma (sakriven na mobilnom dok je forma u kadru) */}
-        <div className={`fixed bottom-6 right-5 z-50 flex-col items-end gap-3 ${bookingInView ? 'hidden md:flex' : 'flex'}`}>
+        {/* Floating widget → booking forma (sakriven na mobilnom dok je forma u kadru)
+
+            Kontejner mora da bude pointer-events-none: on se razvlaci po
+            zatvorenom w-80 panelu unutra, pa je na telefonu 320x387px i pokriva
+            skoro celu donju polovinu ekrana. Sa pointer-events:auto je gutao
+            tapove namenjene sadrzaju ispod — hero video player upada tacno u tu
+            zonu. Interaktivni su samo panel (kad je otvoren) i dugme ispod. */}
+        <div className={`fixed bottom-6 right-5 z-50 flex-col items-end gap-3 pointer-events-none ${bookingInView ? 'hidden md:flex' : 'flex'}`}>
           <div
             className={`transition-all duration-300 ease-out origin-bottom-right ${
               widgetOpen ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-90 translate-y-4 pointer-events-none'
@@ -971,7 +978,7 @@ export function IzradaSajtaDetaljiPage() {
             onClick={() => setWidgetOpen(v => !v)}
             className={`relative w-14 h-14 rounded-full shadow-2xl border-2 border-pink-500 hover:border-pink-400 active:scale-95 bg-pink-700 flex items-center justify-center transition-all duration-500 ease-out ${
               bubbleVisible
-                ? 'opacity-100 scale-100 translate-y-0 hover:scale-105'
+                ? 'opacity-100 scale-100 translate-y-0 hover:scale-105 pointer-events-auto'
                 : 'opacity-0 scale-50 translate-y-4 pointer-events-none'
             }`}
             aria-label="Zakaži poziv"

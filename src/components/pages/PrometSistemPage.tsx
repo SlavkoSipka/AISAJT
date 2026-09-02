@@ -201,6 +201,7 @@ export function PrometSistemPage() {
               {/* Loop se vrti sa našeg domena, pun klip stiže sa Vimea na klik. */}
               <ClipPlayer
                 vimeoId="1222709691"
+                fullSrcMobile="/videos/promet-sistem-full.mp4"
                 loopSrc="/videos/promet-sistem-loop.mp4"
                 poster="/videos/promet-sistem-poster.webp"
                 title="Promet Sistem — kako radi"

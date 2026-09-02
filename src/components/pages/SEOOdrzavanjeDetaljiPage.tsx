@@ -317,6 +317,7 @@ export function SEOOdrzavanjeDetaljiPage() {
                   {/* Loop se vrti sa našeg domena, pun klip stiže sa Vimea na klik. */}
                   <ClipPlayer
                     vimeoId="1222709693"
+                    fullSrcMobile="/videos/seo-detalji-full.mp4"
                     loopSrc="/videos/seo-detalji-loop.mp4"
                     poster="/videos/seo-detalji-poster.webp"
                     title="AiSajt — SEO održavanje, ceo video"
@@ -653,8 +654,12 @@ export function SEOOdrzavanjeDetaljiPage() {
           </div>
         </div>
 
-        {/* Floating widget → funnel */}
-        <div className="fixed bottom-6 right-5 z-50 flex flex-col items-end gap-3">
+        {/* Floating widget → funnel
+
+            Kontejner je pointer-events-none — vidi isti komentar na
+            /izrada-sajta-detalji: razvlaci se po zatvorenom w-80 panelu i
+            inace guta tapove namenjene sadrzaju ispod. */}
+        <div className="fixed bottom-6 right-5 z-50 flex flex-col items-end gap-3 pointer-events-none">
           <div
             className={`transition-all duration-300 ease-out origin-bottom-right ${
               widgetOpen ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-90 translate-y-4 pointer-events-none'
@@ -713,7 +718,7 @@ export function SEOOdrzavanjeDetaljiPage() {
           </div>
           <button
             onClick={() => setWidgetOpen(v => !v)}
-            className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-[#05afd1] hover:border-[#05afd1] transition-all hover:scale-105 active:scale-95 bg-[#05afd1] flex items-center justify-center"
+            className="relative w-14 h-14 rounded-full shadow-2xl border-2 border-[#05afd1] hover:border-[#05afd1] transition-all hover:scale-105 active:scale-95 bg-[#05afd1] flex items-center justify-center pointer-events-auto"
             aria-label="Zakaži poziv"
           >
             <img src="/images/aisajt_providno-removebg-preview.png" width={500} height={180} alt="AiSajt" className="w-9 h-9 object-contain" loading="lazy" />

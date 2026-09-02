@@ -2,23 +2,31 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Play } from 'lucide-react';
 import { usePointerFine } from '../../hooks/usePointerFine';
 
-/* ClipPlayer — 15s loop sa našeg domena se vrti u pozadini, pun klip živi na
-   Vimeu. Player ima dve odvojene putanje, jer se desktop i telefon ponašaju
-   suštinski različito oko autoplaya:
+/* ClipPlayer — 15s nemi loop sa našeg domena se vrti u pozadini, a klik pušta
+   pun klip. Odakle dolazi pun klip zavisi od uređaja, i to nije stvar ukusa
+   nego politike autoplay-a u browserima:
 
-   DESKTOP (pointer: fine) — iframe se montira unapred sa autoplay=0, Vimeo
-   Player SDK se povuče dok se sekcija približava ekranu, a klik onda samo
-   pozove setCurrentTime + setVolume + play. Klip krene od nule sa zvukom, bez
-   reloada iframe-a i bez treptaja.
+   DESKTOP (pointer: fine) → Vimeo iframe.
+   Iframe se montira unapred sa autoplay=0, Player SDK se povuče dok se sekcija
+   približava ekranu, a klik pozove setCurrentTime + setVolume + play. Klip
+   krene od nule sa zvukom, bez reloada i bez treptaja. Vimeo uz to nosi
+   adaptivni bitrate i svoj CDN, pa nema razloga da ga menjamo.
 
-   MOBILNI (pointer: coarse) — SDK se ne učitava uopšte. Ranija verzija je i na
-   telefonu čekala SDK pa zvala play() iz asinhronog `.then()`, a to je već van
-   prozora korisničkog gesta: browser odbije reprodukciju, catch prebaci iframe
-   na autoplay URL i ponovo ga učita, i korisnik gleda crni pravougaonik dok ne
-   klikne još par puta. Zato na dodir iframe montiramo tek na tap, odmah sa
-   autoplay=1 u URL-u, unutar samog gesta i bez ijedne izmene src-a posle toga.
-   Ako mobilni Safari ipak odbije zvučni autoplay, ispod prsta je Vimeov
-   sopstveni play — jedan tap unutar iframe-a uvek prolazi. */
+   MOBILNI (pointer: coarse) → self-hosted MP4 u <video> elementu.
+   Zvuk na dodir se NE može dobiti iz Vimeo iframe-a, koliko god se kod
+   prepravljao: Chrome na Androidu dozvoljava autoplay sa zvukom samo ako je
+   sajt dodat na home screen, a iOS Safari traži gest unutar samog frejma.
+   Korisnikov tap po našem dugmetu ne prelazi granicu cross-origin iframe-a,
+   pa Vimeo padne na muted i ponudi „unmute" — tačno ono što smo videli.
+   Zato na dodiru pun klip mora da bude <video> u našem dokumentu: tada je
+   play() pozvan sinhrono iz onClick-a običan gest nad običnim medijem i
+   prolazi sa zvukom, iz prve, i na iOS-u i na Androidu.
+
+   Ako mobilni fajl nije postavljen (fullSrcMobile izostavljen ili 404), sve se
+   vraća na Vimeo putanju — sajt radi i bez tih fajlova, samo bez zvuka iz
+   prve. Zato se postojanje fajla proverava HEAD zahtevom unapred, dok se
+   player približava ekranu, a ne u trenutku tapa: provera u tap handleru bi
+   potrošila gest na čekanje mreže i vratila nas na isti problem. */
 
 type VimeoNs = { Player: new (el: HTMLIFrameElement) => VimeoPlayer };
 type VimeoPlayer = {
@@ -69,8 +77,15 @@ function loadVimeoSdk(): Promise<VimeoNs> {
 }
 
 interface ClipPlayerProps {
-  /** Vimeo ID punog klipa, npr. '1222709692'. */
+  /** Vimeo ID punog klipa, npr. '1222709692'. Desktop i mobilni fallback. */
   vimeoId: string;
+  /**
+   * Pun klip sa našeg domena, u mobilnoj rezoluciji — npr.
+   * '/videos/izrada-sajta-full.mp4'. Koristi se samo na dodirnim uređajima,
+   * jer je jedini način da tap odmah da zvuk. Ako fajla nema, mobilni pada
+   * nazad na Vimeo.
+   */
+  fullSrcMobile?: string;
   /** 15s nemi loop sa našeg domena, npr. '/videos/izrada-sajta-loop.mp4'. */
   loopSrc: string;
   /** Poster — prikazuje se dok se loop učitava i uz reduced-motion. */
@@ -86,6 +101,7 @@ interface ClipPlayerProps {
 
 export function ClipPlayer({
   vimeoId,
+  fullSrcMobile,
   loopSrc,
   poster,
   title,
@@ -97,37 +113,39 @@ export function ClipPlayer({
 }: ClipPlayerProps) {
   const fine = usePointerFine();
 
-  /* armed = iframe je montiran (desktop: pre klika; mobilni: tek na tap)
-     playing = korisnik je kliknuo, pun klip preuzima ekran
-     direct = autoplay ide kroz URL parametar, bez SDK-a
-     loaded = iframe je javio load, pa smemo da sakrijemo loop ispod njega */
+  /* armed = Vimeo iframe je montiran; playing = pun klip je preuzeo ekran;
+     direct = Vimeo autoplay ide kroz URL parametar, bez SDK-a;
+     loaded = iframe je javio load, pa smemo da sklonimo loop ispod njega;
+     nativeOk = mobilni MP4 postoji (null dok provera traje). */
   const [armed, setArmed] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [direct, setDirect] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [nativeOk, setNativeOk] = useState<boolean | null>(null);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const loopRef = useRef<HTMLVideoElement>(null);
+  const fullRef = useRef<HTMLVideoElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<Promise<VimeoPlayer> | null>(null);
-  /* Klik pre nego što je iframe montiran — odigraj čim se player napravi. */
   const wantsPlayRef = useRef(false);
 
-  /* Kad se autoplay gura kroz URL, iframe se montira već sa njim — src se posle
-     toga više ne menja, pa nema drugog učitavanja. */
+  /* Native putanja se koristi samo kad je uređaj dodirni I fajl stvarno tu.
+     Dok provera traje (nativeOk === null) tap ide na Vimeo — čekanje mreže bi
+     potrošilo gest. */
+  const useNative = !fine && !!fullSrcMobile && nativeOk === true;
+
   const src =
     `https://player.vimeo.com/video/${vimeoId}` +
     `?badge=0&byline=0&portrait=0&title=0&dnt=1&playsinline=1&controls=1` +
     `&autoplay=${direct ? 1 : 0}&muted=0`;
 
-  /* Na dodiru "arm" je samo zagrevanje veze — iframe ceka pravi tap. */
   const arm = useCallback(() => {
     preconnectVimeo();
     if (fine) setArmed(true);
   }, [fine]);
 
-  /* Napravi Player čim je iframe u DOM-u. Samo desktop: na dodiru autoplay ide
-     kroz URL, pa SDK nema šta da radi. */
+  /* Vimeo Player SDK — samo desktop. */
   useEffect(() => {
     if (!fine || direct) return;
     if (!armed || !iframeRef.current || playerRef.current) return;
@@ -159,30 +177,60 @@ export function ClipPlayer({
     };
   }, [armed, fine, direct]);
 
-  /* Vimeo se priprema cim se player priblizi ekranu — do klika je player.js
-     ucitan, iframe montiran i konfiguracija povucena, pa play krece odmah.
-     Na telefonu ostaje samo preconnect: iframe unapred nema smisla jer bi ga
-     tap ionako morao ponovo ucitati sa autoplay parametrom. */
+  /* Da li je mobilni fajl tu, saznajemo od samog <video> elementa.
+
+     Provera readyState-a pre kacenja slusaca nije suvisna: loadedmetadata ne
+     bubbluje, pa ga React kaci direktno na element tek u commit fazi, a kod
+     keširanog fajla metapodaci stignu pre toga. Sa samim onLoadedMetadata u
+     JSX-u je zato nativeOk ostajao null pri svakoj drugoj poseti i tap je bez
+     razloga isao na Vimeo. */
+  useEffect(() => {
+    const v = fullRef.current;
+    if (fine || !fullSrcMobile || !v) return;
+
+    if (v.error) {
+      setNativeOk(false);
+      return;
+    }
+    if (v.readyState >= 1 /* HAVE_METADATA */) {
+      setNativeOk(true);
+      return;
+    }
+
+    const ok = () => setNativeOk(true);
+    const fail = () => setNativeOk(false);
+    v.addEventListener('loadedmetadata', ok);
+    v.addEventListener('error', fail);
+    return () => {
+      v.removeEventListener('loadedmetadata', ok);
+      v.removeEventListener('error', fail);
+    };
+  }, [fine, fullSrcMobile]);
+
+  /* Desktop: Vimeo se priprema čim se player približi ekranu — do klika je
+     player.js učitan, iframe montiran i konfiguracija povučena. Ovo je čista
+     optimizacija; ako IO izostane, klik i dalje radi kroz start(). */
   useEffect(() => {
     const wrap = wrapRef.current;
-    if (!wrap || armed) return;
+    if (!wrap || !fine || armed) return;
+
     if (typeof IntersectionObserver === 'undefined') {
       preconnectVimeo();
-      if (fine) setArmed(true);
+      setArmed(true);
       return;
     }
     const io = new IntersectionObserver(
       ([e]) => {
         if (!e.isIntersecting) return;
         preconnectVimeo();
-        if (fine) setArmed(true);
+        setArmed(true);
         io.disconnect();
       },
       { rootMargin: '400px' }
     );
     io.observe(wrap);
     return () => io.disconnect();
-  }, [armed, fine]);
+  }, [fine, armed]);
 
   /* Loop ne troši CPU i bateriju dok je van ekrana. */
   useEffect(() => {
@@ -214,17 +262,34 @@ export function ClipPlayer({
     loopRef.current?.pause();
     setPlaying(true);
 
-    if (!fine) {
-      /* Dodir: montiraj iframe sa autoplay=1 unutar samog gesta. */
-      setDirect(true);
-      setArmed(true);
+    if (useNative) {
+      /* Sve pre play() mora da bude sinhrono — svaki await ovde bi izašao iz
+         gesta i browser bi odbio zvuk. */
+      const v = fullRef.current;
+      if (v) {
+        v.muted = false;
+        v.volume = 1;
+        const p = v.play();
+        /* Ako bi play ipak pao (npr. fajl je u međuvremenu nestao), pusti bez
+           zvuka umesto da ekran ostane prazan. */
+        p?.catch(() => {
+          v.muted = true;
+          void v.play().catch(() => {});
+        });
+      }
       return;
     }
 
     setArmed(true);
+    if (!fine) {
+      /* Dodir bez mobilnog fajla: montiraj iframe sa autoplay=1 unutar gesta.
+         Zvuk ovde zavisi od Vimea i browsera i nije zagarantovan. */
+      setDirect(true);
+      return;
+    }
+
     const pending = playerRef.current;
     if (!pending) {
-      /* Iframe se tek montira u ovom renderu — obradi ga effect iznad. */
       wantsPlayRef.current = true;
       return;
     }
@@ -235,11 +300,18 @@ export function ClipPlayer({
         return p.play();
       })
       .catch(() => setDirect(true));
-  }, [fine]);
+  }, [fine, useNative]);
 
-  /* Na dodiru loop stoji dok iframe ne javi load — zamrznuti kadar je lepši
-     (i informativniji) od crnog pravougaonika. */
-  const clipVisible = playing && (loaded || !direct);
+  /* Kad se klip završi, vrati loop i dugme — stranica ne ostaje na crnom. */
+  const handleEnded = useCallback(() => {
+    setPlaying(false);
+    const v = fullRef.current;
+    if (v) v.currentTime = 0;
+    void loopRef.current?.play().catch(() => {});
+  }, []);
+
+  /* Loop se sklanja tek kad ono što ide preko njega ume da se prikaže. */
+  const clipVisible = playing && (useNative || loaded || !direct);
 
   return (
     <div ref={wrapRef} className={`aspect-video relative bg-black overflow-hidden ${className}`}>
@@ -260,7 +332,31 @@ export function ClipPlayer({
         }`}
       />
 
-      {/* Pun klip sa Vimea */}
+      {/* Pun klip u nasem dokumentu — mobilni.
+
+          Element se montira odmah (ne ceka ni IO ni tap) i sam sluzi kao
+          provera: loadedmetadata znaci da je fajl tu, error da nije. Zato nema
+          HEAD zahteva — fetch bi na fajlu sa drugog domena bez CORS zaglavlja
+          pao i nepotrebno nas vratio na Vimeo, a <video> ucitava cross-origin
+          bez ikakvih zaglavlja. Zbog toga fullSrcMobile sme da bude i URL sa
+          CDN-a, ne mora sa naseg domena — za zvuk je bitno samo da je <video>
+          u nasem dokumentu, ne odakle fajl dolazi. */}
+      {!fine && fullSrcMobile && (
+        <video
+          ref={fullRef}
+          src={fullSrcMobile}
+          poster={poster}
+          playsInline
+          controls={playing}
+          preload="metadata"
+          onEnded={handleEnded}
+          className={`absolute inset-0 w-full h-full object-contain bg-black transition-opacity duration-300 ${
+            playing && useNative ? 'opacity-100 z-20' : 'opacity-0 pointer-events-none'
+          }`}
+        />
+      )}
+
+      {/* Pun klip sa Vimea — desktop i mobilni fallback */}
       {armed && (
         <iframe
           ref={iframeRef}
