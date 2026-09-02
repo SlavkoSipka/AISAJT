@@ -5,6 +5,7 @@ import { useLanguage } from '../../hooks/useLanguage';
 import { SEOHelmet } from '../seo/SEOHelmet';
 import { BookingCalendar, formatBookingSlot } from '../booking/BookingCalendar';
 import { ClipPlayer } from '../video/ClipPlayer';
+import { usePointerFine } from '../../hooks/usePointerFine';
 /** Marko vodi SEO, pa kartica za direktan poziv ide na njegov broj,
  *  a ne na opšti broj agencije iz NAP-a. */
 const MARKO_TEL = '+381621058144';
@@ -82,12 +83,16 @@ export function SEOOdrzavanjeDetaljiPage() {
   const [stickyBarVisible, setStickyBarVisible] = useState(false);
 
   /* ── Trailing cursor square ─────────────────────────────────── */
+  /* Samo za miš. Na telefonu kvadratić nema šta da prati, a rAF petlja bi se
+     svejedno vrtela na svakom frejmu i otimala budžet dodiru i videu. */
+  const finePointer = usePointerFine();
   const trailRef = useRef<HTMLDivElement>(null);
   const mouse = useRef({ x: -200, y: -200 });
   const pos = useRef({ x: -200, y: -200 });
   const rafId = useRef<number>(0);
 
   useEffect(() => {
+    if (!finePointer) return;
     const onMove = (e: MouseEvent) => {
       mouse.current = { x: e.clientX, y: e.clientY };
       if (trailRef.current) trailRef.current.style.opacity = '1';
@@ -112,11 +117,16 @@ export function SEOOdrzavanjeDetaljiPage() {
       document.removeEventListener('mouseleave', onLeave);
       cancelAnimationFrame(rafId.current);
     };
-  }, []);
+  }, [finePointer]);
   /* ──────────────────────────────────────────────────────────── */
 
   useEffect(() => {
-    const onScroll = () => {
+    /* Merenja najviše jednom po frejmu — vidi isti komentar na
+       /izrada-sajta-detalji. */
+    let raf = 0;
+
+    const measure = () => {
+      raf = 0;
       if (!widgetAutoOpened) {
         const scrolled = window.scrollY + window.innerHeight;
         const total = document.documentElement.scrollHeight;
@@ -126,11 +136,20 @@ export function SEOOdrzavanjeDetaljiPage() {
         }
       }
       const heroEl = document.querySelector('section.pt-14') as HTMLElement | null;
-      const inHero = heroEl ? heroEl.getBoundingClientRect().bottom > 0 && heroEl.getBoundingClientRect().top < window.innerHeight : false;
+      const rect = heroEl?.getBoundingClientRect();
+      const inHero = rect ? rect.bottom > 0 && rect.top < window.innerHeight : false;
       setStickyBarVisible(!inHero && window.scrollY > 60);
     };
+
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(measure);
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, [widgetAutoOpened]);
 
   const dayLabels = language === 'sr'
@@ -177,14 +196,16 @@ export function SEOOdrzavanjeDetaljiPage() {
 
   return (
     <div className="min-h-screen bg-gray-950 overflow-x-hidden relative">
-      {/* ── Trailing cursor square ─────────────────────────────── */}
-      <div
-        ref={trailRef}
-        className="fixed top-0 left-0 z-[99999] pointer-events-none opacity-0 transition-opacity duration-200"
-        style={{ willChange: 'transform' }}
-      >
-        <div className="w-2 h-2 bg-[#05afd1] shadow-[0_0_6px_rgba(5,175,209,0.7)]" />
-      </div>
+      {/* ── Trailing cursor square (samo miš) ──────────────────── */}
+      {finePointer && (
+        <div
+          ref={trailRef}
+          className="fixed top-0 left-0 z-[99999] pointer-events-none opacity-0 transition-opacity duration-200"
+          style={{ willChange: 'transform' }}
+        >
+          <div className="w-2 h-2 bg-[#05afd1] shadow-[0_0_6px_rgba(5,175,209,0.7)]" />
+        </div>
+      )}
       {/* ──────────────────────────────────────────────────────── */}
       <div className="fixed top-0 left-0 right-0 h-[95vh] max-h-[1200px] pointer-events-none z-0">
         <div
@@ -193,10 +214,12 @@ export function SEOOdrzavanjeDetaljiPage() {
             background: 'radial-gradient(circle at 50% -60%, rgba(5, 175, 209, 0.35), rgba(5, 175, 209, 0.15) 40%, rgba(0, 0, 0, 0) 70%)'
           }}
         />
-        <div className="absolute -top-[500px] left-1/2 -translate-x-1/2 w-[1600px] h-[1200px] bg-[#05afd1]/25 rounded-full blur-[150px]" />
-        <div className="absolute -top-[200px] left-1/2 -translate-x-1/2 w-[1000px] h-[800px] bg-[#05afd1]/15 rounded-full blur-[130px]" />
-        <div className="absolute top-1/4 -left-40 w-[700px] h-[700px] bg-[#05afd1]/12 rounded-full blur-[120px]" />
-        <div className="absolute top-1/3 -right-40 w-[700px] h-[700px] bg-[#05afd1]/12 rounded-full blur-[120px]" />
+        {/* Vidi komentar na /izrada-sajta-detalji: na telefonu ostaje jedan
+            blaži krug, jer četiri fixed blur filtera jedu frejmove skrola. */}
+        <div className="absolute -top-[500px] left-1/2 -translate-x-1/2 w-[1600px] h-[1200px] bg-[#05afd1]/25 rounded-full blur-[70px] md:blur-[150px]" />
+        <div className="hidden md:block absolute -top-[200px] left-1/2 -translate-x-1/2 w-[1000px] h-[800px] bg-[#05afd1]/15 rounded-full blur-[130px]" />
+        <div className="hidden md:block absolute top-1/4 -left-40 w-[700px] h-[700px] bg-[#05afd1]/12 rounded-full blur-[120px]" />
+        <div className="hidden md:block absolute top-1/3 -right-40 w-[700px] h-[700px] bg-[#05afd1]/12 rounded-full blur-[120px]" />
       </div>
 
       <SEOHelmet

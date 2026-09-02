@@ -1,14 +1,24 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Play } from 'lucide-react';
+import { usePointerFine } from '../../hooks/usePointerFine';
 
 /* ClipPlayer — 15s loop sa našeg domena se vrti u pozadini, pun klip živi na
-   Vimeu i priprema se tek kad player uđe u vidno polje. Vimeo tako ne servira
-   ništa posetiocima koji nikad ne skroluju do videa, a onima koji dođu do njega
-   je player spreman pre nego što kliknu.
+   Vimeu. Player ima dve odvojene putanje, jer se desktop i telefon ponašaju
+   suštinski različito oko autoplaya:
 
-   Klik radi kroz Vimeo Player SDK (setCurrentTime + setVolume + play), pa klip
-   kreće od nule sa zvukom bez reloada iframe-a. Stara varijanta je menjala
-   iframe.src, zbog čega je video na unmute uvek krenuo ispočetka uz treptaj. */
+   DESKTOP (pointer: fine) — iframe se montira unapred sa autoplay=0, Vimeo
+   Player SDK se povuče dok se sekcija približava ekranu, a klik onda samo
+   pozove setCurrentTime + setVolume + play. Klip krene od nule sa zvukom, bez
+   reloada iframe-a i bez treptaja.
+
+   MOBILNI (pointer: coarse) — SDK se ne učitava uopšte. Ranija verzija je i na
+   telefonu čekala SDK pa zvala play() iz asinhronog `.then()`, a to je već van
+   prozora korisničkog gesta: browser odbije reprodukciju, catch prebaci iframe
+   na autoplay URL i ponovo ga učita, i korisnik gleda crni pravougaonik dok ne
+   klikne još par puta. Zato na dodir iframe montiramo tek na tap, odmah sa
+   autoplay=1 u URL-u, unutar samog gesta i bez ijedne izmene src-a posle toga.
+   Ako mobilni Safari ipak odbije zvučni autoplay, ispod prsta je Vimeov
+   sopstveni play — jedan tap unutar iframe-a uvek prolazi. */
 
 type VimeoNs = { Player: new (el: HTMLIFrameElement) => VimeoPlayer };
 type VimeoPlayer = {
@@ -85,12 +95,16 @@ export function ClipPlayer({
   accentBadge = 'bg-black/60 border-white/10',
   className = '',
 }: ClipPlayerProps) {
-  /* armed = iframe je montiran i SDK se priprema (hover/tap, pre klika)
+  const fine = usePointerFine();
+
+  /* armed = iframe je montiran (desktop: pre klika; mobilni: tek na tap)
      playing = korisnik je kliknuo, pun klip preuzima ekran
-     direct = SDK nije uspeo, pa autoplay guramo kroz URL parametar */
+     direct = autoplay ide kroz URL parametar, bez SDK-a
+     loaded = iframe je javio load, pa smemo da sakrijemo loop ispod njega */
   const [armed, setArmed] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [direct, setDirect] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const loopRef = useRef<HTMLVideoElement>(null);
@@ -99,20 +113,23 @@ export function ClipPlayer({
   /* Klik pre nego što je iframe montiran — odigraj čim se player napravi. */
   const wantsPlayRef = useRef(false);
 
-  /* Ako korisnik klikne pre nego što je iframe uopšte montiran, autoplay ide
-     kroz URL. allow="autoplay" na iframe-u dozvoljava i zvuk. */
+  /* Kad se autoplay gura kroz URL, iframe se montira već sa njim — src se posle
+     toga više ne menja, pa nema drugog učitavanja. */
   const src =
     `https://player.vimeo.com/video/${vimeoId}` +
     `?badge=0&byline=0&portrait=0&title=0&dnt=1&playsinline=1&controls=1` +
     `&autoplay=${direct ? 1 : 0}&muted=0`;
 
+  /* Na dodiru "arm" je samo zagrevanje veze — iframe ceka pravi tap. */
   const arm = useCallback(() => {
     preconnectVimeo();
-    setArmed(true);
-  }, []);
+    if (fine) setArmed(true);
+  }, [fine]);
 
-  /* Napravi Player čim je iframe u DOM-u. */
+  /* Napravi Player čim je iframe u DOM-u. Samo desktop: na dodiru autoplay ide
+     kroz URL, pa SDK nema šta da radi. */
   useEffect(() => {
+    if (!fine || direct) return;
     if (!armed || !iframeRef.current || playerRef.current) return;
 
     const el = iframeRef.current;
@@ -140,31 +157,32 @@ export function ClipPlayer({
       playerRef.current?.then((p) => p.destroy().catch(() => {})).catch(() => {});
       playerRef.current = null;
     };
-  }, [armed]);
+  }, [armed, fine, direct]);
 
   /* Vimeo se priprema cim se player priblizi ekranu — do klika je player.js
      ucitan, iframe montiran i konfiguracija povucena, pa play krece odmah.
-     Sa autoplay=0 Vimeo ne skida same segmente videa, samo player. */
+     Na telefonu ostaje samo preconnect: iframe unapred nema smisla jer bi ga
+     tap ionako morao ponovo ucitati sa autoplay parametrom. */
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap || armed) return;
     if (typeof IntersectionObserver === 'undefined') {
       preconnectVimeo();
-      setArmed(true);
+      if (fine) setArmed(true);
       return;
     }
     const io = new IntersectionObserver(
       ([e]) => {
         if (!e.isIntersecting) return;
         preconnectVimeo();
-        setArmed(true);
+        if (fine) setArmed(true);
         io.disconnect();
       },
       { rootMargin: '400px' }
     );
     io.observe(wrap);
     return () => io.disconnect();
-  }, [armed]);
+  }, [armed, fine]);
 
   /* Loop ne troši CPU i bateriju dok je van ekrana. */
   useEffect(() => {
@@ -193,10 +211,17 @@ export function ClipPlayer({
   }, [playing]);
 
   const start = useCallback(() => {
-    setArmed(true);
-    setPlaying(true);
     loopRef.current?.pause();
+    setPlaying(true);
 
+    if (!fine) {
+      /* Dodir: montiraj iframe sa autoplay=1 unutar samog gesta. */
+      setDirect(true);
+      setArmed(true);
+      return;
+    }
+
+    setArmed(true);
     const pending = playerRef.current;
     if (!pending) {
       /* Iframe se tek montira u ovom renderu — obradi ga effect iznad. */
@@ -210,7 +235,11 @@ export function ClipPlayer({
         return p.play();
       })
       .catch(() => setDirect(true));
-  }, []);
+  }, [fine]);
+
+  /* Na dodiru loop stoji dok iframe ne javi load — zamrznuti kadar je lepši
+     (i informativniji) od crnog pravougaonika. */
+  const clipVisible = playing && (loaded || !direct);
 
   return (
     <div ref={wrapRef} className={`aspect-video relative bg-black overflow-hidden ${className}`}>
@@ -227,7 +256,7 @@ export function ClipPlayer({
         aria-hidden="true"
         tabIndex={-1}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-          playing ? 'opacity-0' : 'opacity-100'
+          clipVisible ? 'opacity-0' : 'opacity-100'
         }`}
       />
 
@@ -238,13 +267,21 @@ export function ClipPlayer({
           src={src}
           title={title}
           frameBorder="0"
+          onLoad={() => setLoaded(true)}
           referrerPolicy="strict-origin-when-cross-origin"
           allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
           allowFullScreen
           className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${
-            playing ? 'opacity-100 z-20' : 'opacity-0 pointer-events-none'
+            clipVisible ? 'opacity-100 z-20' : 'opacity-0 pointer-events-none'
           }`}
         />
+      )}
+
+      {/* Kratak trenutak izmedju tapa i prvog frejma sa Vimea */}
+      {playing && !clipVisible && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/40 pointer-events-none">
+          <span className="w-10 h-10 rounded-full border-2 border-white/25 border-t-white animate-spin" />
+        </div>
       )}
 
       {/* Play dugme preko loopa */}
@@ -253,6 +290,7 @@ export function ClipPlayer({
           type="button"
           onClick={start}
           onMouseEnter={arm}
+          onPointerDown={arm}
           onTouchStart={arm}
           onFocus={arm}
           aria-label={headline}

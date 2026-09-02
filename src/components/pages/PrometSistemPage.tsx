@@ -157,9 +157,11 @@ export function PrometSistemPage() {
 
       {/* ambient glows */}
       <div className="fixed inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute -top-[380px] left-1/2 -translate-x-1/2 w-[1100px] h-[800px] bg-cyan-500/10 rounded-full blur-[140px]" />
-        <div className="absolute top-[40%] -left-52 w-[600px] h-[600px] bg-cyan-600/[0.06] rounded-full blur-[120px]" />
-        <div className="absolute top-[70%] -right-52 w-[600px] h-[600px] bg-blue-600/[0.06] rounded-full blur-[120px]" />
+        {/* Vidi komentar na /izrada-sajta-detalji: na telefonu ostaje jedan
+            blaži krug, jer fixed blur filteri jedu frejmove skrola. */}
+        <div className="absolute -top-[380px] left-1/2 -translate-x-1/2 w-[1100px] h-[800px] bg-cyan-500/10 rounded-full blur-[70px] md:blur-[140px]" />
+        <div className="hidden md:block absolute top-[40%] -left-52 w-[600px] h-[600px] bg-cyan-600/[0.06] rounded-full blur-[120px]" />
+        <div className="hidden md:block absolute top-[70%] -right-52 w-[600px] h-[600px] bg-blue-600/[0.06] rounded-full blur-[120px]" />
       </div>
 
       {/* top bar */}
