@@ -9,6 +9,17 @@ import { BookingCalendar, formatBookingSlot } from '../booking/BookingCalendar';
 import { ClipPlayer } from '../video/ClipPlayer';
 import { usePointerFine } from '../../hooks/usePointerFine';
 import { trackCTAClick, trackFormSubmitAttempt, trackFormError, trackPhoneClick } from '../../utils/analytics';
+import { useMetaPixel } from '../../hooks/useMetaPixel';
+import {
+  pixelTrackCustom,
+  trackVideoProgress,
+  trackVideoWatchSeconds,
+  trackFunnelViewContent,
+  trackBookingStarted,
+  trackBookingCompleted,
+  trackPhoneIntent,
+  pixelAdvancedMatch,
+} from '../../utils/metaPixel';
 import { submitFunnelForm } from '../../utils/hubspot';
 import { NAP } from '../../lib/site-config';
 
@@ -93,6 +104,10 @@ export function IzradaSajtaDetaljiPage() {
 
   /* Vimeo SDK više ne učitavamo ovde — ClipPlayer ga povlači sam, tek kad
      player uđe u vidno polje. */
+
+  /* Meta Pixel vozi samo na ovoj stranici — ovde je odredište IG kampanja. */
+  useMetaPixel();
+  const viewContentSentRef = useRef(false);
 
   const [statsRef, statsInView] = useInView(0.3);
   const c1 = useCountUp(50, 1200, statsInView);
@@ -186,6 +201,12 @@ export function IzradaSajtaDetaljiPage() {
       /* sticky bar: samo kada su i hero i booking forma van ekrana */
       setStickyBarVisible(!inHero && !inBooking && window.scrollY > 60);
       setBookingInView(inBooking);
+
+      /* Prvi dolazak do kalendara = ViewContent. Jednom po poseti. */
+      if (inBooking && !viewContentSentRef.current) {
+        viewContentSentRef.current = true;
+        trackFunnelViewContent();
+      }
     };
 
     const onScroll = () => {
@@ -243,6 +264,14 @@ export function IzradaSajtaDetaljiPage() {
   }) => {
     const fullName = `${firstName} ${lastName}`.trim();
     trackFormSubmitAttempt('funnel_booking', language);
+
+    /* Konverzija ide odavde, a ne sa /thank-you: pixel vozi samo na ovoj
+       stranici, pa bi event poslat posle navigacije bio izgubljen.
+       Advanced Matching prvo — hešovani podaci vežu konverziju za osobu koja
+       je videla reklamu; await je bezbedan jer nije unutar korisnikovog gesta. */
+    await pixelAdvancedMatch({ email, phone, firstName, lastName });
+    trackBookingCompleted(slotAt);
+
     try {
       await submitFunnelForm({ name: fullName, email, phone, termin: formatBookingSlot(slotAt), source: 'izrada-sajta-detalji' });
       trackCTAClick('Booking Form Submit', 'izrada_sajta_detalji_form', language);
@@ -393,6 +422,10 @@ export function IzradaSajtaDetaljiPage() {
                     }
                     accentButton="bg-pink-600/90 text-white group-hover:bg-pink-500"
                     accentBadge="bg-black/60 border-white/10"
+                    trackAs="hero-glavni-klip"
+                    onPlay={() => pixelTrackCustom('VideoStart', { clip: 'hero-glavni-klip' })}
+                    onProgress={(pct) => trackVideoProgress('hero-glavni-klip', pct)}
+                    onWatchSeconds={(sec) => trackVideoWatchSeconds('hero-glavni-klip', sec)}
                   />
                 </div>
               </div>
@@ -448,14 +481,23 @@ export function IzradaSajtaDetaljiPage() {
                 </div>
 
                 <div className="relative z-10 bg-gray-900 p-4 sm:p-6 md:p-8">
-                  <BookingCalendar language={language} onBooked={handleBooked} preselectWeekday={preselectWeekday} source="izrada-sajta-detalji" />
+                  <BookingCalendar
+                    language={language}
+                    onBooked={handleBooked}
+                    preselectWeekday={preselectWeekday}
+                    source="izrada-sajta-detalji"
+                    onSlotPicked={trackBookingStarted}
+                  />
                 </div>
               </div>
 
               {/* Kontakt kartica – direktan poziv */}
               <a
                 href={`tel:${NAP.phone.tel}`}
-                onClick={() => trackPhoneClick(NAP.phone.tel, 'izrada_sajta_detalji_booking', language)}
+                onClick={() => {
+                  trackPhoneClick(NAP.phone.tel, 'izrada_sajta_detalji_booking', language);
+                  trackPhoneIntent('booking_sekcija');
+                }}
                 className="mt-3 md:mt-4 flex items-center gap-3 md:gap-4 px-4 py-3 md:px-5 md:py-4 rounded-xl border border-gray-800 bg-gray-900/60 md:hover:bg-gray-800/80 md:hover:border-pink-500/40 transition-colors duration-300 group touch-manipulation active:bg-gray-800/90"
                 style={{ WebkitTapHighlightColor: 'transparent' }}
               >

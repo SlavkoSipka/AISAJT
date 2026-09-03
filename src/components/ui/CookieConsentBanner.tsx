@@ -29,8 +29,11 @@ export function CookieConsentBanner() {
   const handleAccept = () => {
     storeConsent('accepted');
     window.__aisajtLoadGA4?.();
-    window.__aisajtLoadPixel?.();
     window.__aisajtLoadHubspot?.();
+    // Meta Pixel se namerno ne pali odavde: vozi samo /izrada-sajta-detalji,
+    // pa ga useMetaPixel() na toj stranici pali — i pri učitavanju i ovde,
+    // preko 'aisajt:consent' događaja ispod, ako pristanak stigne u toku posete.
+    window.dispatchEvent(new Event('aisajt:consent'));
     setVisible(false);
   };
 

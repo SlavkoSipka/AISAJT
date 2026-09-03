@@ -34,6 +34,7 @@ type VimeoPlayer = {
   setVolume: (v: number) => Promise<number>;
   setCurrentTime: (s: number) => Promise<number>;
   destroy: () => Promise<void>;
+  on: (event: 'timeupdate', cb: (d: { percent: number }) => void) => void;
 };
 
 let sdkPromise: Promise<VimeoNs> | null = null;
@@ -97,6 +98,23 @@ interface ClipPlayerProps {
   accentButton?: string;
   accentBadge?: string;
   className?: string;
+  /**
+   * Ime klipa u izveštajima (Meta/GA). Bez njega se ne meri ništa —
+   * praćenje je opt-in, da druge stranice sa istim plejerom ostanu neizmenjene.
+   */
+  trackAs?: string;
+  /** Zove se jednom po pragu odgledanog (25/50/75/95) za ovaj klip. */
+  onProgress?: (percent: 25 | 50 | 75 | 95) => void;
+  /** Zove se kad posetilac pokrene klip. */
+  onPlay?: () => void;
+  /**
+   * Zamena za procenat na putanji gde ga nema. Kad klip ide kao Vimeo iframe
+   * sa autoplay parametrom (dodirni uređaj bez `fullSrcMobile`), SDK se
+   * namerno ne pravi — kačenje na plejer tamo dira reprodukciju za koju je
+   * zvuk na tap mučno nameštan. Umesto procenta se javlja koliko je sekundi
+   * proteklo od pokretanja, dok je kartica u prvom planu.
+   */
+  onWatchSeconds?: (seconds: 30 | 60 | 120) => void;
 }
 
 export function ClipPlayer({
@@ -110,8 +128,35 @@ export function ClipPlayer({
   accentButton = 'bg-white/90',
   accentBadge = 'bg-black/60 border-white/10',
   className = '',
+  trackAs,
+  onProgress,
+  onPlay,
+  onWatchSeconds,
 }: ClipPlayerProps) {
   const fine = usePointerFine();
+
+  /* Pragovi odgledanog — svaki se javlja najviše jednom po učitavanju
+     stranice, pa premotavanje unazad ne pravi duple evente. */
+  const firedRef = useRef<Set<number>>(new Set());
+  const onProgressRef = useRef(onProgress);
+  onProgressRef.current = onProgress;
+
+  const reportPercent = useCallback((pct: number) => {
+    if (!trackAs) return;
+    for (const step of [25, 50, 75, 95] as const) {
+      if (pct >= step && !firedRef.current.has(step)) {
+        firedRef.current.add(step);
+        onProgressRef.current?.(step);
+      }
+    }
+  }, [trackAs]);
+
+  /* Trenutak pokretanja — koristi se samo za vremenske pragove ispod. */
+  const startedAtRef = useRef<number | null>(null);
+  const secondsFiredRef = useRef<Set<number>>(new Set());
+  const onWatchSecondsRef = useRef(onWatchSeconds);
+  onWatchSecondsRef.current = onWatchSeconds;
+
 
   /* armed = Vimeo iframe je montiran; playing = pun klip je preuzeo ekran;
      direct = Vimeo autoplay ide kroz URL parametar, bez SDK-a;
@@ -135,6 +180,29 @@ export function ClipPlayer({
      potrošilo gest. */
   const useNative = !fine && !!fullSrcMobile && nativeOk === true;
 
+  /* Vremenski pragovi — samo kad procenta nema (iframe sa autoplay-om).
+     Sat stoji dok je kartica u pozadini, da minimizovan telefon ne broji
+     kao gledanje. */
+  useEffect(() => {
+    if (!trackAs || !playing) return;
+    if (useNative || (fine && !direct)) return; /* te putanje daju pravi procenat */
+
+    let elapsed = 0;
+    const id = window.setInterval(() => {
+      if (document.visibilityState !== 'visible') return;
+      elapsed += 1;
+      for (const step of [30, 60, 120] as const) {
+        if (elapsed >= step && !secondsFiredRef.current.has(step)) {
+          secondsFiredRef.current.add(step);
+          onWatchSecondsRef.current?.(step);
+        }
+      }
+      if (elapsed >= 120) window.clearInterval(id);
+    }, 1000);
+
+    return () => window.clearInterval(id);
+  }, [trackAs, playing, useNative, fine, direct]);
+
   const src =
     `https://player.vimeo.com/video/${vimeoId}` +
     `?badge=0&byline=0&portrait=0&title=0&dnt=1&playsinline=1&controls=1` +
@@ -155,6 +223,14 @@ export function ClipPlayer({
 
     playerRef.current
       .then((p) => {
+        /* Vimeo javlja napredak kao udeo 0–1. */
+        if (trackAs) {
+          try {
+            p.on('timeupdate', (d) => reportPercent(d.percent * 100));
+          } catch {
+            /* Stariji SDK bez on() — klip i dalje radi, samo se ne meri. */
+          }
+        }
         if (wantsPlayRef.current) {
           wantsPlayRef.current = false;
           p.setCurrentTime(0).catch(() => {});
@@ -175,7 +251,7 @@ export function ClipPlayer({
       playerRef.current?.then((p) => p.destroy().catch(() => {})).catch(() => {});
       playerRef.current = null;
     };
-  }, [armed, fine, direct]);
+  }, [armed, fine, direct, trackAs, reportPercent]);
 
   /* Da li je mobilni fajl tu, saznajemo od samog <video> elementa.
 
@@ -261,6 +337,10 @@ export function ClipPlayer({
   const start = useCallback(() => {
     loopRef.current?.pause();
     setPlaying(true);
+    if (trackAs) {
+      onPlay?.();
+      startedAtRef.current = Date.now();
+    }
 
     if (useNative) {
       /* Sve pre play() mora da bude sinhrono — svaki await ovde bi izašao iz
@@ -300,7 +380,7 @@ export function ClipPlayer({
         return p.play();
       })
       .catch(() => setDirect(true));
-  }, [fine, useNative]);
+  }, [fine, useNative, trackAs, onPlay]);
 
   /* Kad se klip završi, vrati loop i dugme — stranica ne ostaje na crnom. */
   const handleEnded = useCallback(() => {
@@ -349,7 +429,16 @@ export function ClipPlayer({
           playsInline
           controls={playing}
           preload="metadata"
-          onEnded={handleEnded}
+          onEnded={() => {
+            /* Do kraja odgledano — 95% prag ume da promakne ako se poslednji
+               timeupdate ne okine pre kraja. */
+            reportPercent(100);
+            handleEnded();
+          }}
+          onTimeUpdate={(e) => {
+            const v = e.currentTarget;
+            if (v.duration > 0) reportPercent((v.currentTime / v.duration) * 100);
+          }}
           className={`absolute inset-0 w-full h-full object-contain bg-black transition-opacity duration-300 ${
             playing && useNative ? 'opacity-100 z-20' : 'opacity-0 pointer-events-none'
           }`}

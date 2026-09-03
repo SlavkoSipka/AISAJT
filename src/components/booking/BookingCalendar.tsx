@@ -27,6 +27,8 @@ interface BookingCalendarProps {
   /** Sa koje stranice je zakazano — upisuje se u `bookings.source`.
       Ne utiče na dostupnost: termin zauzet ovde je zauzet na svim stranicama. */
   source: BookingSource;
+  /** Izabran termin — mikro-konverzija, pre nego što se forma pošalje. */
+  onSlotPicked?: (slotAt: string) => void;
 }
 
 /* Tailwind ne ume da izvede klase u runtime-u, pa idu kao pune vrednosti. */
@@ -96,7 +98,7 @@ function belgradeTime(iso: string): string {
   }).format(new Date(iso));
 }
 
-export function BookingCalendar({ language, onBooked, preselectWeekday, accent = 'pink', source }: BookingCalendarProps) {
+export function BookingCalendar({ language, onBooked, preselectWeekday, accent = 'pink', source, onSlotPicked }: BookingCalendarProps) {
   const c = ACCENTS[accent];
   const sr = language === 'sr';
 
@@ -189,6 +191,7 @@ export function BookingCalendar({ language, onBooked, preselectWeekday, accent =
     setSelectedSlot(slotAt);
     setStep('details');
     setFormError(null);
+    onSlotPicked?.(slotAt);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

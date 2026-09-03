@@ -51,6 +51,11 @@ if (${HOSTNAME_GUARD} && ${HAS_CONSENT}) {
 }
 `;
 
+// Meta Pixel se NE pali na celom sajtu — vozi samo /izrada-sajta-detalji,
+// odredišnu stranicu Instagram kampanja. Zato ovde stoji samo definicija
+// loadera; poziva ga useMetaPixel() sa te stranice, pošto su i pristanak i
+// ruta uslov. Prethodni pixel (1206162938252666) je uklonjen na zahtev
+// vlasnika — više se ne učitava nigde.
 const META_PIXEL_SCRIPT = `
 window.__aisajtLoadPixel = function() {
   if (window.__aisajtPixelLoaded) return;
@@ -63,12 +68,9 @@ window.__aisajtLoadPixel = function() {
   t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1206162938252666');
+  fbq('init', '3600632330101047');
   fbq('track', 'PageView');
 };
-if (${HOSTNAME_GUARD} && ${HAS_CONSENT}) {
-  window.__aisajtLoadPixel();
-}
 `;
 
 const HUBSPOT_SCRIPT = `
