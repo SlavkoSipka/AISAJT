@@ -1,4 +1,4 @@
-import { getSupabaseAdmin } from './supabase-server.js';
+import { getSupabaseAdmin } from './_lib/supabase-server.js';
 
 const DEFAULT_STEPS = [
   { position: 1, title: 'Prikupljanje materijala', description: 'Prikupljamo sve potrebne materijale: logo, tekstove, fotografije i vaše zahteve za sajt.' },

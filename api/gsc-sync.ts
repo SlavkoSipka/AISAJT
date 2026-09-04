@@ -11,9 +11,9 @@
  */
 
 import crypto from 'crypto';
-import { getSupabaseAdmin, getSupabaseEnvDebug } from './supabase-server.js';
-import { readJsonBody } from './read-json-body.js';
-import { hintPost } from './postgrest-hint.js';
+import { getSupabaseAdmin, getSupabaseEnvDebug } from './_lib/supabase-server.js';
+import { readJsonBody } from './_lib/read-json-body.js';
+import { hintPost } from './_lib/postgrest-hint.js';
 
 export const config = { maxDuration: 60 };
 

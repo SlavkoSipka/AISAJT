@@ -1,4 +1,4 @@
-import { getSupabaseAdmin } from './supabase-server.js';
+import { getSupabaseAdmin } from './_lib/supabase-server.js';
 
 interface DeployPayload {
   id?: string;
