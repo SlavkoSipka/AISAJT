@@ -1,5 +1,3 @@
-import { createHash } from 'node:crypto';
-
 /**
  * Meta Conversions API — server-side blizanac browser pixela.
  *
@@ -20,9 +18,19 @@ import { createHash } from 'node:crypto';
 const API_VERSION = 'v21.0';
 const PIXEL_ID = '3600632330101047';
 
-/** Meta traži SHA-256 preko normalizovane vrednosti (trim + lowercase). */
-function hash(value: string): string {
-  return createHash('sha256').update(value.trim().toLowerCase()).digest('hex');
+/**
+ * Meta traži SHA-256 preko normalizovane vrednosti (trim + lowercase).
+ *
+ * Namerno preko Web Crypto (`crypto.subtle`), a ne `node:crypto`: bez
+ * Node-only importa funkcija se vrti i na Node i na Edge runtime-u, pa
+ * ne zavisi od toga koji joj Vercel dodeli.
+ */
+async function hash(value: string): Promise<string> {
+  const bytes = new TextEncoder().encode(value.trim().toLowerCase());
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
 }
 
 /** 062 155 2156 → 381621552156 (E.164 bez plusa, kako Meta očekuje). */
@@ -80,14 +88,14 @@ export default async function handler(req: Request): Promise<Response> {
        njih Meta traži u čistom obliku, jer su njeni sopstveni identifikatori
        i ne otkrivaju ništa o osobi van Metinog sistema. */
     const userData: Record<string, string[] | string> = {};
-    if (body.email) userData.em = [hash(body.email)];
+    if (body.email) userData.em = [await hash(body.email)];
     if (body.phone) {
       const phone = normalizePhone(body.phone);
-      if (phone) userData.ph = [hash(phone)];
+      if (phone) userData.ph = [await hash(phone)];
     }
-    if (body.firstName) userData.fn = [hash(body.firstName)];
-    if (body.lastName) userData.ln = [hash(body.lastName)];
-    if (body.externalId) userData.external_id = [hash(body.externalId)];
+    if (body.firstName) userData.fn = [await hash(body.firstName)];
+    if (body.lastName) userData.ln = [await hash(body.lastName)];
+    if (body.externalId) userData.external_id = [await hash(body.externalId)];
     if (body.fbp) userData.fbp = body.fbp;
     if (body.fbc) userData.fbc = body.fbc;
 
