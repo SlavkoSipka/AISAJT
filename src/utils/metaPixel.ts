@@ -125,10 +125,30 @@ export function trackFunnelViewContent(): void {
  */
 export function trackVideoProgress(clip: string, percent: 25 | 50 | 75 | 95): void {
   pixelTrackCustom('VideoProgress', { clip, percent });
-  // 50% dobija i zaseban event, da se u Events Manageru bira kao cilj kampanje.
   if (percent === 50) {
     pixelTrackCustom('VideoHalfWatched', { clip });
+    emitHalfWatchedStandard(clip, 'percent');
   }
+}
+
+/**
+ * Pola klipa i kao STANDARDNI event.
+ *
+ * Custom event Meta mora prvo da primi i obradi da bi se uopšte pojavio u
+ * listi za Custom Conversions, a to ume da potraje — do tada se ne može
+ * izabrati kao cilj kampanje. `AddToCart` je standardan, pa je u toj listi
+ * od prvog dana; u lead-gen kampanjama se uobičajeno koristi baš za ovakvu
+ * mikro-konverziju. Custom event ostaje uz njega, za čitljivije izveštaje.
+ */
+function emitHalfWatchedStandard(clip: string, basis: 'percent' | 'time'): void {
+  pixelTrack('AddToCart', {
+    content_name: 'Odgledao pola klipa',
+    content_category: 'video',
+    clip,
+    basis,
+    value: LEAD_VALUE_EUR / 4,
+    currency: 'EUR',
+  });
 }
 
 /* ── Sloj 2: mikro-konverzije ───────────────────────────────────────────── */
@@ -193,5 +213,6 @@ export function trackVideoWatchSeconds(clip: string, seconds: 30 | 60 | 120): vo
   pixelTrackCustom('VideoWatchTime', { clip, seconds });
   if (seconds === 60) {
     pixelTrackCustom('VideoHalfWatched', { clip, basis: 'time' });
+    emitHalfWatchedStandard(clip, 'time');
   }
 }

@@ -5,6 +5,7 @@ import { getStoredConsent, storeConsent } from '../../utils/consent';
 declare global {
   interface Window {
     __aisajtLoadGA4?: () => void;
+    __aisajtLoadGTM?: () => void;
     __aisajtLoadPixel?: () => void;
     __aisajtLoadHubspot?: () => void;
   }
@@ -28,6 +29,7 @@ export function CookieConsentBanner() {
 
   const handleAccept = () => {
     storeConsent('accepted');
+    window.__aisajtLoadGTM?.();
     window.__aisajtLoadGA4?.();
     window.__aisajtLoadHubspot?.();
     // Meta Pixel se namerno ne pali odavde: vozi samo /izrada-sajta-detalji,

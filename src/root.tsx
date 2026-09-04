@@ -73,6 +73,29 @@ window.__aisajtLoadPixel = function() {
 };
 `;
 
+// Google Tag Manager — kontejner GTM-NX6WV6LT. Isti obrazac kao ostali
+// trackeri: definiše se loader, a poziva se tek uz pristanak, jer GTM
+// učitava tagove koji postavljaju kolačiće.
+//
+// <noscript> iframe iz Google-ovog uputstva ovde namerno NE stoji, iz istog
+// razloga zbog kog ga nema ni Meta Pixel (vidi <body> ispod): bez JS-a nema
+// načina da se proveri pristanak niti da se prikaže banner, pa bi se
+// posetilac pratio bez saglasnosti.
+const GTM_SCRIPT = `
+window.__aisajtLoadGTM = function() {
+  if (window.__aisajtGTMLoaded) return;
+  window.__aisajtGTMLoaded = true;
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-NX6WV6LT');
+};
+if (${HOSTNAME_GUARD} && ${HAS_CONSENT}) {
+  window.__aisajtLoadGTM();
+}
+`;
+
 const HUBSPOT_SCRIPT = `
 window.__aisajtLoadHubspot = function() {
   if (window.__aisajtHubspotLoaded) return;
@@ -138,6 +161,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <link rel="dns-prefetch" href="https://www.youtube.com" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
 
+        <script dangerouslySetInnerHTML={{ __html: GTM_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: GA4_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: META_PIXEL_SCRIPT }} />
         <BusinessSchema />
