@@ -270,7 +270,7 @@ export function IzradaSajtaDetaljiPage() {
        Advanced Matching prvo — hešovani podaci vežu konverziju za osobu koja
        je videla reklamu; await je bezbedan jer nije unutar korisnikovog gesta. */
     await pixelAdvancedMatch({ email, phone, firstName, lastName });
-    trackBookingCompleted(slotAt);
+    trackBookingCompleted(slotAt, { email, phone, firstName, lastName });
 
     try {
       await submitFunnelForm({ name: fullName, email, phone, termin: formatBookingSlot(slotAt), source: 'izrada-sajta-detalji' });

@@ -194,14 +194,72 @@ export const LEAD_VALUE_EUR = 60;
  *
  * Za cilj kampanje koristiti `Schedule`, ne `Lead`.
  */
-export function trackBookingCompleted(slotAt: string): void {
+export function trackBookingCompleted(
+  slotAt: string,
+  person?: { email?: string; phone?: string; firstName?: string; lastName?: string; externalId?: string },
+): void {
+  const eventId = newEventId();
+
   pixelTrack('Schedule', {
     content_name: 'Zakazan poziv',
     content_category: 'booking',
     slot_at: slotAt,
     value: LEAD_VALUE_EUR,
     currency: 'EUR',
+    eventID: eventId,
   });
+
+  /* Isti event i sa servera, pod istim event_id — Meta ih spaja u jednu
+     konverziju, a ona stigne i kad browser event blokira ad blocker. */
+  void sendToCapi({
+    event_name: 'Schedule',
+    event_id: eventId,
+    value: LEAD_VALUE_EUR,
+    currency: 'EUR',
+    ...person,
+  });
+}
+
+/** Čita Metin cookie (_fbp / _fbc) — najjači signal za uparivanje na CAPI strani. */
+function readCookie(name: string): string | undefined {
+  if (typeof document === 'undefined') return undefined;
+  const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+  return m ? decodeURIComponent(m[1]) : undefined;
+}
+
+/**
+ * Isti događaj ide i iz browsera i sa servera; `event_id` je ključ po kom ih
+ * Meta spaja u jednu konverziju. Bez njega bi zakazivanje bilo izbrojano dvaput.
+ */
+function newEventId(): string {
+  try {
+    return crypto.randomUUID();
+  } catch {
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  }
+}
+
+/**
+ * Šalje isti događaj kroz Conversions API. Greška se namerno guta — merenje
+ * ne sme da obori zakazivanje koje je korisnik upravo završio.
+ */
+async function sendToCapi(payload: Record<string, unknown>): Promise<void> {
+  if (isLocalhost()) return;
+  try {
+    await fetch('/api/meta-capi', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...payload,
+        event_source_url: window.location.href,
+        fbp: readCookie('_fbp'),
+        fbc: readCookie('_fbc'),
+      }),
+      keepalive: true,
+    });
+  } catch {
+    /* mreža pukla — browser event je već otišao */
+  }
 }
 
 /**
