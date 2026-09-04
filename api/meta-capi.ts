@@ -11,26 +11,24 @@
  * svako zakazivanje bilo izbrojano dvaput. `event_name` mora da se poklopi
  * isto (oba šalju 'Schedule').
  *
+ * POTPIS HANDLERA: (req, res), Node stil — isti kao gsc-query.ts. Nije stvar
+ * ukusa: funkcije ovog projekta pisane u Web stilu (Request → Response) na
+ * produkciji vise dok zahtev ne istekne, umesto da odgovore. Vidi
+ * send-notification.ts i create-*.ts, koje imaju isti problem.
+ *
  * Access token NIKAD ne stoji u kodu — čita se iz META_CAPI_ACCESS_TOKEN
  * u Vercel environment variables.
  */
 
+import crypto from 'crypto';
+import { readJsonBody } from './_lib/read-json-body.js';
+
 const API_VERSION = 'v21.0';
 const PIXEL_ID = '3600632330101047';
 
-/**
- * Meta traži SHA-256 preko normalizovane vrednosti (trim + lowercase).
- *
- * Namerno preko Web Crypto (`crypto.subtle`), a ne `node:crypto`: bez
- * Node-only importa funkcija se vrti i na Node i na Edge runtime-u, pa
- * ne zavisi od toga koji joj Vercel dodeli.
- */
-async function hash(value: string): Promise<string> {
-  const bytes = new TextEncoder().encode(value.trim().toLowerCase());
-  const digest = await crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
+/** Meta traži SHA-256 preko normalizovane vrednosti (trim + lowercase). */
+function hash(value: string): string {
+  return crypto.createHash('sha256').update(value.trim().toLowerCase()).digest('hex');
 }
 
 /** 062 155 2156 → 381621552156 (E.164 bez plusa, kako Meta očekuje). */
@@ -41,84 +39,80 @@ function normalizePhone(raw: string): string {
   return digits;
 }
 
-interface CapiBody {
-  event_name: string;
-  /** Isti ID koji je browser poslao — bez njega nema deduplikacije. */
-  event_id: string;
-  event_source_url?: string;
-  /** Sekunde, ne milisekunde. Meta odbija događaje starije od 7 dana. */
-  event_time?: number;
-  email?: string;
-  phone?: string;
-  firstName?: string;
-  lastName?: string;
-  /** Stabilan ID iz naše baze (id rezervacije) — diže EMQ ocenu. */
-  externalId?: string;
-  value?: number;
-  currency?: string;
-  /** Meta cookies iz browsera — najjači signal za uparivanje. */
-  fbp?: string;
-  fbc?: string;
+function str(v: unknown): string | undefined {
+  return typeof v === 'string' && v.trim() !== '' ? v : undefined;
 }
 
-export default async function handler(req: Request): Promise<Response> {
+export default async function handler(req: any, res: any): Promise<void> {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
   }
 
   const token = process.env.META_CAPI_ACCESS_TOKEN;
   if (!token) {
-    return new Response(
-      JSON.stringify({ error: 'META_CAPI_ACCESS_TOKEN not configured' }),
-      { status: 500 },
-    );
+    res.status(500).json({ error: 'META_CAPI_ACCESS_TOKEN not configured' });
+    return;
   }
 
   try {
-    const body = (await req.json()) as CapiBody;
+    const body = await readJsonBody(req);
 
-    if (!body.event_name || !body.event_id) {
-      return new Response(
-        JSON.stringify({ error: 'Missing event_name or event_id' }),
-        { status: 400 },
-      );
+    const eventName = str(body.event_name);
+    const eventId = str(body.event_id);
+    if (!eventName || !eventId) {
+      res.status(400).json({ error: 'Missing event_name or event_id' });
+      return;
     }
 
     /* Sve što identifikuje osobu ide hešovano; fbp/fbc su izuzetak —
        njih Meta traži u čistom obliku, jer su njeni sopstveni identifikatori
        i ne otkrivaju ništa o osobi van Metinog sistema. */
     const userData: Record<string, string[] | string> = {};
-    if (body.email) userData.em = [await hash(body.email)];
-    if (body.phone) {
-      const phone = normalizePhone(body.phone);
-      if (phone) userData.ph = [await hash(phone)];
+    const email = str(body.email);
+    const phoneRaw = str(body.phone);
+    const firstName = str(body.firstName);
+    const lastName = str(body.lastName);
+    const externalId = str(body.externalId);
+
+    if (email) userData.em = [hash(email)];
+    if (phoneRaw) {
+      const phone = normalizePhone(phoneRaw);
+      if (phone) userData.ph = [hash(phone)];
     }
-    if (body.firstName) userData.fn = [await hash(body.firstName)];
-    if (body.lastName) userData.ln = [await hash(body.lastName)];
-    if (body.externalId) userData.external_id = [await hash(body.externalId)];
-    if (body.fbp) userData.fbp = body.fbp;
-    if (body.fbc) userData.fbc = body.fbc;
+    if (firstName) userData.fn = [hash(firstName)];
+    if (lastName) userData.ln = [hash(lastName)];
+    if (externalId) userData.external_id = [hash(externalId)];
+
+    const fbp = str(body.fbp);
+    const fbc = str(body.fbc);
+    if (fbp) userData.fbp = fbp;
+    if (fbc) userData.fbc = fbc;
 
     /* IP i user-agent pomažu uparivanje i Meta ih očekuje u čistom obliku.
        Na Vercelu stvarni IP posetioca stiže kroz x-forwarded-for. */
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
-    const ua = req.headers.get('user-agent');
+    const fwd = req.headers?.['x-forwarded-for'];
+    const ip = Array.isArray(fwd) ? fwd[0] : String(fwd ?? '').split(',')[0]?.trim();
+    const ua = req.headers?.['user-agent'];
     if (ip) userData.client_ip_address = ip;
-    if (ua) userData.client_user_agent = ua;
+    if (ua) userData.client_user_agent = String(ua);
+
+    const customData: Record<string, unknown> = {};
+    if (typeof body.value === 'number') customData.value = body.value;
+    if (str(body.currency)) customData.currency = body.currency;
 
     const payload = {
       data: [
         {
-          event_name: body.event_name,
-          event_time: body.event_time ?? Math.floor(Date.now() / 1000),
-          event_id: body.event_id,
-          event_source_url: body.event_source_url,
+          event_name: eventName,
+          event_time: typeof body.event_time === 'number'
+            ? body.event_time
+            : Math.floor(Date.now() / 1000),
+          event_id: eventId,
+          event_source_url: str(body.event_source_url),
           action_source: 'website',
           user_data: userData,
-          custom_data: {
-            ...(body.value !== undefined ? { value: body.value } : {}),
-            ...(body.currency ? { currency: body.currency } : {}),
-          },
+          custom_data: customData,
         },
       ],
       /* Postavi META_CAPI_TEST_CODE dok testiraš — događaji tada idu u
@@ -128,7 +122,7 @@ export default async function handler(req: Request): Promise<Response> {
         : {}),
     };
 
-    const res = await fetch(
+    const metaRes = await fetch(
       `https://graph.facebook.com/${API_VERSION}/${PIXEL_ID}/events?access_token=${encodeURIComponent(token)}`,
       {
         method: 'POST',
@@ -137,21 +131,19 @@ export default async function handler(req: Request): Promise<Response> {
       },
     );
 
-    const text = await res.text();
-    if (!res.ok) {
+    const text = await metaRes.text();
+    if (!metaRes.ok) {
       /* Odgovor se ne prosleđuje klijentu doslovno — Metine greške ume da
          sadrže deo tokena. Loguje se serverski, klijent dobija samo status. */
       console.error('[meta-capi] Meta odbila događaj:', text);
-      return new Response(JSON.stringify({ error: 'Meta API error' }), { status: 502 });
+      res.status(502).json({ error: 'Meta API error' });
+      return;
     }
 
-    return new Response(text, {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    res.status(200).json(JSON.parse(text));
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Serverska greška';
     console.error('[meta-capi]', message);
-    return new Response(JSON.stringify({ error: 'Serverska greška' }), { status: 500 });
+    res.status(500).json({ error: 'Serverska greška' });
   }
 }
