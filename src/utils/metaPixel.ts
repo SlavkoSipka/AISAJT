@@ -146,7 +146,9 @@ function emitHalfWatchedStandard(clip: string, basis: 'percent' | 'time'): void 
     content_category: 'video',
     clip,
     basis,
-    value: LEAD_VALUE_EUR / 4,
+    /* Odgledao pola klipa je tek znak pažnje — do zakazivanja odatle stigne
+       mali deo ljudi, pa nosi mali deo vrednosti lida. */
+    value: Math.round(LEAD_VALUE_EUR / 20),
     currency: 'EUR',
   });
 }
@@ -159,7 +161,9 @@ export function trackBookingStarted(slotAt: string): void {
     content_name: 'Zakazivanje poziva',
     content_category: 'booking',
     slot_at: slotAt,
-    value: LEAD_VALUE_EUR,
+    /* Termin je izabran, ali forma još nije poslata — otprilike polovina
+       odavde završi, pa nosi pola vrednosti zakazanog poziva. */
+    value: Math.round(LEAD_VALUE_EUR / 2),
     currency: 'EUR',
   });
 }
@@ -175,12 +179,18 @@ export function trackPhoneIntent(location: string): void {
 /* ── Sloj 3: konverzija ─────────────────────────────────────────────────── */
 
 /**
- * Procenjena vrednost jednog zakazanog poziva. Nije cena sajta nego
- * očekivani prihod po lidu (prosečan posao × stopa zatvaranja) — po tome
- * Meta uči da traži ljude koji zaista zakazuju. Vlasnik neka ispravi
- * brojku kad bude imao stvarnu stopu zatvaranja.
+ * Vrednost jednog zakazanog poziva — prosečan posao × stopa zatvaranja, ne
+ * cena sajta. Po ovoj brojci Meta procenjuje koliko sme da plati za lida,
+ * pa promašena vrednost znači promašenu publiku.
+ *
+ * Osnova (septembar 2026, prva tri klijenta): poslovi od 4000, 3000 i 900 €
+ * daju prosek ~2600 €. Vlasnik računa da otprilike svaki drugi zakazan poziv
+ * postane klijent, pa je vrednost lida ~1300 €.
+ *
+ * Ovo je procena na tri posla — ispraviti čim bude dovoljno zakazivanja da se
+ * stopa zatvaranja stvarno izmeri.
  */
-export const LEAD_VALUE_EUR = 60;
+export const LEAD_VALUE_EUR = 1300;
 
 /**
  * Zakazivanje uspešno poslato — jedina konverzija koju ovaj modul šalje.
