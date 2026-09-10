@@ -169,18 +169,46 @@ export function IzradaSajtaDetaljiPage() {
   const [bookingInView, setBookingInView] = useState(false);
 
   /* ViewContent tek kad se posetilac zaista zadrži na kalendaru.
-     Sam ulazak u vidno polje ne znači ništa — do dna stranice se prođe i
-     kad se samo brzo skroluje, pa bi event pokupio i nezainteresovane i
-     razblažio publiku po kojoj Meta uči. Tri sekunde neprekidno u kadru
-     odvajaju onoga ko gleda termine od onoga ko je proleteo. */
+     Sam ulazak u vidno polje ne znači ništa — do dna stranice se prođe i kad
+     se samo brzo skroluje, pa bi event pokupio i nezainteresovane i razblažio
+     publiku po kojoj Meta uči. Tri sekunde neprekidno u kadru odvajaju onoga
+     ko gleda termine od onoga ko je proleteo.
+
+     Merenje ide preko IntersectionObserver-a, a ne preko bookingInView (koji
+     se osvežava iz scroll handlera): posetilac koji dođe na usidren link ili
+     stane bez daljeg skrolovanja ne proizvodi nijedan scroll događaj, pa bi
+     na toj putanji event izostao. Observer javlja i ulazak i izlazak sam od
+     sebe, bez obzira na to kako je element dospeo u kadar. */
   useEffect(() => {
-    if (!bookingInView || viewContentSentRef.current) return;
-    const timer = setTimeout(() => {
-      viewContentSentRef.current = true;
-      trackFunnelViewContent();
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, [bookingInView]);
+    const el = document.getElementById('booking-form');
+    if (!el) return;
+
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !viewContentSentRef.current) {
+          timer = setTimeout(() => {
+            viewContentSentRef.current = true;
+            trackFunnelViewContent();
+            obs.disconnect();
+          }, 3000);
+        } else {
+          /* otišao pre isteka — odbroj ispočetka sledeći put */
+          clearTimeout(timer);
+        }
+      },
+      /* Deo kalendara u kadru je dovoljan: na telefonu sekcija je viša od
+         ekrana, pa se veći prag nikad ne bi ispunio. */
+      { threshold: 0.01 },
+    );
+
+    obs.observe(el);
+    return () => {
+      clearTimeout(timer);
+      obs.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     const isElementInViewport = (el: HTMLElement) => {
