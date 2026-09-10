@@ -168,6 +168,20 @@ export function IzradaSajtaDetaljiPage() {
   /* booking forma u viewportu — da plutajući widget ne prekriva formu na mobilnom */
   const [bookingInView, setBookingInView] = useState(false);
 
+  /* ViewContent tek kad se posetilac zaista zadrži na kalendaru.
+     Sam ulazak u vidno polje ne znači ništa — do dna stranice se prođe i
+     kad se samo brzo skroluje, pa bi event pokupio i nezainteresovane i
+     razblažio publiku po kojoj Meta uči. Tri sekunde neprekidno u kadru
+     odvajaju onoga ko gleda termine od onoga ko je proleteo. */
+  useEffect(() => {
+    if (!bookingInView || viewContentSentRef.current) return;
+    const timer = setTimeout(() => {
+      viewContentSentRef.current = true;
+      trackFunnelViewContent();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [bookingInView]);
+
   useEffect(() => {
     const isElementInViewport = (el: HTMLElement) => {
       const rect = el.getBoundingClientRect();
@@ -201,12 +215,6 @@ export function IzradaSajtaDetaljiPage() {
       /* sticky bar: samo kada su i hero i booking forma van ekrana */
       setStickyBarVisible(!inHero && !inBooking && window.scrollY > 60);
       setBookingInView(inBooking);
-
-      /* Prvi dolazak do kalendara = ViewContent. Jednom po poseti. */
-      if (inBooking && !viewContentSentRef.current) {
-        viewContentSentRef.current = true;
-        trackFunnelViewContent();
-      }
     };
 
     const onScroll = () => {
