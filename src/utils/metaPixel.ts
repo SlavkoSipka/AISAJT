@@ -1,18 +1,28 @@
 /**
  * Meta Pixel — samo za /izrada-sajta-detalji (odredište Instagram kampanja).
  *
- * Zašto slojevi umesto jednog "zakazano" eventa: Meta traži oko 50 konverzija
- * nedeljno po ad setu da ad set izađe iz faze učenja. Zakazanih poziva ima
- * premalo da se to ikad dostigne, pa bi optimizacija samo na njih ostavila
- * kampanju trajno u učenju — skupi i nestabilni lidovi. Zato se šalju tri
- * sloja signala, od čestih ka retkim, i kampanja se optimizuje na onaj sloj
- * koji trenutno ima dovoljno zapreminu:
+ * Zašto piramida umesto jednog "zakazano" eventa: Meta traži oko 50 konverzija
+ * nedeljno po ad setu da ad set izađe iz faze učenja. Kod poslova ovog reda
+ * veličine zakazanih poziva toliko nikad nema, pa bi optimizacija samo na njih
+ * ostavila kampanju trajno u učenju — skupi i nestabilni lidovi. Zato svaki
+ * korak kroz stranicu nosi svoj event, od najšireg ka najužem, i kampanja se
+ * optimizuje na onaj sloj koji trenutno ima dovoljno obima:
  *
- *   sloj 1 (često)  ViewContent, VideoProgress  — gledao klip, stigao do forme
- *   sloj 2 (srednje) InitiateCheckout, Contact  — izabrao termin, kliknuo tel.
- *   sloj 3 (retko)   Schedule + Lead            — zakazao poziv
+ *   VideoStart         pustio klip                      (custom)
+ *   AddToWishlist      odgledao 25%
+ *   AddToCart          odgledao 50%
+ *   CustomizeProduct   odgledao 75%
+ *   Search             odgledao do kraja
+ *   ViewContent        zadržao se na kalendaru 3s
+ *   InitiateCheckout   izabrao termin
+ *   Schedule           zakazao poziv                    (+ CAPI)
  *
- * Sloj 3 uvek meri stvarni rezultat, bez obzira na to na šta se optimizuje.
+ * Tačno jedan event po koraku — raniji `VideoProgress`, `VideoHalfWatched` i
+ * `VideoWatchTime` slali su se uz standardne i time isti korak brojali dva do
+ * tri puta. Standardni su zadržani jer se biraju kao cilj kampanje odmah, dok
+ * custom event Meta prvo mora da primi i obradi da bi se uopšte pojavio u
+ * listi. `VideoStart` je ostao custom jer nijedan standardni event ne pokriva
+ * "pustio klip", pa nema šta da duplira.
  */
 
 import { CONSENT_STORAGE_KEY } from './consent';
@@ -144,10 +154,6 @@ const VIDEO_TIERS = {
 } as const;
 
 export function trackVideoProgress(clip: string, percent: 25 | 50 | 75 | 95): void {
-  /* Custom event ostaje uz standardni — nosi tačan procenat u jednom mestu,
-     korisno za dijagnostiku levka u Events Manageru. */
-  pixelTrackCustom('VideoProgress', { clip, percent });
-
   const tier = VIDEO_TIERS[percent];
   pixelTrack(tier.event, {
     content_name: tier.label,
@@ -158,10 +164,6 @@ export function trackVideoProgress(clip: string, percent: 25 | 50 | 75 | 95): vo
     value: Math.round(LEAD_VALUE_EUR / tier.divisor),
     currency: 'EUR',
   });
-
-  if (percent === 50) {
-    pixelTrackCustom('VideoHalfWatched', { clip });
-  }
 }
 
 /* ── Sloj 2: mikro-konverzije ───────────────────────────────────────────── */
@@ -289,10 +291,9 @@ async function sendToCapi(payload: Record<string, unknown>): Promise<void> {
  * i sme se koristiti kao cilj kampanje isto kao VideoHalfWatched.
  */
 export function trackVideoWatchSeconds(clip: string, seconds: 30 | 60 | 120): void {
-  pixelTrackCustom('VideoWatchTime', { clip, seconds });
-
   /* Vreme se preslikava na iste pragove piramide, da mobilni gledaoci ulaze
-     u isti sloj kao i oni kojima plejer daje procenat. */
+     u isti sloj kao i oni kojima plejer daje procenat — isti event, isti
+     sloj, samo drugi izvor merenja (`basis`). */
   const tierPercent = seconds === 120 ? 75 : seconds === 60 ? 50 : 25;
   const tier = VIDEO_TIERS[tierPercent];
   pixelTrack(tier.event, {
@@ -304,8 +305,4 @@ export function trackVideoWatchSeconds(clip: string, seconds: 30 | 60 | 120): vo
     value: Math.round(LEAD_VALUE_EUR / tier.divisor),
     currency: 'EUR',
   });
-
-  if (seconds === 60) {
-    pixelTrackCustom('VideoHalfWatched', { clip, basis: 'time' });
-  }
 }
