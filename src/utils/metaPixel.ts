@@ -119,38 +119,49 @@ export function trackFunnelViewContent(): void {
 }
 
 /**
- * Prag odgledanog klipa (25/50/75/95). 50%+ je najkorisniji signal za
- * optimizaciju: dovoljno ga je često da algoritam ima šta da uči, a već
- * odvaja gledaoca od slučajnog prolaznika.
- */
-export function trackVideoProgress(clip: string, percent: 25 | 50 | 75 | 95): void {
-  pixelTrackCustom('VideoProgress', { clip, percent });
-  if (percent === 50) {
-    pixelTrackCustom('VideoHalfWatched', { clip });
-    emitHalfWatchedStandard(clip, 'percent');
-  }
-}
-
-/**
- * Pola klipa i kao STANDARDNI event.
+ * Piramida gledanosti: svaki prag klipa nosi svoj STANDARDNI Meta event.
  *
- * Custom event Meta mora prvo da primi i obradi da bi se uopšte pojavio u
- * listi za Custom Conversions, a to ume da potraje — do tada se ne može
- * izabrati kao cilj kampanje. `AddToCart` je standardan, pa je u toj listi
- * od prvog dana; u lead-gen kampanjama se uobičajeno koristi baš za ovakvu
- * mikro-konverziju. Custom event ostaje uz njega, za čitljivije izveštaje.
+ * Zašto standardni, a ne custom: custom event Meta mora prvo da primi i
+ * obradi da bi se uopšte pojavio u listi za Custom Conversions, pa se do
+ * tada ne može izabrati kao cilj kampanje. Standardni su u toj listi od
+ * prvog dana. Imena su Metina fiksna (AddToWishlist/AddToCart/…) i njihovo
+ * doslovno značenje ovde ne igra ulogu — algoritam uči iz signala, ne iz
+ * imena; `content_name` nosi ljudski čitljiv opis za izveštaje.
+ *
+ * Svaki naredni prag je uži i vredniji, pa kampanja može da bira sloj koji
+ * trenutno ima dovoljno obima:
+ *
+ *   25%  AddToWishlist      najširi, tek zagrejan
+ *   50%  AddToCart          gledalac, ne prolaznik
+ *   75%  CustomizeProduct   odgledao skoro sve
+ *   95%  Search             odgledao do kraja, najuži
  */
-function emitHalfWatchedStandard(clip: string, basis: 'percent' | 'time'): void {
-  pixelTrack('AddToCart', {
-    content_name: 'Odgledao pola klipa',
+const VIDEO_TIERS = {
+  25: { event: 'AddToWishlist', label: 'Odgledao 25% klipa', divisor: 40 },
+  50: { event: 'AddToCart', label: 'Odgledao 50% klipa', divisor: 20 },
+  75: { event: 'CustomizeProduct', label: 'Odgledao 75% klipa', divisor: 10 },
+  95: { event: 'Search', label: 'Odgledao klip do kraja', divisor: 6 },
+} as const;
+
+export function trackVideoProgress(clip: string, percent: 25 | 50 | 75 | 95): void {
+  /* Custom event ostaje uz standardni — nosi tačan procenat u jednom mestu,
+     korisno za dijagnostiku levka u Events Manageru. */
+  pixelTrackCustom('VideoProgress', { clip, percent });
+
+  const tier = VIDEO_TIERS[percent];
+  pixelTrack(tier.event, {
+    content_name: tier.label,
     content_category: 'video',
     clip,
-    basis,
-    /* Odgledao pola klipa je tek znak pažnje — do zakazivanja odatle stigne
-       mali deo ljudi, pa nosi mali deo vrednosti lida. */
-    value: Math.round(LEAD_VALUE_EUR / 20),
+    percent,
+    /* Što dalje u klipu, to bliže zakazivanju — vrednost raste po pragu. */
+    value: Math.round(LEAD_VALUE_EUR / tier.divisor),
     currency: 'EUR',
   });
+
+  if (percent === 50) {
+    pixelTrackCustom('VideoHalfWatched', { clip });
+  }
 }
 
 /* ── Sloj 2: mikro-konverzije ───────────────────────────────────────────── */
@@ -279,8 +290,22 @@ async function sendToCapi(payload: Record<string, unknown>): Promise<void> {
  */
 export function trackVideoWatchSeconds(clip: string, seconds: 30 | 60 | 120): void {
   pixelTrackCustom('VideoWatchTime', { clip, seconds });
+
+  /* Vreme se preslikava na iste pragove piramide, da mobilni gledaoci ulaze
+     u isti sloj kao i oni kojima plejer daje procenat. */
+  const tierPercent = seconds === 120 ? 75 : seconds === 60 ? 50 : 25;
+  const tier = VIDEO_TIERS[tierPercent];
+  pixelTrack(tier.event, {
+    content_name: tier.label,
+    content_category: 'video',
+    clip,
+    basis: 'time',
+    seconds,
+    value: Math.round(LEAD_VALUE_EUR / tier.divisor),
+    currency: 'EUR',
+  });
+
   if (seconds === 60) {
     pixelTrackCustom('VideoHalfWatched', { clip, basis: 'time' });
-    emitHalfWatchedStandard(clip, 'time');
   }
 }
