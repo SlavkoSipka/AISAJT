@@ -178,24 +178,44 @@ export function IzradaSajtaDetaljiPage() {
      se osvežava iz scroll handlera): posetilac koji dođe na usidren link ili
      stane bez daljeg skrolovanja ne proizvodi nijedan scroll događaj, pa bi
      na toj putanji event izostao. Observer javlja i ulazak i izlazak sam od
-     sebe, bez obzira na to kako je element dospeo u kadar. */
+     sebe, bez obzira na to kako je element dospeo u kadar.
+
+     Uz to se traži i pokret samog posetioca (točkić, dodir, tastatura). Bez
+     tog uslova event je odlazio i onome ko na stranicu sleti preko
+     #booking-form linka: kod ga tada sam odveze do kalendara, observer to
+     vidi kao gledanje i posle tri sekunde javi interesovanje koje se nije
+     desilo. Isto važi i za vraćanje na sačuvanu poziciju skrola. */
   useEffect(() => {
     const el = document.getElementById('booking-form');
     if (!el) return;
 
     let timer: ReturnType<typeof setTimeout> | undefined;
+    let userMoved = false;
+    let intersecting = false;
+
+    const startIfReady = () => {
+      if (!userMoved || !intersecting || viewContentSentRef.current || timer) return;
+      timer = setTimeout(() => {
+        viewContentSentRef.current = true;
+        trackFunnelViewContent();
+        obs.disconnect();
+      }, 3000);
+    };
+
+    const onUserMove = () => {
+      userMoved = true;
+      startIfReady();
+    };
 
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !viewContentSentRef.current) {
-          timer = setTimeout(() => {
-            viewContentSentRef.current = true;
-            trackFunnelViewContent();
-            obs.disconnect();
-          }, 3000);
+        intersecting = entry.isIntersecting;
+        if (intersecting) {
+          startIfReady();
         } else {
           /* otišao pre isteka — odbroj ispočetka sledeći put */
           clearTimeout(timer);
+          timer = undefined;
         }
       },
       /* Deo kalendara u kadru je dovoljan: na telefonu sekcija je viša od
@@ -203,10 +223,19 @@ export function IzradaSajtaDetaljiPage() {
       { threshold: 0.01 },
     );
 
+    /* `wheel` i `touchmove` okida samo čovek; programski scrollTo/scrollIntoView
+       ih ne proizvodi, pa se automatski skrol ovim ne računa. */
+    window.addEventListener('wheel', onUserMove, { passive: true, once: true });
+    window.addEventListener('touchmove', onUserMove, { passive: true, once: true });
+    window.addEventListener('keydown', onUserMove, { once: true });
+
     obs.observe(el);
     return () => {
       clearTimeout(timer);
       obs.disconnect();
+      window.removeEventListener('wheel', onUserMove);
+      window.removeEventListener('touchmove', onUserMove);
+      window.removeEventListener('keydown', onUserMove);
     };
   }, []);
 
