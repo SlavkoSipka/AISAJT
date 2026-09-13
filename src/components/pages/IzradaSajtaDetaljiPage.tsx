@@ -14,7 +14,6 @@ import {
   pixelTrackCustom,
   trackVideoProgress,
   trackVideoWatchSeconds,
-  trackFunnelViewContent,
   trackBookingStarted,
   trackBookingCompleted,
   trackPhoneIntent,
@@ -107,7 +106,6 @@ export function IzradaSajtaDetaljiPage() {
 
   /* Meta Pixel vozi samo na ovoj stranici — ovde je odredište IG kampanja. */
   useMetaPixel();
-  const viewContentSentRef = useRef(false);
 
   const [statsRef, statsInView] = useInView(0.3);
   const c1 = useCountUp(50, 1200, statsInView);
@@ -168,76 +166,6 @@ export function IzradaSajtaDetaljiPage() {
   /* booking forma u viewportu — da plutajući widget ne prekriva formu na mobilnom */
   const [bookingInView, setBookingInView] = useState(false);
 
-  /* ViewContent tek kad se posetilac zaista zadrži na kalendaru.
-     Sam ulazak u vidno polje ne znači ništa — do dna stranice se prođe i kad
-     se samo brzo skroluje, pa bi event pokupio i nezainteresovane i razblažio
-     publiku po kojoj Meta uči. Tri sekunde neprekidno u kadru odvajaju onoga
-     ko gleda termine od onoga ko je proleteo.
-
-     Merenje ide preko IntersectionObserver-a, a ne preko bookingInView (koji
-     se osvežava iz scroll handlera): posetilac koji dođe na usidren link ili
-     stane bez daljeg skrolovanja ne proizvodi nijedan scroll događaj, pa bi
-     na toj putanji event izostao. Observer javlja i ulazak i izlazak sam od
-     sebe, bez obzira na to kako je element dospeo u kadar.
-
-     Uz to se traži i pokret samog posetioca (točkić, dodir, tastatura). Bez
-     tog uslova event je odlazio i onome ko na stranicu sleti preko
-     #booking-form linka: kod ga tada sam odveze do kalendara, observer to
-     vidi kao gledanje i posle tri sekunde javi interesovanje koje se nije
-     desilo. Isto važi i za vraćanje na sačuvanu poziciju skrola. */
-  useEffect(() => {
-    const el = document.getElementById('booking-form');
-    if (!el) return;
-
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    let userMoved = false;
-    let intersecting = false;
-
-    const startIfReady = () => {
-      if (!userMoved || !intersecting || viewContentSentRef.current || timer) return;
-      timer = setTimeout(() => {
-        viewContentSentRef.current = true;
-        trackFunnelViewContent();
-        obs.disconnect();
-      }, 3000);
-    };
-
-    const onUserMove = () => {
-      userMoved = true;
-      startIfReady();
-    };
-
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        intersecting = entry.isIntersecting;
-        if (intersecting) {
-          startIfReady();
-        } else {
-          /* otišao pre isteka — odbroj ispočetka sledeći put */
-          clearTimeout(timer);
-          timer = undefined;
-        }
-      },
-      /* Deo kalendara u kadru je dovoljan: na telefonu sekcija je viša od
-         ekrana, pa se veći prag nikad ne bi ispunio. */
-      { threshold: 0.01 },
-    );
-
-    /* `wheel` i `touchmove` okida samo čovek; programski scrollTo/scrollIntoView
-       ih ne proizvodi, pa se automatski skrol ovim ne računa. */
-    window.addEventListener('wheel', onUserMove, { passive: true, once: true });
-    window.addEventListener('touchmove', onUserMove, { passive: true, once: true });
-    window.addEventListener('keydown', onUserMove, { once: true });
-
-    obs.observe(el);
-    return () => {
-      clearTimeout(timer);
-      obs.disconnect();
-      window.removeEventListener('wheel', onUserMove);
-      window.removeEventListener('touchmove', onUserMove);
-      window.removeEventListener('keydown', onUserMove);
-    };
-  }, []);
 
   useEffect(() => {
     const isElementInViewport = (el: HTMLElement) => {

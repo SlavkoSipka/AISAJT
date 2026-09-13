@@ -13,7 +13,6 @@
  *   AddToCart          odgledao 50%
  *   CustomizeProduct   odgledao 75%
  *   Search             odgledao do kraja
- *   ViewContent        zadržao se na kalendaru 3s
  *   InitiateCheckout   izabrao termin
  *   Schedule           zakazao poziv                    (+ CAPI)
  *
@@ -67,7 +66,7 @@ export function pixelReady(): boolean {
   return !isLocalhost() && hasConsent() && typeof window !== 'undefined' && !!window.fbq;
 }
 
-/** Standardni Meta event (ViewContent, Lead, Schedule…). */
+/** Standardni Meta event (AddToCart, InitiateCheckout, Schedule…). */
 export function pixelTrack(event: string, params?: PixelParams): void {
   if (!pixelReady()) return;
   window.fbq!('track', event, params);
@@ -119,9 +118,6 @@ export async function pixelAdvancedMatch(input: {
 }
 
 /* ── Sloj 1: signali namere ─────────────────────────────────────────────── */
-
-/** Stigao do sekcije sa kalendarom — video ponudu, nije još kliknuo. */
-
 
 /**
  * Piramida gledanosti: svaki prag klipa nosi svoj STANDARDNI Meta event.

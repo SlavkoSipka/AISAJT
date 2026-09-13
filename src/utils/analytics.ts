@@ -255,13 +255,10 @@ export const trackPortfolioClick = (
     language: language
   });
 
-  // Meta Pixel - ViewContent
-  trackFBEvent('ViewContent', {
-    content_name: projectName,
-    content_category: 'Portfolio',
-    content_type: 'project',
-    content_ids: [projectUrl]
-  });
+  /* Meti se odavde namerno ne šalje ništa. Klik na portfolio projekat je
+     ranije išao kao ViewContent, pa se u Events Manageru mešao sa ostalim
+     signalima i pravio zabunu oko toga šta je posetilac zapravo uradio.
+     Merenje ostaje u GA4, gde mu je i mesto. */
 };
 
 /**
