@@ -121,12 +121,7 @@ export async function pixelAdvancedMatch(input: {
 /* ── Sloj 1: signali namere ─────────────────────────────────────────────── */
 
 /** Stigao do sekcije sa kalendarom — video ponudu, nije još kliknuo. */
-export function trackFunnelViewContent(): void {
-  pixelTrack('ViewContent', {
-    content_name: 'Izrada sajta — funnel',
-    content_category: 'funnel',
-  });
-}
+
 
 /**
  * Piramida gledanosti: svaki prag klipa nosi svoj STANDARDNI Meta event.
