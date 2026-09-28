@@ -106,6 +106,24 @@ export function IzradaSajtaDetaljiPage() {
   /* Meta Pixel vozi samo na ovoj stranici — ovde je odredište IG kampanja. */
   useMetaPixel();
 
+  /* Jednom po poseti. Klip se može pustiti ponovo, a termin promeniti preko
+     "Promeni termin" — bez ovoga isti posetilac je slao VideoStart i
+     InitiateCheckout onoliko puta koliko je kliknuo, pa je izgledao kao više
+     zainteresovanih ljudi. InitiateCheckout je uz to cilj kampanje, pa je to
+     naduvavalo baš brojku po kojoj Meta uči. */
+  const videoStartSentRef = useRef(false);
+  const bookingStartSentRef = useRef(false);
+  const handleVideoStart = () => {
+    if (videoStartSentRef.current) return;
+    videoStartSentRef.current = true;
+    pixelTrackCustom('VideoStart', { clip: 'hero-glavni-klip' });
+  };
+  const handleSlotPicked = (slotAt: string) => {
+    if (bookingStartSentRef.current) return;
+    bookingStartSentRef.current = true;
+    trackBookingStarted(slotAt);
+  };
+
   const [statsRef, statsInView] = useInView(0.3);
   const c1 = useCountUp(50, 1200, statsInView);
   const c2 = useCountUp(50, 1200, statsInView);
@@ -415,7 +433,7 @@ export function IzradaSajtaDetaljiPage() {
                     accentButton="bg-pink-600/90 text-white group-hover:bg-pink-500"
                     accentBadge="bg-black/60 border-white/10"
                     trackAs="hero-glavni-klip"
-                    onPlay={() => pixelTrackCustom('VideoStart', { clip: 'hero-glavni-klip' })}
+                    onPlay={handleVideoStart}
                     onProgress={(pct) => trackVideoProgress('hero-glavni-klip', pct)}
                     onWatchSeconds={(sec) => trackVideoWatchSeconds('hero-glavni-klip', sec)}
                   />
@@ -478,7 +496,7 @@ export function IzradaSajtaDetaljiPage() {
                     onBooked={handleBooked}
                     preselectWeekday={preselectWeekday}
                     source="izrada-sajta-detalji"
-                    onSlotPicked={trackBookingStarted}
+                    onSlotPicked={handleSlotPicked}
                   />
                 </div>
               </div>
