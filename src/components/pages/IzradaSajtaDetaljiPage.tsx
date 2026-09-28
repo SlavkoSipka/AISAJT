@@ -16,7 +16,6 @@ import {
   trackVideoWatchSeconds,
   trackBookingStarted,
   trackBookingCompleted,
-  trackPhoneIntent,
   pixelAdvancedMatch,
 } from '../../utils/metaPixel';
 import { submitFunnelForm } from '../../utils/hubspot';
@@ -487,10 +486,9 @@ export function IzradaSajtaDetaljiPage() {
               {/* Kontakt kartica – direktan poziv */}
               <a
                 href={`tel:${NAP.phone.tel}`}
-                onClick={() => {
-                  trackPhoneClick(NAP.phone.tel, 'izrada_sajta_detalji_booking', language);
-                  trackPhoneIntent('booking_sekcija');
-                }}
+                /* trackPhoneClick već šalje Meta `Contact` (uz GA4) — drugi
+                   poziv je isti klik brojao dvaput. */
+                onClick={() => trackPhoneClick(NAP.phone.tel, 'izrada_sajta_detalji_booking', language)}
                 className="mt-3 md:mt-4 flex items-center gap-3 md:gap-4 px-4 py-3 md:px-5 md:py-4 rounded-xl border border-gray-800 bg-gray-900/60 md:hover:bg-gray-800/80 md:hover:border-pink-500/40 transition-colors duration-300 group touch-manipulation active:bg-gray-800/90"
                 style={{ WebkitTapHighlightColor: 'transparent' }}
               >

@@ -66,10 +66,22 @@ export function pixelReady(): boolean {
   return !isLocalhost() && hasConsent() && typeof window !== 'undefined' && !!window.fbq;
 }
 
-/** Standardni Meta event (AddToCart, InitiateCheckout, Schedule…). */
-export function pixelTrack(event: string, params?: PixelParams): void {
+/**
+ * Standardni Meta event (AddToCart, InitiateCheckout, Schedule…).
+ *
+ * `eventId` mora da ide kao ČETVRTI argument fbq-a, ne u `params`. Samo iz
+ * tog argumenta pixel puni `eid` u zahtevu, a po `eid` Meta spaja browser
+ * event sa istim eventom sa servera (CAPI). Stavljen u `params`, ID završi
+ * kao `cd[eventID]` koji Meta ne gleda, pixel sam izmisli nasumičan `eid`,
+ * pa se dva dolaska nikad ne spoje i jedna konverzija se broji dvaput.
+ */
+export function pixelTrack(event: string, params?: PixelParams, eventId?: string): void {
   if (!pixelReady()) return;
-  window.fbq!('track', event, params);
+  if (eventId) {
+    window.fbq!('track', event, params, { eventID: eventId });
+  } else {
+    window.fbq!('track', event, params);
+  }
 }
 
 /** Custom event — vidi se u Events Manageru pod tim imenom. */
@@ -172,14 +184,6 @@ export function trackBookingStarted(slotAt: string): void {
   });
 }
 
-/** Klik na broj telefona — visoka namera, ali bez podataka o osobi. */
-export function trackPhoneIntent(location: string): void {
-  pixelTrack('Contact', {
-    content_name: 'Klik na telefon',
-    content_category: location,
-  });
-}
-
 /* ── Sloj 3: konverzija ─────────────────────────────────────────────────── */
 
 /**
@@ -214,14 +218,17 @@ export function trackBookingCompleted(
 ): void {
   const eventId = newEventId();
 
-  pixelTrack('Schedule', {
-    content_name: 'Zakazan poziv',
-    content_category: 'booking',
-    slot_at: slotAt,
-    value: LEAD_VALUE_EUR,
-    currency: 'EUR',
-    eventID: eventId,
-  });
+  pixelTrack(
+    'Schedule',
+    {
+      content_name: 'Zakazan poziv',
+      content_category: 'booking',
+      slot_at: slotAt,
+      value: LEAD_VALUE_EUR,
+      currency: 'EUR',
+    },
+    eventId,
+  );
 
   /* Isti event i sa servera, pod istim event_id — Meta ih spaja u jednu
      konverziju, a ona stigne i kad browser event blokira ad blocker. */
